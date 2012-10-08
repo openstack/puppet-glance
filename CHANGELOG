@@ -1,2 +1,6 @@
+* 2012-10-08 0.1.0
+- add enable param for services
+- add basic image management
+- allow keystone to be on a different host
 * 2012-06-07 0.1.0
 - initial release
