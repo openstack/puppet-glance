@@ -24,9 +24,8 @@ describe 'glance::keystone::auth' do
       :description => 'Openstack Image Service'
     ) }
 
-    it { should contain_keystone_endpoint('glance').with(
+    it { should contain_keystone_endpoint('RegionOne/glance').with(
       :ensure       => 'present',
-      :region       => 'RegionOne',
       :public_url   => 'http://127.0.0.1:9292/v1',
       :admin_url    => 'http://127.0.0.1:9292/v1',
       :internal_url => 'http://127.0.0.1:9292/v1'
@@ -75,9 +74,8 @@ describe 'glance::keystone::auth' do
       }
     end
 
-    it { should contain_keystone_endpoint('glance').with(
+    it { should contain_keystone_endpoint('RegionTwo/glance').with(
       :ensure       => 'present',
-      :region       => 'RegionTwo',
       :public_url   => 'http://10.0.0.1:9393/v1',
       :admin_url    => 'http://10.0.0.2:9393/v1',
       :internal_url => 'http://10.0.0.3:9393/v1'
