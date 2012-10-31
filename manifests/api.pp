@@ -42,7 +42,6 @@ class glance::api(
   $auth_host         = '127.0.0.1',
   $auth_port         = '35357',
   $auth_protocol     = 'http',
-  $auth_url          = "http://127.0.0.1:5000/",
   $keystone_tenant   = 'admin',
   $keystone_user     = 'admin',
   $enabled           = true,
@@ -124,7 +123,6 @@ class glance::api(
     'keystone_authtoken/auth_host':         value => $auth_host;
     'keystone_authtoken/auth_port':         value => $auth_port;
     'keystone_authtoken/protocol':          value => $protocol;
-    'keystone_authtoken/auth_uri':          value => $auth_uri;
   }
 
   # keystone config
