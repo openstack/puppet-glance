@@ -19,7 +19,6 @@ describe 'glance::api' do
       :registry_port     => '9191',
       :log_file          => '/var/log/glance/api.log',
       :auth_type         => 'keystone',
-      :auth_url          => 'http://127.0.0.1:5000/',
       :enabled           => true,
       :backlog           => '4096',
       :workers           => '7',
@@ -44,7 +43,6 @@ describe 'glance::api' do
       :registry_port     => '9111',
       :log_file          => '/var/log/glance-api.log',
       :auth_type         => 'not_keystone',
-      :auth_url          => 'http://192.168.56.210:5000/',
       :enabled           => false,
       :backlog           => '4095',
       :workers           => '5',
@@ -112,8 +110,7 @@ describe 'glance::api' do
         [
           'auth_host',
           'auth_port',
-          'protocol',
-          'auth_uri'
+          'protocol'
         ].each do |config|
           should contain_glance_api_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
         end
@@ -125,7 +122,7 @@ describe 'glance::api' do
           ['admin_tenant_name', 'admin_user', 'admin_password'].each do |config|
             should contain_glance_api_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
           end
-          ['admin_tenant_name', 'admin_user', 'admin_password', 'auth_url'].each do |config|
+          ['admin_tenant_name', 'admin_user', 'admin_password'].each do |config|
             should contain_glance_cache_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
           end
         end

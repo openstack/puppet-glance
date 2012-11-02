@@ -1,31 +1,39 @@
-
 #
 # == Paremeters:
 #
-#  $verbose - rather to log the glance api service at verbose level.
+#
+#  * keystone_password Password used to authemn
+#
+#  * verbose - rather to log the glance api service at verbose level.
 #  Optional. Default: false
 #
-#  $debug - rather to log the glance api service at debug level.
+#  * debug - rather to log the glance api service at debug level.
 #  Optional. Default: false
 #
-#  $default_store - Backend used to store glance dist images.
-#  Optional. Default: file
-#
-#  $bind_host - The address of the host to bind to.
+#  * bind_host - The address of the host to bind to.
 #  Optional. Default: 0.0.0.0
 #
-#  $bind_port - The port the server should bind to.
+#  * bind_port - The port the server should bind to.
 #  Optional. Default: 9292
 #
-#  $registry_host - The address used to connecto to the registy service.
+#  * registry_host - The address used to connecto to the registy service.
 #  Optional. Default:
 #
-#  $registry_port - The port of the Glance registry service.
+#  * registry_port - The port of the Glance registry service.
 #  Optional. Default: 9191
 #
-#  $log_file - The path of file used for logging
+#  * log_file - The path of file used for logging
 #  Optional. Default: /var/log/glance/api.log
 #
+#  * auth_type - Type is authorization being used. Optional. Defaults to 'keystone'
+#  * auth_host - Host running auth service. Optional. Defaults to '127.0.0.1'.
+#  * auth_port - Port to use for auth service on auth_host. Optional. Defaults to '35357'.
+#  * auth_protocol - Protocol to use for auth. Optional. Defaults to 'http'.
+#  * keystone_tenant - tenant to authenticate to. Optioal. Defaults to admin.
+#  * keystone_user User to authenticate as with keystone Optional. Defaults to admin.
+#  * enabled  Whether to enable services. Optional. Defaults to true.
+#  * sql_idle_timeout
+#  * sql_connection db conection.
 #
 class glance::api(
   $keystone_password,
@@ -42,7 +50,6 @@ class glance::api(
   $auth_host         = '127.0.0.1',
   $auth_port         = '35357',
   $auth_protocol     = 'http',
-  $auth_url          = "http://127.0.0.1:5000/",
   $keystone_tenant   = 'admin',
   $keystone_user     = 'admin',
   $enabled           = true,
@@ -124,7 +131,6 @@ class glance::api(
     'keystone_authtoken/auth_host':         value => $auth_host;
     'keystone_authtoken/auth_port':         value => $auth_port;
     'keystone_authtoken/protocol':          value => $protocol;
-    'keystone_authtoken/auth_uri':          value => $auth_uri;
   }
 
   # keystone config
