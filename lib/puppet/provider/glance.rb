@@ -9,24 +9,24 @@ class Puppet::Provider::Glance < Puppet::Provider
   end
 
   def self.get_glance_credentials
-    if glance_file and glance_file['filter:authtoken'] and 
-      glance_file['filter:authtoken']['auth_host'] and
-      glance_file['filter:authtoken']['auth_port'] and
-      glance_file['filter:authtoken']['auth_protocol'] and
-      glance_file['filter:authtoken']['admin_tenant_name'] and
-      glance_file['filter:authtoken']['admin_user'] and
-      glance_file['filter:authtoken']['admin_password']
+    if glance_file and glance_file['keystone_authtoken'] and 
+      glance_file['keystone_authtoken']['auth_host'] and
+      glance_file['keystone_authtoken']['auth_port'] and
+      glance_file['keystone_authtoken']['auth_protocol'] and
+      glance_file['keystone_authtoken']['admin_tenant_name'] and
+      glance_file['keystone_authtoken']['admin_user'] and
+      glance_file['keystone_authtoken']['admin_password']
 
         g = {}
-        g['auth_host'] = glance_file['filter:authtoken']['auth_host'].strip
-        g['auth_port'] = glance_file['filter:authtoken']['auth_port'].strip
-        g['auth_protocol'] = glance_file['filter:authtoken']['auth_protocol'].strip
-        g['admin_tenant_name'] = glance_file['filter:authtoken']['admin_tenant_name'].strip
-        g['admin_user'] = glance_file['filter:authtoken']['admin_user'].strip
-        g['admin_password'] = glance_file['filter:authtoken']['admin_password'].strip
+        g['auth_host'] = glance_file['keystone_authtoken']['auth_host'].strip
+        g['auth_port'] = glance_file['keystone_authtoken']['auth_port'].strip
+        g['auth_protocol'] = glance_file['keystone_authtoken']['auth_protocol'].strip
+        g['admin_tenant_name'] = glance_file['keystone_authtoken']['admin_tenant_name'].strip
+        g['admin_user'] = glance_file['keystone_authtoken']['admin_user'].strip
+        g['admin_password'] = glance_file['keystone_authtoken']['admin_password'].strip
         return g
     else
-      raise(Puppet::Error, 'File: /etc/glance/glance-api-paste.ini does not contain all required sections.')
+      raise(Puppet::Error, 'File: /etc/glance/glance-api.conf does not contain all required sections.')
     end
   end
 
@@ -46,7 +46,7 @@ class Puppet::Provider::Glance < Puppet::Provider
   def self.glance_file
     return @glance_file if @glance_file
     @glance_file = Puppet::Util::IniConfig::File.new
-    @glance_file.read('/etc/glance/glance-api-paste.ini')
+    @glance_file.read('/etc/glance/glance-api.conf')
     @glance_file
   end
 

@@ -1,3 +1,12 @@
+* 2012-11-02 1.0.0
+- Add travisci support to repo
+- Remove essex support
+- Add folsom support
+- Remove file concat
+- Add native types for managing all config file
+- Remove password defaults
+- update multi-region support for compat with keystone 1.0.0
+- switch log_verbose,log_debug to debug,verbose
 * 2012-10-08 0.1.0
 - add enable param for services
 - add basic image management
