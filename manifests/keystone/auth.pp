@@ -25,7 +25,8 @@ class glance::keystone::auth(
   $internal_address   = '127.0.0.1',
   $port               = '9292',
   $region             = 'RegionOne',
-  $tenant             = 'services'
+  $tenant             = 'services',
+  $public_protocol    = 'http'
 ) {
 
   Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'glance-registry' |>
@@ -49,7 +50,7 @@ class glance::keystone::auth(
   if $configure_endpoint {
     keystone_endpoint { "${region}/$auth_name":
       ensure       => present,
-      public_url   => "http://${public_address}:${port}/v1",
+      public_url   => "${public_protocol}://${public_address}:${port}/v1",
       admin_url    => "http://${admin_address}:${port}/v1",
       internal_url => "http://${internal_address}:${port}/v1",
     }
