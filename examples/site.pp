@@ -37,6 +37,7 @@ class role_glance_mysql {
     keystone_tenant   => 'services',
     keystone_user     => 'glance',
     keystone_password => 'glance_password',
+    sql_connection    => 'mysql://glance:glance@127.0.0.1/glance',
   }
   class { 'glance::backend::file': }
 
