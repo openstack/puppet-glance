@@ -7,6 +7,8 @@ It is currently targettting the folsom release of OpenStack.
 
 Use the essex branch for essex support.
 
+[![Unit Test Status](https://secure.travis-ci.org/puppetlabs/puppetlabs-glance.png?branch=master)](http://travis-ci.org/puppetlabs/puppetlabs-glance)
+
 ## Platforms
 
 * Ubuntu 11.04 (Natty)
