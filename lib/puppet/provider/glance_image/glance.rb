@@ -50,9 +50,9 @@ Puppet::Type.type(:glance_image).provide(
       raise(Puppet::Error, "Must specify either source or location")
     end
     if stdin
-      auth_glance_stdin('add', "name='#{resource[:name]}'", "is_public=#{resource[:is_public]}", "container_format=#{resource[:container_format]}", "disk_format=#{resource[:disk_format]}", location)
+      auth_glance_stdin('add', "name=#{resource[:name]}", "is_public=#{resource[:is_public]}", "container_format=#{resource[:container_format]}", "disk_format=#{resource[:disk_format]}", location)
     else
-      auth_glance('add', "name='#{resource[:name]}'", "is_public=#{resource[:is_public]}", "container_format=#{resource[:container_format]}", "disk_format=#{resource[:disk_format]}", location)
+      auth_glance('add', "name=#{resource[:name]}", "is_public=#{resource[:is_public]}", "container_format=#{resource[:container_format]}", "disk_format=#{resource[:disk_format]}", location)
     end
   end
 
