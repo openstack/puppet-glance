@@ -1,3 +1,10 @@
+* 2013-03-19 1.1.0
+- update travis matrix (add ruby 1.9, puppet 3.0)
+- implement provider changes for purging
+- refactor of glance_image native types
+- remove /v1 from endpoints
+- allow specifying https for public endpoint
+- parse credentials out of apt-paste.conf
 * 2012-11-02 1.0.0
 - Add travisci support to repo
 - Remove essex support
