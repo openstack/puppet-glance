@@ -1,5 +1,5 @@
 name    'puppetlabs-glance'
-version '1.0.0'
+version '1.1.0'
 source  'git://github.com/puppetlabs/puppetlabs-glance'
 author  'Puppet Labs'
 license 'Apache'
@@ -8,6 +8,6 @@ description 'Openstack Glance module for folsom. Tested on Ubuntu Precise and RH
 project_page 'http://github.com/puppetlabs/puppetlabs-glance'
 
 dependency 'cprice404/inifile', '>= 0.9.0'
-dependency 'puppetlabs/keystone', '>= 1.0.1'
+dependency 'puppetlabs/keystone', '>= 1.1.0'
 dependency 'puppetlabs/mysql', '>= 0.5.0'
 dependency 'puppetlabs/stdlib', '>= 2.4.0'
