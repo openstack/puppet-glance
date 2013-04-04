@@ -17,7 +17,7 @@ class glance::backend::swift(
   $swift_store_auth_address = '127.0.0.1:8080/v1.0/',
   $swift_store_container = 'glance',
   $swift_store_create_container_on_put = 'False'
-) inherits glance::api {
+) {
 
   glance_api_config {
     'DEFAULT/default_store': value => 'swift';
