@@ -1,19 +1,17 @@
 # PuppetLabs Glance module
 
-This module provides a set of manifests that can be used to install and
-configure glance.
+This module can be used to flexibly configure [glance](http://glance.openstack.org/),
+the image service of openstack.
 
-It is currently targettting the folsom release of OpenStack.
+It has been tested with a combination of other modules, and has primarily been
+developed as a subcomponent of the [openstack module](https://github.com/stackforge/puppet-openstack)
 
-Use the essex branch for essex support.
-
-[![Unit Test Status](https://secure.travis-ci.org/puppetlabs/puppetlabs-glance.png?branch=master)](http://travis-ci.org/puppetlabs/puppetlabs-glance)
+It is currently targettting the folsom/grizzly releases of OpenStack.
 
 ## Platforms
 
-* Ubuntu 11.04 (Natty)
-* Ubuntu 11.10 (Oneiric)
 * Ubuntu 12.04 (Precise)
+* RHEL 6
 
 ## configurations
 
@@ -76,7 +74,7 @@ should be run on your keystone server
 
 for full examples, see the examples directory.
 
-in the module, puppetlabs-openstack, the following classes
+in the module, puppet-openstack, the following classes
 configure parts of glance:
 
   - openstack::glance    # api, file backend, and registry
