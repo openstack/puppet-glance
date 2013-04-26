@@ -129,4 +129,16 @@ describe 'glance::api' do
       end
     end
   end
+
+  describe 'with overridden pipeline' do
+    let :params do
+      {
+        :keystone_password => 'ChangeMe',
+        :pipeline           => 'keystone',
+      }
+    end
+
+    it { should contain_glance_api_config('paste_deploy/flavor').with_value('keystone') }
+  end
+
 end
