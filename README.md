@@ -1,82 +1,124 @@
-# PuppetLabs Glance module
+glance
+=======
 
-This module can be used to flexibly configure [glance](http://glance.openstack.org/),
-the image service of openstack.
+#### Table of Contents
 
-It has been tested with a combination of other modules, and has primarily been
-developed as a subcomponent of the [openstack module](https://github.com/stackforge/puppet-openstack)
+1. [Overview - What is the glance module?](#overview)
+2. [Module Description - What does the module do?](#module-description)
+3. [Setup - The basics of getting started with glance](#setup)
+4. [Implementation - An under-the-hood peek at what the module is doing](#implementation)
+5. [Limitations - OS compatibility, etc.](#limitations)
+6. [Development - Guide for contributing to the module](#development)
+7. [Contributors - Those with commits](#contributors)
+8. [Release Notes - Notes on the most recent updates to the module](#release-notes)
 
-It is currently targettting the folsom/grizzly releases of OpenStack.
+Overview
+--------
 
-## Platforms
+The glance module is a part of [Stackforge](https://github.com/stackfoge), an effort by the Openstack infrastructure team to provide continuous integration testing and code review for Openstack and Openstack community projects not part of the core software.  The module its self is used to flexibly configure and manage the image service for Openstack.
 
-* Ubuntu 12.04 (Precise)
-* RHEL 6
+Module Description
+------------------
 
-## configurations
+The glance module is a thorough attempt to make Puppet capable of managing the entirety of glance.  This includes manifests to provision such things as keystone endpoints, RPC configurations specific to glance, and database connections.  Types are shipped as part of the glance module to assist in manipulation of configuration files.
 
-Glance is configured with the following classes:
+This module is tested in combination with other modules needed to build and leverage an entire Openstack software stack.  These modules can be found, all pulled together in the [openstack module](https://github.com/stackfoge/puppet-openstack).
 
+Setup
+-----
 
-### configures glance::api service
+**What the glance module affects**
 
-    class { 'glance::api':
-      verbose           => $verbose,
-      debug             => $verbose,
-      auth_type         => 'keystone',
-      auth_port         => '35357',
-      auth_host         => $keystone_host,
-      keystone_tenant   => 'services',
-      keystone_user     => 'glance',
-      keystone_password => $glance_user_password,
-      sql_connection    => $sql_connection,
-      enabled           => $enabled,
-    }
+* glance, the image service for Openstack.
 
-### configures the glance registry
+### Installing glance
 
-    class { 'glance::registry':
-      verbose           => $verbose,
-      debug             => $verbose,
-      auth_host         => $keystone_host,
-      auth_port         => '35357',
-      auth_type         => 'keystone',
-      keystone_tenant   => 'services',
-      keystone_user     => 'glance',
-      keystone_password => $glance_user_password,
-      sql_connection    => $sql_connection,
-      enabled           => $enabled,
-    }
+    example% puppet module install puppetlabs/glance
 
-### Configure file storage backend
+### Beginning with glance
 
-    class { 'glance::backend::file': }
+To utilize the glance module's functionality you will need to declare multiple resources.  The following is a modified excerpt from the [openstack module](https://github.com/stackfoge/puppet-openstack).  This is not an exhaustive list of all the components needed, we recommend you consult and understand the [openstack module](https://github.com/stackforge/puppet-openstack) and the [core openstack](http://docs.openstack.org) documentation.
 
-### Create the Glance db, this should be configured on your mysql server
+**Define a glance node**
 
-    class { 'glance::db::mysql':
-      user          => $glance_db_user,
-      password      => $glance_db_password,
-      dbname        => $glance_db_dbname,
-      allowed_hosts => $allowed_hosts,
-    }
+```puppet
+class { 'glance::api':
+  verbose           => 'True',
+  keystone_tenant   => 'services',
+  keystone_user     => 'glance',
+  keystone_password => '12345',
+  sql_connection    => 'mysql://glance:12345@127.0.0.1/glance',
+}
 
-### configures glance endpoints in keystone
-should be run on your keystone server
+class { 'glance::registry':
+  verbose           => 'True',
+  keystone_tenant   => 'services',
+  keystone_user     => 'glance',
+  keystone_password => '12345',
+  sql_connection    => 'mysql://glance:12345@127.0.0.1/glance',
+}
 
-    class { 'glance::keystone::auth':
-      password         => $glance_user_password,
-      public_address   => $glance_public_real,
-      admin_address    => $glance_admin_real,
-      internal_address => $glance_internal_real,
-      region           => $region,
-    }
+class { 'glance::backend::file': }
+```
 
-for full examples, see the examples directory.
+**Setup postgres node glance**
 
-in the module, puppet-openstack, the following classes
-configure parts of glance:
+```puppet
+class { 'glance::db::postgresql':
+  password => '12345',
+}
+```
 
-  - openstack::glance    # api, file backend, and registry
-  - openstack::keystone  # sets up endpoints
-  - openstack::db::mysql # sets up db config
+**Setup mysql node for glance**
+
+```puppet
+class { 'glance::db::mysql':
+  password      => '12345',
+  allowed_hosts => '%',
+}
+```
+
+**Setup up keystone endpoints for glance on keystone node**
+
+```puppet
+class { 'glance::keystone::auth':
+  password         => '12345'
+  public_address   => '172.17.0.3',
+  admin_address    => 'admin@example.com',
+  internal_address => '172.17.1.3',
+  region           => 'example-west-1',
+}
+```
+
+Implementation
+--------------
+
+### glance
+
+glance is a combination of Puppet manifest and ruby code to deliver configuration and extra functionality through types and providers.
+
+Limitations
+------------
+
+* Only supports configuring the file and swift storage backends.
+
+Development
+-----------
+
+Developer documentation for the entire puppet-openstack project.
+
+* https://wiki.openstack.org/wiki/Puppet-openstack#Developer_documentation
+
+Contributors
+------------
+
+* https://github.com/stackforge/puppet-glance/graphs/contributors
+
+Release Notes
+-------------
+
+**2.0.0**
+
+* Upstream is now part of stackfoge.
+* Added postgresql support.
+* Various cleanups and bug fixes.
