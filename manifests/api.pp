@@ -37,8 +37,8 @@
 #
 class glance::api(
   $keystone_password,
-  $verbose           = 'False',
-  $debug             = 'False',
+  $verbose           = false,
+  $debug             = false,
   $bind_host         = '0.0.0.0',
   $bind_port         = '9292',
   $backlog           = '4096',

@@ -10,8 +10,8 @@ describe 'glance::registry' do
 
   let :default_params do
     {
-      :verbose           => 'False',
-      :debug             => 'False',
+      :verbose           => false,
+      :debug             => false,
       :bind_host         => '0.0.0.0',
       :bind_port         => '9191',
       :log_file          => '/var/log/glance/registry.log',
@@ -31,8 +31,8 @@ describe 'glance::registry' do
   [
     {:keystone_password => 'ChangeMe'},
     {
-      :verbose           => 'True',
-      :debug             => 'True',
+      :verbose           => true,
+      :debug             => true,
       :bind_host         => '127.0.0.1',
       :bind_port         => '9111',
       :log_file          => '/var/log/glance-registry.log',
@@ -63,8 +63,8 @@ describe 'glance::registry' do
       it { should contain_service('glance-registry').with(
           'ensure'     => param_hash[:enabled] ? 'running' : 'stopped',
           'enable'     => param_hash[:enabled],
-          'hasstatus'  => 'true',
-          'hasrestart' => 'true',
+          'hasstatus'  => true,
+          'hasrestart' => true,
           'subscribe'  => 'File[/etc/glance/glance-registry.conf]',
           'require'    => 'Class[Glance]'
       )}
