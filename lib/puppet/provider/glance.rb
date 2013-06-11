@@ -9,7 +9,7 @@ class Puppet::Provider::Glance < Puppet::Provider
   end
 
   def self.get_glance_credentials
-    if glance_file and glance_file['keystone_authtoken'] and 
+    if glance_file and glance_file['keystone_authtoken'] and
       glance_file['keystone_authtoken']['auth_host'] and
       glance_file['keystone_authtoken']['auth_port'] and
       glance_file['keystone_authtoken']['auth_protocol'] and
@@ -21,6 +21,7 @@ class Puppet::Provider::Glance < Puppet::Provider
         g['auth_host'] = glance_file['keystone_authtoken']['auth_host'].strip
         g['auth_port'] = glance_file['keystone_authtoken']['auth_port'].strip
         g['auth_protocol'] = glance_file['keystone_authtoken']['auth_protocol'].strip
+        g['auth_admin_prefix'] = glance_file['keystone_authtoken'].fetch('auth_admin_prefix', '').strip
         g['admin_tenant_name'] = glance_file['keystone_authtoken']['admin_tenant_name'].strip
         g['admin_user'] = glance_file['keystone_authtoken']['admin_user'].strip
         g['admin_password'] = glance_file['keystone_authtoken']['admin_password'].strip
@@ -40,7 +41,7 @@ class Puppet::Provider::Glance < Puppet::Provider
 
   def self.get_auth_endpoint
     g = glance_credentials
-    "#{g['auth_protocol']}://#{g['auth_host']}:#{g['auth_port']}/v2.0/"
+    "#{g['auth_protocol']}://#{g['auth_host']}:#{g['auth_port']}#{g['auth_admin_prefix']}/v2.0/"
   end
 
   def self.glance_file

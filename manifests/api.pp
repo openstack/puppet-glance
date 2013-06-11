@@ -28,6 +28,10 @@
 #  * auth_type - Type is authorization being used. Optional. Defaults to 'keystone'
 #  * auth_host - Host running auth service. Optional. Defaults to '127.0.0.1'.
 #  * auth_port - Port to use for auth service on auth_host. Optional. Defaults to '35357'.
+#  * auth_admin_prefix - (optional) path part of the auth url.
+#    This allow admin auth URIs like http://auth_host:35357/keystone/admin.
+#    (where '/keystone/admin' is auth_admin_prefix)
+#    Defaults to false for empty. If defined, should be a string with a leading '/' and no trailing '/'.
 #  * auth_protocol - Protocol to use for auth. Optional. Defaults to 'http'.
 #  * keystone_tenant - tenant to authenticate to. Optioal. Defaults to admin.
 #  * keystone_user User to authenticate as with keystone Optional. Defaults to admin.
@@ -49,6 +53,7 @@ class glance::api(
   $auth_type         = 'keystone',
   $auth_host         = '127.0.0.1',
   $auth_port         = '35357',
+  $auth_admin_prefix = false,
   $auth_protocol     = 'http',
   $pipeline          = 'keystone+cachemanagement',
   $keystone_tenant   = 'admin',
@@ -132,6 +137,17 @@ class glance::api(
     'keystone_authtoken/auth_host':         value => $auth_host;
     'keystone_authtoken/auth_port':         value => $auth_port;
     'keystone_authtoken/protocol':          value => $protocol;
+  }
+
+  if $auth_admin_prefix {
+    validate_re($auth_admin_prefix, '^(/.+[^/])?$')
+    glance_api_config {
+      'keystone_authtoken/auth_admin_prefix': value => $auth_admin_prefix;
+    }
+  } else {
+    glance_api_config {
+      'keystone_authtoken/auth_admin_prefix': ensure => absent;
+    }
   }
 
   # keystone config

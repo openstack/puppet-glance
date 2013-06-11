@@ -115,6 +115,7 @@ describe 'glance::api' do
           should contain_glance_api_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
         end
       end
+      it { should contain_glance_api_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent') }
 
       it 'should configure itself for keystone if that is the auth_type' do
         if params[:auth_type] == 'keystone'
@@ -134,11 +135,43 @@ describe 'glance::api' do
     let :params do
       {
         :keystone_password => 'ChangeMe',
-        :pipeline           => 'keystone',
+        :pipeline          => 'keystone',
       }
     end
 
     it { should contain_glance_api_config('paste_deploy/flavor').with_value('keystone') }
+  end
+
+  describe 'with overriden auth_admin_prefix' do
+    let :params do
+      {
+        :keystone_password => 'ChangeMe',
+        :auth_admin_prefix => '/keystone/main'
+      }
+    end
+
+    it { should contain_glance_api_config('keystone_authtoken/auth_admin_prefix').with_value('/keystone/main') }
+  end
+
+  [
+    '/keystone/',
+    'keystone/',
+    'keystone',
+    '/keystone/admin/',
+    'keystone/admin/',
+    'keystone/admin'
+  ].each do |auth_admin_prefix|
+    describe "with auth_admin_prefix_containing incorrect value #{auth_admin_prefix}" do
+      let :params do
+        {
+          :keystone_password => 'ChangeMe',
+          :auth_admin_prefix => auth_admin_prefix
+        }
+      end
+
+      it { expect { should contain_glance_api_config('filter:authtoken/auth_admin_prefix') }.to\
+        raise_error(Puppet::Error, /validate_re\(\): "#{auth_admin_prefix}" does not match/) }
+    end
   end
 
 end

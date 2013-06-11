@@ -1,3 +1,66 @@
+# == Class: glance::registry
+#
+# Installs and configures glance-registry
+#
+# === Parameters
+#
+#  [*keystone_password*]
+#    (required) The keystone password for administrative user
+#
+#  [*verbose*]
+#    (optional) Enable verbose logs (true|false). Defaults to false.
+#
+#  [*debug*]
+#    (optional) Enable debug logs (true|false). Defaults to false.
+#
+#  [*bind_host*]
+#    (optional) The address of the host to bind to. Defaults to '0.0.0.0'.
+#
+#  [*bind_port*]
+#    (optional) The port the server should bind to. Defaults to '9191'.
+#
+#  [*log_file*]
+#    (optional) Log file for glance-registry.
+#    Defaults to '/var/log/glance/registry.log'.
+#
+#  [*sql_connection*]
+#    (optional) SQL connection string.
+#    Defaults to 'sqlite:///var/lib/glance/glance.sqlite'.
+#
+#  [*sql_idle_timeout*]
+#    (optional) SQL connections idle timeout. Defaults to '3600'.
+#
+#  [*auth_type*]
+#    (optional) Authentication type. Defaults to 'keystone'.
+#
+#  [*auth_host*]
+#    (optional) Address of the admin authentication endpoint.
+#    Defaults to '127.0.0.1'.
+#
+#  [*auth_port*]
+#    (optional) Port of the admin authentication endpoint. Defaults to '35357'.
+#
+#  [*auth_admin_prefix*]
+#    (optional) path part of the auth url.
+#    This allow admin auth URIs like http://auth_host:35357/keystone/admin.
+#    (where '/keystone/admin' is auth_admin_prefix)
+#    Defaults to false for empty. If defined, should be a string with a leading '/' and no trailing '/'.
+#
+#  [*auth_protocol*]
+#    (optional) Protocol to communicate with the admin authentication endpoint.
+#    Defaults to 'http'. Should be 'http' or 'https'.
+#
+#  [*keystone_tenant*]
+#    (optional) administrative tenant name to connect to keystone.
+#    Defaults to 'admin'.
+#
+#  [*keystone_user*]
+#    (optional) administrative user name to connect to keystone.
+#    Defaults to 'admin'.
+#
+#  [*enabled*]
+#    (optional) Should the service be enabled. Defaults to true.
+#
 class glance::registry(
   $keystone_password,
   $verbose           = false,
@@ -10,6 +73,7 @@ class glance::registry(
   $auth_type         = 'keystone',
   $auth_host         = '127.0.0.1',
   $auth_port         = '35357',
+  $auth_admin_prefix = false,
   $auth_protocol     = 'http',
   $keystone_tenant   = 'admin',
   $keystone_user     = 'admin',
@@ -62,6 +126,17 @@ class glance::registry(
     'keystone_authtoken/auth_host':     value => $auth_host;
     'keystone_authtoken/auth_port':     value => $auth_port;
     'keystone_authtoken/auth_protocol': value => $auth_protocol;
+  }
+
+  if $auth_admin_prefix {
+    validate_re($auth_admin_prefix, '^(/.+[^/])?$')
+    glance_registry_config {
+      'keystone_authtoken/auth_admin_prefix': value => $auth_admin_prefix;
+    }
+  } else {
+    glance_registry_config {
+      'keystone_authtoken/auth_admin_prefix': ensure => absent;
+    }
   }
 
   # keystone config

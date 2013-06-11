@@ -1,4 +1,3 @@
-require 'spec_helper'
 
 describe 'glance::registry' do
 
@@ -99,6 +98,7 @@ describe 'glance::registry' do
         ].each do |config|
           should contain_glance_registry_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
         end
+        should contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
         if param_hash[:auth_type] == 'keystone'
           should contain_glance_registry_config("paste_deploy/flavor").with_value('keystone')
           should contain_glance_registry_config("keystone_authtoken/admin_tenant_name").with_value(param_hash[:keystone_tenant])
@@ -106,6 +106,38 @@ describe 'glance::registry' do
           should contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password])
         end
       end
+    end
+  end
+
+  describe 'with overriden auth_admin_prefix' do
+    let :params do
+      {
+        :keystone_password => 'ChangeMe',
+        :auth_admin_prefix => '/keystone/main'
+      }
+    end
+
+    it { should contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_value('/keystone/main') }
+  end
+
+  [
+    '/keystone/',
+    'keystone/',
+    'keystone',
+    '/keystone/admin/',
+    'keystone/admin/',
+    'keystone/admin'
+  ].each do |auth_admin_prefix|
+    describe "with auth_admin_prefix_containing incorrect value #{auth_admin_prefix}" do
+      let :params do
+        {
+          :keystone_password => 'ChangeMe',
+          :auth_admin_prefix => auth_admin_prefix
+        }
+      end
+
+      it { expect { should contain_glance_registry_config('filter:authtoken/auth_admin_prefix') }.to\
+        raise_error(Puppet::Error, /validate_re\(\): "#{auth_admin_prefix}" does not match/) }
     end
   end
 end
