@@ -21,10 +21,13 @@ class Puppet::Provider::Glance < Puppet::Provider
         g['auth_host'] = glance_file['keystone_authtoken']['auth_host'].strip
         g['auth_port'] = glance_file['keystone_authtoken']['auth_port'].strip
         g['auth_protocol'] = glance_file['keystone_authtoken']['auth_protocol'].strip
-        g['auth_admin_prefix'] = glance_file['keystone_authtoken'].fetch('auth_admin_prefix', '').strip
         g['admin_tenant_name'] = glance_file['keystone_authtoken']['admin_tenant_name'].strip
         g['admin_user'] = glance_file['keystone_authtoken']['admin_user'].strip
         g['admin_password'] = glance_file['keystone_authtoken']['admin_password'].strip
+
+        # auth_admin_prefix not required to be set.
+        g['auth_admin_prefix'] = (glance_file['keystone_authtoken']['auth_admin_prefix'] || '').strip
+
         return g
     else
       raise(Puppet::Error, 'File: /etc/glance/glance-api.conf does not contain all required sections.')
