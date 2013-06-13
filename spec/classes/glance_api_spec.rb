@@ -110,7 +110,7 @@ describe 'glance::api' do
         [
           'auth_host',
           'auth_port',
-          'protocol'
+          'auth_protocol'
         ].each do |config|
           should contain_glance_api_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
         end

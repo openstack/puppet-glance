@@ -136,7 +136,7 @@ class glance::api(
   glance_api_config {
     'keystone_authtoken/auth_host':         value => $auth_host;
     'keystone_authtoken/auth_port':         value => $auth_port;
-    'keystone_authtoken/protocol':          value => $protocol;
+    'keystone_authtoken/auth_protocol':     value => $auth_protocol;
   }
 
   if $auth_admin_prefix {
