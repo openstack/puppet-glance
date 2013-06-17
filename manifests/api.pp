@@ -150,19 +150,30 @@ class glance::api(
     }
   }
 
+  # Set the pipeline, it is allowed to be blank
+  if $pipeline != '' {
+    validate_re($pipeline, '^(\w+([+]\w+)*)*$')
+    glance_api_config {
+      'paste_deploy/flavor':
+        value  => $pipeline,
+        ensure => present
+    }
+  } else {
+    glance_api_config { 'paste_deploy/flavor': ensure => absent }
+  }
+
   # keystone config
   if $auth_type == 'keystone' {
     glance_api_config {
-      'paste_deploy/flavor':                  value => $pipeline;
       'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
-      'keystone_authtoken/admin_user':        value => $keystone_user;
-      'keystone_authtoken/admin_password':    value => $keystone_password;
+      'keystone_authtoken/admin_user'       : value => $keystone_user;
+      'keystone_authtoken/admin_password'   : value => $keystone_password;
     }
     glance_cache_config {
-      'DEFAULT/auth_url':          value => $auth_url;
+      'DEFAULT/auth_url'         : value => $auth_url;
       'DEFAULT/admin_tenant_name': value => $keystone_tenant;
-      'DEFAULT/admin_user':        value => $keystone_user;
-      'DEFAULT/admin_password':    value => $eystone_password;
+      'DEFAULT/admin_user'       : value => $keystone_user;
+      'DEFAULT/admin_password'   : value => $eystone_password;
     }
   }
 
