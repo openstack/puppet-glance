@@ -82,7 +82,7 @@ class glance::registry(
 
   require 'keystone::python'
 
-  validate_re($sql_connection, '(sqlite|mysql|posgres):\/\/(\S+:\S+@\S+\/\S+)?')
+  validate_re($sql_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   Package['glance'] -> Glance_registry_config<||>
   Glance_registry_config<||> ~> Exec<| title == 'glance-manage db_sync' |>

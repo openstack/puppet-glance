@@ -66,7 +66,7 @@ class glance::api(
   # used to configure concat
   require 'keystone::python'
 
-  validate_re($sql_connection, '(sqlite|mysql|posgres):\/\/(\S+:\S+@\S+\/\S+)?')
+  validate_re($sql_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   Package['glance'] -> Glance_api_config<||>
   Package['glance'] -> Glance_cache_config<||>
