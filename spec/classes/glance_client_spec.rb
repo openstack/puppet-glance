@@ -4,8 +4,8 @@ describe 'glance::client' do
 
   shared_examples 'glance client' do
     it { should include_class('glance::params') }
-    it { should contain_package('python-glance').with(
-        :name   => 'python-glance',
+    it { should contain_package('python-glanceclient').with(
+        :name   => 'python-glanceclient',
         :ensure => 'present'
       )
     }

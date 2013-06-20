@@ -2,7 +2,7 @@
 # should be considered to be constant
 class glance::params {
 
-  $client_package_name = 'python-glance'
+  $client_package_name = 'python-glanceclient'
 
   case $::osfamily {
     'RedHat': {
