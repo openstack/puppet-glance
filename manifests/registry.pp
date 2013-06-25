@@ -77,6 +77,7 @@ class glance::registry(
   $auth_protocol     = 'http',
   $keystone_tenant   = 'admin',
   $keystone_user     = 'admin',
+  $pipeline          = 'keystone',
   $enabled           = true
 ) inherits glance {
 
@@ -139,13 +140,24 @@ class glance::registry(
     }
   }
 
+  # Set the pipeline, it is allowed to be blank
+  if $pipeline != '' {
+    validate_re($pipeline, '^(\w+([+]\w+)*)*$')
+    glance_registry_config {
+      'paste_deploy/flavor':
+        value  => $pipeline,
+        ensure => present
+    }
+  } else {
+    glance_registry_config { 'paste_deploy/flavor': ensure => absent }
+  }
+
   # keystone config
   if $auth_type == 'keystone' {
     glance_registry_config {
-      'paste_deploy/flavor':                  value => 'keystone';
       'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
-      'keystone_authtoken/admin_user':        value => $keystone_user;
-      'keystone_authtoken/admin_password':    value => $keystone_password;
+      'keystone_authtoken/admin_user'       : value => $keystone_user;
+      'keystone_authtoken/admin_password'   : value => $keystone_password;
     }
   }
 

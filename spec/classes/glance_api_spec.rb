@@ -142,6 +142,37 @@ describe 'glance::api' do
     it { should contain_glance_api_config('paste_deploy/flavor').with_value('keystone') }
   end
 
+  describe 'with blank pipeline' do
+    let :params do
+      {
+        :keystone_password => 'ChangeMe',
+        :pipeline          => '',
+      }
+    end
+
+    it { should contain_glance_api_config('paste_deploy/flavor').with_ensure('absent') }
+  end
+
+  [
+    'keystone/',
+    'keystone+',
+    '+keystone',
+    'keystone+cachemanagement+',
+    '+'
+  ].each do |pipeline|
+    describe "with pipeline incorrect value #{pipeline}" do
+      let :params do
+        {
+          :keystone_password => 'ChangeMe',
+          :pipeline          => pipeline
+        }
+      end
+
+      it { expect { should contain_glance_api_config('filter:paste_deploy/flavor') }.to\
+        raise_error(Puppet::Error, /validate_re\(\): .* does not match/) }
+    end
+  end
+
   describe 'with overriden auth_admin_prefix' do
     let :params do
       {
