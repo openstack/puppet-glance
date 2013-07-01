@@ -1,5 +1,5 @@
 #
-# == Paremeters:
+# == Parameters
 #
 #
 #  * keystone_password Password used to authemn
@@ -63,8 +63,7 @@ class glance::api(
   $sql_connection    = 'sqlite:///var/lib/glance/glance.sqlite'
 ) inherits glance {
 
-  # used to configure concat
-  require 'keystone::python'
+  require keystone::python
 
   validate_re($sql_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
@@ -125,7 +124,8 @@ class glance::api(
   }
 
   # db connection config
-  # I do not believe this was required in Essex. Does the API server now need to connect to the DB?
+  # I do not believe this was required in Essex.
+  # Does the API server now need to connect to the DB?
   # TODO figure out if I need this...
   glance_api_config {
     'DEFAULT/sql_connection':   value => $sql_connection;
@@ -134,9 +134,9 @@ class glance::api(
 
   # auth config
   glance_api_config {
-    'keystone_authtoken/auth_host':         value => $auth_host;
-    'keystone_authtoken/auth_port':         value => $auth_port;
-    'keystone_authtoken/auth_protocol':     value => $auth_protocol;
+    'keystone_authtoken/auth_host':     value => $auth_host;
+    'keystone_authtoken/auth_port':     value => $auth_port;
+    'keystone_authtoken/auth_protocol': value => $auth_protocol;
   }
 
   if $auth_admin_prefix {
@@ -179,8 +179,7 @@ class glance::api(
 
   file { ['/etc/glance/glance-api.conf',
           '/etc/glance/glance-api-paste.ini',
-          '/etc/glance/glance-cache.conf'
-         ]:
+          '/etc/glance/glance-cache.conf']:
   }
 
   if $enabled {

@@ -8,14 +8,14 @@ class glance::db::postgresql(
   $user   = 'glance'
 ) {
 
-  require 'postgresql::python'
+  require postgresql::python
 
   Postgresql::Db[$dbname] ~> Exec<| title == 'glance-manage db_sync' |>
   Package['python-psycopg2'] -> Exec<| title == 'glance-manage db_sync' |>
 
-  postgresql::db { "${dbname}":
-    user      =>  "${user}",
-    password  =>  "${password}",
+  postgresql::db { $dbname:
+    user      =>  $user,
+    password  =>  $password,
   }
 
 }

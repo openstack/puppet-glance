@@ -6,8 +6,8 @@ Exec { logoutput => 'on_failure' }
 node glance_keystone_mysql {
   class { 'mysql::server': }
   class { 'keystone':
-    verbose  => true,
-    debug    => true,
+    verbose      => true,
+    debug        => true,
     catalog_type => 'sql',
     admin_token  => 'admin_token',
   }
@@ -31,8 +31,8 @@ node default {
 class role_glance_mysql {
 
   class { 'glance::api':
-    verbose       => 'True',
-    debug         => 'True',
+    verbose           => true,
+    debug             => true,
     auth_type         => 'keystone',
     keystone_tenant   => 'services',
     keystone_user     => 'glance',
@@ -46,18 +46,17 @@ class role_glance_mysql {
     dbname   => 'glance',
     user     => 'glance',
     host     => '127.0.0.1',
-   # allowed_hosts = undef,
-   # $cluster_id = 'localzone'
+    # allowed_hosts = undef,
+    # $cluster_id = 'localzone'
   }
 
   class { 'glance::registry':
-    verbose       => 'True',
-    debug         => 'True',
+    verbose           => true,
+    debug             => true,
     auth_type         => 'keystone',
     keystone_tenant   => 'services',
     keystone_user     => 'glance',
     keystone_password => 'glance_password',
     sql_connection    => 'mysql://glance:glance@127.0.0.1/glance',
   }
-
 }

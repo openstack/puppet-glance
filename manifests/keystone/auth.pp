@@ -38,17 +38,20 @@ class glance::keystone::auth(
     email    => $email,
     tenant   => $tenant,
   }
+
   keystone_user_role { "${auth_name}@${tenant}":
     ensure  => present,
     roles   => 'admin',
   }
+
   keystone_service { $auth_name:
     ensure      => present,
     type        => $service_type,
-    description => "Openstack Image Service",
+    description => 'Openstack Image Service',
   }
+
   if $configure_endpoint {
-    keystone_endpoint { "${region}/$auth_name":
+    keystone_endpoint { "${region}/${auth_name}":
       ensure       => present,
       public_url   => "${public_protocol}://${public_address}:${port}",
       admin_url    => "http://${admin_address}:${port}",

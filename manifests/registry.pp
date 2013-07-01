@@ -81,7 +81,7 @@ class glance::registry(
   $enabled           = true
 ) inherits glance {
 
-  require 'keystone::python'
+  require keystone::python
 
   validate_re($sql_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
@@ -99,7 +99,7 @@ class glance::registry(
   }
 
   if($sql_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-    require 'mysql::python'
+    require mysql::python
   } elsif($sql_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
 
   } elsif($sql_connection =~ /sqlite:\/\//) {
@@ -108,7 +108,6 @@ class glance::registry(
     fail("Invalid db connection ${sql_connection}")
   }
 
-  # basic service config
   glance_registry_config {
     'DEFAULT/verbose':   value => $verbose;
     'DEFAULT/debug':     value => $debug;
@@ -116,7 +115,6 @@ class glance::registry(
     'DEFAULT/bind_port': value => $bind_port;
   }
 
-  # db connection config
   glance_registry_config {
     'DEFAULT/sql_connection':   value => $sql_connection;
     'DEFAULT/sql_idle_timeout': value => $sql_idle_timeout;
@@ -162,8 +160,7 @@ class glance::registry(
   }
 
   file { ['/etc/glance/glance-registry.conf',
-          '/etc/glance/glance-registry-paste.ini'
-         ]:
+          '/etc/glance/glance-registry-paste.ini']:
   }
 
   if $enabled {
