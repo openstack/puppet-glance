@@ -100,7 +100,7 @@ glance is a combination of Puppet manifest and ruby code to deliver configuratio
 Limitations
 ------------
 
-* Only supports configuring the file and swift storage backends.
+* Only supports configuring the file, swift and rbd storage backends.
 
 Development
 -----------

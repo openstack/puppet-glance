@@ -3,6 +3,7 @@
 class glance::params {
 
   $client_package_name = 'python-glanceclient'
+  $pyceph_package_name = 'python-ceph'
 
   case $::osfamily {
     'RedHat': {
