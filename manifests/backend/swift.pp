@@ -31,4 +31,14 @@ class glance::backend::swift(
       value => $swift_store_create_container_on_put;
   }
 
+  glance_cache_config {
+    'DEFAULT/swift_store_user':         value => $swift_store_user;
+    'DEFAULT/swift_store_key':          value => $swift_store_key;
+    'DEFAULT/swift_store_auth_address': value => $swift_store_auth_address;
+    'DEFAULT/swift_store_container':    value => $swift_store_container;
+    'DEFAULT/swift_store_auth_version': value => $swift_store_auth_version;
+    'DEFAULT/swift_store_create_container_on_put':
+      value => $swift_store_create_container_on_put;
+  }
+
 }
