@@ -58,6 +58,13 @@ class Puppet::Provider::Glance < Puppet::Provider
     @glance_hash ||= build_glance_hash
   end
 
+  def self.reset
+    @glance_hash        = nil
+    @glance_file        = nil
+    @glance_credentials = nil
+    @auth_endpoint      = nil
+  end
+
   def glance_hash
     self.class.glance_hash
   end
@@ -67,8 +74,12 @@ class Puppet::Provider::Glance < Puppet::Provider
       g = glance_credentials
       glance('-T', g['admin_tenant_name'], '-I', g['admin_user'], '-K', g['admin_password'], '-N', auth_endpoint, args)
     rescue Exception => e
-      # Will probably add conditions later
-      raise(e)
+      if (e.message =~ /\[Errno 111\] Connection refused/) or (e.message =~ /\(HTTP 400\)/) or (e.message =~ /HTTP Unable to establish connection/)
+        sleep 10
+        glance('-T', g['admin_tenant_name'], '-I', g['admin_user'], '-K', g['admin_password'], '-N', auth_endpoint, args)
+      else
+        raise(e)
+      end
     end
   end
 
