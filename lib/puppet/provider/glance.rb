@@ -90,7 +90,7 @@ class Puppet::Provider::Glance < Puppet::Provider
   def self.auth_glance_stdin(*args)
     begin
       g = glance_credentials
-      command = "glance --silent-upload -T #{g['admin_tenant_name']} -I #{g['admin_user']} -K #{g['admin_password']} -N #{auth_endpoint} #{args.join(' ')}"
+      command = "glance -T #{g['admin_tenant_name']} -I #{g['admin_user']} -K #{g['admin_password']} -N #{auth_endpoint} #{args.join(' ')}"
 
       # This is a horrible, horrible hack
       # Redirect stderr to stdout in order to report errors
