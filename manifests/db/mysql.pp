@@ -25,9 +25,18 @@ class glance::db::mysql(
     require      => Class['mysql::config'],
   }
 
-  if $allowed_hosts {
+  # Check allowed_hosts to avoid duplicate resource declarations
+  # If $host in $allowed_hosts, then remove it
+  if is_array($allowed_hosts) and delete($allowed_hosts,$host) != [] {
+    $real_allowed_hosts = delete($allowed_hosts,$host)
+  # If $host = $allowed_hosts, then set it to undef
+  } elsif is_string($allowed_hosts) and ($allowed_hosts != $host) {
+    $real_allowed_hosts = $allowed_hosts
+  }
+
+  if $real_allowed_hosts {
     # TODO this class should be in the mysql namespace
-    glance::db::mysql::host_access { $allowed_hosts:
+    glance::db::mysql::host_access { $real_allowed_hosts:
       user      => $user,
       password  => $password,
       database  => $dbname,
