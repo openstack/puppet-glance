@@ -5,6 +5,9 @@ class glance::params {
   $client_package_name = 'python-glanceclient'
   $pyceph_package_name = 'python-ceph'
 
+  $cache_cleaner_command = 'glance-cache-cleaner'
+  $cache_pruner_command  = 'glance-cache-pruner'
+
   case $::osfamily {
     'RedHat': {
       $package_name          = 'openstack-glance'
