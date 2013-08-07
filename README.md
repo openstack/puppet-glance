@@ -117,6 +117,20 @@ Contributors
 Release Notes
 -------------
 
+**2.1.0**
+
+* Added glance-cache-cleaner and glance-cache-pruner.
+* Added ceph/rdb support.
+* Added retry for glance provider to account for service startup time.
+* Added support for both file and swift backends.
+* Fixed allowed_hosts/database access bug.
+* Fixed glance_image type example.
+* Removed unnecessary mysql::server dependency.
+* Removed --silent-upload option.
+* Removed glance-manage version_control.
+* Pinned rabbit and mysql module versions.
+* Various lint and bug fixes.
+
 **2.0.0**
 
 * Upstream is now part of stackfoge.
