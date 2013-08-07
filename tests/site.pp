@@ -18,18 +18,6 @@ node glance_keystone_mysql {
     email    => 'test@puppetlabs.com',
     password => 'ChangeMe',
   }
-  class { 'role_glance_mysql': }
-  class { 'glance::keystone::auth':
-    password => 'glance_pass',
-  }
-}
-
-node default {
-  fail("could not find a matching node entry for ${clientcert}")
-}
-
-class role_glance_mysql {
-
   class { 'glance::api':
     verbose           => true,
     debug             => true,
@@ -59,4 +47,11 @@ class role_glance_mysql {
     keystone_password => 'glance_password',
     sql_connection    => 'mysql://glance:glance@127.0.0.1/glance',
   }
+  class { 'glance::keystone::auth':
+    password => 'glance_pass',
+  }
+}
+
+node default {
+  fail("could not find a matching node entry for ${clientcert}")
 }
