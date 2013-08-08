@@ -50,6 +50,9 @@
 #    (optional) Protocol to communicate with the admin authentication endpoint.
 #    Defaults to 'http'. Should be 'http' or 'https'.
 #
+#  [*auth_uri*]
+#    (optional) Complete public Identity API endpoint.
+#
 #  [*keystone_tenant*]
 #    (optional) administrative tenant name to connect to keystone.
 #    Defaults to 'admin'.
@@ -74,6 +77,7 @@ class glance::registry(
   $auth_host         = '127.0.0.1',
   $auth_port         = '35357',
   $auth_admin_prefix = false,
+  $auth_uri          = false,
   $auth_protocol     = 'http',
   $keystone_tenant   = 'admin',
   $keystone_user     = 'admin',
@@ -118,6 +122,12 @@ class glance::registry(
   glance_registry_config {
     'DEFAULT/sql_connection':   value => $sql_connection;
     'DEFAULT/sql_idle_timeout': value => $sql_idle_timeout;
+  }
+
+  if $auth_uri {
+    glance_registry_config { 'keystone_authtoken/auth_uri': value => $auth_uri; }
+  } else {
+    glance_registry_config { 'keystone_authtoken/auth_uri': value => "${auth_protocol}://${auth_host}:5000/"; }
   }
 
   # auth config

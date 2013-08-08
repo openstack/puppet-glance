@@ -33,6 +33,7 @@
 #    (where '/keystone/admin' is auth_admin_prefix)
 #    Defaults to false for empty. If defined, should be a string with a leading '/' and no trailing '/'.
 #  * auth_protocol - Protocol to use for auth. Optional. Defaults to 'http'.
+#  * auth_uri - Complete public Identity API endpoint.
 #  * keystone_tenant - tenant to authenticate to. Optioal. Defaults to admin.
 #  * keystone_user User to authenticate as with keystone Optional. Defaults to admin.
 #  * enabled  Whether to enable services. Optional. Defaults to true.
@@ -54,6 +55,7 @@ class glance::api(
   $auth_host         = '127.0.0.1',
   $auth_url          = 'http://localhost:5000/v2.0',
   $auth_port         = '35357',
+  $auth_uri          = false,
   $auth_admin_prefix = false,
   $auth_protocol     = 'http',
   $pipeline          = 'keystone+cachemanagement',
@@ -131,6 +133,12 @@ class glance::api(
   glance_api_config {
     'DEFAULT/sql_connection':   value => $sql_connection;
     'DEFAULT/sql_idle_timeout': value => $sql_idle_timeout;
+  }
+
+  if $auth_uri {
+    glance_api_config { 'keystone_authtoken/auth_uri': value => $auth_uri; }
+  } else {
+    glance_api_config { 'keystone_authtoken/auth_uri': value => "${auth_protocol}://${auth_host}:5000/"; }
   }
 
   # auth config
