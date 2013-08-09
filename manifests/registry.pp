@@ -143,8 +143,8 @@ class glance::registry(
     validate_re($pipeline, '^(\w+([+]\w+)*)*$')
     glance_registry_config {
       'paste_deploy/flavor':
+        ensure => present,
         value  => $pipeline,
-        ensure => present
     }
   } else {
     glance_registry_config { 'paste_deploy/flavor': ensure => absent }
@@ -181,8 +181,8 @@ class glance::registry(
   }
 
   service { 'glance-registry':
-    name       => $::glance::params::registry_service_name,
     ensure     => $service_ensure,
+    name       => $::glance::params::registry_service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,

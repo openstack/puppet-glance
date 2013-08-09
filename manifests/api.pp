@@ -155,8 +155,8 @@ class glance::api(
     validate_re($pipeline, '^(\w+([+]\w+)*)*$')
     glance_api_config {
       'paste_deploy/flavor':
+        ensure => present,
         value  => $pipeline,
-        ensure => present
     }
   } else {
     glance_api_config { 'paste_deploy/flavor': ensure => absent }
@@ -189,8 +189,8 @@ class glance::api(
   }
 
   service { 'glance-api':
-    name       => $::glance::params::api_service_name,
     ensure     => $service_ensure,
+    name       => $::glance::params::api_service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
