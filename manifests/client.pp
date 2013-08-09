@@ -11,8 +11,8 @@ class glance::client (
   include glance::params
 
   package { 'python-glanceclient':
-    name   => $::glance::params::client_package_name,
     ensure => $ensure,
+    name   => $::glance::params::client_package_name,
   }
 
 }

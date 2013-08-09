@@ -18,7 +18,7 @@ class glance(
     require => Package['glance']
   }
   package { 'glance':
-    name   => $::glance::params::package_name,
     ensure => $package_ensure,
+    name   => $::glance::params::package_name,
   }
 }
