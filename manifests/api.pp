@@ -52,6 +52,7 @@ class glance::api(
   $registry_port     = '9191',
   $auth_type         = 'keystone',
   $auth_host         = '127.0.0.1',
+  $auth_url          = 'http://localhost:5000/v2.0',
   $auth_port         = '35357',
   $auth_admin_prefix = false,
   $auth_protocol     = 'http',
@@ -173,7 +174,7 @@ class glance::api(
       'DEFAULT/auth_url'         : value => $auth_url;
       'DEFAULT/admin_tenant_name': value => $keystone_tenant;
       'DEFAULT/admin_user'       : value => $keystone_user;
-      'DEFAULT/admin_password'   : value => $eystone_password;
+      'DEFAULT/admin_password'   : value => $keystone_password;
     }
   }
 

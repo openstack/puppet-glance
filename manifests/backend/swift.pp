@@ -21,7 +21,7 @@ class glance::backend::swift(
 ) {
 
   glance_api_config {
-    'DEFAULT/default_store': value => 'swift';
+    'DEFAULT/default_store':            value => 'swift';
     'DEFAULT/swift_store_user':         value => $swift_store_user;
     'DEFAULT/swift_store_key':          value => $swift_store_key;
     'DEFAULT/swift_store_auth_address': value => $swift_store_auth_address;
