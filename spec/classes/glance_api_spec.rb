@@ -26,8 +26,8 @@ describe 'glance::api' do
       :auth_port         => '35357',
       :auth_protocol     => 'http',
       :auth_uri          => 'http://127.0.0.1:5000/',
-      :keystone_tenant   => 'admin',
-      :keystone_user     => 'admin',
+      :keystone_tenant   => 'services',
+      :keystone_user     => 'glance',
       :keystone_password => 'ChangeMe',
       :sql_idle_timeout  => '3600',
       :sql_connection    => 'sqlite:///var/lib/glance/glance.sqlite'

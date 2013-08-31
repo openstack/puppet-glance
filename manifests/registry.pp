@@ -55,11 +55,11 @@
 #
 #  [*keystone_tenant*]
 #    (optional) administrative tenant name to connect to keystone.
-#    Defaults to 'admin'.
+#    Defaults to 'services'.
 #
 #  [*keystone_user*]
 #    (optional) administrative user name to connect to keystone.
-#    Defaults to 'admin'.
+#    Defaults to 'glance'.
 #
 #  [*enabled*]
 #    (optional) Should the service be enabled. Defaults to true.
@@ -79,8 +79,8 @@ class glance::registry(
   $auth_admin_prefix = false,
   $auth_uri          = false,
   $auth_protocol     = 'http',
-  $keystone_tenant   = 'admin',
-  $keystone_user     = 'admin',
+  $keystone_tenant   = 'services',
+  $keystone_user     = 'glance',
   $pipeline          = 'keystone',
   $enabled           = true
 ) inherits glance {

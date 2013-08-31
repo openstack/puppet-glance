@@ -34,8 +34,8 @@
 #    Defaults to false for empty. If defined, should be a string with a leading '/' and no trailing '/'.
 #  * auth_protocol - Protocol to use for auth. Optional. Defaults to 'http'.
 #  * auth_uri - Complete public Identity API endpoint.
-#  * keystone_tenant - tenant to authenticate to. Optioal. Defaults to admin.
-#  * keystone_user User to authenticate as with keystone Optional. Defaults to admin.
+#  * keystone_tenant - tenant to authenticate to. Optioal. Defaults to services.
+#  * keystone_user User to authenticate as with keystone Optional. Defaults to glance.
 #  * enabled  Whether to enable services. Optional. Defaults to true.
 #  * sql_idle_timeout
 #  * sql_connection db conection.
@@ -59,8 +59,8 @@ class glance::api(
   $auth_admin_prefix = false,
   $auth_protocol     = 'http',
   $pipeline          = 'keystone+cachemanagement',
-  $keystone_tenant   = 'admin',
-  $keystone_user     = 'admin',
+  $keystone_tenant   = 'services',
+  $keystone_user     = 'glance',
   $enabled           = true,
   $sql_idle_timeout  = '3600',
   $sql_connection    = 'sqlite:///var/lib/glance/glance.sqlite'
