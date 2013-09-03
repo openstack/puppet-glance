@@ -61,6 +61,15 @@
 #    (optional) administrative user name to connect to keystone.
 #    Defaults to 'glance'.
 #
+#  [*use_syslog*]
+#    (optional) Use syslog for logging.
+#    Defaults to false.
+#
+#  [*log_facility*]
+#    (optional) Syslog facility to receive log lines.
+#    Defaults to LOG_USER.
+#
+#
 #  [*enabled*]
 #    (optional) Should the service be enabled. Defaults to true.
 #
@@ -82,6 +91,8 @@ class glance::registry(
   $keystone_tenant   = 'services',
   $keystone_user     = 'glance',
   $pipeline          = 'keystone',
+  $use_syslog        = false,
+  $log_facility      = 'LOG_USER',
   $enabled           = true
 ) inherits glance {
 
@@ -166,6 +177,18 @@ class glance::registry(
       'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
       'keystone_authtoken/admin_user'       : value => $keystone_user;
       'keystone_authtoken/admin_password'   : value => $keystone_password;
+    }
+  }
+
+  # Syslog
+  if $use_syslog {
+    glance_registry_config {
+      'DEFAULT/use_syslog':           value => true;
+      'DEFAULT/syslog_log_facility':  value => $log_facility;
+    }
+  } else {
+    glance_registry_config {
+      'DEFAULT/use_syslog': value => false;
     }
   }
 

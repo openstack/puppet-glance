@@ -39,6 +39,8 @@
 #  * enabled  Whether to enable services. Optional. Defaults to true.
 #  * sql_idle_timeout
 #  * sql_connection db conection.
+#  * use_syslog - Use syslog for logging.
+#  * log_facility - Syslog facility to receive log lines.
 #
 class glance::api(
   $keystone_password,
@@ -63,7 +65,9 @@ class glance::api(
   $keystone_user     = 'glance',
   $enabled           = true,
   $sql_idle_timeout  = '3600',
-  $sql_connection    = 'sqlite:///var/lib/glance/glance.sqlite'
+  $sql_connection    = 'sqlite:///var/lib/glance/glance.sqlite',
+  $use_syslog        = false,
+  $log_facility      = 'LOG_USER',
 ) inherits glance {
 
   require keystone::python
@@ -183,6 +187,18 @@ class glance::api(
       'DEFAULT/admin_tenant_name': value => $keystone_tenant;
       'DEFAULT/admin_user'       : value => $keystone_user;
       'DEFAULT/admin_password'   : value => $keystone_password;
+    }
+  }
+
+  # Syslog
+  if $use_syslog {
+    glance_api_config {
+      'DEFAULT/use_syslog'          : value => true;
+      'DEFAULT/syslog_log_facility' : value => $log_facility;
+    }
+  } else {
+    glance_api_config {
+      'DEFAULT/use_syslog': value => false;
     }
   }
 
