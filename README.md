@@ -43,7 +43,7 @@ To utilize the glance module's functionality you will need to declare multiple r
 
 ```puppet
 class { 'glance::api':
-  verbose           => 'True',
+  verbose           => true,
   keystone_tenant   => 'services',
   keystone_user     => 'glance',
   keystone_password => '12345',
@@ -51,7 +51,7 @@ class { 'glance::api':
 }
 
 class { 'glance::registry':
-  verbose           => 'True',
+  verbose           => true,
   keystone_tenant   => 'services',
   keystone_user     => 'glance',
   keystone_password => '12345',
