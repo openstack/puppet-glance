@@ -10,6 +10,8 @@ fixtures:
       repo: "git://github.com/puppetlabs/puppetlabs-rabbitmq"
       ref: 'origin/2.x'
     'inifile':  'git://github.com/puppetlabs/puppetlabs-inifile'
-    "postgresql": "git://github.com/puppetlabs/puppet-postgresql.git"
+    "postgresql":
+      repo: "git://github.com/puppetlabs/puppet-postgresql.git"
+      ref:  "2.5.0"
   symlinks:
     "glance": "#{source_dir}"
