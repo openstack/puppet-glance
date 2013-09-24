@@ -83,8 +83,9 @@ class { 'glance::db::mysql':
 ```puppet
 class { 'glance::keystone::auth':
   password         => '12345'
+  email            => 'glance@example.com',
   public_address   => '172.17.0.3',
-  admin_address    => 'admin@example.com',
+  admin_address    => '172.17.0.3',
   internal_address => '172.17.1.3',
   region           => 'example-west-1',
 }
