@@ -117,6 +117,15 @@ Contributors
 Release Notes
 -------------
 
+**2.2.0**
+
+* Added syslog support.
+* Added support for iso disk format.
+* Fixed bug to allow support for rdb options in glance-api.conf.
+* Fixed bug for rabbitmq options in notify::rabbitmq.
+* Removed non-implemented glance::scrubber class.
+* Various lint and bug fixes.
+
 **2.1.0**
 
 * Added glance-cache-cleaner and glance-cache-pruner.
