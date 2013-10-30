@@ -95,4 +95,22 @@ describe 'glance::keystone::auth' do
     it { should_not contain_keystone_endpoint('glance') }
   end
 
+  describe 'when configuring glance-api and the keystone endpoint' do
+    let :pre_condition do
+      "class { 'glance::api': keystone_password => 'test' }"
+    end
+
+    let :facts do
+      { :osfamily => 'Debian' }
+    end
+
+    let :params do
+      {
+        :password => 'test',
+        :configure_endpoint => true
+      }
+    end
+
+    it { should contain_keystone_endpoint('RegionOne/glance').with_notify('Service[glance-api]') }
+    end
 end
