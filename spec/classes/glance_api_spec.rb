@@ -34,7 +34,8 @@ describe 'glance::api' do
       :sql_connection        => 'sqlite:///var/lib/glance/glance.sqlite',
       :show_image_direct_url => false,
       :purge_config          => false,
-      :mysql_module          => '0.9'
+      :mysql_module          => '0.9',
+      :known_stores          => false,
     }
   end
 
@@ -285,5 +286,22 @@ describe 'glance::api' do
       it { should contain_glance_api_config('DEFAULT/cert_file').with_value('/tmp/cert_file') }
       it { should contain_glance_api_config('DEFAULT/key_file').with_value('/tmp/key_file') }
     end
+  end
+  describe 'with known_stores by default' do
+    let :params do
+      default_params
+    end
+
+    it { should_not contain_glance_api_config('DEFAULT/known_stores').with_value('false') }
+  end
+
+  describe 'with known_stores override' do
+    let :params do
+      default_params.merge({
+        :known_stores   => ['glance.store.filesystem.Store','glance.store.http.Store'],
+      })
+    end
+
+    it { should contain_glance_api_config('DEFAULT/known_stores').with_value("glance.store.filesystem.Store,glance.store.http.Store") }
   end
 end
