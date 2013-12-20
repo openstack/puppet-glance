@@ -1,5 +1,5 @@
 name    'puppetlabs-glance'
-version '3.0.0-rc1'
+version '3.0.0-rc2'
 source  'https://github.com/stackforge/puppet-glance'
 author  'Puppet Labs'
 license 'Apache License 2.0'

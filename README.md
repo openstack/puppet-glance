@@ -122,6 +122,8 @@ Release Notes
 
 * Major release for OpenStack Havana.
 * Fixed bug to ensure keystone endpoint is set before service starts.
+* Added Cinder backend to image storage.
+* Fixed qpid_hostname bug.
 
 **2.2.0**
 
