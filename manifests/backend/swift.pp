@@ -2,15 +2,17 @@
 # configures the storage backend for glance
 # as a swift instance
 #
-#  $swift_store_auth_address - Optional. Default: '127.0.0.1:8080/v1.0/',
+#  $swift_store_user - Required.
 #
-#  $swift_store_user - Optional. Default:'jdoe',
+#  $swift_store_key - Required.
 #
-#  $swift_store_key - Optional. Default: 'a86850deb2742ec3cb41518e26aa2d89',
+#  $swift_store_auth_address - Optional. Default: '127.0.0.1:5000/v2.0/'
 #
-#  $swift_store_container - 'glance',
+#  $swift_store_container - Optional. Default: 'glance'
 #
-#  $swift_store_create_container_on_put - 'False'
+#  $swift_store_auth_version - Optional. Default: '2'
+#
+#  $swift_store_create_container_on_put - Optional. Default: 'False'
 class glance::backend::swift(
   $swift_store_user,
   $swift_store_key,
