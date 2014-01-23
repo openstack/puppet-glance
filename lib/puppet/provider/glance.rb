@@ -72,11 +72,11 @@ class Puppet::Provider::Glance < Puppet::Provider
   def self.auth_glance(*args)
     begin
       g = glance_credentials
-      glance('-T', g['admin_tenant_name'], '-I', g['admin_user'], '-K', g['admin_password'], '-N', auth_endpoint, args)
+      remove_warnings(glance('-T', g['admin_tenant_name'], '-I', g['admin_user'], '-K', g['admin_password'], '-N', auth_endpoint, args))
     rescue Exception => e
       if (e.message =~ /\[Errno 111\] Connection refused/) or (e.message =~ /\(HTTP 400\)/) or (e.message =~ /HTTP Unable to establish connection/)
         sleep 10
-        glance('-T', g['admin_tenant_name'], '-I', g['admin_user'], '-K', g['admin_password'], '-N', auth_endpoint, args)
+        remove_warnings(glance('-T', g['admin_tenant_name'], '-I', g['admin_user'], '-K', g['admin_password'], '-N', auth_endpoint, args))
       else
         raise(e)
       end
@@ -132,4 +132,27 @@ class Puppet::Provider::Glance < Puppet::Provider
       return attrs
     end
 
+    # Remove warning from the output. This is a temporary hack until
+    # things will be refactored to use the REST API
+    def self.remove_warnings(results)
+      found_header = false
+      in_warning = false
+      results.split("\n").collect do |line|
+        unless found_header
+          if line =~ /^\+[-\+]+\+$/
+            in_warning = false
+            found_header = true
+            line
+          elsif line =~ /^WARNING/ or line =~ /UserWarning/ or in_warning
+            # warnings can be multi line, we have to skip all of them
+            in_warning = true
+            nil
+          else
+            line
+          end
+        else
+          line
+        end
+      end.compact.join("\n")
+    end
 end
