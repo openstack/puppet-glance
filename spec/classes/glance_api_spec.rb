@@ -11,51 +11,53 @@ describe 'glance::api' do
 
   let :default_params do
     {
-      :verbose           => false,
-      :debug             => false,
-      :bind_host         => '0.0.0.0',
-      :bind_port         => '9292',
-      :registry_host     => '0.0.0.0',
-      :registry_port     => '9191',
-      :log_file          => '/var/log/glance/api.log',
-      :auth_type         => 'keystone',
-      :enabled           => true,
-      :backlog           => '4096',
-      :workers           => '7',
-      :auth_host         => '127.0.0.1',
-      :auth_port         => '35357',
-      :auth_protocol     => 'http',
-      :auth_uri          => 'http://127.0.0.1:5000/',
-      :keystone_tenant   => 'services',
-      :keystone_user     => 'glance',
-      :keystone_password => 'ChangeMe',
-      :sql_idle_timeout  => '3600',
-      :sql_connection    => 'sqlite:///var/lib/glance/glance.sqlite'
+      :verbose               => false,
+      :debug                 => false,
+      :bind_host             => '0.0.0.0',
+      :bind_port             => '9292',
+      :registry_host         => '0.0.0.0',
+      :registry_port         => '9191',
+      :log_file              => '/var/log/glance/api.log',
+      :auth_type             => 'keystone',
+      :enabled               => true,
+      :backlog               => '4096',
+      :workers               => '7',
+      :auth_host             => '127.0.0.1',
+      :auth_port             => '35357',
+      :auth_protocol         => 'http',
+      :auth_uri              => 'http://127.0.0.1:5000/',
+      :keystone_tenant       => 'services',
+      :keystone_user         => 'glance',
+      :keystone_password     => 'ChangeMe',
+      :sql_idle_timeout      => '3600',
+      :sql_connection        => 'sqlite:///var/lib/glance/glance.sqlite',
+      :show_image_direct_url => false
     }
   end
 
   [{:keystone_password => 'ChangeMe'},
    {
-      :verbose           => true,
-      :debug             => true,
-      :bind_host         => '127.0.0.1',
-      :bind_port         => '9222',
-      :registry_host     => '127.0.0.1',
-      :registry_port     => '9111',
-      :log_file          => '/var/log/glance-api.log',
-      :auth_type         => 'not_keystone',
-      :enabled           => false,
-      :backlog           => '4095',
-      :workers           => '5',
-      :auth_host         => '127.0.0.2',
-      :auth_port         => '35358',
-      :auth_protocol     => 'https',
-      :auth_uri          => 'https://127.0.0.2:5000/v2.0/',
-      :keystone_tenant   => 'admin2',
-      :keystone_user     => 'admin2',
-      :keystone_password => 'ChangeMe2',
-      :sql_idle_timeout  => '36002',
-      :sql_connection    => 'mysql:///var:lib@glance/glance'
+      :verbose               => true,
+      :debug                 => true,
+      :bind_host             => '127.0.0.1',
+      :bind_port             => '9222',
+      :registry_host         => '127.0.0.1',
+      :registry_port         => '9111',
+      :log_file              => '/var/log/glance-api.log',
+      :auth_type             => 'not_keystone',
+      :enabled               => false,
+      :backlog               => '4095',
+      :workers               => '5',
+      :auth_host             => '127.0.0.2',
+      :auth_port             => '35358',
+      :auth_protocol         => 'https',
+      :auth_uri              => 'https://127.0.0.2:5000/v2.0/',
+      :keystone_tenant       => 'admin2',
+      :keystone_user         => 'admin2',
+      :keystone_password     => 'ChangeMe2',
+      :sql_idle_timeout      => '36002',
+      :sql_connection        => 'mysql:///var:lib@glance/glance',
+      :show_image_direct_url => true
     }
   ].each do |param_set|
 
@@ -86,7 +88,8 @@ describe 'glance::api' do
           'bind_port',
           'log_file',
           'registry_host',
-          'registry_port'
+          'registry_port',
+          'show_image_direct_url'
         ].each do |config|
           should contain_glance_api_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
         end
