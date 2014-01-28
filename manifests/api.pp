@@ -1,73 +1,143 @@
+# == Class glance::api
+#
+# Configure API service in glance
 #
 # == Parameters
 #
+# [*keystone_password*]
+#   (required) Password used to authentication.
 #
-#  * keystone_password Password used to authemn
+# [*verbose*]
+#   (optional) Rather to log the glance api service at verbose level.
+#   Default: false
 #
-#  * verbose - rather to log the glance api service at verbose level.
-#  Optional. Default: false
+# [*debug*]
+#   (optional) Rather to log the glance api service at debug level.
+#   Default: false
 #
-#  * debug - rather to log the glance api service at debug level.
-#  Optional. Default: false
+# [*bind_host*]
+#   (optional) The address of the host to bind to.
+#   Default: 0.0.0.0
 #
-#  * bind_host - The address of the host to bind to.
-#  Optional. Default: 0.0.0.0
+# [*bind_port*]
+#   (optional) The port the server should bind to.
+#   Default: 9292
 #
-#  * bind_port - The port the server should bind to.
-#  Optional. Default: 9292
+# [*backlog*]
+#   (optional) Backlog requests when creating socket
+#   Default: 4096
 #
-#  * registry_host - The address used to connecto to the registy service.
-#  Optional. Default:
+# [*workers*]
+#   (optional) Number of Glance API worker processes to start
+#   Default: $::processorcount
 #
-#  * registry_port - The port of the Glance registry service.
-#  Optional. Default: 9191
+# [*log_file*]
+#   (optional) The path of file used for logging
+#   Default: /var/log/glance/api.log
 #
-#  * log_file - The path of file used for logging
-#  Optional. Default: /var/log/glance/api.log
+# [*registry_host*]
+#   (optional) The address used to connect to the registry service.
+#   Default: 0.0.0.0
 #
-#  * auth_type - Type is authorization being used. Optional. Defaults to 'keystone'
-#  * auth_host - Host running auth service. Optional. Defaults to '127.0.0.1'.
-#  * auth_port - Port to use for auth service on auth_host. Optional. Defaults to '35357'.
-#  * auth_admin_prefix - (optional) path part of the auth url.
-#    This allow admin auth URIs like http://auth_host:35357/keystone/admin.
-#    (where '/keystone/admin' is auth_admin_prefix)
-#    Defaults to false for empty. If defined, should be a string with a leading '/' and no trailing '/'.
-#  * auth_protocol - Protocol to use for auth. Optional. Defaults to 'http'.
-#  * auth_uri - Complete public Identity API endpoint.
-#  * keystone_tenant - tenant to authenticate to. Optioal. Defaults to services.
-#  * keystone_user User to authenticate as with keystone Optional. Defaults to glance.
-#  * enabled  Whether to enable services. Optional. Defaults to true.
-#  * sql_idle_timeout
-#  * sql_connection db conection.
-#  * use_syslog - Use syslog for logging.
-#  * log_facility - Syslog facility to receive log lines.
+# [*registry_port*]
+#   (optional) The port of the Glance registry service.
+#   Default: 9191
+#
+# [*auth_type*]
+#   (optional) Type is authorization being used.
+#   Defaults to 'keystone'
+#
+# [* auth_host*]
+#   (optional) Host running auth service.
+#   Defaults to '127.0.0.1'.
+#
+# [*auth_url*]
+#   (optional) Authentication URL.
+#   Defaults to 'http://localhost:5000/v2.0'.
+#
+# [* auth_port*]
+#   (optional) Port to use for auth service on auth_host.
+#   Defaults to '35357'.
+#
+# [* auth_uri*]
+#   (optional) Complete public Identity API endpoint.
+#   Defaults to false.
+#
+# [*auth_admin_prefix*]
+#   (optional) Path part of the auth url.
+#   This allow admin auth URIs like http://auth_host:35357/keystone/admin.
+#   (where '/keystone/admin' is auth_admin_prefix)
+#   Defaults to false for empty. If defined, should be a string with a leading '/' and no trailing '/'.
+#
+# [* auth_protocol*]
+#   (optional) Protocol to use for auth.
+#   Defaults to 'http'.
+#
+# [*pipeline*]
+#   (optional) Partial name of a pipeline in your paste configuration file with the
+#   service name removed.
+#   Defaults to 'keystone+cachemanagement'.
+#
+# [*keystone_tenant*]
+#   (optional) Tenant to authenticate to.
+#   Defaults to services.
+#
+# [*keystone_user*]
+#   (optional) User to authenticate as with keystone.
+#   Defaults to 'glance'.
+#
+# [*enabled*]
+#   (optional) Whether to enable services.
+#   Defaults to true.
+#
+# [*sql_idle_timeout*]
+#   (optional) Period in seconds after which SQLAlchemy should reestablish its connection
+#   to the database.
+#   Defaults to '3600'.
+#
+# [*sql_connection*]
+#   (optional) Database connection.
+#   Defaults to 'sqlite:///var/lib/glance/glance.sqlite'.
+#
+# [*use_syslog*]
+#   (optional) Use syslog for logging.
+#   Defaults to false.
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines.
+#   Defaults to 'LOG_USER'.
+#
+# [*show_image_direct_url*]
+#   (optional) Expose image location to trusted clients.
+#   Defaults to false.
 #
 class glance::api(
   $keystone_password,
-  $verbose           = false,
-  $debug             = false,
-  $bind_host         = '0.0.0.0',
-  $bind_port         = '9292',
-  $backlog           = '4096',
-  $workers           = $::processorcount,
-  $log_file          = '/var/log/glance/api.log',
-  $registry_host     = '0.0.0.0',
-  $registry_port     = '9191',
-  $auth_type         = 'keystone',
-  $auth_host         = '127.0.0.1',
-  $auth_url          = 'http://localhost:5000/v2.0',
-  $auth_port         = '35357',
-  $auth_uri          = false,
-  $auth_admin_prefix = false,
-  $auth_protocol     = 'http',
-  $pipeline          = 'keystone+cachemanagement',
-  $keystone_tenant   = 'services',
-  $keystone_user     = 'glance',
-  $enabled           = true,
-  $sql_idle_timeout  = '3600',
-  $sql_connection    = 'sqlite:///var/lib/glance/glance.sqlite',
-  $use_syslog        = false,
-  $log_facility      = 'LOG_USER',
+  $verbose               = false,
+  $debug                 = false,
+  $bind_host             = '0.0.0.0',
+  $bind_port             = '9292',
+  $backlog               = '4096',
+  $workers               = $::processorcount,
+  $log_file              = '/var/log/glance/api.log',
+  $registry_host         = '0.0.0.0',
+  $registry_port         = '9191',
+  $auth_type             = 'keystone',
+  $auth_host             = '127.0.0.1',
+  $auth_url              = 'http://localhost:5000/v2.0',
+  $auth_port             = '35357',
+  $auth_uri              = false,
+  $auth_admin_prefix     = false,
+  $auth_protocol         = 'http',
+  $pipeline              = 'keystone+cachemanagement',
+  $keystone_tenant       = 'services',
+  $keystone_user         = 'glance',
+  $enabled               = true,
+  $sql_idle_timeout      = '3600',
+  $sql_connection        = 'sqlite:///var/lib/glance/glance.sqlite',
+  $use_syslog            = false,
+  $log_facility          = 'LOG_USER',
+  $show_image_direct_url = false,
 ) inherits glance {
 
   require keystone::python
@@ -105,13 +175,14 @@ class glance::api(
 
   # basic service config
   glance_api_config {
-    'DEFAULT/verbose':   value => $verbose;
-    'DEFAULT/debug':     value => $debug;
-    'DEFAULT/bind_host': value => $bind_host;
-    'DEFAULT/bind_port': value => $bind_port;
-    'DEFAULT/backlog':   value => $backlog;
-    'DEFAULT/workers':   value => $workers;
-    'DEFAULT/log_file':  value => $log_file;
+    'DEFAULT/verbose':               value => $verbose;
+    'DEFAULT/debug':                 value => $debug;
+    'DEFAULT/bind_host':             value => $bind_host;
+    'DEFAULT/bind_port':             value => $bind_port;
+    'DEFAULT/backlog':               value => $backlog;
+    'DEFAULT/workers':               value => $workers;
+    'DEFAULT/log_file':              value => $log_file;
+    'DEFAULT/show_image_direct_url': value => $show_image_direct_url;
   }
 
   glance_cache_config {
