@@ -14,11 +14,12 @@ describe 'glance::db::mysql' do
   describe "with default params" do
     let :params do
       {
-        :password => 'glancepass1'
+        :password => 'glancepass1',
+        :mysql_module => '0.9'
       }
     end
 
-  it { should contain_class('mysql::python') }
+    it { should contain_class('mysql::python') }
 
     it { should contain_mysql__db('glance').with(
       :password => 'glancepass1',

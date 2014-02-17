@@ -134,6 +134,11 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to false, not set
 #
+# [*mysql_module*]
+#   (optional) Mysql puppet module version to use
+#   Tested versions include 0.9 and 2.2
+#   Defaults to '0.9'.
+#
 class glance::api(
   $keystone_password,
   $verbose               = false,
@@ -165,7 +170,8 @@ class glance::api(
   $purge_config          = false,
   $cert_file             = false,
   $key_file              = false,
-  $ca_file               = false
+  $ca_file               = false,
+  $mysql_module          = '0.9',
 ) inherits glance {
 
   require keystone::python
@@ -192,7 +198,12 @@ class glance::api(
   }
 
   if($sql_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-    require 'mysql::python'
+    if ($mysql_module >= 2.2) {
+      require 'mysql::bindings'
+      require 'mysql::bindings::python'
+    } else {
+      require 'mysql::python'
+    }
   } elsif($sql_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
 
   } elsif($sql_connection =~ /sqlite:\/\//) {

@@ -33,7 +33,8 @@ describe 'glance::api' do
       :sql_idle_timeout      => '3600',
       :sql_connection        => 'sqlite:///var/lib/glance/glance.sqlite',
       :show_image_direct_url => false,
-      :purge_config          => false
+      :purge_config          => false,
+      :mysql_module          => '0.9'
     }
   end
 
