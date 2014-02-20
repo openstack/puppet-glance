@@ -33,7 +33,13 @@
 #
 # [*log_file*]
 #   (optional) The path of file used for logging
+#   If set to boolean false, it will not log to any file.
 #   Default: /var/log/glance/api.log
+#
+#  [*log_dir*]
+#    (optional) directory to which glance logs are sent.
+#    If set to boolean false, it will not log to any directory.
+#    Defaults to '/var/log/glance'
 #
 # [*registry_host*]
 #   (optional) The address used to connect to the registry service.
@@ -120,6 +126,7 @@ class glance::api(
   $backlog               = '4096',
   $workers               = $::processorcount,
   $log_file              = '/var/log/glance/api.log',
+  $log_dir               = '/var/log/glance',
   $registry_host         = '0.0.0.0',
   $registry_port         = '9191',
   $auth_type             = 'keystone',
@@ -181,7 +188,6 @@ class glance::api(
     'DEFAULT/bind_port':             value => $bind_port;
     'DEFAULT/backlog':               value => $backlog;
     'DEFAULT/workers':               value => $workers;
-    'DEFAULT/log_file':              value => $log_file;
     'DEFAULT/show_image_direct_url': value => $show_image_direct_url;
   }
 
@@ -258,6 +264,27 @@ class glance::api(
       'DEFAULT/admin_tenant_name': value => $keystone_tenant;
       'DEFAULT/admin_user'       : value => $keystone_user;
       'DEFAULT/admin_password'   : value => $keystone_password;
+    }
+  }
+
+  # Logging
+  if $log_file {
+    glance_api_config {
+      'DEFAULT/log_file': value  => $log_file;
+    }
+  } else {
+    glance_api_config {
+      'DEFAULT/log_file': ensure => absent;
+    }
+  }
+
+  if $log_dir {
+    glance_api_config {
+      'DEFAULT/log_dir': value  => $log_dir;
+    }
+  } else {
+    glance_api_config {
+      'DEFAULT/log_dir': ensure => absent;
     }
   }
 

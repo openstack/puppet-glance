@@ -18,6 +18,7 @@ describe 'glance::api' do
       :registry_host         => '0.0.0.0',
       :registry_port         => '9191',
       :log_file              => '/var/log/glance/api.log',
+      :log_dir               => '/var/log/glance',
       :auth_type             => 'keystone',
       :enabled               => true,
       :backlog               => '4096',
@@ -43,7 +44,6 @@ describe 'glance::api' do
       :bind_port             => '9222',
       :registry_host         => '127.0.0.1',
       :registry_port         => '9111',
-      :log_file              => '/var/log/glance-api.log',
       :auth_type             => 'not_keystone',
       :enabled               => false,
       :backlog               => '4095',
@@ -86,7 +86,6 @@ describe 'glance::api' do
           'debug',
           'bind_host',
           'bind_port',
-          'log_file',
           'registry_host',
           'registry_port',
           'show_image_direct_url'
@@ -241,5 +240,28 @@ describe 'glance::api' do
     it { should contain_glance_api_config('DEFAULT/use_syslog').with_value(true) }
     it { should contain_glance_api_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
   end
+
+  describe 'with log_file enabled by default' do
+    let(:params) { default_params }
+
+    it { should contain_glance_api_config('DEFAULT/log_file').with_value(default_params[:log_file]) }
+
+    context 'with log_file disabled' do
+      let(:params) { default_params.merge!({ :log_file => false }) }
+      it { should contain_glance_api_config('DEFAULT/log_file').with_ensure('absent') }
+    end
+  end
+
+  describe 'with log_dir enabled by default' do
+    let(:params) { default_params }
+
+    it { should contain_glance_api_config('DEFAULT/log_dir').with_value(default_params[:log_dir]) }
+
+    context 'with log_dir disabled' do
+      let(:params) { default_params.merge!({ :log_dir => false }) }
+      it { should contain_glance_api_config('DEFAULT/log_dir').with_ensure('absent') }
+    end
+  end
+
 
 end

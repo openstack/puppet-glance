@@ -14,6 +14,7 @@ describe 'glance::registry' do
       :bind_host         => '0.0.0.0',
       :bind_port         => '9191',
       :log_file          => '/var/log/glance/registry.log',
+      :log_dir           => '/var/log/glance',
       :sql_connection    => 'sqlite:///var/lib/glance/glance.sqlite',
       :sql_idle_timeout  => '3600',
       :enabled           => true,
@@ -35,7 +36,6 @@ describe 'glance::registry' do
       :debug             => true,
       :bind_host         => '127.0.0.1',
       :bind_port         => '9111',
-      :log_file          => '/var/log/glance-registry.log',
       :sql_connection    => 'sqlite:///var/lib/glance.sqlite',
       :sql_idle_timeout  => '360',
       :enabled           => false,
@@ -218,6 +218,28 @@ describe 'glance::registry' do
 
     it { should contain_glance_registry_config('DEFAULT/use_syslog').with_value(true) }
     it { should contain_glance_registry_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
+  end
+
+  describe 'with log_file enabled by default' do
+    let(:params) { default_params }
+
+    it { should contain_glance_registry_config('DEFAULT/log_file').with_value(default_params[:log_file]) }
+
+    context 'with log_file disabled' do
+      let(:params) { default_params.merge!({ :log_file => false }) }
+      it { should contain_glance_registry_config('DEFAULT/log_file').with_ensure('absent') }
+    end
+  end
+
+  describe 'with log_dir enabled by default' do
+    let(:params) { default_params }
+
+    it { should contain_glance_registry_config('DEFAULT/log_dir').with_value(default_params[:log_dir]) }
+
+    context 'with log_dir disabled' do
+      let(:params) { default_params.merge!({ :log_dir => false }) }
+      it { should contain_glance_registry_config('DEFAULT/log_dir').with_ensure('absent') }
+    end
   end
 
 end

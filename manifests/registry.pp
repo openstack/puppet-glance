@@ -21,7 +21,13 @@
 #
 #  [*log_file*]
 #    (optional) Log file for glance-registry.
+#    If set to boolean false, it will not log to any file.
 #    Defaults to '/var/log/glance/registry.log'.
+#
+#  [*log_dir*]
+#    (optional) directory to which glance logs are sent.
+#    If set to boolean false, it will not log to any directory.
+#    Defaults to '/var/log/glance'
 #
 #  [*sql_connection*]
 #    (optional) SQL connection string.
@@ -69,7 +75,6 @@
 #    (optional) Syslog facility to receive log lines.
 #    Defaults to LOG_USER.
 #
-#
 #  [*enabled*]
 #    (optional) Should the service be enabled. Defaults to true.
 #
@@ -80,6 +85,7 @@ class glance::registry(
   $bind_host         = '0.0.0.0',
   $bind_port         = '9191',
   $log_file          = '/var/log/glance/registry.log',
+  $log_dir           = '/var/log/glance',
   $sql_connection    = 'sqlite:///var/lib/glance/glance.sqlite',
   $sql_idle_timeout  = '3600',
   $auth_type         = 'keystone',
@@ -177,6 +183,27 @@ class glance::registry(
       'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
       'keystone_authtoken/admin_user'       : value => $keystone_user;
       'keystone_authtoken/admin_password'   : value => $keystone_password;
+    }
+  }
+
+  # Logging
+  if $log_file {
+    glance_registry_config {
+      'DEFAULT/log_file': value  => $log_file;
+    }
+  } else {
+    glance_registry_config {
+      'DEFAULT/log_file': ensure => absent;
+    }
+  }
+
+  if $log_dir {
+    glance_registry_config {
+      'DEFAULT/log_dir': value  => $log_dir;
+    }
+  } else {
+    glance_registry_config {
+      'DEFAULT/log_dir': ensure => absent;
     }
   }
 
