@@ -73,6 +73,11 @@
 #  [*enabled*]
 #    (optional) Should the service be enabled. Defaults to true.
 #
+#  [*purge_config*]
+#    (optional) Whether to create only the specified config values in
+#    the glance registry config file.
+#    Defaults to false.
+#
 class glance::registry(
   $keystone_password,
   $verbose           = false,
@@ -93,7 +98,8 @@ class glance::registry(
   $pipeline          = 'keystone',
   $use_syslog        = false,
   $log_facility      = 'LOG_USER',
-  $enabled           = true
+  $enabled           = true,
+  $purge_config      = false
 ) inherits glance {
 
   require keystone::python
@@ -190,6 +196,10 @@ class glance::registry(
     glance_registry_config {
       'DEFAULT/use_syslog': value => false;
     }
+  }
+
+  resources { 'glance_registry_config':
+    purge => $purge_config
   }
 
   file { ['/etc/glance/glance-registry.conf',

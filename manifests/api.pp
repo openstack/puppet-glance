@@ -111,6 +111,11 @@
 #   (optional) Expose image location to trusted clients.
 #   Defaults to false.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the api config.
+#   Defaults to false.
+#
 class glance::api(
   $keystone_password,
   $verbose               = false,
@@ -138,6 +143,7 @@ class glance::api(
   $use_syslog            = false,
   $log_facility          = 'LOG_USER',
   $show_image_direct_url = false,
+  $purge_config          = false,
 ) inherits glance {
 
   require keystone::python
@@ -271,6 +277,10 @@ class glance::api(
     glance_api_config {
       'DEFAULT/use_syslog': value => false;
     }
+  }
+
+  resources { 'glance_api_config':
+    purge => $purge_config,
   }
 
   file { ['/etc/glance/glance-api.conf',

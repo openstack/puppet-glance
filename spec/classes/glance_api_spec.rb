@@ -31,7 +31,8 @@ describe 'glance::api' do
       :keystone_password     => 'ChangeMe',
       :sql_idle_timeout      => '3600',
       :sql_connection        => 'sqlite:///var/lib/glance/glance.sqlite',
-      :show_image_direct_url => false
+      :show_image_direct_url => false,
+      :purge_config          => false
     }
   end
 
