@@ -61,24 +61,27 @@ describe 'glance::keystone::auth' do
 
   end
 
-  describe 'when address, region and port are overridden' do
+  describe 'when address, region, port and protocoll are overridden' do
 
     let :params do
       {
-        :password         => 'pass',
-        :public_address   => '10.0.0.1',
-        :admin_address    => '10.0.0.2',
-        :internal_address => '10.0.0.3',
-        :port             => '9393',
-        :region           => 'RegionTwo'
+        :password          => 'pass',
+        :public_address    => '10.0.0.1',
+        :admin_address     => '10.0.0.2',
+        :internal_address  => '10.0.0.3',
+        :port              => '9393',
+        :region            => 'RegionTwo',
+        :public_protocol   => 'https',
+        :admin_protocol    => 'https',
+        :internal_protocol => 'https'
       }
     end
 
     it { should contain_keystone_endpoint('RegionTwo/glance').with(
       :ensure       => 'present',
-      :public_url   => 'http://10.0.0.1:9393',
-      :admin_url    => 'http://10.0.0.2:9393',
-      :internal_url => 'http://10.0.0.3:9393'
+      :public_url   => 'https://10.0.0.1:9393',
+      :admin_url    => 'https://10.0.0.2:9393',
+      :internal_url => 'https://10.0.0.3:9393'
     )}
 
   end
