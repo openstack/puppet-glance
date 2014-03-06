@@ -13,6 +13,9 @@
 #  $port :: Port for endpoint. Needs to match glance api service port. Optional.
 #    Defaults to 9292.
 #  $region :: Region where endpoint is set.
+#  $public_protocol :: Protocol for public endpoint. Optional. Defaults to http.
+#  $admin_protocol :: Protocol for admin endpoint. Optional. Defaults to http.
+#  $internal_protocol :: Protocol for internal endpoint. Optional. Defaults to http.
 #
 class glance::keystone::auth(
   $password,
@@ -26,7 +29,9 @@ class glance::keystone::auth(
   $port               = '9292',
   $region             = 'RegionOne',
   $tenant             = 'services',
-  $public_protocol    = 'http'
+  $public_protocol    = 'http',
+  $admin_protocol     = 'http',
+  $internal_protocol  = 'http'
 ) {
 
   Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'glance-registry' |>
@@ -55,8 +60,8 @@ class glance::keystone::auth(
     keystone_endpoint { "${region}/${auth_name}":
       ensure       => present,
       public_url   => "${public_protocol}://${public_address}:${port}",
-      admin_url    => "http://${admin_address}:${port}",
-      internal_url => "http://${internal_address}:${port}",
+      admin_url    => "${admin_protocol}://${admin_address}:${port}",
+      internal_url => "${internal_protocol}://${internal_address}:${port}",
     }
   }
 }
