@@ -117,6 +117,18 @@
 #   (optional) Expose image location to trusted clients.
 #   Defaults to false.
 #
+# [*cert_file*]
+#   (optinal) Certificate file to use when starting API server securely
+#   Defaults to false, not set
+#
+# [*key_file*]
+#   (optional) Private key file to use when starting API server securely
+#   Defaults to false, not set
+#
+# [*ca_file*]
+#   (optional) CA certificate file to use to verify connecting clients
+#   Defaults to false, not set
+#
 class glance::api(
   $keystone_password,
   $verbose               = false,
@@ -145,6 +157,9 @@ class glance::api(
   $use_syslog            = false,
   $log_facility          = 'LOG_USER',
   $show_image_direct_url = false,
+  $cert_file             = false,
+  $key_file              = false,
+  $ca_file               = false
 ) inherits glance {
 
   require keystone::python
@@ -264,6 +279,35 @@ class glance::api(
       'DEFAULT/admin_tenant_name': value => $keystone_tenant;
       'DEFAULT/admin_user'       : value => $keystone_user;
       'DEFAULT/admin_password'   : value => $keystone_password;
+    }
+  }
+
+  # SSL Options
+  if $cert_file {
+    glance_api_config {
+      'DEFAULT/cert_file' : value => $cert_file;
+    }
+  } else {
+    glance_api_config {
+      'DEFAULT/cert_file': ensure => absent;
+    }
+  }
+  if $key_file {
+    glance_api_config {
+      'DEFAULT/key_file'  : value => $key_file;
+    }
+  } else {
+    glance_api_config {
+      'DEFAULT/key_file': ensure => absent;
+    }
+  }
+  if $ca_file {
+    glance_api_config {
+      'DEFAULT/ca_file'   : value => $ca_file;
+    }
+  } else {
+    glance_api_config {
+      'DEFAULT/ca_file': ensure => absent;
     }
   }
 
