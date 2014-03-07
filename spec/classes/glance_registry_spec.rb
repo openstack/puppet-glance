@@ -243,4 +243,28 @@ describe 'glance::registry' do
     end
   end
 
+  describe 'with no ssl options (default)' do
+    let(:params) { default_params }
+
+    it { should contain_glance_registry_config('DEFAULT/ca_file').with_ensure('absent')}
+    it { should contain_glance_registry_config('DEFAULT/cert_file').with_ensure('absent')}
+    it { should contain_glance_registry_config('DEFAULT/key_file').with_ensure('absent')}
+  end
+
+  describe 'with ssl options' do
+    let :params do
+      default_params.merge({
+        :ca_file     => '/tmp/ca_file',
+        :cert_file   => '/tmp/cert_file',
+        :key_file    => '/tmp/key_file'
+      })
+    end
+
+    context 'with ssl options' do
+      it { should contain_glance_registry_config('DEFAULT/ca_file').with_value('/tmp/ca_file') }
+      it { should contain_glance_registry_config('DEFAULT/cert_file').with_value('/tmp/cert_file') }
+      it { should contain_glance_registry_config('DEFAULT/key_file').with_value('/tmp/key_file') }
+    end
+  end
+
 end
