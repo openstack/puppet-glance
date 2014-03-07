@@ -78,6 +78,18 @@
 #  [*enabled*]
 #    (optional) Should the service be enabled. Defaults to true.
 #
+# [*cert_file*]
+#   (optinal) Certificate file to use when starting registry server securely
+#   Defaults to false, not set
+#
+# [*key_file*]
+#   (optional) Private key file to use when starting registry server securely
+#   Defaults to false, not set
+#
+# [*ca_file*]
+#   (optional) CA certificate file to use to verify connecting clients
+#   Defaults to false, not set
+#
 class glance::registry(
   $keystone_password,
   $verbose           = false,
@@ -99,7 +111,10 @@ class glance::registry(
   $pipeline          = 'keystone',
   $use_syslog        = false,
   $log_facility      = 'LOG_USER',
-  $enabled           = true
+  $enabled           = true,
+  $cert_file         = false,
+  $key_file          = false,
+  $ca_file           = false
 ) inherits glance {
 
   require keystone::python
@@ -183,6 +198,35 @@ class glance::registry(
       'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
       'keystone_authtoken/admin_user'       : value => $keystone_user;
       'keystone_authtoken/admin_password'   : value => $keystone_password;
+    }
+  }
+
+  # SSL Options
+  if $cert_file {
+    glance_registry_config {
+      'DEFAULT/cert_file' : value => $cert_file;
+    }
+  } else {
+    glance_registry_config {
+      'DEFAULT/cert_file': ensure => absent;
+    }
+  }
+  if $key_file {
+    glance_registry_config {
+      'DEFAULT/key_file'  : value => $key_file;
+    }
+  } else {
+    glance_registry_config {
+      'DEFAULT/key_file': ensure => absent;
+    }
+  }
+  if $ca_file {
+    glance_registry_config {
+      'DEFAULT/ca_file'   : value => $ca_file;
+    }
+  } else {
+    glance_registry_config {
+      'DEFAULT/ca_file': ensure => absent;
     }
   }
 
