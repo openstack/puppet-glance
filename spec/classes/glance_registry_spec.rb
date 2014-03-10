@@ -26,6 +26,7 @@ describe 'glance::registry' do
       :keystone_tenant   => 'services',
       :keystone_user     => 'glance',
       :keystone_password => 'ChangeMe',
+      :purge_config      => false
     }
   end
 
