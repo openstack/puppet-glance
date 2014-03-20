@@ -159,7 +159,8 @@ class glance::api(
   $show_image_direct_url = false,
   $cert_file             = false,
   $key_file              = false,
-  $ca_file               = false
+  $ca_file               = false,
+  $notifier_strategy     = 'noop',
 ) inherits glance {
 
   require keystone::python
@@ -183,6 +184,10 @@ class glance::api(
     mode    => '0640',
     notify  => Service['glance-api'],
     require => Class['glance'],
+  }
+
+  @glance_api_config {
+    'DEFAULT/notifier_strategy': value => $notifier_strategy;
   }
 
   if($sql_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
