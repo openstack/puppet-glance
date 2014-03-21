@@ -118,6 +118,21 @@ Contributors
 Release Notes
 -------------
 
+**3.1.0**
+
+* Added availability to configure show_image_direct_url.
+* Removed Keystone client warnings.
+* Added support for https authentication endpoints.
+* Enabled ssl configuration for glance-registry.
+* Explicitly sets default notifier strategy.
+
+**3.0.0**
+
+* Major release for OpenStack Havana.
+* Fixed bug to ensure keystone endpoint is set before service starts.
+* Added Cinder backend to image storage.
+* Fixed qpid_hostname bug.
+
 **2.2.0**
 
 * Added syslog support.
