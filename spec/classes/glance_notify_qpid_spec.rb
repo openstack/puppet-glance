@@ -14,6 +14,7 @@ describe 'glance::notify::qpid' do
   end
 
   it { should contain_glance_api_config('DEFAULT/notifier_strategy').with_value('qpid') }
+  it { should contain_glance_api_config('DEFAULT/notifier_strategy').without_value('noop') }
   it { should contain_glance_api_config('DEFAULT/qpid_username').with_value('guest') }
   it { should contain_glance_api_config('DEFAULT/qpid_password').with_value('pass') }
   it { should contain_glance_api_config('DEFAULT/qpid_hostname').with_value('localhost') }

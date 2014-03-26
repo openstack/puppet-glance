@@ -15,6 +15,7 @@ describe 'glance::notify::rabbitmq' do
   end
 
   it { should contain_glance_api_config('DEFAULT/notifier_strategy').with_value('rabbit') }
+  it { should contain_glance_api_config('DEFAULT/notifier_strategy').without_value('noop') }
   it { should contain_glance_api_config('DEFAULT/rabbit_password').with_value('pass') }
   it { should contain_glance_api_config('DEFAULT/rabbit_userid').with_value('guest') }
   it { should contain_glance_api_config('DEFAULT/rabbit_host').with_value('localhost') }
