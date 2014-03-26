@@ -118,6 +118,14 @@ Contributors
 Release Notes
 -------------
 
+**3.1.0**
+
+* Added availability to configure show_image_direct_url.
+* Removed Keystone client warnings.
+* Added support for https authentication endpoints.
+* Enabled ssl configuration for glance-registry.
+* Explicitly sets default notifier strategy.
+
 **3.0.0**
 
 * Major release for OpenStack Havana.
