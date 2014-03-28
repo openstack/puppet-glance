@@ -1,5 +1,5 @@
 name    'puppetlabs-glance'
-version '2.2.0'
+version '4.0.0-devel'
 source  'https://github.com/stackforge/puppet-glance'
 author  'Puppet Labs'
 license 'Apache License 2.0'
@@ -8,6 +8,6 @@ description 'Puppet module to install and configure the Openstack Glance image s
 project_page 'https://launchpad.net/puppet-openstack'
 
 dependency 'puppetlabs/inifile', '>=1.0.0 <2.0.0'
-dependency 'puppetlabs/keystone', '>=2.2.0 <3.0.0'
-dependency 'puppetlabs/mysql', '>=0.6.1 <1.0.0'
-dependency 'puppetlabs/stdlib', '>= 2.5.0'
+dependency 'puppetlabs/keystone', '>=4.0.0 <5.0.0'
+dependency 'puppetlabs/mysql', '>=0.9.0 <1.0.0'
+dependency 'puppetlabs/stdlib', '>= 3.2.0'
