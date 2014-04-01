@@ -24,7 +24,7 @@ describe 'glance::db::mysql' do
     it { should contain_mysql__db('glance').with(
       :password => 'glancepass1',
       :require  => 'Class[Mysql::Config]',
-      :charset  => 'latin1'
+      :charset  => 'utf8'
     )}
 
   end
