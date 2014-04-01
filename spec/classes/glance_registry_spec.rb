@@ -79,7 +79,7 @@ describe 'glance::registry' do
             'path'        => '/usr/bin',
             'refreshonly' => true,
             'logoutput'   => 'on_failure',
-            'subscribe'   => ['Package[glance]', 'File[/etc/glance/glance-registry.conf]'],
+            'subscribe'   => ['Package[glance-registry]', 'File[/etc/glance/glance-registry.conf]'],
             'notify'      => 'Service[glance-registry]'
           )
         end
@@ -265,6 +265,35 @@ describe 'glance::registry' do
       it { should contain_glance_registry_config('DEFAULT/ca_file').with_value('/tmp/ca_file') }
       it { should contain_glance_registry_config('DEFAULT/cert_file').with_value('/tmp/cert_file') }
       it { should contain_glance_registry_config('DEFAULT/key_file').with_value('/tmp/key_file') }
+    end
+  end
+
+  describe 'on Debian platforms' do
+    let :facts do
+      { :osfamily => 'Debian' }
+    end
+    let(:params) { default_params }
+
+    it {should contain_package('glance-registry')}
+  end
+
+  describe 'on RedHat platforms' do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+    let(:params) { default_params }
+
+    it { should contain_package('openstack-glance')}
+  end
+
+  describe 'on unknown platforms' do
+    let :facts do
+      { :osfamily => 'unknown' }
+    end
+    let(:params) { default_params }
+
+    it 'should fails to configure glance-registry' do
+        expect { subject }.to raise_error(Puppet::Error, /module glance only support osfamily RedHat and Debian/)
     end
   end
 

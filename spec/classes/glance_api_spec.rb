@@ -304,4 +304,34 @@ describe 'glance::api' do
 
     it { should contain_glance_api_config('DEFAULT/known_stores').with_value("glance.store.filesystem.Store,glance.store.http.Store") }
   end
+
+  describe 'on Debian platforms' do
+    let :facts do
+      { :osfamily => 'Debian' }
+    end
+    let(:params) { default_params }
+
+    it {should contain_package('glance-api')}
+  end
+
+  describe 'on RedHat platforms' do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+    let(:params) { default_params }
+
+    it { should contain_package('openstack-glance')}
+  end
+
+  describe 'on unknown platforms' do
+    let :facts do
+      { :osfamily => 'unknown' }
+    end
+    let(:params) { default_params }
+
+    it 'should fails to configure glance-api' do
+        expect { subject }.to raise_error(Puppet::Error, /module glance only support osfamily RedHat and Debian/)
+    end
+  end
+
 end

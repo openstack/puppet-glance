@@ -185,8 +185,13 @@ class glance::api(
 
   validate_re($sql_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
-  Package['glance'] -> Glance_api_config<||>
-  Package['glance'] -> Glance_cache_config<||>
+  if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
+    ensure_packages([$glance::params::api_package_name])
+  }
+
+  Package[$glance::params::api_package_name] -> Glance_api_config<||>
+  Package[$glance::params::api_package_name] -> Glance_cache_config<||>
+
   # adding all of this stuff b/c it devstack says glance-api uses the
   # db now
   Glance_api_config<||>   ~> Exec<| title == 'glance-manage db_sync' |>

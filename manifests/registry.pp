@@ -133,7 +133,12 @@ class glance::registry(
 
   validate_re($sql_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
-  Package['glance'] -> Glance_registry_config<||>
+  if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
+    ensure_packages([$glance::params::registry_package_name])
+  }
+
+  Package[$glance::params::registry_package_name] -> Glance_registry_config<||>
+
   Glance_registry_config<||> ~> Exec<| title == 'glance-manage db_sync' |>
   Glance_registry_config<||> ~> Service['glance-registry']
 
@@ -297,7 +302,7 @@ class glance::registry(
       user        => 'glance',
       refreshonly => true,
       logoutput   => on_failure,
-      subscribe   => [Package['glance'], File['/etc/glance/glance-registry.conf']],
+      subscribe   => [Package[$glance::params::registry_package_name], File['/etc/glance/glance-registry.conf']],
     }
     $service_ensure = 'running'
   } else {

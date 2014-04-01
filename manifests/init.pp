@@ -15,10 +15,12 @@ class glance(
     owner   => 'glance',
     group   => 'root',
     mode    => '0770',
-    require => Package['glance']
   }
-  package { 'glance':
-    ensure => $package_ensure,
-    name   => $::glance::params::package_name,
+
+  if ( $glance::params::api_package_name == $glance::params::registry_package_name ) {
+    package { $glance::params::api_package_name :
+      ensure => $package_ensure,
+      name   => $::glance::params::package_name,
+    }
   }
 }
