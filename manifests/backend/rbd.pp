@@ -11,6 +11,7 @@
 #  $rbd_store_chunk_size - Optional. Default:'8'
 #
 #  $show_image_direct_url - Optional. Enables direct COW from glance to rbd
+#  DEPRECATED, use show_image_direct_url in glance::api
 
 class glance::backend::rbd(
   $rbd_store_user         = undef,
@@ -21,13 +22,16 @@ class glance::backend::rbd(
 ) {
   include glance::params
 
+  if $show_image_direct_url {
+    notice('parameter show_image_direct_url is deprecated, use parameter in glance::api')
+  }
+
   glance_api_config {
     'DEFAULT/default_store':          value => 'rbd';
     'DEFAULT/rbd_store_ceph_conf':    value => $rbd_store_ceph_conf;
     'DEFAULT/rbd_store_user':         value => $rbd_store_user;
     'DEFAULT/rbd_store_pool':         value => $rbd_store_pool;
     'DEFAULT/rbd_store_chunk_size':   value => $rbd_store_chunk_size;
-    'DEFAULT/show_image_direct_url':  value => $show_image_direct_url;
   }
 
   package { 'python-ceph':

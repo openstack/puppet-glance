@@ -29,11 +29,9 @@ describe 'glance::backend::rbd' do
       {
         :rbd_store_user        => 'user',
         :rbd_store_chunk_size  => '2',
-        :show_image_direct_url => 'true',
       }
       it { should contain_glance_api_config('DEFAULT/rbd_store_user').with_value('user') }
       it { should contain_glance_api_config('DEFAULT/rbd_store_chunk_size').with_value('2') }
-      it { should contain_glance_api_config('DEFAULT/how_image_direct_url').with_value('true') }
     end
   end
 end
