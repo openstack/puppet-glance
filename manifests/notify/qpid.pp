@@ -10,7 +10,7 @@ class glance::notify::qpid(
 ) inherits glance::api {
 
   glance_api_config {
-    'DEFAULT/notifier_strategy': value => 'qpid';
+    'DEFAULT/notifier_driver':   value => 'qpid';
     'DEFAULT/qpid_hostname':     value => $qpid_hostname;
     'DEFAULT/qpid_port':         value => $qpid_port;
     'DEFAULT/qpid_protocol':     value => $qpid_protocol;
