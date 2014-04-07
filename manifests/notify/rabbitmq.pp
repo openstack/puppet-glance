@@ -14,7 +14,7 @@ class glance::notify::rabbitmq(
 ) {
 
   glance_api_config {
-    'DEFAULT/notifier_strategy':            value => 'rabbit';
+    'DEFAULT/notifier_driver':              value => 'rabbit';
     'DEFAULT/rabbit_host':                  value => $rabbit_host;
     'DEFAULT/rabbit_port':                  value => $rabbit_port;
     'DEFAULT/rabbit_virtual_host':          value => $rabbit_virtual_host;
