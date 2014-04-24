@@ -91,6 +91,19 @@ class { 'glance::keystone::auth':
 }
 ```
 
+**Setup up notifications for multiple RabbitMQ nodes**
+
+```puppet
+class { 'glance::notify::rabbitmq':
+  rabbit_password               => 'pass',
+  rabbit_userid                 => 'guest',
+  rabbit_hosts                  => [
+    'localhost:5672', 'remotehost:5672'
+  ],
+  rabbit_use_ssl                => false,
+}
+```
+
 Implementation
 --------------
 
