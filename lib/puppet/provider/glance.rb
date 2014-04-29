@@ -106,7 +106,6 @@ class Puppet::Provider::Glance < Puppet::Provider
     self.class.auth_glance_stdin(args)
   end
 
-
   private
     def self.list_glance_images
       ids = []
@@ -132,6 +131,35 @@ class Puppet::Provider::Glance < Puppet::Provider
       return attrs
     end
 
+    def parse_table(table)
+      # parse the table into an array of maps with a simplistic state machine
+      found_header = false
+      parsed_header = false
+      keys = nil
+      results = []
+      table.split("\n").collect do |line|
+        # look for the header
+        if not found_header
+          if line =~ /^\+[-|+]+\+$/
+            found_header = true
+            nil
+          end
+        # look for the key names in the table header
+        elsif not parsed_header
+          if line =~ /^(\|\s*[:alpha:]\s*)|$/
+            keys = line.split('|').map(&:strip)
+            parsed_header = true
+          end
+        # parse the values in the rest of the table
+        elsif line =~ /^|.*|$/
+          values = line.split('|').map(&:strip)
+          result = Hash[keys.zip values]
+          results << result
+        end
+      end
+      results
+    end
+
     # Remove warning from the output. This is a temporary hack until
     # things will be refactored to use the REST API
     def self.remove_warnings(results)
@@ -139,7 +167,7 @@ class Puppet::Provider::Glance < Puppet::Provider
       in_warning = false
       results.split("\n").collect do |line|
         unless found_header
-          if line =~ /^\+[-\+]+\+$/
+          if line =~ /^\+[-\+]+\+$/ # Matches upper and lower box borders
             in_warning = false
             found_header = true
             line
