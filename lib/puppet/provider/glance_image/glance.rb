@@ -64,17 +64,32 @@ Puppet::Type.type(:glance_image).provide(
     else
       results = auth_glance('image-create', "--name=#{resource[:name]}", "--is-public=#{resource[:is_public]}", "--container-format=#{resource[:container_format]}", "--disk-format=#{resource[:disk_format]}", location)
     end
+
+    id = nil
+
+    # Check the old behavior of the python-glanceclient
     if results =~ /Added new image with ID: (\S+)/
+      id = $1
+    else # the new behavior doesn't print the status, so parse the table
+      results_array = parse_table(results)
+      results_array.each do |result|
+        if result["Property"] == "id"
+          id = result["Value"]
+        end
+      end
+    end
+
+    if id
       @property_hash = {
         :ensure           => :present,
         :name             => resource[:name],
         :is_public        => resource[:is_public],
         :container_format => resource[:container_format],
         :disk_format      => resource[:disk_format],
-        :id               => $1
+        :id               => id
       }
     else
-      fail("did not get expected message from image creation, got #{results}")
+        fail("did not get expected message from image creation, got #{results}")
     end
   end
 
