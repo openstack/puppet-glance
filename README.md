@@ -1,6 +1,8 @@
 glance
 =======
 
+4.0.0 - 2014.1.0 - Icehouse
+
 #### Table of Contents
 
 1. [Overview - What is the glance module?](#overview)
@@ -119,6 +121,17 @@ Contributors
 
 Release Notes
 -------------
+
+**4.0.0**
+
+* Stable Icehouse release.
+* Added glance::config to handle additional custom options.
+* Added known_stores option for glance::api.
+* Added copy-on-write cloning of images to volumes.
+* Added support for puppetlabs-mysql 2.2 and greater.
+* Added support for python-glanceclient v2 API update.
+* Removed deprecated notifier_stratgy parameter.
+* Deprecated show_image_direct_url in glance::rbd.
 
 **3.1.0**
 
