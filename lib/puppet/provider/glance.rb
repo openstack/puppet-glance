@@ -126,7 +126,7 @@ class Puppet::Provider::Glance < Puppet::Provider
     def self.get_glance_image_attrs(id)
       attrs = {}
       (auth_glance('show', id).split("\n") || []).collect do |line|
-        attrs[line.split(': ').first.downcase] = line.split(': ')[1..-1].to_s
+        attrs[line.split(': ').first.downcase] = line.split(': ')[1..-1].pop
       end
       return attrs
     end
