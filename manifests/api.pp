@@ -145,6 +145,10 @@
 #    Defaults to false.
 #    Example: ['glance.store.filesystem.Store','glance.store.http.Store']
 #
+# [*image_cache_dir*]
+#   (optional) Base directory that the Image Cache uses.
+#    Defaults to '/var/lib/glance/image-cache'.
+#
 class glance::api(
   $keystone_password,
   $verbose               = false,
@@ -179,6 +183,7 @@ class glance::api(
   $ca_file               = false,
   $mysql_module          = '0.9',
   $known_stores          = false,
+  $image_cache_dir       = '/var/lib/glance/image-cache',
 ) inherits glance {
 
   require keystone::python
@@ -233,6 +238,7 @@ class glance::api(
     'DEFAULT/backlog':               value => $backlog;
     'DEFAULT/workers':               value => $workers;
     'DEFAULT/show_image_direct_url': value => $show_image_direct_url;
+    'DEFAULT/image_cache_dir':       value => $image_cache_dir;
   }
 
   # known_stores config

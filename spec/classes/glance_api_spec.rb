@@ -36,6 +36,7 @@ describe 'glance::api' do
       :purge_config          => false,
       :mysql_module          => '0.9',
       :known_stores          => false,
+      :image_cache_dir       => '/var/lib/glance/image-cache',
     }
   end
 
@@ -60,7 +61,8 @@ describe 'glance::api' do
       :keystone_password     => 'ChangeMe2',
       :sql_idle_timeout      => '36002',
       :sql_connection        => 'mysql:///var:lib@glance/glance',
-      :show_image_direct_url => true
+      :show_image_direct_url => true,
+      :image_cache_dir       => '/tmp/glance'
     }
   ].each do |param_set|
 
