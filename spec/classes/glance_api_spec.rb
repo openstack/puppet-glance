@@ -30,8 +30,8 @@ describe 'glance::api' do
       :keystone_tenant       => 'services',
       :keystone_user         => 'glance',
       :keystone_password     => 'ChangeMe',
-      :sql_idle_timeout      => '3600',
-      :sql_connection        => 'sqlite:///var/lib/glance/glance.sqlite',
+      :database_idle_timeout => '3600',
+      :database_connection   => 'sqlite:///var/lib/glance/glance.sqlite',
       :show_image_direct_url => false,
       :purge_config          => false,
       :mysql_module          => '0.9',
@@ -59,8 +59,8 @@ describe 'glance::api' do
       :keystone_tenant       => 'admin2',
       :keystone_user         => 'admin2',
       :keystone_password     => 'ChangeMe2',
-      :sql_idle_timeout      => '36002',
-      :sql_connection        => 'mysql:///var:lib@glance/glance',
+      :database_idle_timeout => '36002',
+      :database_connection   => 'mysql:///var:lib@glance/glance',
       :show_image_direct_url => true,
       :image_cache_dir       => '/tmp/glance'
     }
@@ -111,8 +111,8 @@ describe 'glance::api' do
       end
 
       it 'should config db' do
-        should contain_glance_api_config('DEFAULT/sql_connection').with_value(param_hash[:sql_connection])
-        should contain_glance_api_config('DEFAULT/sql_idle_timeout').with_value(param_hash[:sql_idle_timeout])
+        should contain_glance_api_config('database/connection').with_value(param_hash[:database_connection])
+        should contain_glance_api_config('database/idle_timeout').with_value(param_hash[:database_idle_timeout])
       end
 
       it 'should have  no ssl options' do
@@ -305,6 +305,20 @@ describe 'glance::api' do
     end
 
     it { should contain_glance_api_config('DEFAULT/known_stores').with_value("glance.store.filesystem.Store,glance.store.http.Store") }
+  end
+
+  describe 'with deprecated sql parameters' do
+    let :params do
+      default_params.merge({
+        :sql_connection   => 'mysql://user:pass@db/db',
+        :sql_idle_timeout => '30'
+      })
+    end
+
+    it 'configures database' do
+      should contain_glance_api_config('database/connection').with_value('mysql://user:pass@db/db')
+      should contain_glance_api_config('database/idle_timeout').with_value('30')
+    end
   end
 
   describe 'on Debian platforms' do
