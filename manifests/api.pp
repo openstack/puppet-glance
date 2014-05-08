@@ -97,13 +97,20 @@
 #   Defaults to true.
 #
 # [*sql_idle_timeout*]
-#   (optional) Period in seconds after which SQLAlchemy should reestablish its connection
-#   to the database.
-#   Defaults to '3600'.
+#   (optional) Deprecated. Use database_idle_timeout instead
+#   Defaults to false
 #
 # [*sql_connection*]
-#   (optional) Database connection.
-#   Defaults to 'sqlite:///var/lib/glance/glance.sqlite'.
+#   (optional) Deprecated. Use database_connection instead.
+#   Defaults to false
+#
+# [*database_connection*]
+#   (optional) Connection url to connect to nova database.
+#   Defaults to 'sqlite:///var/lib/glance/glance.sqlite'
+#
+# [*database_idle_timeout*]
+#   (optional) Timeout before idle db connections are reaped.
+#   Defaults to 3600
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging.
@@ -172,8 +179,6 @@ class glance::api(
   $keystone_tenant       = 'services',
   $keystone_user         = 'glance',
   $enabled               = true,
-  $sql_idle_timeout      = '3600',
-  $sql_connection        = 'sqlite:///var/lib/glance/glance.sqlite',
   $use_syslog            = false,
   $log_facility          = 'LOG_USER',
   $show_image_direct_url = false,
@@ -183,12 +188,15 @@ class glance::api(
   $ca_file               = false,
   $mysql_module          = '0.9',
   $known_stores          = false,
+  $database_connection   = 'sqlite:///var/lib/glance/glance.sqlite',
+  $database_idle_timeout = 3600,
   $image_cache_dir       = '/var/lib/glance/image-cache',
+  # DEPRECATED PARAMETERS
+  $sql_idle_timeout      = false,
+  $sql_connection        = false,
 ) inherits glance {
 
   require keystone::python
-
-  validate_re($sql_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages([$glance::params::api_package_name])
@@ -214,19 +222,39 @@ class glance::api(
     require => Class['glance'],
   }
 
-  if($sql_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-    if ($mysql_module >= 2.2) {
-      require 'mysql::bindings'
-      require 'mysql::bindings::python'
-    } else {
-      require 'mysql::python'
-    }
-  } elsif($sql_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
-
-  } elsif($sql_connection =~ /sqlite:\/\//) {
-
+  if $sql_connection {
+    warning('The sql_connection parameter is deprecated, use database_connection instead.')
+    $database_connection_real = $sql_connection
   } else {
-    fail("Invalid db connection ${sql_connection}")
+    $database_connection_real = $database_connection
+  }
+
+  if $sql_idle_timeout {
+    warning('The sql_idle_timeout parameter is deprecated, use database_idle_timeout instead.')
+    $database_idle_timeout_real = $sql_idle_timeout
+  } else {
+    $database_idle_timeout_real = $database_idle_timeout
+  }
+
+  if $database_connection_real {
+    if($database_connection_real =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
+      if ($mysql_module >= 2.2) {
+        require 'mysql::bindings'
+        require 'mysql::bindings::python'
+      } else {
+        require 'mysql::python'
+      }
+    } elsif($database_connection_real =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
+
+    } elsif($database_connection_real =~ /sqlite:\/\//) {
+
+    } else {
+      fail("Invalid db connection ${database_connection_real}")
+    }
+    glance_api_config {
+      'database/connection':   value => $database_connection_real;
+      'database/idle_timeout': value => $database_idle_timeout_real;
+    }
   }
 
   # basic service config
@@ -266,15 +294,6 @@ class glance::api(
   glance_cache_config {
     'DEFAULT/registry_host': value => $registry_host;
     'DEFAULT/registry_port': value => $registry_port;
-  }
-
-  # db connection config
-  # I do not believe this was required in Essex.
-  # Does the API server now need to connect to the DB?
-  # TODO figure out if I need this...
-  glance_api_config {
-    'DEFAULT/sql_connection':   value => $sql_connection;
-    'DEFAULT/sql_idle_timeout': value => $sql_idle_timeout;
   }
 
   if $auth_uri {
