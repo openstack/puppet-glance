@@ -97,8 +97,7 @@ describe 'glance::registry' do
          'database_connection',
          'database_idle_timeout',
         ].each do |config|
-          should contain_glance_registry_config("database/connection").with_value(param_hash[:database_connection])
-          should contain_glance_registry_config("database/idle_timeout").with_value(param_hash[:database_idle_timeout])
+          should contain_glance_registry_config("database/#{config.gsub(/database_/,'')}").with_value(param_hash[config.intern])
         end
         [
          'auth_host',
