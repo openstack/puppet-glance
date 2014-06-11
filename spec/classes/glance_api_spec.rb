@@ -112,6 +112,7 @@ describe 'glance::api' do
 
       it 'should config db' do
         should contain_glance_api_config('database/connection').with_value(param_hash[:database_connection])
+        should contain_glance_api_config('database/connection').with_value(param_hash[:database_connection]).with_secret(true)
         should contain_glance_api_config('database/idle_timeout').with_value(param_hash[:database_idle_timeout])
       end
 
@@ -135,12 +136,16 @@ describe 'glance::api' do
       it 'should configure itself for keystone if that is the auth_type' do
         if params[:auth_type] == 'keystone'
           should contain('paste_deploy/flavor').with_value('keystone+cachemanagement')
+
           ['admin_tenant_name', 'admin_user', 'admin_password'].each do |config|
             should contain_glance_api_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
           end
+          should contain_glance_api_config('keystone_authtoken/admin_password').with_value(param_hash[:keystone_password]).with_secret(true)
+
           ['admin_tenant_name', 'admin_user', 'admin_password'].each do |config|
             should contain_glance_cache_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
           end
+          should contain_glance_cache_config('keystone_authtoken/admin_password').with_value(param_hash[:keystone_password]).with_secret(true)
         end
       end
     end
