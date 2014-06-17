@@ -49,6 +49,10 @@
 #   (optional) The port of the Glance registry service.
 #   Default: 9191
 #
+# [*registry_client_protocol*]
+#   (optional) The protocol of the Glance registry service.
+#   Default: http
+#
 # [*auth_type*]
 #   (optional) Type is authorization being used.
 #   Defaults to 'keystone'
@@ -158,42 +162,43 @@
 #
 class glance::api(
   $keystone_password,
-  $verbose               = false,
-  $debug                 = false,
-  $bind_host             = '0.0.0.0',
-  $bind_port             = '9292',
-  $backlog               = '4096',
-  $workers               = $::processorcount,
-  $log_file              = '/var/log/glance/api.log',
-  $log_dir               = '/var/log/glance',
-  $registry_host         = '0.0.0.0',
-  $registry_port         = '9191',
-  $auth_type             = 'keystone',
-  $auth_host             = '127.0.0.1',
-  $auth_url              = 'http://localhost:5000/v2.0',
-  $auth_port             = '35357',
-  $auth_uri              = false,
-  $auth_admin_prefix     = false,
-  $auth_protocol         = 'http',
-  $pipeline              = 'keystone+cachemanagement',
-  $keystone_tenant       = 'services',
-  $keystone_user         = 'glance',
-  $enabled               = true,
-  $use_syslog            = false,
-  $log_facility          = 'LOG_USER',
-  $show_image_direct_url = false,
-  $purge_config          = false,
-  $cert_file             = false,
-  $key_file              = false,
-  $ca_file               = false,
-  $mysql_module          = '0.9',
-  $known_stores          = false,
-  $database_connection   = 'sqlite:///var/lib/glance/glance.sqlite',
-  $database_idle_timeout = 3600,
-  $image_cache_dir       = '/var/lib/glance/image-cache',
+  $verbose                  = false,
+  $debug                    = false,
+  $bind_host                = '0.0.0.0',
+  $bind_port                = '9292',
+  $backlog                  = '4096',
+  $workers                  = $::processorcount,
+  $log_file                 = '/var/log/glance/api.log',
+  $log_dir                  = '/var/log/glance',
+  $registry_host            = '0.0.0.0',
+  $registry_port            = '9191',
+  $registry_client_protocol = 'http',
+  $auth_type                = 'keystone',
+  $auth_host                = '127.0.0.1',
+  $auth_url                 = 'http://localhost:5000/v2.0',
+  $auth_port                = '35357',
+  $auth_uri                 = false,
+  $auth_admin_prefix        = false,
+  $auth_protocol            = 'http',
+  $pipeline                 = 'keystone+cachemanagement',
+  $keystone_tenant          = 'services',
+  $keystone_user            = 'glance',
+  $enabled                  = true,
+  $use_syslog               = false,
+  $log_facility             = 'LOG_USER',
+  $show_image_direct_url    = false,
+  $purge_config             = false,
+  $cert_file                = false,
+  $key_file                 = false,
+  $ca_file                  = false,
+  $mysql_module             = '0.9',
+  $known_stores             = false,
+  $database_connection      = 'sqlite:///var/lib/glance/glance.sqlite',
+  $database_idle_timeout    = 3600,
+  $image_cache_dir          = '/var/lib/glance/image-cache',
   # DEPRECATED PARAMETERS
-  $sql_idle_timeout      = false,
-  $sql_connection        = false,
+  $sql_idle_timeout         = false,
+  $sql_connection           = false,
 ) inherits glance {
 
   require keystone::python
@@ -288,8 +293,9 @@ class glance::api(
 
   # configure api service to connect registry service
   glance_api_config {
-    'DEFAULT/registry_host': value => $registry_host;
-    'DEFAULT/registry_port': value => $registry_port;
+    'DEFAULT/registry_host':            value => $registry_host;
+    'DEFAULT/registry_port':            value => $registry_port;
+    'DEFAULT/registry_client_protocol': value => $registry_client_protocol;
   }
 
   glance_cache_config {
