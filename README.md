@@ -135,6 +135,16 @@ Contributors
 Release Notes
 -------------
 
+**4.1.0**
+
+* Added multiple rabbit hosts support.
+* Added image_cache_dir parameter.
+* Deprecated old SQL parameters.
+* Fixed the Glance add_image parser for new client.
+* Fixed values in get_glance_image_attrs.
+* Fixed 'could not find user glance' bug.
+* Pinned major gems.
+
 **4.0.0**
 
 * Stable Icehouse release.
