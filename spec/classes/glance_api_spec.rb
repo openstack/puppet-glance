@@ -35,7 +35,6 @@ describe 'glance::api' do
       :database_connection      => 'sqlite:///var/lib/glance/glance.sqlite',
       :show_image_direct_url    => false,
       :purge_config             => false,
-      :mysql_module             => '2.2',
       :known_stores             => false,
       :image_cache_dir          => '/var/lib/glance/image-cache',
     }
