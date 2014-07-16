@@ -5,7 +5,7 @@
 #   [*mysql_module*]
 #   (optional) The mysql puppet module version to use. Tested
 #   versions include 0.9 and 2.2
-#   Default to '0.9'
+#   Default to '2.2'
 #
 class glance::db::mysql(
   $password,
@@ -16,7 +16,7 @@ class glance::db::mysql(
   $charset       = 'utf8',
   $collate       = 'utf8_unicode_ci',
   $cluster_id    = 'localzone',
-  $mysql_module  = '0.9'
+  $mysql_module  = '2.2'
 ) {
 
   Class['glance::db::mysql'] -> Exec<| title == 'glance-manage db_sync' |>

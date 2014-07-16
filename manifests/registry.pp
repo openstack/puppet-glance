@@ -107,7 +107,7 @@
 #  [*mysql_module*]
 #  (optional) The version of puppet-mysql to use. Tested versions
 #  include 0.9 and 2.2
-#  Defaults to '0.9'
+#  Defaults to '2.2'
 #
 class glance::registry(
   $keystone_password,
@@ -135,7 +135,7 @@ class glance::registry(
   $cert_file             = false,
   $key_file              = false,
   $ca_file               = false,
-  $mysql_module          = '0.9',
+  $mysql_module          = '2.2',
   # DEPRECATED PARAMETERS
   $sql_idle_timeout      = false,
   $sql_connection        = false,

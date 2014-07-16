@@ -27,7 +27,7 @@ describe 'glance::registry' do
       :keystone_user          => 'glance',
       :keystone_password      => 'ChangeMe',
       :purge_config           => false,
-      :mysql_module           => '0.9'
+      :mysql_module           => '2.2'
     }
   end
 

@@ -148,7 +148,7 @@
 # [*mysql_module*]
 #   (optional) Mysql puppet module version to use
 #   Tested versions include 0.9 and 2.2
-#   Defaults to '0.9'.
+#   Defaults to '2.2'.
 #
 # [*known_stores*]
 #   (optional)List of which store classes and store class locations are
@@ -191,7 +191,7 @@ class glance::api(
   $cert_file                = false,
   $key_file                 = false,
   $ca_file                  = false,
-  $mysql_module             = '0.9',
+  $mysql_module             = '2.2',
   $known_stores             = false,
   $database_connection      = 'sqlite:///var/lib/glance/glance.sqlite',
   $database_idle_timeout    = 3600,
