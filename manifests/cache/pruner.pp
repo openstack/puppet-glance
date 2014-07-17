@@ -37,6 +37,8 @@ class glance::cache::pruner (
     hour        => $hour,
     monthday    => $monthday,
     month       => $month,
-    weekday     => $weekday
+    weekday     => $weekday,
+    require     => Package[$::glance::params::api_package_name],
+
   }
 }
