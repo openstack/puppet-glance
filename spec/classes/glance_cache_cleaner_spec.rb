@@ -15,7 +15,8 @@ describe 'glance::cache::cleaner' do
       :hour        => 0,
       :monthday    => '*',
       :month       => '*',
-      :weekday     => '*'
+      :weekday     => '*',
+      :require     => 'Package[glance-api]'
     )
   end
 end

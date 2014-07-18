@@ -15,7 +15,8 @@ describe 'glance::cache::pruner' do
       :hour        => '*',
       :monthday    => '*',
       :month       => '*',
-      :weekday     => '*'
+      :weekday     => '*',
+      :require     => 'Package[glance-api]'
     )
   end
 end
