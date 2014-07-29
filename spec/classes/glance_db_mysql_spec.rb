@@ -15,15 +15,15 @@ describe 'glance::db::mysql' do
     let :params do
       {
         :password => 'glancepass1',
-        :mysql_module => '0.9'
+        :mysql_module => '2.2'
       }
     end
 
-    it { should contain_class('mysql::python') }
+    it { should contain_class('mysql::bindings::python') }
 
     it { should contain_mysql__db('glance').with(
       :password => 'glancepass1',
-      :require  => 'Class[Mysql::Config]',
+      :require  => 'Class[Mysql::Server]',
       :charset  => 'utf8'
     )}
 

@@ -1,7 +1,7 @@
 #
 # Used to grant access to the glance mysql DB
 #
-define glance::db::mysql::host_access ($user, $password, $database, $mysql_module = '0.9')  {
+define glance::db::mysql::host_access ($user, $password, $database, $mysql_module = '2.2')  {
 
   if ($mysql_module >= 2.2) {
     mysql_user { "${user}@${name}":
