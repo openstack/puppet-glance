@@ -192,7 +192,7 @@ class glance::registry(
       fail("Invalid db connection ${database_connection_real}")
     }
     glance_registry_config {
-      'database/connection':   value => $database_connection_real;
+      'database/connection':   value => $database_connection_real, secret => true;
       'database/idle_timeout': value => $database_idle_timeout_real;
     }
   }
@@ -245,7 +245,7 @@ class glance::registry(
     glance_registry_config {
       'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
       'keystone_authtoken/admin_user'       : value => $keystone_user;
-      'keystone_authtoken/admin_password'   : value => $keystone_password;
+      'keystone_authtoken/admin_password'   : value => $keystone_password, secret => true;
     }
   }
 

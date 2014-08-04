@@ -112,6 +112,7 @@ describe 'glance::registry' do
           should contain_glance_registry_config("keystone_authtoken/admin_tenant_name").with_value(param_hash[:keystone_tenant])
           should contain_glance_registry_config("keystone_authtoken/admin_user").with_value(param_hash[:keystone_user])
           should contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password])
+          should contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password]).with_secret(true)
         end
       end
     end
