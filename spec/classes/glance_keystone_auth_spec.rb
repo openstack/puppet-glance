@@ -116,4 +116,21 @@ describe 'glance::keystone::auth' do
 
     it { should contain_keystone_endpoint('RegionOne/glance').with_notify('Service[glance-api]') }
     end
+
+  describe 'when overriding service name' do
+
+    let :params do
+      {
+        :service_name => 'glance_service',
+        :password     => 'pass'
+      }
+    end
+
+    it { should contain_keystone_user('glance') }
+    it { should contain_keystone_user_role('glance@services') }
+    it { should contain_keystone_service('glance_service') }
+    it { should contain_keystone_endpoint('RegionOne/glance_service') }
+
+  end
+
 end
