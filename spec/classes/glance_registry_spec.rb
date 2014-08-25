@@ -18,6 +18,7 @@ describe 'glance::registry' do
       :database_connection    => 'sqlite:///var/lib/glance/glance.sqlite',
       :database_idle_timeout  => '3600',
       :enabled                => true,
+      :manage_service         => true,
       :auth_type              => 'keystone',
       :auth_host              => '127.0.0.1',
       :auth_port              => '35357',
@@ -64,7 +65,7 @@ describe 'glance::registry' do
       it { should contain_class 'glance::registry' }
 
       it { should contain_service('glance-registry').with(
-          'ensure'     => param_hash[:enabled] ? 'running' : 'stopped',
+          'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running' : 'stopped',
           'enable'     => param_hash[:enabled],
           'hasstatus'  => true,
           'hasrestart' => true,
@@ -116,6 +117,25 @@ describe 'glance::registry' do
         end
       end
     end
+  end
+
+  describe 'with disabled service managing' do
+    let :params do
+      {
+        :keystone_password => 'ChangeMe',
+        :manage_service => false,
+        :enabled        => false,
+      }
+    end
+
+    it { should contain_service('glance-registry').with(
+          'ensure'     => nil,
+          'enable'     => false,
+          'hasstatus'  => true,
+          'hasrestart' => true,
+          'subscribe'  => 'File[/etc/glance/glance-registry.conf]',
+          'require'    => 'Class[Glance]'
+      )}
   end
 
   describe 'with overridden pipeline' do

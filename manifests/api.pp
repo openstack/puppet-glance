@@ -96,6 +96,10 @@
 #   (optional) User to authenticate as with keystone.
 #   Defaults to 'glance'.
 #
+# [*manage_service*]
+#   (optional) If Puppet should manage service startup / shutdown.
+#   Defaults to true.
+#
 # [*enabled*]
 #   (optional) Whether to enable services.
 #   Defaults to true.
@@ -183,6 +187,7 @@ class glance::api(
   $pipeline                 = 'keystone+cachemanagement',
   $keystone_tenant          = 'services',
   $keystone_user            = 'glance',
+  $manage_service           = true,
   $enabled                  = true,
   $use_syslog               = false,
   $log_facility             = 'LOG_USER',
@@ -425,10 +430,12 @@ class glance::api(
           '/etc/glance/glance-cache.conf']:
   }
 
-  if $enabled {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'glance-api':
