@@ -146,9 +146,7 @@
 #   Defaults to false, not set
 #
 # [*mysql_module*]
-#   (optional) Mysql puppet module version to use
-#   Tested versions include 0.9 and 2.2
-#   Defaults to '2.2'.
+#   (optional) Deprecated. Does nothing.
 #
 # [*known_stores*]
 #   (optional)List of which store classes and store class locations are
@@ -191,17 +189,21 @@ class glance::api(
   $cert_file                = false,
   $key_file                 = false,
   $ca_file                  = false,
-  $mysql_module             = '2.2',
   $known_stores             = false,
   $database_connection      = 'sqlite:///var/lib/glance/glance.sqlite',
   $database_idle_timeout    = 3600,
   $image_cache_dir          = '/var/lib/glance/image-cache',
   # DEPRECATED PARAMETERS
+  $mysql_module             = undef,
   $sql_idle_timeout         = false,
   $sql_connection           = false,
 ) inherits glance {
 
   require keystone::python
+
+  if $mysql_module {
+    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
+  }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages([$glance::params::api_package_name])
@@ -244,12 +246,8 @@ class glance::api(
 
   if $database_connection_real {
     if($database_connection_real =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-      if ($mysql_module >= 2.2) {
-        require 'mysql::bindings'
-        require 'mysql::bindings::python'
-      } else {
-        require 'mysql::python'
-      }
+      require 'mysql::bindings'
+      require 'mysql::bindings::python'
     } elsif($database_connection_real =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
 
     } elsif($database_connection_real =~ /sqlite:\/\//) {
