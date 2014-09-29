@@ -22,6 +22,7 @@ describe 'glance::api' do
       :log_dir                  => '/var/log/glance',
       :auth_type                => 'keystone',
       :enabled                  => true,
+      :manage_service           => true,
       :backlog                  => '4096',
       :workers                  => '7',
       :auth_host                => '127.0.0.1',
@@ -80,7 +81,7 @@ describe 'glance::api' do
       it { should contain_class 'glance' }
 
       it { should contain_service('glance-api').with(
-        'ensure'     => param_hash[:enabled] ? 'running': 'stopped',
+        'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running': 'stopped',
         'enable'     => param_hash[:enabled],
         'hasstatus'  => true,
         'hasrestart' => true
@@ -151,6 +152,23 @@ describe 'glance::api' do
         end
       end
     end
+  end
+
+  describe 'with disabled service managing' do
+    let :params do
+      {
+        :keystone_password => 'ChangeMe',
+        :manage_service => false,
+        :enabled        => false,
+      }
+    end
+
+    it { should contain_service('glance-api').with(
+        'ensure'     => nil,
+        'enable'     => false,
+        'hasstatus'  => true,
+        'hasrestart' => true
+      ) }
   end
 
   describe 'with overridden pipeline' do

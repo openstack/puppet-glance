@@ -84,8 +84,13 @@
 #    (optional) Syslog facility to receive log lines.
 #    Defaults to LOG_USER.
 #
+#  [*manage_service*]
+#    (optional) If Puppet should manage service startup / shutdown.
+#    Defaults to true.
+#
 #  [*enabled*]
-#    (optional) Should the service be enabled. Defaults to true.
+#    (optional) Should the service be enabled.
+#    Defaults to true.
 #
 #  [*purge_config*]
 #    (optional) Whether to create only the specified config values in
@@ -128,6 +133,7 @@ class glance::registry(
   $pipeline              = 'keystone',
   $use_syslog            = false,
   $log_facility          = 'LOG_USER',
+  $manage_service        = true,
   $enabled               = true,
   $purge_config          = false,
   $cert_file             = false,
@@ -317,21 +323,23 @@ class glance::registry(
           '/etc/glance/glance-registry-paste.ini']:
   }
 
-  if $enabled {
 
-    Exec['glance-manage db_sync'] ~> Service['glance-registry']
+  if $manage_service {
+    if $enabled {
+      Exec['glance-manage db_sync'] ~> Service['glance-registry']
 
-    exec { 'glance-manage db_sync':
-      command     => $::glance::params::db_sync_command,
-      path        => '/usr/bin',
-      user        => 'glance',
-      refreshonly => true,
-      logoutput   => on_failure,
-      subscribe   => [Package[$glance::params::registry_package_name], File['/etc/glance/glance-registry.conf']],
+      exec { 'glance-manage db_sync':
+        command     => $::glance::params::db_sync_command,
+        path        => '/usr/bin',
+        user        => 'glance',
+        refreshonly => true,
+        logoutput   => on_failure,
+        subscribe   => [Package[$glance::params::registry_package_name], File['/etc/glance/glance-registry.conf']],
+      }
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
     }
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
   }
 
   service { 'glance-registry':
