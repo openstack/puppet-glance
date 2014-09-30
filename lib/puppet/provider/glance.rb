@@ -15,7 +15,8 @@ class Puppet::Provider::Glance < Puppet::Provider
       glance_file['keystone_authtoken']['auth_protocol'] and
       glance_file['keystone_authtoken']['admin_tenant_name'] and
       glance_file['keystone_authtoken']['admin_user'] and
-      glance_file['keystone_authtoken']['admin_password']
+      glance_file['keystone_authtoken']['admin_password'] and
+      glance_file['DEFAULT']['os_region_name']
 
         g = {}
         g['auth_host'] = glance_file['keystone_authtoken']['auth_host'].strip
@@ -24,6 +25,7 @@ class Puppet::Provider::Glance < Puppet::Provider
         g['admin_tenant_name'] = glance_file['keystone_authtoken']['admin_tenant_name'].strip
         g['admin_user'] = glance_file['keystone_authtoken']['admin_user'].strip
         g['admin_password'] = glance_file['keystone_authtoken']['admin_password'].strip
+        g['os_region_name'] = glance_file['DEFAULT']['os_region_name'].strip
 
         # auth_admin_prefix not required to be set.
         g['auth_admin_prefix'] = (glance_file['keystone_authtoken']['auth_admin_prefix'] || '').strip
@@ -72,11 +74,11 @@ class Puppet::Provider::Glance < Puppet::Provider
   def self.auth_glance(*args)
     begin
       g = glance_credentials
-      remove_warnings(glance('--os-tenant-name', g['admin_tenant_name'], '--os-username', g['admin_user'], '--os-password', g['admin_password'], '--os-auth-url', auth_endpoint, args))
+      remove_warnings(glance('--os-tenant-name', g['admin_tenant_name'], '--os-username', g['admin_user'], '--os-password', g['admin_password'], '--os-region-name', g['os_region_name'], '--os-auth-url', auth_endpoint, args))
     rescue Exception => e
       if (e.message =~ /\[Errno 111\] Connection refused/) or (e.message =~ /\(HTTP 400\)/) or (e.message =~ /HTTP Unable to establish connection/)
         sleep 10
-        remove_warnings(glance('--os-tenant-name', g['admin_tenant_name'], '--os-username', g['admin_user'], '--os-password', g['admin_password'], '--os-auth-url', auth_endpoint, args))
+        remove_warnings(glance('--os-tenant-name', g['admin_tenant_name'], '--os-username', g['admin_user'], '--os-password', g['admin_password'], '--os-region-name', g['os_region_name'], '--os-auth-url', auth_endpoint, args))
       else
         raise(e)
       end
@@ -90,7 +92,7 @@ class Puppet::Provider::Glance < Puppet::Provider
   def self.auth_glance_stdin(*args)
     begin
       g = glance_credentials
-      command = "glance --os-tenant-name #{g['admin_tenant_name']} --os-username #{g['admin_user']} --os-password #{g['admin_password']} --os-auth-url #{auth_endpoint} #{args.join(' ')}"
+      command = "glance --os-tenant-name #{g['admin_tenant_name']} --os-username #{g['admin_user']} --os-password #{g['admin_password']} --os-region-name #{g['os_region_name']} --os-auth-url #{auth_endpoint} #{args.join(' ')}"
 
       # This is a horrible, horrible hack
       # Redirect stderr to stdout in order to report errors

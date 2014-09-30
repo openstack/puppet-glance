@@ -35,6 +35,10 @@ describe Puppet::Provider::Glance do
                'admin_tenant_name' => 'foo',
                'admin_user'        => 'user',
                'admin_password'    => 'pass'
+            },
+                'DEFAULT' =>
+            {
+                'os_region_name' => 'SomeRegion',
             }
           }
           Puppet::Util::IniConfig::File.expects(:new).returns(mock)
@@ -47,6 +51,8 @@ describe Puppet::Provider::Glance do
             'user',
             '--os-password',
             'pass',
+            '--os-region-name',
+            'SomeRegion',
             '--os-auth-url',
             'http://127.0.0.1:35357/v2.0/',
             ['test_retries']
