@@ -72,11 +72,11 @@ class Puppet::Provider::Glance < Puppet::Provider
   def self.auth_glance(*args)
     begin
       g = glance_credentials
-      remove_warnings(glance('-T', g['admin_tenant_name'], '-I', g['admin_user'], '-K', g['admin_password'], '-N', auth_endpoint, args))
+      remove_warnings(glance('--os-tenant-name', g['admin_tenant_name'], '--os-username', g['admin_user'], '--os-password', g['admin_password'], '--os-auth-url', auth_endpoint, args))
     rescue Exception => e
       if (e.message =~ /\[Errno 111\] Connection refused/) or (e.message =~ /\(HTTP 400\)/) or (e.message =~ /HTTP Unable to establish connection/)
         sleep 10
-        remove_warnings(glance('-T', g['admin_tenant_name'], '-I', g['admin_user'], '-K', g['admin_password'], '-N', auth_endpoint, args))
+        remove_warnings(glance('--os-tenant-name', g['admin_tenant_name'], '--os-username', g['admin_user'], '--os-password', g['admin_password'], '--os-auth-url', auth_endpoint, args))
       else
         raise(e)
       end
@@ -90,7 +90,7 @@ class Puppet::Provider::Glance < Puppet::Provider
   def self.auth_glance_stdin(*args)
     begin
       g = glance_credentials
-      command = "glance -T #{g['admin_tenant_name']} -I #{g['admin_user']} -K #{g['admin_password']} -N #{auth_endpoint} #{args.join(' ')}"
+      command = "glance --os-tenant-name #{g['admin_tenant_name']} --os-username #{g['admin_user']} --os-password #{g['admin_password']} --os-auth-url #{auth_endpoint} #{args.join(' ')}"
 
       # This is a horrible, horrible hack
       # Redirect stderr to stdout in order to report errors
@@ -109,14 +109,14 @@ class Puppet::Provider::Glance < Puppet::Provider
   private
     def self.list_glance_images
       ids = []
-      (auth_glance('index').split("\n")[2..-1] || []).collect do |line|
-        ids << line.split[0]
+      (auth_glance('image-list').split("\n")[3..-2] || []).collect do |line|
+        ids << line.split('|')[1].strip()
       end
       return ids
     end
 
     def self.get_glance_image_attr(id, attr)
-      (auth_glance('show', id).split("\n") || []).collect do |line|
+      (auth_glance('image-show', id).split("\n") || []).collect do |line|
         if line =~ /^#{attr}:/
           return line.split(': ')[1..-1]
         end
@@ -125,8 +125,8 @@ class Puppet::Provider::Glance < Puppet::Provider
 
     def self.get_glance_image_attrs(id)
       attrs = {}
-      (auth_glance('show', id).split("\n") || []).collect do |line|
-        attrs[line.split(': ').first.downcase] = line.split(': ')[1..-1].pop
+      (auth_glance('image-show', id).split("\n")[3..-2] || []).collect do |line|
+        attrs[line.split('|')[1].strip()] = line.split('|')[2].strip()
       end
       return attrs
     end

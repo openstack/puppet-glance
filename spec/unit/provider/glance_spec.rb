@@ -41,13 +41,13 @@ describe Puppet::Provider::Glance do
           mock.expects(:read).with('/etc/glance/glance-api.conf')
           klass.expects(:sleep).with(10).returns(nil)
           klass.expects(:glance).twice.with(
-            '-T',
+            '--os-tenant-name',
             'foo',
-            '-I',
+            '--os-username',
             'user',
-            '-K',
+            '--os-password',
             'pass',
-            '-N',
+            '--os-auth-url',
             'http://127.0.0.1:35357/v2.0/',
             ['test_retries']
           ).raises(Exception, valid_message).then.returns('')

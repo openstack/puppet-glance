@@ -21,10 +21,10 @@ Puppet::Type.type(:glance_image).provide(
       new(
         :ensure           => :present,
         :name             => attrs['name'],
-        :is_public        => attrs['public'],
-        :container_format => attrs['container format'],
+        :is_public        => attrs['is_public'],
+        :container_format => attrs['container_format'],
         :id               => attrs['id'],
-        :disk_format      => attrs['disk format']
+        :disk_format      => attrs['disk_format']
       )
     end
   end
