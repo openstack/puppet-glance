@@ -38,6 +38,7 @@ describe 'glance::api' do
       :purge_config             => false,
       :known_stores             => false,
       :image_cache_dir          => '/var/lib/glance/image-cache',
+      :os_region_name           => 'RegionOne',
     }
   end
 
@@ -64,7 +65,8 @@ describe 'glance::api' do
       :database_idle_timeout    => '36002',
       :database_connection      => 'mysql:///var:lib@glance/glance',
       :show_image_direct_url    => true,
-      :image_cache_dir          => '/tmp/glance'
+      :image_cache_dir          => '/tmp/glance',
+      :os_region_name           => 'RegionOne2',
     }
   ].each do |param_set|
 
@@ -96,7 +98,8 @@ describe 'glance::api' do
           'registry_host',
           'registry_port',
           'registry_client_protocol',
-          'show_image_direct_url'
+          'show_image_direct_url',
+          'os_region_name',
         ].each do |config|
           should contain_glance_api_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
         end
@@ -107,7 +110,8 @@ describe 'glance::api' do
           'verbose',
           'debug',
           'registry_host',
-          'registry_port'
+          'registry_port',
+          'os_region_name',
         ].each do |config|
           should contain_glance_cache_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
         end
