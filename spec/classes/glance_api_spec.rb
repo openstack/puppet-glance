@@ -324,7 +324,7 @@ describe 'glance::api' do
       default_params
     end
 
-    it { should_not contain_glance_api_config('DEFAULT/known_stores').with_value('false') }
+    it { should_not contain_glance_api_config('glance_store/stores').with_value('false') }
   end
 
   describe 'with known_stores override' do
@@ -334,7 +334,7 @@ describe 'glance::api' do
       })
     end
 
-    it { should contain_glance_api_config('DEFAULT/known_stores').with_value("glance.store.filesystem.Store,glance.store.http.Store") }
+    it { should contain_glance_api_config('glance_store/stores').with_value("glance.store.filesystem.Store,glance.store.http.Store") }
   end
 
   describe 'with deprecated sql parameters' do
