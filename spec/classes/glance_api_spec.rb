@@ -81,6 +81,7 @@ describe 'glance::api' do
       end
 
       it { should contain_class 'glance' }
+      it { should contain_class 'glance::policy' }
 
       it { should contain_service('glance-api').with(
         'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running': 'stopped',

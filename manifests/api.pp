@@ -208,6 +208,7 @@ class glance::api(
   $sql_connection           = false,
 ) inherits glance {
 
+  include glance::policy
   require keystone::python
 
   if $mysql_module {
@@ -219,6 +220,7 @@ class glance::api(
   }
 
   Package[$glance::params::api_package_name] -> File['/etc/glance/']
+  Package[$glance::params::api_package_name] -> Class['glance::policy']
   Package[$glance::params::api_package_name] -> Glance_api_config<||>
   Package[$glance::params::api_package_name] -> Glance_cache_config<||>
 
@@ -229,6 +231,7 @@ class glance::api(
   Exec<| title == 'glance-manage db_sync' |> ~> Service['glance-api']
   Glance_api_config<||>   ~> Service['glance-api']
   Glance_cache_config<||> ~> Service['glance-api']
+  Class['glance::policy'] ~> Service['glance-api']
 
   File {
     ensure  => present,
