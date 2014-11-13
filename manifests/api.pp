@@ -232,6 +232,7 @@ class glance::api(
   Glance_api_config<||>   ~> Service['glance-api']
   Glance_cache_config<||> ~> Service['glance-api']
   Class['glance::policy'] ~> Service['glance-api']
+  Service['glance-api']   ~> Glance_image<||>
 
   File {
     ensure  => present,
