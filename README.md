@@ -45,19 +45,19 @@ To utilize the glance module's functionality you will need to declare multiple r
 
 ```puppet
 class { 'glance::api':
-  verbose           => true,
-  keystone_tenant   => 'services',
-  keystone_user     => 'glance',
-  keystone_password => '12345',
-  sql_connection    => 'mysql://glance:12345@127.0.0.1/glance',
+  verbose             => true,
+  keystone_tenant     => 'services',
+  keystone_user       => 'glance',
+  keystone_password   => '12345',
+  database_connection => 'mysql://glance:12345@127.0.0.1/glance',
 }
 
 class { 'glance::registry':
-  verbose           => true,
-  keystone_tenant   => 'services',
-  keystone_user     => 'glance',
-  keystone_password => '12345',
-  sql_connection    => 'mysql://glance:12345@127.0.0.1/glance',
+  verbose             => true,
+  keystone_tenant     => 'services',
+  keystone_user       => 'glance',
+  keystone_password   => '12345',
+  database_connection => 'mysql://glance:12345@127.0.0.1/glance',
 }
 
 class { 'glance::backend::file': }

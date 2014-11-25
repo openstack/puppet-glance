@@ -19,13 +19,13 @@ node glance_keystone_mysql {
     password => 'ChangeMe',
   }
   class { 'glance::api':
-    verbose           => true,
-    debug             => true,
-    auth_type         => 'keystone',
-    keystone_tenant   => 'services',
-    keystone_user     => 'glance',
-    keystone_password => 'glance_password',
-    sql_connection    => 'mysql://glance:glance@127.0.0.1/glance',
+    verbose             => true,
+    debug               => true,
+    auth_type           => 'keystone',
+    keystone_tenant     => 'services',
+    keystone_user       => 'glance',
+    keystone_password   => 'glance_password',
+    database_connection => 'mysql://glance:glance@127.0.0.1/glance',
   }
   class { 'glance::backend::file': }
 
@@ -39,13 +39,13 @@ node glance_keystone_mysql {
   }
 
   class { 'glance::registry':
-    verbose           => true,
-    debug             => true,
-    auth_type         => 'keystone',
-    keystone_tenant   => 'services',
-    keystone_user     => 'glance',
-    keystone_password => 'glance_password',
-    sql_connection    => 'mysql://glance:glance@127.0.0.1/glance',
+    verbose             => true,
+    debug               => true,
+    auth_type           => 'keystone',
+    keystone_tenant     => 'services',
+    keystone_user       => 'glance',
+    keystone_password   => 'glance_password',
+    database_connection => 'mysql://glance:glance@127.0.0.1/glance',
   }
   class { 'glance::keystone::auth':
     password => 'glance_pass',

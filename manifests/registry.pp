@@ -29,14 +29,6 @@
 #    If set to boolean false, it will not log to any directory.
 #    Defaults to '/var/log/glance'
 #
-# [*sql_idle_timeout*]
-#   (optional) Deprecated. Use database_idle_timeout instead
-#   Defaults to false
-#
-# [*sql_connection*]
-#   (optional) Deprecated. Use database_connection instead.
-#   Defaults to false
-#
 # [*database_connection*]
 #   (optional) Connection url to connect to nova database.
 #   Defaults to 'sqlite:///var/lib/glance/glance.sqlite'
@@ -141,8 +133,6 @@ class glance::registry(
   $ca_file               = false,
   # DEPRECATED PARAMETERS
   $mysql_module          = undef,
-  $sql_idle_timeout      = false,
-  $sql_connection        = false,
 ) inherits glance {
 
   require keystone::python
@@ -170,34 +160,20 @@ class glance::registry(
     require => Class['glance']
   }
 
-  if $sql_connection {
-    warning('The sql_connection parameter is deprecated, use database_connection instead.')
-    $database_connection_real = $sql_connection
-  } else {
-    $database_connection_real = $database_connection
-  }
-
-  if $sql_idle_timeout {
-    warning('The sql_idle_timeout parameter is deprecated, use database_idle_timeout instead.')
-    $database_idle_timeout_real = $sql_idle_timeout
-  } else {
-    $database_idle_timeout_real = $database_idle_timeout
-  }
-
-  if $database_connection_real {
-    if($database_connection_real =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
+  if $database_connection {
+    if($database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
       require 'mysql::bindings'
       require 'mysql::bindings::python'
-    } elsif($database_connection_real =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
+    } elsif($database_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
 
-    } elsif($database_connection_real =~ /sqlite:\/\//) {
+    } elsif($database_connection =~ /sqlite:\/\//) {
 
     } else {
-      fail("Invalid db connection ${database_connection_real}")
+      fail("Invalid db connection ${database_connection}")
     }
     glance_registry_config {
-      'database/connection':   value => $database_connection_real, secret => true;
-      'database/idle_timeout': value => $database_idle_timeout_real;
+      'database/connection':   value => $database_connection, secret => true;
+      'database/idle_timeout': value => $database_idle_timeout;
     }
   }
 
