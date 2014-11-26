@@ -337,20 +337,6 @@ describe 'glance::api' do
     it { should contain_glance_api_config('glance_store/stores').with_value("glance.store.filesystem.Store,glance.store.http.Store") }
   end
 
-  describe 'with deprecated sql parameters' do
-    let :params do
-      default_params.merge({
-        :sql_connection   => 'mysql://user:pass@db/db',
-        :sql_idle_timeout => '30'
-      })
-    end
-
-    it 'configures database' do
-      should contain_glance_api_config('database/connection').with_value('mysql://user:pass@db/db')
-      should contain_glance_api_config('database/idle_timeout').with_value('30')
-    end
-  end
-
   describe 'on Debian platforms' do
     let :facts do
       { :osfamily => 'Debian' }
