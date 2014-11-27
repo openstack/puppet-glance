@@ -46,7 +46,8 @@ Puppet::Type.newtype(:glance_image) do
     newvalues(/(y|Y)es/, /(n|N)o/)
     defaultto('Yes')
     munge do |v|
-      v.to_s.capitalize
+      'True'  if v =~ /^(y|Y)es$/
+      'False' if v =~ /^(n|N)o$/
     end
   end
 
