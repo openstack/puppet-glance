@@ -21,7 +21,7 @@ describe 'glance::keystone::auth' do
     it { should contain_keystone_service('glance').with(
       :ensure      => 'present',
       :type        => 'image',
-      :description => 'Openstack Image Service'
+      :description => 'OpenStack Image Service'
     ) }
 
     it { should contain_keystone_endpoint('RegionOne/glance').with(
@@ -56,7 +56,7 @@ describe 'glance::keystone::auth' do
     it { should contain_keystone_service('glancey').with(
       :ensure      => 'present',
       :type        => 'imagey',
-      :description => 'Openstack Image Service'
+      :description => 'OpenStack Image Service'
     ) }
 
   end
@@ -113,7 +113,7 @@ describe 'glance::keystone::auth' do
     it { should contain_keystone_service('glance').with(
       :ensure      => 'present',
       :type        => 'image',
-      :description => 'Openstack Image Service'
+      :description => 'OpenStack Image Service'
     ) }
   end
 
@@ -133,7 +133,7 @@ describe 'glance::keystone::auth' do
     it { should contain_keystone_service('glance').with(
       :ensure      => 'present',
       :type        => 'image',
-      :description => 'Openstack Image Service'
+      :description => 'OpenStack Image Service'
     ) }
   end
 

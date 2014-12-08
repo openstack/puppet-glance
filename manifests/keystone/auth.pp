@@ -54,7 +54,7 @@ class glance::keystone::auth(
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     service_type        => $service_type,
-    service_description => 'Openstack Image Service',
+    service_description => 'OpenStack Image Service',
     service_name        => $real_service_name,
     region              => $region,
     password            => $password,
