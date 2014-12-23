@@ -157,6 +157,27 @@
 # [*os_region_name*]
 #   (optional) Sets the keystone region to use.
 #   Defaults to 'RegionOne'.
+#
+# [*validate*]
+#   (optional) Whether to validate the service is working after any service refreshes
+#   Defaults to false
+#
+# [*validation_options*]
+#   (optional) Service validation options
+#   Should be a hash of options defined in openstacklib::service_validation
+#   If empty, defaults values are taken from openstacklib function.
+#   Default command list images.
+#   Require validate set at True.
+#   Example:
+#   glance::api::validation_options:
+#     glance-api:
+#       command: check_glance-api.py
+#       path: /usr/bin:/bin:/usr/sbin:/sbin
+#       provider: shell
+#       tries: 5
+#       try_sleep: 10
+#   Defaults to {}
+#
 class glance::api(
   $keystone_password,
   $verbose                  = false,
@@ -194,6 +215,8 @@ class glance::api(
   $database_idle_timeout    = 3600,
   $image_cache_dir          = '/var/lib/glance/image-cache',
   $os_region_name           = 'RegionOne',
+  $validate                 = false,
+  $validation_options       = {},
   # DEPRECATED PARAMETERS
   $mysql_module             = undef,
 ) inherits glance {
@@ -429,4 +452,15 @@ class glance::api(
     hasstatus  => true,
     hasrestart => true,
   }
+
+  if $validate {
+    $defaults = {
+      'glance-api' => {
+        'command'  => "glance --os-auth-url ${auth_url} --os-tenant-name ${keystone_tenant} --os-username ${keystone_user} --os-password ${keystone_password} image-list",
+      }
+    }
+    $validation_options_hash = merge ($defaults, $validation_options)
+    create_resources('openstacklib::service_validation', $validation_options_hash, {'subscribe' => 'Service[glance-api]'})
+  }
+
 }
