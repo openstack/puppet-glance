@@ -45,7 +45,7 @@ describe 'glance::notify::rabbitmq' do
       it { should contain_glance_api_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent') }
       it { should contain_glance_api_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent') }
       it { should contain_glance_api_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent') }
-      it { should contain_glance_api_config('DEFAULT/kombu_ssl_version').with_value('SSLv3') }
+      it { should contain_glance_api_config('DEFAULT/kombu_ssl_version').with_value('TLSv1') }
       it { should contain_glance_api_config('DEFAULT/rabbit_durable_queues').with_value('true') }
     end
   end
