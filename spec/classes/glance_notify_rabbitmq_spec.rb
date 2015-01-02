@@ -71,7 +71,7 @@ describe 'glance::notify::rabbitmq' do
         :kombu_ssl_ca_certs => 'undef',
         :kombu_ssl_certfile => 'undef',
         :kombu_ssl_keyfile  => 'undef',
-        :kombu_ssl_version  => 'SSLv3',
+        :kombu_ssl_version  => 'TLSv1',
       }
     end
 
