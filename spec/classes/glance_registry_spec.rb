@@ -296,9 +296,15 @@ describe 'glance::registry' do
     let :facts do
       { :osfamily => 'Debian' }
     end
-    let(:params) { default_params }
 
-    it {should contain_package('glance-registry')}
+    # We only test this on Debian platforms, since on RedHat there isn't a
+    # separate package for glance registry.
+    ['present', 'latest'].each do |package_ensure|
+      context "with package_ensure '#{package_ensure}'" do
+        let(:params) { default_params.merge({ :package_ensure => package_ensure })}
+        it {should contain_package('glance-registry').with_ensure(package_ensure)}
+      end
+    end
   end
 
   describe 'on RedHat platforms' do
