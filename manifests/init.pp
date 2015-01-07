@@ -1,5 +1,5 @@
 #
-# base glacne config.
+# base glance config.
 #
 # == parameters
 #   * package_ensure - ensure state for package.
