@@ -7,6 +7,11 @@
 #  [*keystone_password*]
 #    (required) The keystone password for administrative user
 #
+#  [*package_ensure*]
+#    (optional) Ensure state for package. Defaults to 'present'.  On RedHat
+#    platforms this setting is ignored and the setting from the glance class is
+#    used because there is only one glance package.
+#
 #  [*verbose*]
 #    (optional) Enable verbose logs (true|false). Defaults to false.
 #
@@ -114,6 +119,7 @@
 #
 class glance::registry(
   $keystone_password,
+  $package_ensure        = 'present',
   $verbose               = false,
   $debug                 = false,
   $bind_host             = '0.0.0.0',
@@ -152,7 +158,8 @@ class glance::registry(
   }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
-    ensure_packages([$glance::params::registry_package_name])
+    ensure_packages( [$glance::params::registry_package_name],
+      { ensure => $package_ensure })
   }
 
   Package[$glance::params::registry_package_name] -> File['/etc/glance/']
