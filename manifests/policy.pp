@@ -6,7 +6,17 @@
 #
 # [*policies*]
 #   (optional) Set of policies to configure for glance
-#   Example : { 'glance-context_is_admin' => {'context_is_admin' => 'true'}, 'glance-default' => {'default' => 'rule:admin_or_owner'} }
+#   Example :
+#     {
+#       'glance-context_is_admin' => {
+#         'key' => 'context_is_admin',
+#         'value' => 'true'
+#       },
+#       'glance-default' => {
+#         'key' => 'default',
+#         'value' => 'rule:admin_or_owner'
+#       }
+#     }
 #   Defaults to empty hash.
 #
 # [*policy_path*]
