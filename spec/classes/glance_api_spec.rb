@@ -28,7 +28,6 @@ describe 'glance::api' do
       :auth_host                => '127.0.0.1',
       :auth_port                => '35357',
       :auth_protocol            => 'http',
-      :auth_uri                 => 'http://127.0.0.1:5000/',
       :keystone_tenant          => 'services',
       :keystone_user            => 'glance',
       :keystone_password        => 'ChangeMe',
@@ -58,7 +57,6 @@ describe 'glance::api' do
       :auth_host                => '127.0.0.2',
       :auth_port                => '35358',
       :auth_protocol            => 'https',
-      :auth_uri                 => 'https://127.0.0.2:5000/v2.0/',
       :keystone_tenant          => 'admin2',
       :keystone_user            => 'admin2',
       :keystone_password        => 'ChangeMe2',
@@ -126,7 +124,7 @@ describe 'glance::api' do
         should contain_glance_api_config('database/idle_timeout').with_value(param_hash[:database_idle_timeout])
       end
 
-      it 'should have  no ssl options' do
+      it 'should have no ssl options' do
         should contain_glance_api_config('DEFAULT/ca_file').with_ensure('absent')
         should contain_glance_api_config('DEFAULT/cert_file').with_ensure('absent')
         should contain_glance_api_config('DEFAULT/key_file').with_ensure('absent')
@@ -378,6 +376,47 @@ describe 'glance::api' do
       :require => 'Exec[execute glance-api validation]',
     )}
   end
+
+  describe 'with identity and auth settings' do
+    let :params do
+      {
+        :keystone_password => 'ChangeMe',
+      }
+    end
+    context 'with custom keystone identity_uri' do
+      let :params do
+        default_params.merge!({
+          :identity_uri => 'https://foo.bar:1234/',
+        })
+      end
+      it 'configures identity_uri' do
+        should contain_glance_api_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
+        # since only identity_uri is set the deprecated auth parameters should
+        # still get set in case they are still in use
+        should contain_glance_api_config('keystone_authtoken/auth_host').with_value('127.0.0.1');
+        should contain_glance_api_config('keystone_authtoken/auth_port').with_value('35357');
+        should contain_glance_api_config('keystone_authtoken/auth_protocol').with_value('http');
+      end
+    end
+
+    context 'with custom keystone identity_uri and auth_uri' do
+      let :params do
+        default_params.merge!({
+          :identity_uri => 'https://foo.bar:35357/',
+          :auth_uri => 'https://foo.bar:5000/v2.0/',
+        })
+      end
+      it 'configures identity_uri' do
+        should contain_glance_api_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
+        should contain_glance_api_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
+        should contain_glance_api_config('keystone_authtoken/auth_host').with_ensure('absent')
+        should contain_glance_api_config('keystone_authtoken/auth_port').with_ensure('absent')
+        should contain_glance_api_config('keystone_authtoken/auth_protocol').with_ensure('absent')
+        should contain_glance_api_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
+      end
+    end
+  end
+
 
   describe 'on Debian platforms' do
     let :facts do
