@@ -60,18 +60,6 @@ class glance::notify::rabbitmq(
     $amqp_durable_queues_real = $amqp_durable_queues
   }
 
-  if $rabbit_use_ssl {
-    if !$kombu_ssl_ca_certs {
-      fail('The kombu_ssl_ca_certs parameter is required when rabbit_use_ssl is set to true')
-    }
-    if !$kombu_ssl_certfile {
-      fail('The kombu_ssl_certfile parameter is required when rabbit_use_ssl is set to true')
-    }
-    if !$kombu_ssl_keyfile {
-      fail('The kombu_ssl_keyfile parameter is required when rabbit_use_ssl is set to true')
-    }
-  }
-
   if $rabbit_hosts {
     glance_api_config {
       'DEFAULT/rabbit_hosts':     value => join($rabbit_hosts, ',');
@@ -98,19 +86,34 @@ class glance::notify::rabbitmq(
   }
 
   if $rabbit_use_ssl {
-    glance_api_config {
-      'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs;
-      'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile;
-      'DEFAULT/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
-      'DEFAULT/kombu_ssl_version':  value => $kombu_ssl_version;
+    glance_api_config { 'DEFAULT/kombu_ssl_version': value => $kombu_ssl_version }
+
+    if $kombu_ssl_ca_certs {
+      glance_api_config { 'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs }
+    } else {
+      glance_api_config { 'DEFAULT/kombu_ssl_ca_certs': ensure => absent}
+    }
+
+    if $kombu_ssl_certfile {
+      glance_api_config { 'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile }
+    } else {
+      glance_api_config { 'DEFAULT/kombu_ssl_certfile': ensure => absent}
+    }
+
+    if $kombu_ssl_keyfile {
+      glance_api_config { 'DEFAULT/kombu_ssl_keyfile': value => $kombu_ssl_keyfile }
+    } else {
+      glance_api_config { 'DEFAULT/kombu_ssl_keyfile': ensure => absent}
     }
   } else {
     glance_api_config {
+      'DEFAULT/kombu_ssl_version':  ensure => absent;
       'DEFAULT/kombu_ssl_ca_certs': ensure => absent;
       'DEFAULT/kombu_ssl_certfile': ensure => absent;
       'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
-      'DEFAULT/kombu_ssl_version':  ensure => absent;
+    }
+    if ($kombu_ssl_keyfile or $kombu_ssl_certfile or $kombu_ssl_ca_certs) {
+      notice('Configuration of certificates with $rabbit_use_ssl == false is a useless config')
     }
   }
-
 }
