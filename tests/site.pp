@@ -4,21 +4,21 @@
 Exec { logoutput => 'on_failure' }
 
 node glance_keystone_mysql {
-  class { 'mysql::server': }
-  class { 'keystone':
+  class { '::mysql::server': }
+  class { '::keystone':
     verbose      => true,
     debug        => true,
     catalog_type => 'sql',
     admin_token  => 'admin_token',
   }
-  class { 'keystone::db::mysql':
+  class { '::keystone::db::mysql':
     password => 'keystone',
   }
-  class { 'keystone::roles::admin':
+  class { '::keystone::roles::admin':
     email    => 'test@puppetlabs.com',
     password => 'ChangeMe',
   }
-  class { 'glance::api':
+  class { '::glance::api':
     verbose             => true,
     debug               => true,
     auth_type           => 'keystone',
@@ -27,9 +27,9 @@ node glance_keystone_mysql {
     keystone_password   => 'glance_password',
     database_connection => 'mysql://glance:glance@127.0.0.1/glance',
   }
-  class { 'glance::backend::file': }
+  class { '::glance::backend::file': }
 
-  class { 'glance::db::mysql':
+  class { '::glance::db::mysql':
     password => 'glance',
     dbname   => 'glance',
     user     => 'glance',
@@ -38,7 +38,7 @@ node glance_keystone_mysql {
     # $cluster_id = 'localzone'
   }
 
-  class { 'glance::registry':
+  class { '::glance::registry':
     verbose             => true,
     debug               => true,
     auth_type           => 'keystone',
@@ -47,7 +47,7 @@ node glance_keystone_mysql {
     keystone_password   => 'glance_password',
     database_connection => 'mysql://glance:glance@127.0.0.1/glance',
   }
-  class { 'glance::keystone::auth':
+  class { '::glance::keystone::auth':
     password => 'glance_pass',
   }
 }

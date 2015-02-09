@@ -221,7 +221,7 @@ class glance::api(
   $mysql_module             = undef,
 ) inherits glance {
 
-  include glance::policy
+  include ::glance::policy
   require keystone::python
 
   if $mysql_module {
