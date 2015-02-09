@@ -40,7 +40,7 @@ describe 'glance' do
     end
     let(:params) { default_params }
 
-    it {should_not contain_package('glance')}
+    it { should_not contain_package('glance') }
   end
 
   describe 'on RedHat platforms' do
@@ -49,7 +49,9 @@ describe 'glance' do
     end
     let(:params) { default_params }
 
-    it { should contain_package('openstack-glance')}
+    it { should contain_package('openstack-glance').with(
+        :tag => ['openstack'],
+    )}
   end
 
 end
