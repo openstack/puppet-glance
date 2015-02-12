@@ -33,7 +33,7 @@ class glance::cache::pruner (
   $command_options  = '',
 ) {
 
-  include glance::params
+  include ::glance::params
 
   cron { 'glance-cache-pruner':
     command     => "${glance::params::cache_pruner_command} ${command_options}",

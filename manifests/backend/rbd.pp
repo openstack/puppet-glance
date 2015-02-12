@@ -27,7 +27,7 @@ class glance::backend::rbd(
   $show_image_direct_url  = undef,
   $package_ensure         = 'present',
 ) {
-  include glance::params
+  include ::glance::params
 
   if $show_image_direct_url {
     notice('parameter show_image_direct_url is deprecated, use parameter in glance::api')

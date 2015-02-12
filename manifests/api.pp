@@ -226,7 +226,7 @@ class glance::api(
   $auth_protocol            = 'http',
 ) inherits glance {
 
-  include glance::policy
+  include ::glance::policy
   require keystone::python
 
   if $mysql_module {
