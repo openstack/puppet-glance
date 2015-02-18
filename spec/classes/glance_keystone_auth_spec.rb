@@ -95,7 +95,7 @@ describe 'glance::keystone::auth' do
       }
     end
 
-    it { is_expected.to_not contain_keystone_endpoint('glance') }
+    it { is_expected.to_not contain_keystone_endpoint('RegionOne/glance') }
   end
 
   describe 'when disabling user configuration' do
