@@ -2,7 +2,9 @@
 # Installs the glance python library.
 #
 # == parameters
-#  * ensure - ensure state for pachage.
+#  [*ensure*]
+#    (Optional) Ensure state for pachage.
+#    Defaults to 'present'
 #
 class glance::client (
   $ensure = 'present'

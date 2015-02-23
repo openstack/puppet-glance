@@ -29,6 +29,10 @@
 #  [*mysql_module*]
 #   (optional) Deprecated. Does nothing.
 #
+#  === Deprecated parameters:
+#
+#  [*cluster_id*] This parameter does nothing
+#
 class glance::db::mysql(
   $password,
   $dbname        = 'glance',

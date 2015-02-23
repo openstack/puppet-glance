@@ -1,17 +1,25 @@
+# == class: glance::backend::rbd
 #
 # configures the storage backend for glance
 # as a rbd instance
 #
-#  $rbd_store_user - Optional.
+# === parameters:
 #
-#  $rbd_store_pool - Optional. Default:'images'
+#  [*rbd_store_user*]
+#    Optional.
 #
-#  $rbd_store_ceph_conf  - Optional. Default:'/etc/ceph/ceph.conf'
+#  [*rbd_store_pool*]
+#    Optional. Default:'images'
 #
-#  $rbd_store_chunk_size - Optional. Default:'8'
+#  [*rbd_store_ceph_conf*]
+#    Optional. Default:'/etc/ceph/ceph.conf'
 #
-#  $show_image_direct_url - Optional. Enables direct COW from glance to rbd
-#  DEPRECATED, use show_image_direct_url in glance::api
+#  [*rbd_store_chunk_size*]
+#    Optional. Default:'8'
+#
+#  [*show_image_direct_url*]
+#    Optional. Enables direct COW from glance to rbd
+#    DEPRECATED, use show_image_direct_url in glance::api
 #
 #  [*package_ensure*]
 #      (optional) Desired ensure state of packages.

@@ -77,6 +77,11 @@
 #    (optional) administrative user name to connect to keystone.
 #    Defaults to 'glance'.
 #
+#  [*pipeline*]
+#    (optional) Partial name of a pipeline in your paste configuration
+#     file with the service name removed.
+#     Defaults to 'keystone'.
+#
 #  [*use_syslog*]
 #    (optional) Use syslog for logging.
 #    Defaults to false.

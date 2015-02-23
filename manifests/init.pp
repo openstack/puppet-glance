@@ -1,8 +1,12 @@
+# == class: glance
 #
 # base glance config.
 #
-# == parameters
-#   * package_ensure - ensure state for package.
+# === parameters:
+#
+#  [*package_ensure*]
+#    (Optional) ensure state for package.
+#    Defaults to 'present'
 #
 class glance(
   $package_ensure = 'present'
