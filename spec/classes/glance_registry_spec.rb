@@ -61,9 +61,9 @@ describe 'glance::registry' do
         param_set
       end
 
-      it { should contain_class 'glance::registry' }
+      it { is_expected.to contain_class 'glance::registry' }
 
-      it { should contain_service('glance-registry').with(
+      it { is_expected.to contain_service('glance-registry').with(
           'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running' : 'stopped',
           'enable'     => param_hash[:enabled],
           'hasstatus'  => true,
@@ -72,10 +72,10 @@ describe 'glance::registry' do
           'require'    => 'Class[Glance]'
       )}
 
-      it 'should only sync the db if the service is enabled' do
+      it 'is_expected.to only sync the db if the service is enabled' do
 
         if param_hash[:enabled]
-          should contain_exec('glance-manage db_sync').with(
+          is_expected.to contain_exec('glance-manage db_sync').with(
             'path'        => '/usr/bin',
             'refreshonly' => true,
             'logoutput'   => 'on_failure',
@@ -84,35 +84,35 @@ describe 'glance::registry' do
           )
         end
       end
-      it 'should configure itself' do
+      it 'is_expected.to configure itself' do
         [
          'verbose',
          'debug',
          'bind_port',
          'bind_host',
         ].each do |config|
-          should contain_glance_registry_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
+          is_expected.to contain_glance_registry_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
         end
         [
          'database_connection',
          'database_idle_timeout',
         ].each do |config|
-          should contain_glance_registry_config("database/#{config.gsub(/database_/,'')}").with_value(param_hash[config.intern])
+          is_expected.to contain_glance_registry_config("database/#{config.gsub(/database_/,'')}").with_value(param_hash[config.intern])
         end
         [
          'auth_host',
          'auth_port',
          'auth_protocol'
         ].each do |config|
-          should contain_glance_registry_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
+          is_expected.to contain_glance_registry_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
         end
-        should contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
         if param_hash[:auth_type] == 'keystone'
-          should contain_glance_registry_config("paste_deploy/flavor").with_value('keystone')
-          should contain_glance_registry_config("keystone_authtoken/admin_tenant_name").with_value(param_hash[:keystone_tenant])
-          should contain_glance_registry_config("keystone_authtoken/admin_user").with_value(param_hash[:keystone_user])
-          should contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password])
-          should contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password]).with_secret(true)
+          is_expected.to contain_glance_registry_config("paste_deploy/flavor").with_value('keystone')
+          is_expected.to contain_glance_registry_config("keystone_authtoken/admin_tenant_name").with_value(param_hash[:keystone_tenant])
+          is_expected.to contain_glance_registry_config("keystone_authtoken/admin_user").with_value(param_hash[:keystone_user])
+          is_expected.to contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password])
+          is_expected.to contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password]).with_secret(true)
         end
       end
     end
@@ -127,7 +127,7 @@ describe 'glance::registry' do
       }
     end
 
-    it { should contain_service('glance-registry').with(
+    it { is_expected.to contain_service('glance-registry').with(
           'ensure'     => nil,
           'enable'     => false,
           'hasstatus'  => true,
@@ -147,7 +147,7 @@ describe 'glance::registry' do
       }
     end
 
-    it { should contain_glance_registry_config('paste_deploy/flavor').with_value('validoptionstring') }
+    it { is_expected.to contain_glance_registry_config('paste_deploy/flavor').with_value('validoptionstring') }
   end
 
   describe 'with blank pipeline' do
@@ -158,7 +158,7 @@ describe 'glance::registry' do
       }
     end
 
-    it { should contain_glance_registry_config('paste_deploy/flavor').with_ensure('absent') }
+    it { is_expected.to contain_glance_registry_config('paste_deploy/flavor').with_ensure('absent') }
   end
 
   [
@@ -177,7 +177,7 @@ describe 'glance::registry' do
         }
       end
 
-      it { expect { should contain_glance_registry_config('filter:paste_deploy/flavor') }.to\
+      it { expect { is_expected.to contain_glance_registry_config('filter:paste_deploy/flavor') }.to\
         raise_error(Puppet::Error, /validate_re\(\): .* does not match/) }
     end
   end
@@ -190,7 +190,7 @@ describe 'glance::registry' do
       }
     end
 
-    it { should contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_value('/keystone/main') }
+    it { is_expected.to contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_value('/keystone/main') }
   end
 
   [
@@ -209,7 +209,7 @@ describe 'glance::registry' do
         }
       end
 
-      it { expect { should contain_glance_registry_config('filter:authtoken/auth_admin_prefix') }.to\
+      it { expect { is_expected.to contain_glance_registry_config('filter:authtoken/auth_admin_prefix') }.to\
         raise_error(Puppet::Error, /validate_re\(\): "#{auth_admin_prefix}" does not match/) }
     end
   end
@@ -219,8 +219,8 @@ describe 'glance::registry' do
       default_params
     end
 
-    it { should contain_glance_registry_config('DEFAULT/use_syslog').with_value(false) }
-    it { should_not contain_glance_registry_config('DEFAULT/syslog_log_facility') }
+    it { is_expected.to contain_glance_registry_config('DEFAULT/use_syslog').with_value(false) }
+    it { is_expected.to_not contain_glance_registry_config('DEFAULT/syslog_log_facility') }
   end
 
   describe 'with syslog enabled' do
@@ -230,8 +230,8 @@ describe 'glance::registry' do
       })
     end
 
-    it { should contain_glance_registry_config('DEFAULT/use_syslog').with_value(true) }
-    it { should contain_glance_registry_config('DEFAULT/syslog_log_facility').with_value('LOG_USER') }
+    it { is_expected.to contain_glance_registry_config('DEFAULT/use_syslog').with_value(true) }
+    it { is_expected.to contain_glance_registry_config('DEFAULT/syslog_log_facility').with_value('LOG_USER') }
   end
 
   describe 'with syslog enabled and custom settings' do
@@ -242,38 +242,38 @@ describe 'glance::registry' do
      })
     end
 
-    it { should contain_glance_registry_config('DEFAULT/use_syslog').with_value(true) }
-    it { should contain_glance_registry_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
+    it { is_expected.to contain_glance_registry_config('DEFAULT/use_syslog').with_value(true) }
+    it { is_expected.to contain_glance_registry_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
   end
 
   describe 'with log_file enabled by default' do
     let(:params) { default_params }
 
-    it { should contain_glance_registry_config('DEFAULT/log_file').with_value(default_params[:log_file]) }
+    it { is_expected.to contain_glance_registry_config('DEFAULT/log_file').with_value(default_params[:log_file]) }
 
     context 'with log_file disabled' do
       let(:params) { default_params.merge!({ :log_file => false }) }
-      it { should contain_glance_registry_config('DEFAULT/log_file').with_ensure('absent') }
+      it { is_expected.to contain_glance_registry_config('DEFAULT/log_file').with_ensure('absent') }
     end
   end
 
   describe 'with log_dir enabled by default' do
     let(:params) { default_params }
 
-    it { should contain_glance_registry_config('DEFAULT/log_dir').with_value(default_params[:log_dir]) }
+    it { is_expected.to contain_glance_registry_config('DEFAULT/log_dir').with_value(default_params[:log_dir]) }
 
     context 'with log_dir disabled' do
       let(:params) { default_params.merge!({ :log_dir => false }) }
-      it { should contain_glance_registry_config('DEFAULT/log_dir').with_ensure('absent') }
+      it { is_expected.to contain_glance_registry_config('DEFAULT/log_dir').with_ensure('absent') }
     end
   end
 
   describe 'with no ssl options (default)' do
     let(:params) { default_params }
 
-    it { should contain_glance_registry_config('DEFAULT/ca_file').with_ensure('absent')}
-    it { should contain_glance_registry_config('DEFAULT/cert_file').with_ensure('absent')}
-    it { should contain_glance_registry_config('DEFAULT/key_file').with_ensure('absent')}
+    it { is_expected.to contain_glance_registry_config('DEFAULT/ca_file').with_ensure('absent')}
+    it { is_expected.to contain_glance_registry_config('DEFAULT/cert_file').with_ensure('absent')}
+    it { is_expected.to contain_glance_registry_config('DEFAULT/key_file').with_ensure('absent')}
   end
 
   describe 'with ssl options' do
@@ -286,9 +286,9 @@ describe 'glance::registry' do
     end
 
     context 'with ssl options' do
-      it { should contain_glance_registry_config('DEFAULT/ca_file').with_value('/tmp/ca_file') }
-      it { should contain_glance_registry_config('DEFAULT/cert_file').with_value('/tmp/cert_file') }
-      it { should contain_glance_registry_config('DEFAULT/key_file').with_value('/tmp/key_file') }
+      it { is_expected.to contain_glance_registry_config('DEFAULT/ca_file').with_value('/tmp/ca_file') }
+      it { is_expected.to contain_glance_registry_config('DEFAULT/cert_file').with_value('/tmp/cert_file') }
+      it { is_expected.to contain_glance_registry_config('DEFAULT/key_file').with_value('/tmp/key_file') }
     end
   end
 
@@ -306,12 +306,12 @@ describe 'glance::registry' do
         })
       end
       it 'configures identity_uri' do
-        should contain_glance_registry_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
-        # since only auth_uri is set the deprecated auth parameters should
+        is_expected.to contain_glance_registry_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
+        # since only auth_uri is set the deprecated auth parameters is_expected.to
         # still get set in case they are still in use
-        should contain_glance_registry_config('keystone_authtoken/auth_host').with_value('127.0.0.1');
-        should contain_glance_registry_config('keystone_authtoken/auth_port').with_value('35357');
-        should contain_glance_registry_config('keystone_authtoken/auth_protocol').with_value('http');
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_host').with_value('127.0.0.1');
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_port').with_value('35357');
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_protocol').with_value('http');
       end
     end
 
@@ -323,12 +323,12 @@ describe 'glance::registry' do
         })
       end
       it 'configures identity_uri' do
-        should contain_glance_registry_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
-        should contain_glance_registry_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
-        should contain_glance_registry_config('keystone_authtoken/auth_host').with_ensure('absent')
-        should contain_glance_registry_config('keystone_authtoken/auth_port').with_ensure('absent')
-        should contain_glance_registry_config('keystone_authtoken/auth_protocol').with_ensure('absent')
-        should contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
+        is_expected.to contain_glance_registry_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_host').with_ensure('absent')
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_port').with_ensure('absent')
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_protocol').with_ensure('absent')
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
       end
     end
   end
@@ -343,7 +343,7 @@ describe 'glance::registry' do
     ['present', 'latest'].each do |package_ensure|
       context "with package_ensure '#{package_ensure}'" do
         let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
-        it { should contain_package('glance-registry').with(
+        it { is_expected.to contain_package('glance-registry').with(
             :ensure => package_ensure,
             :tag    => ['openstack']
         )}
@@ -357,7 +357,7 @@ describe 'glance::registry' do
     end
     let(:params) { default_params }
 
-    it { should contain_package('openstack-glance')}
+    it { is_expected.to contain_package('openstack-glance')}
   end
 
   describe 'on unknown platforms' do
@@ -366,9 +366,7 @@ describe 'glance::registry' do
     end
     let(:params) { default_params }
 
-    it 'should fails to configure glance-registry' do
-        expect { subject }.to raise_error(Puppet::Error, /module glance only support osfamily RedHat and Debian/)
-    end
+    it_raises 'a Puppet::Error', /module glance only support osfamily RedHat and Debian/
   end
 
 end
