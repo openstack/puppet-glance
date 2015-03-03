@@ -31,6 +31,21 @@ class Puppet::Provider::Glance < Puppet::Provider
         g['auth_admin_prefix'] = (glance_file['keystone_authtoken']['auth_admin_prefix'] || '').strip
 
         return g
+    elsif glance_file and glance_file['keystone_authtoken'] and
+      glance_file['keystone_authtoken']['identity_uri'] and
+      glance_file['keystone_authtoken']['admin_tenant_name'] and
+      glance_file['keystone_authtoken']['admin_user'] and
+      glance_file['keystone_authtoken']['admin_password'] and
+      glance_file['DEFAULT']['os_region_name']
+
+        g = {}
+        g['identity_uri'] = glance_file['keystone_authtoken']['identity_uri'].strip
+        g['admin_tenant_name'] = glance_file['keystone_authtoken']['admin_tenant_name'].strip
+        g['admin_user'] = glance_file['keystone_authtoken']['admin_user'].strip
+        g['admin_password'] = glance_file['keystone_authtoken']['admin_password'].strip
+        g['os_region_name'] = glance_file['DEFAULT']['os_region_name'].strip
+
+        return g
     else
       raise(Puppet::Error, 'File: /etc/glance/glance-api.conf does not contain all required sections.')
     end
@@ -46,7 +61,11 @@ class Puppet::Provider::Glance < Puppet::Provider
 
   def self.get_auth_endpoint
     g = glance_credentials
-    "#{g['auth_protocol']}://#{g['auth_host']}:#{g['auth_port']}#{g['auth_admin_prefix']}/v2.0/"
+    if g.key?('identity_uri')
+      "#{g['identity_uri']}/"
+    else
+      "#{g['auth_protocol']}://#{g['auth_host']}:#{g['auth_port']}#{g['auth_admin_prefix']}/v2.0/"
+    end
   end
 
   def self.glance_file
