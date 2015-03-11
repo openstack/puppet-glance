@@ -38,6 +38,7 @@ describe 'glance::api' do
       :known_stores             => false,
       :image_cache_dir          => '/var/lib/glance/image-cache',
       :os_region_name           => 'RegionOne',
+      :pipeline                 => 'keystone',
     }
   end
 
@@ -65,6 +66,7 @@ describe 'glance::api' do
       :show_image_direct_url    => true,
       :image_cache_dir          => '/tmp/glance',
       :os_region_name           => 'RegionOne2',
+      :pipeline                 => 'keystone2',
     }
   ].each do |param_set|
 
@@ -89,6 +91,7 @@ describe 'glance::api' do
       ) }
 
       it { is_expected.to_not contain_exec('validate_nova_api') }
+      it { is_expected.to contain_glance_api_config("paste_deploy/flavor").with_value(param_hash[:pipeline]) }
 
       it 'is_expected.to lay down default api config' do
         [
@@ -181,11 +184,11 @@ describe 'glance::api' do
     let :params do
       {
         :keystone_password => 'ChangeMe',
-        :pipeline          => 'keystone',
+        :pipeline          => 'something',
       }
     end
 
-    it { is_expected.to contain_glance_api_config('paste_deploy/flavor').with_value('keystone') }
+    it { is_expected.to contain_glance_api_config('paste_deploy/flavor').with_value('something') }
   end
 
   describe 'with blank pipeline' do

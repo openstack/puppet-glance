@@ -90,7 +90,7 @@
 # [*pipeline*]
 #   (optional) Partial name of a pipeline in your paste configuration file with the
 #   service name removed.
-#   Defaults to 'keystone+cachemanagement'.
+#   Defaults to 'keystone'.
 #
 # [*keystone_tenant*]
 #   (optional) Tenant to authenticate to.
@@ -198,7 +198,7 @@ class glance::api(
   $auth_type                = 'keystone',
   $auth_uri                 = false,
   $identity_uri             = false,
-  $pipeline                 = 'keystone+cachemanagement',
+  $pipeline                 = 'keystone',
   $keystone_tenant          = 'services',
   $keystone_user            = 'glance',
   $manage_service           = true,
