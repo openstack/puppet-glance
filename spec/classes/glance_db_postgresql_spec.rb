@@ -24,7 +24,7 @@ describe 'glance::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('glance').with(
+      it { is_expected.to contain_postgresql__server__db('glance').with(
         :user     => 'glance',
         :password => 'md56c7c03b193c2c1e0667bc5bd891703db'
       )}
@@ -47,7 +47,7 @@ describe 'glance::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('glance').with(
+      it { is_expected.to contain_postgresql__server__db('glance').with(
         :user     => 'glance',
         :password => 'md56c7c03b193c2c1e0667bc5bd891703db'
       )}

@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 group :development, :test do
   gem 'puppetlabs_spec_helper', :require => false
-  gem 'rspec-puppet', '~> 1.0.1'
+  gem 'rspec-puppet', '~> 2.0.0', :require => false
+
   gem 'metadata-json-lint'
   gem 'puppet-lint-param-docs'
   gem 'puppet-lint-absolute_classname-check'
@@ -15,8 +16,6 @@ group :development, :test do
   gem 'puppet-lint-variable_contains_upcase'
   gem 'puppet-lint-numericvariable'
 
-  gem 'rake', '10.1.1'
-  gem 'rspec', '< 2.99'
   gem 'json'
   gem 'webmock'
 end

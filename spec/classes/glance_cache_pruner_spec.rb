@@ -7,7 +7,7 @@ describe 'glance::cache::pruner' do
     context 'when default parameters' do
 
       it 'configures a cron' do
-         should contain_cron('glance-cache-pruner').with(
+         is_expected.to contain_cron('glance-cache-pruner').with(
           :command     => 'glance-cache-pruner ',
           :environment => 'PATH=/bin:/usr/bin:/usr/sbin',
           :user        => 'glance',
@@ -32,7 +32,7 @@ describe 'glance::cache::pruner' do
         }
       end
       it 'configures a cron' do
-        should contain_cron('glance-cache-pruner').with(
+        is_expected.to contain_cron('glance-cache-pruner').with(
           :command     => 'glance-cache-pruner --config-dir /etc/glance/',
           :environment => 'PATH=/bin:/usr/bin:/usr/sbin',
           :user        => 'glance',
@@ -51,7 +51,7 @@ describe 'glance::cache::pruner' do
       { :osfamily => 'Debian' }
     end
     include_examples 'glance cache pruner'
-    it { should contain_cron('glance-cache-pruner').with(:require     => 'Package[glance-api]')}
+    it { is_expected.to contain_cron('glance-cache-pruner').with(:require     => 'Package[glance-api]')}
   end
 
   context 'on RedHat platforms' do
@@ -59,7 +59,7 @@ describe 'glance::cache::pruner' do
       { :osfamily => 'RedHat' }
     end
     include_examples 'glance cache pruner'
-    it { should contain_cron('glance-cache-pruner').with(:require     => 'Package[openstack-glance]')}
+    it { is_expected.to contain_cron('glance-cache-pruner').with(:require     => 'Package[openstack-glance]')}
   end
 
 end

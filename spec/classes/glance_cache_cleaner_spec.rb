@@ -7,7 +7,7 @@ describe 'glance::cache::cleaner' do
     context 'when default parameters' do
 
       it 'configures a cron' do
-         should contain_cron('glance-cache-cleaner').with(
+         is_expected.to contain_cron('glance-cache-cleaner').with(
           :command     => 'glance-cache-cleaner ',
           :environment => 'PATH=/bin:/usr/bin:/usr/sbin',
           :user        => 'glance',
@@ -32,7 +32,7 @@ describe 'glance::cache::cleaner' do
         }
       end
       it 'configures a cron' do
-        should contain_cron('glance-cache-cleaner').with(
+        is_expected.to contain_cron('glance-cache-cleaner').with(
           :command     => 'glance-cache-cleaner --config-dir /etc/glance/',
           :environment => 'PATH=/bin:/usr/bin:/usr/sbin',
           :user        => 'glance',
@@ -51,7 +51,7 @@ describe 'glance::cache::cleaner' do
       { :osfamily => 'Debian' }
     end
     include_examples 'glance cache cleaner'
-    it { should contain_cron('glance-cache-cleaner').with(:require     => 'Package[glance-api]')}
+    it { is_expected.to contain_cron('glance-cache-cleaner').with(:require     => 'Package[glance-api]')}
   end
 
   context 'on RedHat platforms' do
@@ -59,7 +59,7 @@ describe 'glance::cache::cleaner' do
       { :osfamily => 'RedHat' }
     end
     include_examples 'glance cache cleaner'
-    it { should contain_cron('glance-cache-cleaner').with(:require     => 'Package[openstack-glance]')}
+    it { is_expected.to contain_cron('glance-cache-cleaner').with(:require     => 'Package[openstack-glance]')}
   end
 
 end
