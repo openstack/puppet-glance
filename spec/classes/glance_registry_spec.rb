@@ -77,6 +77,7 @@ describe 'glance::registry' do
         if param_hash[:enabled]
           is_expected.to contain_exec('glance-manage db_sync').with(
             'path'        => '/usr/bin',
+            'command'     => 'glance-manage --config-file=/etc/glance/glance-registry.conf db_sync',
             'refreshonly' => true,
             'logoutput'   => 'on_failure',
             'subscribe'   => ['Package[glance-registry]', 'File[/etc/glance/glance-registry.conf]'],
