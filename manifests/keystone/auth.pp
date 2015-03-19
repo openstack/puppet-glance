@@ -83,7 +83,9 @@ class glance::keystone::auth(
     $real_service_name = $service_name
   }
 
-  Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'glance-api' |>
+  if $configure_endpoint {
+    Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'glance-api' |>
+  }
 
   keystone::resource::service_identity { $auth_name:
     configure_user      => $configure_user,
