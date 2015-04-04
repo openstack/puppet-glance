@@ -114,6 +114,10 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to false, not set
 #
+# [*sync_db*]
+#   (Optional) Run db sync on the node.
+#   Defaults to true
+#
 #  [*mysql_module*]
 #  (optional) Deprecated. Does nothing.
 #
@@ -145,6 +149,7 @@ class glance::registry(
   $cert_file             = false,
   $key_file              = false,
   $ca_file               = false,
+  $sync_db               = true,
   # DEPRECATED PARAMETERS
   $mysql_module          = undef,
   $sql_idle_timeout      = false,
@@ -333,15 +338,17 @@ class glance::registry(
 
   if $manage_service {
     if $enabled {
-      Exec['glance-manage db_sync'] ~> Service['glance-registry']
+      if $sync_db {
+        Exec['glance-manage db_sync'] ~> Service['glance-registry']
 
-      exec { 'glance-manage db_sync':
-        command     => $::glance::params::db_sync_command,
-        path        => '/usr/bin',
-        user        => 'glance',
-        refreshonly => true,
-        logoutput   => on_failure,
-        subscribe   => [Package[$glance::params::registry_package_name], File['/etc/glance/glance-registry.conf']],
+        exec { 'glance-manage db_sync':
+          command     => $::glance::params::db_sync_command,
+          path        => '/usr/bin',
+          user        => 'glance',
+          refreshonly => true,
+          logoutput   => on_failure,
+          subscribe   => [Package[$glance::params::registry_package_name], File['/etc/glance/glance-registry.conf']],
+        }
       }
       $service_ensure = 'running'
     } else {
