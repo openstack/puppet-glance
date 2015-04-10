@@ -92,10 +92,6 @@ Puppet::Type.type(:glance_image).provide(
     @property_hash[:ensure] = :absent
   end
 
-  def location=(value)
-    auth_glance('image-update', id, "--location=#{value}")
-  end
-
   def is_public=(value)
     auth_glance('image-update', id, "--is-public=#{value}")
   end
