@@ -2,7 +2,29 @@
 # this probably could have all gone in the provider file.
 # But maybe this is good long-term.
 require 'puppet/util/inifile'
-class Puppet::Provider::Glance < Puppet::Provider
+require 'puppet/provider/openstack'
+require 'puppet/provider/openstack/auth'
+require 'puppet/provider/openstack/credentials'
+class Puppet::Provider::Glance < Puppet::Provider::Openstack
+
+  extend Puppet::Provider::Openstack::Auth
+
+  def self.request(service, action, properties=nil)
+    begin
+      super
+    rescue Puppet::Error::OpenstackAuthInputError => error
+      glance_request(service, action, error, properties)
+    end
+  end
+
+  def self.glance_request(service, action, error, properties=nil)
+    @credentials.username = glance_credentials['admin_user']
+    @credentials.password = glance_credentials['admin_password']
+    @credentials.project_name = glance_credentials['admin_tenant_name']
+    @credentials.auth_url = auth_endpoint
+    raise error unless @credentials.set?
+    Puppet::Provider::Openstack.request(service, action, properties, @credentials)
+  end
 
   def self.glance_credentials
     @glance_credentials ||= get_glance_credentials
@@ -51,10 +73,6 @@ class Puppet::Provider::Glance < Puppet::Provider
     end
   end
 
-  def glance_credentials
-    self.class.glance_credentials
-  end
-
   def self.auth_endpoint
     @auth_endpoint ||= get_auth_endpoint
   end
@@ -79,129 +97,8 @@ class Puppet::Provider::Glance < Puppet::Provider
     @glance_hash ||= build_glance_hash
   end
 
-  def self.reset
-    @glance_hash        = nil
-    @glance_file        = nil
-    @glance_credentials = nil
-    @auth_endpoint      = nil
+  def bool_to_sym(bool)
+    bool == true ? :true : :false
   end
 
-  def glance_hash
-    self.class.glance_hash
-  end
-
-  def self.auth_glance(*args)
-    begin
-      g = glance_credentials
-      remove_warnings(glance('--os-tenant-name', g['admin_tenant_name'], '--os-username', g['admin_user'], '--os-password', g['admin_password'], '--os-region-name', g['os_region_name'], '--os-auth-url', auth_endpoint, args))
-    rescue Exception => e
-      if (e.message =~ /\[Errno 111\] Connection refused/) or (e.message =~ /\(HTTP 400\)/) or (e.message =~ /HTTP Unable to establish connection/)
-        sleep 10
-        remove_warnings(glance('--os-tenant-name', g['admin_tenant_name'], '--os-username', g['admin_user'], '--os-password', g['admin_password'], '--os-region-name', g['os_region_name'], '--os-auth-url', auth_endpoint, args))
-      else
-        raise(e)
-      end
-    end
-  end
-
-  def auth_glance(*args)
-    self.class.auth_glance(args)
-  end
-
-  def self.auth_glance_stdin(*args)
-    begin
-      g = glance_credentials
-      command = "glance --os-tenant-name #{g['admin_tenant_name']} --os-username #{g['admin_user']} --os-password #{g['admin_password']} --os-region-name #{g['os_region_name']} --os-auth-url #{auth_endpoint} #{args.join(' ')}"
-
-      # This is a horrible, horrible hack
-      # Redirect stderr to stdout in order to report errors
-      # Ignore good output
-      err = `#{command} 3>&1 1>/dev/null 2>&3`
-      if $? != 0
-        raise(Puppet::Error, err)
-      end
-    end
-  end
-
-  def auth_glance_stdin(*args)
-    self.class.auth_glance_stdin(args)
-  end
-
-  private
-    def self.list_glance_images
-      ids = []
-      (auth_glance('image-list').split("\n")[3..-2] || []).collect do |line|
-        ids << line.split('|')[1].strip()
-      end
-      return ids
-    end
-
-    def self.get_glance_image_attr(id, attr)
-      (auth_glance('image-show', id).split("\n") || []).collect do |line|
-        if line =~ /^#{attr}:/
-          return line.split(': ')[1..-1]
-        end
-      end
-    end
-
-    def self.get_glance_image_attrs(id)
-      attrs = {}
-      (auth_glance('image-show', id).split("\n")[3..-2] || []).collect do |line|
-        attrs[line.split('|')[1].strip()] = line.split('|')[2].strip()
-      end
-      return attrs
-    end
-
-    def parse_table(table)
-      # parse the table into an array of maps with a simplistic state machine
-      found_header = false
-      parsed_header = false
-      keys = nil
-      results = []
-      table.split("\n").collect do |line|
-        # look for the header
-        if not found_header
-          if line =~ /^\+[-|+]+\+$/
-            found_header = true
-            nil
-          end
-        # look for the key names in the table header
-        elsif not parsed_header
-          if line =~ /^(\|\s*[:alpha:]\s*)|$/
-            keys = line.split('|').map(&:strip)
-            parsed_header = true
-          end
-        # parse the values in the rest of the table
-        elsif line =~ /^|.*|$/
-          values = line.split('|').map(&:strip)
-          result = Hash[keys.zip values]
-          results << result
-        end
-      end
-      results
-    end
-
-    # Remove warning from the output. This is a temporary hack until
-    # things will be refactored to use the REST API
-    def self.remove_warnings(results)
-      found_header = false
-      in_warning = false
-      results.split("\n").collect do |line|
-        unless found_header
-          if line =~ /^\+[-\+]+\+$/ # Matches upper and lower box borders
-            in_warning = false
-            found_header = true
-            line
-          elsif line =~ /^WARNING/ or line =~ /UserWarning/ or in_warning
-            # warnings can be multi line, we have to skip all of them
-            in_warning = true
-            nil
-          else
-            line
-          end
-        else
-          line
-        end
-      end.compact.join("\n")
-    end
 end
