@@ -427,9 +427,17 @@ describe 'glance::api' do
     end
     let(:params) { default_params }
 
-    it { is_expected.to contain_package('glance-api').with(
-        :tag => ['openstack'],
-    )}
+    # We only test this on Debian platforms, since on RedHat there isn't a
+    # separate package for glance API.
+    ['present', 'latest'].each do |package_ensure|
+      context "with package_ensure '#{package_ensure}'" do
+        let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
+        it { is_expected.to contain_package('glance-api').with(
+            :ensure => package_ensure,
+            :tag    => ['openstack']
+        )}
+      end
+    end
   end
 
   describe 'on RedHat platforms' do

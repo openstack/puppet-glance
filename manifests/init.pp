@@ -5,7 +5,8 @@
 # === parameters:
 #
 #  [*package_ensure*]
-#    (Optional) ensure state for package.
+#    (Optional) Ensure state for package. On Ubuntu this setting
+#    is ignored since Ubuntu has separate API and registry packages.
 #    Defaults to 'present'
 #
 class glance(
