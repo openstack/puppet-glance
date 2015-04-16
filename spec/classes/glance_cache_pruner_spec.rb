@@ -59,7 +59,7 @@ describe 'glance::cache::pruner' do
       { :osfamily => 'RedHat' }
     end
     include_examples 'glance cache pruner'
-    it { is_expected.to contain_cron('glance-cache-pruner').with(:require     => 'Package[openstack-glance]')}
+    it { is_expected.to contain_cron('glance-cache-pruner').with(:require     => 'Package[openstack-glance-api]')}
   end
 
 end

@@ -434,8 +434,6 @@ describe 'glance::api' do
     end
     let(:params) { default_params }
 
-    # We only test this on Debian platforms, since on RedHat there isn't a
-    # separate package for glance API.
     ['present', 'latest'].each do |package_ensure|
       context "with package_ensure '#{package_ensure}'" do
         let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
@@ -453,9 +451,15 @@ describe 'glance::api' do
     end
     let(:params) { default_params }
 
-    it { is_expected.to contain_package('openstack-glance').with(
-        :tag => ['openstack'],
-    )}
+    ['present', 'latest'].each do |package_ensure|
+      context "with package_ensure '#{package_ensure}'" do
+        let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
+        it { is_expected.to contain_package('openstack-glance-api').with(
+            :ensure => package_ensure,
+            :tag    => ['openstack']
+        )}
+      end
+    end
   end
 
   describe 'on unknown platforms' do

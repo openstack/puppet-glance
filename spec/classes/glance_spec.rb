@@ -49,9 +49,7 @@ describe 'glance' do
     end
     let(:params) { default_params }
 
-    it { is_expected.to contain_package('openstack-glance').with(
-        :tag => ['openstack'],
-    )}
+    it { is_expected.to_not contain_package('openstack-glance') }
   end
 
 end
