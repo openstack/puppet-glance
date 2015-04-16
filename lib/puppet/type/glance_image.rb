@@ -36,7 +36,7 @@ Puppet::Type.newtype(:glance_image) do
     end
   end
 
-  newproperty(:location) do
+  newparam(:location) do
     desc "The permanent location of the image. Optional"
     newvalues(/\S+/)
   end
