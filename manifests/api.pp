@@ -8,7 +8,9 @@
 #   (required) Password used to authentication.
 #
 # [*package_ensure*]
-#   (optional) Ensure state for package. Defaults to 'present'.
+#   (optional) Ensure state for package. On RedHat platforms this
+#   setting is ignored and the setting from the glance class is used
+#   because there is only one glance package. Defaults to 'present'.
 #
 # [*verbose*]
 #   (optional) Rather to log the glance api service at verbose level.
@@ -237,12 +239,14 @@ class glance::api(
     warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
   }
 
-  ensure_packages([$glance::params::api_package_name],
-    {
-      ensure => $package_ensure,
-      tag    => ['openstack'],
-    }
-  )
+  if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
+    ensure_packages([$glance::params::api_package_name],
+      {
+        ensure => $package_ensure,
+        tag    => ['openstack'],
+      }
+    )
+  }
 
   Package[$glance::params::api_package_name] -> File['/etc/glance/']
   Package[$glance::params::api_package_name] -> Class['glance::policy']
