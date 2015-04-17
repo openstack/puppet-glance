@@ -347,6 +347,8 @@ describe 'glance::registry' do
       { :osfamily => 'Debian' }
     end
 
+    # We only test this on Debian platforms, since on RedHat there isn't a
+    # separate package for glance registry.
     ['present', 'latest'].each do |package_ensure|
       context "with package_ensure '#{package_ensure}'" do
         let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
@@ -364,16 +366,7 @@ describe 'glance::registry' do
     end
     let(:params) { default_params }
 
-    ['present', 'latest'].each do |package_ensure|
-      context "with package_ensure '#{package_ensure}'" do
-        let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
-        it { is_expected.to contain_package('openstack-glance-registry').with(
-            :ensure => package_ensure,
-            :tag    => ['openstack']
-        )}
-      end
-    end
-
+    it { is_expected.to contain_package('openstack-glance')}
   end
 
   describe 'on unknown platforms' do
