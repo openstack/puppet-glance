@@ -20,7 +20,8 @@ describe 'glance::db::mysql' do
 
     it { is_expected.to contain_openstacklib__db__mysql('glance').with(
       :password_hash => '*41C910F70EB213CF4CB7B2F561B4995503C0A87B',
-      :charset       => 'utf8'
+      :charset       => 'utf8',
+      :collate       => 'utf8_general_ci',
     )}
 
   end
