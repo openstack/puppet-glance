@@ -36,7 +36,7 @@ describe Puppet::Provider::Glance do
                'admin_user'        => 'user',
                'admin_password'    => 'pass'
             },
-                'glance_store' =>
+                'DEFAULT' =>
             {
                 'os_region_name' => 'SomeRegion',
             }
