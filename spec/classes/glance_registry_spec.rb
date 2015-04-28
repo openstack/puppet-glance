@@ -83,7 +83,7 @@ describe 'glance::registry' do
             'refreshonly' => true,
             'logoutput'   => 'on_failure',
             'subscribe'   => ['Package[glance-registry]', 'File[/etc/glance/glance-registry.conf]'],
-            'notify'      => 'Service[glance-registry]'
+            'notify'      => ["Service[glance-registry]"]
           )
         end
       end
