@@ -15,7 +15,7 @@ describe 'glance::keystone::auth' do
 
     it { is_expected.to contain_keystone_user_role('glance@services').with(
       :ensure => 'present',
-      :roles  => 'admin'
+      :roles  => ['admin']
     ) }
 
     it { is_expected.to contain_keystone_service('glance').with(
@@ -50,7 +50,7 @@ describe 'glance::keystone::auth' do
 
     it { is_expected.to contain_keystone_user_role('glancey@services').with(
       :ensure => 'present',
-      :roles  => 'admin'
+      :roles  => ['admin']
     ) }
 
     it { is_expected.to contain_keystone_service('glancey').with(
@@ -153,7 +153,7 @@ describe 'glance::keystone::auth' do
       }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/glance').with_notify('Service[glance-api]') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/glance').with_notify(["Service[glance-api]"]) }
     end
 
   describe 'when overriding service name' do
