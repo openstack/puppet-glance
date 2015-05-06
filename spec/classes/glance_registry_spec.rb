@@ -74,9 +74,9 @@ describe 'glance::registry' do
           'require'    => 'Class[Glance]'
       )}
 
-      it 'is_expected.to only sync the db if the service is enabled' do
+      it 'is_expected.to only sync the db if sync_db is enabled' do
 
-        if param_hash[:enabled] and param_hash[:sync_db]
+        if param_hash[:sync_db]
           is_expected.to contain_exec('glance-manage db_sync').with(
             'path'        => '/usr/bin',
             'command'     => 'glance-manage --config-file=/etc/glance/glance-registry.conf db_sync',
@@ -89,7 +89,7 @@ describe 'glance::registry' do
       end
       it 'is_expected.to not sync the db if sync_db is set to false' do
 
-        if param_hash[:enabled] and !param_hash[:sync_db]
+        if !param_hash[:sync_db]
           is_expected.not_to contain_exec('glance-manage db_sync')
         end
       end

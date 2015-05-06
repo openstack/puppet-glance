@@ -356,25 +356,27 @@ class glance::registry(
           '/etc/glance/glance-registry-paste.ini']:
   }
 
+  if $sync_db {
+    Exec['glance-manage db_sync'] ~> Service['glance-registry']
+
+    exec { 'glance-manage db_sync':
+      command     => $::glance::params::db_sync_command,
+      path        => '/usr/bin',
+      user        => 'glance',
+      refreshonly => true,
+      logoutput   => on_failure,
+      subscribe   => [Package[$glance::params::registry_package_name], File['/etc/glance/glance-registry.conf']],
+    }
+  }
 
   if $manage_service {
     if $enabled {
-      if $sync_db {
-        Exec['glance-manage db_sync'] ~> Service['glance-registry']
-
-        exec { 'glance-manage db_sync':
-          command     => $::glance::params::db_sync_command,
-          path        => '/usr/bin',
-          user        => 'glance',
-          refreshonly => true,
-          logoutput   => on_failure,
-          subscribe   => [Package[$glance::params::registry_package_name], File['/etc/glance/glance-registry.conf']],
-        }
-      }
       $service_ensure = 'running'
     } else {
       $service_ensure = 'stopped'
     }
+  } else {
+    warning('Execution of db_sync does not depend on $manage_service or $enabled anymore. Please use sync_db instead.')
   }
 
   service { 'glance-registry':
