@@ -28,9 +28,9 @@ RSpec.configure do |c|
       # install library modules from the forge
       on host, puppet('module','install', '--force', 'puppetlabs-mysql', '--version', '3.2.0'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','dprince/qpid'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module','install','puppetlabs-apt', '--version', '1.8.0'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-inifile'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
-      on host, puppet('module','install','puppetlabs-rabbitmq'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','stahnma-epel'), { :acceptable_exit_codes => [0,1] }
 
       # install puppet modules from git, use master
