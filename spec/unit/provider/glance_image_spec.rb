@@ -23,6 +23,8 @@ describe provider_class do
         :container_format => 'bare',
         :disk_format      => 'qcow2',
         :source           => 'http://example.com/image1.img',
+        :min_ram          => 1024,
+        :min_disk         => 1024,
       }
     end
 
@@ -43,7 +45,7 @@ describe provider_class do
 "534  5b502-efe4-4852-a45d-edaba3a3acc6","image1","raw","bare",1270,"active"
 ')
           provider.class.stubs(:openstack)
-                        .with('image', 'create', '--format', 'shell', ['image1', '--public', '--container-format=bare', '--disk-format=qcow2', '--copy-from=http://example.com/image1.img' ])
+                        .with('image', 'create', '--format', 'shell', ['image1', '--public', '--container-format=bare', '--disk-format=qcow2', '--min-disk=1024', '--min-ram=1024', '--copy-from=http://example.com/image1.img' ])
                         .returns('checksum="09b9c392dc1f6e914cea287cb6be34b0"
 container_format="bare"
 created_at="2015-04-08T18:28:01"
@@ -52,8 +54,8 @@ deleted_at="None"
 disk_format="qcow2"
 id="5345b502-efe4-4852-a45d-edaba3a3acc6"
 is_public="True"
-min_disk="0"
-min_ram="0"
+min_disk="1024"
+min_ram="1024"
 name="image1"
 owner="None"
 properties="{}"
@@ -99,8 +101,8 @@ deleted_at="None"
 disk_format="qcow2"
 id="5345b502-efe4-4852-a45d-edaba3a3acc6"
 is_public="True"
-min_disk="0"
-min_ram="0"
+min_disk="1024"
+min_ram="1024"
 name="image1"
 owner="None"
 properties="{}"

@@ -11,6 +11,8 @@ Puppet::Type.newtype(:glance_image) do
       container_format => ovf,
       disk_format      => 'qcow2',
       source           => 'http://uec-images.ubuntu.com/releases/precise/release/ubuntu-12.04-server-cloudimg-amd64-disk1.img'
+      min_ram          => 1234,
+      min_disk         => 1234,
     }
 
     Known problems / limitations:
@@ -70,6 +72,16 @@ Puppet::Type.newtype(:glance_image) do
   newparam(:source) do
     desc "The source of the image to import from"
     newvalues(/\S+/)
+  end
+
+  newparam(:min_ram) do
+    desc "The minimal ram size"
+    newvalues(/\d+/)
+  end
+
+  newparam(:min_disk) do
+    desc "The minimal disk size"
+    newvalues(/\d+/)
   end
 
   # Require the Glance service to be running

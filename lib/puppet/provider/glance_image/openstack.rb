@@ -45,6 +45,8 @@ Puppet::Type.type(:glance_image).provide(
     end
     properties << "--container-format=#{resource[:container_format]}"
     properties << "--disk-format=#{resource[:disk_format]}"
+    properties << "--min-disk=#{resource[:min_disk]}" if resource[:min_disk]
+    properties << "--min-ram=#{resource[:min_ram]}" if resource[:min_ram]
     properties << location
     @property_hash = self.class.request('image', 'create', properties)
     @property_hash[:ensure] = :present
@@ -83,6 +85,14 @@ Puppet::Type.type(:glance_image).provide(
     @property_hash[:container_format]
   end
 
+  def min_ram=(value)
+    @property_flush[:min_ram] = value
+  end
+
+  def min_disk=(value)
+    @property_flush[:min_disk] = value
+  end
+
   def id=(id)
     fail('id is read only')
   end
@@ -101,7 +111,9 @@ Puppet::Type.type(:glance_image).provide(
         :is_public        => attrs[:is_public].downcase.chomp == 'true'? true : false,
         :container_format => attrs[:container_format],
         :id               => attrs[:id],
-        :disk_format      => attrs[:disk_format]
+        :disk_format      => attrs[:disk_format],
+        :min_disk         => attrs['min_disk'],
+        :min_ram          => attrs['min_ram']
       )
     end
   end
@@ -122,6 +134,8 @@ Puppet::Type.type(:glance_image).provide(
       (properties << '--private') if @property_flush[:is_public] == :false
       (properties << "--container-format=#{@property_flush[:container_format]}") if @property_flush[:container_format]
       (properties << "--disk-format=#{@property_flush[:disk_format]}") if @property_flush[:disk_format]
+      (properties << "--min-ram=#{@property_flush[:min_ram]}") if @property_flush[:min_ram]
+      (properties << "--min-disk=#{@property_flush[:min_disk]}") if @property_flush[:min_disk]
       self.class.request('image', 'set', properties)
       @property_flush.clear
     end
