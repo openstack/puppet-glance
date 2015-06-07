@@ -315,8 +315,11 @@ describe 'glance::registry' do
     # separate package for glance registry.
     ['present', 'latest'].each do |package_ensure|
       context "with package_ensure '#{package_ensure}'" do
-        let(:params) { default_params.merge({ :package_ensure => package_ensure })}
-        it {should contain_package('glance-registry').with_ensure(package_ensure)}
+        let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
+        it { should contain_package('glance-registry').with(
+            :ensure => package_ensure,
+            :tag    => ['openstack']
+        )}
       end
     end
   end

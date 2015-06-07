@@ -239,7 +239,11 @@ class glance::api(
   }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
-    ensure_packages([$glance::params::api_package_name])
+    ensure_packages([$glance::params::api_package_name],
+      {
+        tag    => ['openstack'],
+      }
+    )
   }
 
   Package[$glance::params::api_package_name] -> File['/etc/glance/']
