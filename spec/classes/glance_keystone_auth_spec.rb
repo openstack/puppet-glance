@@ -95,7 +95,7 @@ describe 'glance::keystone::auth' do
       }
     end
 
-    it { should_not contain_keystone_endpoint('glance') }
+    it { should_not contain_keystone_endpoint('RegionOne/glance') }
   end
 
   describe 'when disabling user configuration' do
