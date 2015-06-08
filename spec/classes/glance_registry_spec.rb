@@ -28,6 +28,7 @@ describe 'glance::registry' do
       :keystone_user          => 'glance',
       :keystone_password      => 'ChangeMe',
       :purge_config           => false,
+      :sync_db                => true,
     }
   end
 
@@ -49,6 +50,7 @@ describe 'glance::registry' do
       :keystone_tenant        => 'admin',
       :keystone_user          => 'admin',
       :keystone_password      => 'ChangeMe',
+      :sync_db                => false,
     }
   ].each do |param_set|
 
@@ -82,6 +84,12 @@ describe 'glance::registry' do
             'subscribe'   => ['Package[glance-registry]', 'File[/etc/glance/glance-registry.conf]'],
             'notify'      => 'Service[glance-registry]'
           )
+        end
+      end
+      it 'should not sync the db if sync_db is set to false' do
+
+        if param_hash[:enabled] and !param_hash[:sync_db]
+          is_expected.not_to contain_exec('glance-manage db_sync')
         end
       end
       it 'should configure itself' do
