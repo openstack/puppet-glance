@@ -35,6 +35,9 @@
 #  [*rabbit_durable_queues*]
 #    Defaults  to false
 #
+#  [*notification_driver*]
+#    Notification driver to use. Defaults to 'messaging'.
+
 class glance::notify::rabbitmq(
   $rabbit_password,
   $rabbit_userid                = 'guest',
@@ -51,6 +54,7 @@ class glance::notify::rabbitmq(
   $rabbit_notification_topic    = 'notifications',
   $rabbit_durable_queues        = false,
   $amqp_durable_queues          = false,
+  $notification_driver          = 'messaging',
 ) {
 
   if $rabbit_durable_queues {
@@ -75,7 +79,7 @@ class glance::notify::rabbitmq(
   }
 
   glance_api_config {
-    'DEFAULT/notification_driver':          value => 'messaging';
+    'DEFAULT/notification_driver':          value => $notification_driver;
     'DEFAULT/rabbit_virtual_host':          value => $rabbit_virtual_host;
     'DEFAULT/rabbit_password':              value => $rabbit_password, secret => true;
     'DEFAULT/rabbit_userid':                value => $rabbit_userid;
