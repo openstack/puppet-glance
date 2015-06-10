@@ -42,4 +42,31 @@ describe 'glance::backend::rbd' do
       )
     }
   end
+
+  describe 'package on RedHat platform el6' do
+    let :facts do
+      {
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '6.5',
+      }
+    end
+    it { is_expected.to contain_package('python-ceph').with(
+        :name   => 'python-ceph',
+        :ensure => 'present'
+      )
+    }
+  end
+  describe 'package on RedHat platform el7' do
+    let :facts do
+      {
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '7.0'
+      }
+    end
+    it { is_expected.to contain_package('python-ceph').with(
+        :name   => 'python-rbd',
+        :ensure => 'present'
+      )
+    }
+  end
 end
