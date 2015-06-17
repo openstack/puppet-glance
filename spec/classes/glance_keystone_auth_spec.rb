@@ -61,7 +61,24 @@ describe 'glance::keystone::auth' do
 
   end
 
-  describe 'when address, region, port and protocoll are overridden' do
+  describe 'when overriding endpoint URLs' do
+    let :params do
+      { :password         => 'passw0rd',
+        :region            => 'RegionTwo',
+        :public_url       => 'https://10.10.10.10:81/v2',
+        :internal_url     => 'https://10.10.10.11:81/v2',
+        :admin_url        => 'https://10.10.10.12:81/v2' }
+    end
+
+    it { is_expected.to contain_keystone_endpoint('RegionTwo/glance').with(
+      :ensure       => 'present',
+      :public_url   => 'https://10.10.10.10:81/v2',
+      :internal_url => 'https://10.10.10.11:81/v2',
+      :admin_url    => 'https://10.10.10.12:81/v2'
+    ) }
+  end
+
+  describe 'with deprecated endpoints parameters' do
 
     let :params do
       {
