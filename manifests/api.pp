@@ -299,7 +299,7 @@ class glance::api(
     'DEFAULT/workers':               value => $workers;
     'DEFAULT/show_image_direct_url': value => $show_image_direct_url;
     'DEFAULT/image_cache_dir':       value => $image_cache_dir;
-    'DEFAULT/os_region_name':        value => $os_region_name;
+    'glance_store/os_region_name':   value => $os_region_name;
   }
 
   # known_stores config
@@ -314,9 +314,9 @@ class glance::api(
   }
 
   glance_cache_config {
-    'DEFAULT/verbose':        value => $verbose;
-    'DEFAULT/debug':          value => $debug;
-    'DEFAULT/os_region_name': value => $os_region_name;
+    'DEFAULT/verbose':             value => $verbose;
+    'DEFAULT/debug':               value => $debug;
+    'glance_store/os_region_name': value => $os_region_name;
   }
 
   # configure api service to connect registry service
