@@ -1,10 +1,10 @@
 {
   "name": "stackforge-glance",
-  "version": "5.0.0",
-  "author": "Puppet Labs and StackForge Contributors",
+  "version": "5.1.0",
+  "author": "Puppet Labs and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Glance",
   "license": "Apache-2.0",
-  "source": "git://github.com/stackforge/puppet-glance.git",
+  "source": "git://github.com/openstack/puppet-glance.git",
   "project_page": "https://launchpad.net/puppet-glance",
   "issues_url": "https://bugs.launchpad.net/puppet-glance",
   "requirements": [

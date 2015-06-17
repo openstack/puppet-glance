@@ -1,7 +1,7 @@
 glance
 =======
 
-5.0.0 - 2014.2.0 - Juno
+5.1.0 - 2014.2 - Juno
 
 #### Table of Contents
 
@@ -150,6 +150,25 @@ Contributors
 
 Release Notes
 -------------
+
+**5.1.0**
+
+* Service Validation for Glance-API
+* Switch to TLSv1
+* spec: pin rspec-puppet to 1.0.1
+* Makes kombu_ssl_* parameters optional when rabbit_use_ssl => true
+* Allow overriding package ensure for glance-registry
+* Move rbd related options into glance_store section
+* Pin puppetlabs-concat to 1.2.1 in fixtures
+* change default MySQL collate to utf8_general_ci
+* Add openstack tag to glance packages
+* Correctly munge glance_image is_public property
+* Create a sync_db boolean for Glance
+* Command parameter to sync the correct Database
+* Fix catalog compilation when not configuring endpoint
+* Add $notification_driver parameter to notify::rabbitmq
+* Fix is_public munge
+* Update .gitreview file for project rename
 
 **5.0.0**
 
