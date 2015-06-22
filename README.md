@@ -16,7 +16,7 @@ glance
 Overview
 --------
 
-The glance module is a part of [Stackforge](https://github.com/stackfoge), an effort by the OpenStack infrastructure team to provide continuous integration testing and code review for OpenStack and OpenStack community projects not part of the core software.  The module its self is used to flexibly configure and manage the image service for OpenStack.
+The glance module is a part of [OpenStack](https://github.com/openstack), an effort by the OpenStack infrastructure team to provide continuous integration testing and code review for OpenStack and OpenStack community projects as part of the core software. The module its self is used to flexibly configure and manage the image service for OpenStack.
 
 Module Description
 ------------------
@@ -145,4 +145,4 @@ Developer documentation for the entire puppet-openstack project.
 Contributors
 ------------
 
-* https://github.com/stackforge/puppet-glance/graphs/contributors
+* https://github.com/openstack/puppet-glance/graphs/contributors
