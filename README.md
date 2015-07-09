@@ -34,7 +34,7 @@ Setup
 
 ### Installing glance
 
-    example% puppet module install puppetlabs/glance
+    example% puppet module install openstack/glance
 
 ### Beginning with glance
 
