@@ -21,6 +21,21 @@
 #  [*rabbit_virtual_host*]
 #    virtual_host to use. Optional. Defaults to '/'
 #
+# [*rabbit_heartbeat_timeout_threshold*]
+#   (optional) Number of seconds after which the RabbitMQ broker is considered
+#   down if the heartbeat keepalive fails.  Any value >0 enables heartbeats.
+#   Heartbeating helps to ensure the TCP connection to RabbitMQ isn't silently
+#   closed, resulting in missed or lost messages from the queue.
+#   (Requires kombu >= 3.0.7 and amqp >= 1.4.0)
+#   Defaults to 0
+#
+# [*rabbit_heartbeat_rate*]
+#   (optional) How often during the rabbit_heartbeat_timeout_threshold period to
+#   check the heartbeat on RabbitMQ connection.  (i.e. rabbit_heartbeat_rate=2
+#   when rabbit_heartbeat_timeout_threshold=60, the heartbeat will be checked
+#   every 30 seconds.
+#   Defaults to 2
+#
 #  [*rabbit_use_ssl*]
 #    (optional) Connect over SSL for RabbitMQ
 #    Defaults to false
@@ -61,21 +76,23 @@
 
 class glance::notify::rabbitmq(
   $rabbit_password,
-  $rabbit_userid                = 'guest',
-  $rabbit_host                  = 'localhost',
-  $rabbit_port                  = '5672',
-  $rabbit_hosts                 = false,
-  $rabbit_virtual_host          = '/',
-  $rabbit_use_ssl               = false,
-  $kombu_ssl_ca_certs           = undef,
-  $kombu_ssl_certfile           = undef,
-  $kombu_ssl_keyfile            = undef,
-  $kombu_ssl_version            = 'TLSv1',
-  $rabbit_notification_exchange = 'glance',
-  $rabbit_notification_topic    = 'notifications',
-  $rabbit_durable_queues        = false,
-  $amqp_durable_queues          = false,
-  $notification_driver          = 'messaging',
+  $rabbit_userid                      = 'guest',
+  $rabbit_host                        = 'localhost',
+  $rabbit_port                        = '5672',
+  $rabbit_hosts                       = false,
+  $rabbit_virtual_host                = '/',
+  $rabbit_heartbeat_timeout_threshold = 0,
+  $rabbit_heartbeat_rate              = 2,
+  $rabbit_use_ssl                     = false,
+  $kombu_ssl_ca_certs                 = undef,
+  $kombu_ssl_certfile                 = undef,
+  $kombu_ssl_keyfile                  = undef,
+  $kombu_ssl_version                  = 'TLSv1',
+  $rabbit_notification_exchange       = 'glance',
+  $rabbit_notification_topic          = 'notifications',
+  $rabbit_durable_queues              = false,
+  $amqp_durable_queues                = false,
+  $notification_driver                = 'messaging',
 ) {
 
   if $rabbit_durable_queues {
@@ -106,6 +123,8 @@ class glance::notify::rabbitmq(
     'oslo_messaging_rabbit/rabbit_userid':                value => $rabbit_userid;
     'oslo_messaging_rabbit/rabbit_notification_exchange': value => $rabbit_notification_exchange;
     'oslo_messaging_rabbit/rabbit_notification_topic':    value => $rabbit_notification_topic;
+    'oslo_messaging_rabbit/heartbeat_timeout_threshold':  value => $rabbit_heartbeat_timeout_threshold;
+    'oslo_messaging_rabbit/heartbeat_rate':               value => $rabbit_heartbeat_rate;
     'oslo_messaging_rabbit/rabbit_use_ssl':               value => $rabbit_use_ssl;
     'DEFAULT/amqp_durable_queues':          value => $amqp_durable_queues_real;
   }
