@@ -71,7 +71,8 @@ describe 'glance::registry' do
           'hasstatus'  => true,
           'hasrestart' => true,
           'subscribe'  => 'File[/etc/glance/glance-registry.conf]',
-          'require'    => 'Class[Glance]'
+          'require'    => 'Class[Glance]',
+          'tag'        => 'glance-service',
       )}
 
       it 'is_expected.to only sync the db if sync_db is enabled' do
@@ -142,7 +143,8 @@ describe 'glance::registry' do
           'hasstatus'  => true,
           'hasrestart' => true,
           'subscribe'  => 'File[/etc/glance/glance-registry.conf]',
-          'require'    => 'Class[Glance]'
+          'require'    => 'Class[Glance]',
+          'tag'        => 'glance-service',
       )}
   end
 
@@ -354,7 +356,7 @@ describe 'glance::registry' do
         let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
         it { is_expected.to contain_package('glance-registry').with(
             :ensure => package_ensure,
-            :tag    => ['openstack']
+            :tag    => ['openstack', 'glance-package']
         )}
       end
     end
@@ -366,7 +368,7 @@ describe 'glance::registry' do
     end
     let(:params) { default_params }
 
-    it { is_expected.to contain_package('openstack-glance')}
+    it { is_expected.to contain_package('openstack-glance') }
   end
 
   describe 'on unknown platforms' do

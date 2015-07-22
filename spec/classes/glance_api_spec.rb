@@ -87,7 +87,8 @@ describe 'glance::api' do
         'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running': 'stopped',
         'enable'     => param_hash[:enabled],
         'hasstatus'  => true,
-        'hasrestart' => true
+        'hasrestart' => true,
+        'tag'        => 'glance-service',
       ) }
 
       it { is_expected.to_not contain_exec('validate_nova_api') }
@@ -183,7 +184,8 @@ describe 'glance::api' do
         'ensure'     => nil,
         'enable'     => false,
         'hasstatus'  => true,
-        'hasrestart' => true
+        'hasrestart' => true,
+        'tag'        => 'glance-service',
       ) }
   end
 
@@ -441,7 +443,7 @@ describe 'glance::api' do
         let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
         it { is_expected.to contain_package('glance-api').with(
             :ensure => package_ensure,
-            :tag    => ['openstack']
+            :tag    => ['openstack', 'glance-package']
         )}
       end
     end
@@ -454,7 +456,7 @@ describe 'glance::api' do
     let(:params) { default_params }
 
     it { is_expected.to contain_package('openstack-glance').with(
-        :tag => ['openstack'],
+        :tag => ['openstack', 'glance-package'],
     )}
   end
 

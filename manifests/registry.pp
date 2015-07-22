@@ -166,7 +166,7 @@ class glance::registry(
     ensure_packages( [$glance::params::registry_package_name],
       {
         ensure => $package_ensure,
-        tag    => ['openstack'],
+        tag    => ['openstack', 'glance-package'],
       }
     )
   }
@@ -386,7 +386,8 @@ class glance::registry(
     hasstatus  => true,
     hasrestart => true,
     subscribe  => File['/etc/glance/glance-registry.conf'],
-    require    => Class['glance']
+    require    => Class['glance'],
+    tag        => 'glance-service',
   }
 
 }

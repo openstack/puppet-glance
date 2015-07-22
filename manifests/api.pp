@@ -243,7 +243,7 @@ class glance::api(
     ensure_packages([$glance::params::api_package_name],
       {
         ensure => $package_ensure,
-        tag    => ['openstack'],
+        tag    => ['openstack', 'glance-package'],
       }
     )
   }
@@ -498,6 +498,7 @@ class glance::api(
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
+    tag        => 'glance-service',
   }
 
   if $validate {
