@@ -23,18 +23,18 @@ Module Description
 
 The glance module is a thorough attempt to make Puppet capable of managing the entirety of glance.  This includes manifests to provision such things as keystone endpoints, RPC configurations specific to glance, and database connections.  Types are shipped as part of the glance module to assist in manipulation of configuration files.
 
-This module is tested in combination with other modules needed to build and leverage an entire OpenStack software stack.  These modules can be found, all pulled together in the [openstack module](https://github.com/stackfoge/puppet-openstack).
+This module is tested in combination with other modules needed to build and leverage an entire OpenStack software stack.  These modules can be found, all pulled together in the [openstack module](https://github.com/stackforge/puppet-openstack).
 
 Setup
 -----
 
 **What the glance module affects**
 
-* glance, the image service for OpenStack.
+* [Glance](https://wiki.openstack.org/wiki/Glance), the image service for OpenStack.
 
 ### Installing glance
 
-    example% puppet module install openstack/glance
+    puppet module install openstack/glance
 
 ### Beginning with glance
 
