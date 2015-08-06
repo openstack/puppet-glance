@@ -105,6 +105,92 @@ class { 'glance::notify::rabbitmq':
 }
 ```
 
+### Types
+
+#### glance_api_config
+
+The `glance_api_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/glance/glance-api.conf` file.
+
+```puppet
+glance_api_config { 'DEFAULT/verbose' :
+  value => true,
+}
+```
+
+This will write `verbose=true` in the `[DEFAULT]` section.
+
+##### name
+
+Section/setting name to manage from `glance-api.conf`
+
+##### value
+
+The value of the setting to be defined.
+
+##### secret
+
+Whether to hide the value from Puppet logs. Defaults to `false`.
+
+##### ensure_absent_val
+
+If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
+
+#### glance_registry_config
+
+The `glance_registry_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/glance/glance-registry.conf` file.
+
+```puppet
+glance_registry_config { 'DEFAULT/verbose' :
+  value => true,
+}
+```
+
+This will write `verbose=true` in the `[DEFAULT]` section.
+
+##### name
+
+Section/setting name to manage from `glance-registry.conf`
+
+##### value
+
+The value of the setting to be defined.
+
+##### secret
+
+Whether to hide the value from Puppet logs. Defaults to `false`.
+
+##### ensure_absent_val
+
+If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
+
+#### glance_cache_config
+
+The `glance_cache_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/glance/glance-cache.conf` file.
+
+```puppet
+glance_cache_config { 'DEFAULT/verbose' :
+  value => true,
+}
+```
+
+This will write `verbose=true` in the `[DEFAULT]` section.
+
+##### name
+
+Section/setting name to manage from `glance-cache.conf`
+
+##### value
+
+The value of the setting to be defined.
+
+##### secret
+
+Whether to hide the value from Puppet logs. Defaults to `false`.
+
+##### ensure_absent_val
+
+If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
+
 Implementation
 --------------
 
