@@ -10,12 +10,6 @@ describe 'glance' do
     describe "when using default class parameters" do
       let(:params) { default_params }
 
-      it { is_expected.to contain_file('/etc/glance/').with(
-        'ensure'  => 'directory',
-        'owner'   => 'glance',
-        'mode'    => '0770'
-      )}
-
       it { is_expected.to contain_package('python-openstackclient').with(
         :tag => 'openstack'
       )}
