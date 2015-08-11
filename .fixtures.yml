@@ -4,9 +4,9 @@ fixtures:
     'concat':
       'repo': 'git://github.com/puppetlabs/puppetlabs-concat.git'
       'ref': '1.2.1'
-    'keystone': 'git://github.com/stackforge/puppet-keystone.git'
+    'keystone': 'git://github.com/openstack/puppet-keystone.git'
     'mysql': 'git://github.com/puppetlabs/puppetlabs-mysql.git'
-    'openstacklib': 'git://github.com/stackforge/puppet-openstacklib.git'
+    'openstacklib': 'git://github.com/openstack/puppet-openstacklib.git'
     'stdlib': 'git://github.com/puppetlabs/puppetlabs-stdlib.git'
     'rabbitmq':
       repo: 'git://github.com/puppetlabs/puppetlabs-rabbitmq'
