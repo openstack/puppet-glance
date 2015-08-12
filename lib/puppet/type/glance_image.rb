@@ -1,3 +1,4 @@
+File.expand_path('../../../../openstacklib/lib', File.dirname(__FILE__)).tap { |dir| $LOAD_PATH.unshift(dir) unless $LOAD_PATH.include?(dir) }
 Puppet::Type.newtype(:glance_image) do
   desc <<-EOT
     This allows manifests to declare an image to be
