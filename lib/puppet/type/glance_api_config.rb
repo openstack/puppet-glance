@@ -40,4 +40,8 @@ Puppet::Type.newtype(:glance_api_config) do
     defaultto false
   end
 
+  autorequire(:package) do
+    'glance-api'
+  end
+
 end
