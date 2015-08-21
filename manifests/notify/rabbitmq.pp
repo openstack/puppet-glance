@@ -21,6 +21,10 @@
 #  [*rabbit_virtual_host*]
 #    virtual_host to use. Optional. Defaults to '/'
 #
+# [*rabbit_ha_queues*]
+#   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
+#   Defaults to undef
+#
 # [*rabbit_heartbeat_timeout_threshold*]
 #   (optional) Number of seconds after which the RabbitMQ broker is considered
 #   down if the heartbeat keepalive fails.  Any value >0 enables heartbeats.
@@ -86,6 +90,7 @@ class glance::notify::rabbitmq(
   $rabbit_port                        = '5672',
   $rabbit_hosts                       = false,
   $rabbit_virtual_host                = '/',
+  $rabbit_ha_queues                   = undef,
   $rabbit_heartbeat_timeout_threshold = 0,
   $rabbit_heartbeat_rate              = 2,
   $rabbit_use_ssl                     = false,
@@ -111,16 +116,25 @@ class glance::notify::rabbitmq(
   if $rabbit_hosts {
     glance_api_config {
       'oslo_messaging_rabbit/rabbit_hosts':     value => join($rabbit_hosts, ',');
-      'oslo_messaging_rabbit/rabbit_ha_queues': value => true
     }
   } else {
     glance_api_config {
       'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host;
       'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port;
       'oslo_messaging_rabbit/rabbit_hosts':     value => "${rabbit_host}:${rabbit_port}";
-      'oslo_messaging_rabbit/rabbit_ha_queues': value => false
     }
   }
+
+    # by default rabbit_ha_queues is undef
+    if $rabbit_ha_queues == undef {
+      if $rabbit_hosts {
+        glance_api_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value  => true }
+      } else {
+        glance_api_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
+      }
+    } else {
+      glance_api_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues }
+    }
 
   glance_api_config {
     'DEFAULT/notification_driver':          value => $notification_driver;

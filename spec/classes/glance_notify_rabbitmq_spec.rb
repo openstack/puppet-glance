@@ -114,9 +114,9 @@ describe 'glance::notify::rabbitmq' do
   describe 'when passing params for multiple rabbit hosts' do
     let :params do
       {
-        :rabbit_password        => 'pass',
-        :rabbit_userid          => 'guest3',
-        :rabbit_hosts           => ['nonlocalhost3:5673', 'nonlocalhost4:5673']
+        :rabbit_password => 'pass',
+        :rabbit_userid   => 'guest3',
+        :rabbit_hosts    => ['nonlocalhost3:5673', 'nonlocalhost4:5673']
       }
     end
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest3') }
@@ -125,6 +125,20 @@ describe 'glance::notify::rabbitmq' do
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
     it { is_expected.to_not contain_glance_api_config('oslo_messaging_rabbit/rabbit_port') }
     it { is_expected.to_not contain_glance_api_config('oslo_messaging_rabbit/rabbit_host') }
+  end
+
+  describe 'a single rabbit_host with enable ha queues' do
+    let :params do
+       {
+        :rabbit_password  => 'pass',
+        :rabbit_userid    => 'guest3',
+        :rabbit_ha_queues => true,
+       }
+    end
+
+    it 'should contain rabbit_ha_queues' do
+      is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
+    end
   end
 
   describe 'when passing params for rabbitmq heartbeat' do
