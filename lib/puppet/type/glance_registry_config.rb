@@ -40,4 +40,8 @@ Puppet::Type.newtype(:glance_registry_config) do
     defaultto false
   end
 
+  autorequire(:package) do
+    'glance-registry'
+  end
+
 end

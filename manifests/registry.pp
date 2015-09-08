@@ -174,7 +174,7 @@ class glance::registry(
   }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
-    ensure_packages( [$glance::params::registry_package_name],
+    ensure_packages( 'glance-registry',
       {
         ensure => $package_ensure,
         tag    => ['openstack', 'glance-package'],
@@ -183,7 +183,6 @@ class glance::registry(
   }
 
   Package[$glance::params::registry_package_name] -> File['/etc/glance/']
-  Package[$glance::params::registry_package_name] -> Glance_registry_config<||>
 
   Glance_registry_config<||> ~> Exec<| title == 'glance-manage db_sync' |>
   Glance_registry_config<||> ~> Service['glance-registry']
