@@ -258,9 +258,6 @@ class glance::api(
 
   # adding all of this stuff b/c it devstack says glance-api uses the
   # db now
-  Glance_api_config<||>   ~> Exec<| title == 'glance-manage db_sync' |>
-  Glance_cache_config<||> ~> Exec<| title == 'glance-manage db_sync' |>
-  Exec<| title == 'glance-manage db_sync' |> ~> Service['glance-api']
   Glance_api_config<||>   ~> Service['glance-api']
   Glance_cache_config<||> ~> Service['glance-api']
   Class['glance::policy'] ~> Service['glance-api']

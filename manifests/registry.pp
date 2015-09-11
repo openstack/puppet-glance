@@ -184,7 +184,6 @@ class glance::registry(
 
   Package[$glance::params::registry_package_name] -> File['/etc/glance/']
 
-  Glance_registry_config<||> ~> Exec<| title == 'glance-manage db_sync' |>
   Glance_registry_config<||> ~> Service['glance-registry']
 
   File {
@@ -369,16 +368,7 @@ class glance::registry(
   }
 
   if $sync_db {
-    Exec['glance-manage db_sync'] ~> Service['glance-registry']
-
-    exec { 'glance-manage db_sync':
-      command     => $::glance::params::db_sync_command,
-      path        => '/usr/bin',
-      user        => 'glance',
-      refreshonly => true,
-      logoutput   => on_failure,
-      subscribe   => [Package[$glance::params::registry_package_name], File['/etc/glance/glance-registry.conf']],
-    }
+    include ::glance::db::sync
   }
 
   if $manage_service {
