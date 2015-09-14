@@ -6,7 +6,7 @@
 #    (Optional) Ensure state for pachage.
 #    Defaults to 'present'
 #
-class glance::client (
+class glance::client(
   $ensure = 'present'
 ) {
 

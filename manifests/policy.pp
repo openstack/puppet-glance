@@ -23,7 +23,7 @@
 #   (optional) Path to the glance policy.json file
 #   Defaults to /etc/glance/policy.json
 #
-class glance::policy (
+class glance::policy(
   $policies    = {},
   $policy_path = '/etc/glance/policy.json',
 ) {

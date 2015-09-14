@@ -24,7 +24,7 @@
 #    (eg. point to config file, or redirect output)
 #    (optional) Defaults to ''.
 #
-class glance::cache::cleaner (
+class glance::cache::cleaner(
   $minute           = 1,
   $hour             = 0,
   $monthday         = '*',

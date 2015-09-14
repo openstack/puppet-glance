@@ -24,7 +24,7 @@
 #    (eg. point to config file, or redirect output)
 #    (optional) Defaults to ''.
 #
-class glance::cache::pruner (
+class glance::cache::pruner(
   $minute           = '*/30',
   $hour             = '*',
   $monthday         = '*',
