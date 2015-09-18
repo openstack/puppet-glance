@@ -10,6 +10,12 @@ Puppet::Type.type(:glance_image).provide(
 
   @credentials = Puppet::Provider::Openstack::CredentialsV2_0.new
 
+  # glanceclient support `image create` (in v2 API) but not openstackclient
+  # openstackclient now uses image v2 API by default.
+  # in the meantime it's implemented in openstackclient, hardcode version
+  # see https://bugs.launchpad.net/python-openstackclient/+bug/1405562
+  ENV['OS_IMAGE_API_VERSION'] = '1'
+
   def initialize(value={})
     super(value)
     @property_flush = {}
