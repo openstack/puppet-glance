@@ -38,8 +38,6 @@ describe 'glance::registry' do
   [
     {:keystone_password => 'ChangeMe'},
     {
-      :verbose                => true,
-      :debug                  => true,
       :bind_host              => '127.0.0.1',
       :bind_port              => '9111',
       :workers                => '5',
@@ -68,6 +66,7 @@ describe 'glance::registry' do
       end
 
       it { is_expected.to contain_class 'glance::registry' }
+      it { is_expected.to contain_class 'glance::registry::logging' }
 
       it { is_expected.to contain_service('glance-registry').with(
           'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running' : 'stopped',
@@ -87,8 +86,6 @@ describe 'glance::registry' do
       end
       it 'is_expected.to configure itself' do
         [
-         'verbose',
-         'debug',
          'workers',
          'bind_port',
          'bind_host',
@@ -215,74 +212,6 @@ describe 'glance::registry' do
       it { expect { is_expected.to contain_glance_registry_config('filter:authtoken/auth_admin_prefix') }.to\
         raise_error(Puppet::Error, /validate_re\(\): "#{auth_admin_prefix}" does not match/) }
     end
-  end
-
-  describe 'with syslog disabled by default' do
-    let :params do
-      default_params
-    end
-
-    it { is_expected.to contain_glance_registry_config('DEFAULT/use_syslog').with_value(false) }
-    it { is_expected.to_not contain_glance_registry_config('DEFAULT/syslog_log_facility') }
-  end
-
-  describe 'with syslog enabled' do
-    let :params do
-      default_params.merge({
-        :use_syslog   => 'true',
-      })
-    end
-
-    it { is_expected.to contain_glance_registry_config('DEFAULT/use_syslog').with_value(true) }
-    it { is_expected.to contain_glance_registry_config('DEFAULT/syslog_log_facility').with_value('LOG_USER') }
-  end
-
-  describe 'with syslog enabled and custom settings' do
-    let :params do
-      default_params.merge({
-        :use_syslog   => 'true',
-        :log_facility => 'LOG_LOCAL0'
-     })
-    end
-
-    it { is_expected.to contain_glance_registry_config('DEFAULT/use_syslog').with_value(true) }
-    it { is_expected.to contain_glance_registry_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
-  end
-
-  describe 'with log_file enabled by default' do
-    let(:params) { default_params }
-
-    it { is_expected.to contain_glance_registry_config('DEFAULT/log_file').with_value(default_params[:log_file]) }
-
-    context 'with log_file disabled' do
-      let(:params) { default_params.merge!({ :log_file => false }) }
-      it { is_expected.to contain_glance_registry_config('DEFAULT/log_file').with_ensure('absent') }
-    end
-  end
-
-  describe 'with log_dir enabled by default' do
-    let(:params) { default_params }
-
-    it { is_expected.to contain_glance_registry_config('DEFAULT/log_dir').with_value(default_params[:log_dir]) }
-
-    context 'with log_dir disabled' do
-      let(:params) { default_params.merge!({ :log_dir => false }) }
-      it { is_expected.to contain_glance_registry_config('DEFAULT/log_dir').with_ensure('absent') }
-    end
-  end
-
-  describe 'with no ssl options (default)' do
-    let(:params) { default_params }
-
-    it { is_expected.to contain_glance_registry_config('DEFAULT/ca_file').with_ensure('absent')}
-    it { is_expected.to contain_glance_registry_config('DEFAULT/cert_file').with_ensure('absent')}
-    it { is_expected.to contain_glance_registry_config('DEFAULT/key_file').with_ensure('absent')}
-  end
-
-  describe 'with use_stderr enabled (default)' do
-    let(:params) { default_params }
-
-    it { is_expected.to contain_glance_registry_config('DEFAULT/use_stderr').with_value('true')}
   end
 
   describe 'with ssl options' do

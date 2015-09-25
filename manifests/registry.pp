@@ -13,10 +13,10 @@
 #    used because there is only one glance package.
 #
 #  [*verbose*]
-#    (optional) Enable verbose logs (true|false). Defaults to false.
+#    (optional) Enable verbose logs (true|false). Defaults to undef.
 #
 #  [*debug*]
-#    (optional) Enable debug logs (true|false). Defaults to false.
+#    (optional) Enable debug logs (true|false). Defaults to undef.
 #
 #  [*bind_host*]
 #    (optional) The address of the host to bind to. Defaults to '0.0.0.0'.
@@ -32,12 +32,12 @@
 #  [*log_file*]
 #    (optional) Log file for glance-registry.
 #    If set to boolean false, it will not log to any file.
-#    Defaults to '/var/log/glance/registry.log'.
+#    Defaults to undef.
 #
 #  [*log_dir*]
 #    (optional) directory to which glance logs are sent.
 #    If set to boolean false, it will not log to any directory.
-#    Defaults to '/var/log/glance'
+#    Defaults to undef.
 #
 # [*database_connection*]
 #   (optional) Connection url to connect to nova database.
@@ -89,15 +89,15 @@
 #
 #  [*use_syslog*]
 #    (optional) Use syslog for logging.
-#    Defaults to false.
+#    Defaults to undef.
 #
-# [*use_stderr*]
-#   (optional) Use stderr for logging
-#   Defaults to true
+#  [*use_stderr*]
+#    (optional) Use stderr for logging
+#    Defaults to undef.
 #
 #  [*log_facility*]
 #    (optional) Syslog facility to receive log lines.
-#    Defaults to LOG_USER.
+#    Defaults to undef.
 #
 #  [*manage_service*]
 #    (optional) If Puppet should manage service startup / shutdown.
@@ -134,13 +134,13 @@
 class glance::registry(
   $keystone_password,
   $package_ensure        = 'present',
-  $verbose               = false,
-  $debug                 = false,
+  $verbose               = undef,
+  $debug                 = undef,
   $bind_host             = '0.0.0.0',
   $bind_port             = '9191',
   $workers               = $::processorcount,
-  $log_file              = '/var/log/glance/registry.log',
-  $log_dir               = '/var/log/glance',
+  $log_file              = undef,
+  $log_dir               = undef,
   $database_connection   = 'sqlite:///var/lib/glance/glance.sqlite',
   $database_idle_timeout = 3600,
   $auth_type             = 'keystone',
@@ -149,9 +149,9 @@ class glance::registry(
   $keystone_tenant       = 'services',
   $keystone_user         = 'glance',
   $pipeline              = 'keystone',
-  $use_syslog            = false,
-  $use_stderr            = true,
-  $log_facility          = 'LOG_USER',
+  $use_syslog            = undef,
+  $use_stderr            = undef,
+  $log_facility          = undef,
   $manage_service        = true,
   $enabled               = true,
   $purge_config          = false,
@@ -167,6 +167,7 @@ class glance::registry(
   $auth_protocol         = 'http',
 ) inherits glance {
 
+  include ::glance::registry::logging
   require keystone::python
 
   if $mysql_module {
@@ -213,12 +214,9 @@ class glance::registry(
   }
 
   glance_registry_config {
-    'DEFAULT/verbose':    value => $verbose;
-    'DEFAULT/debug':      value => $debug;
     'DEFAULT/workers':    value => $workers;
     'DEFAULT/bind_host':  value => $bind_host;
     'DEFAULT/bind_port':  value => $bind_port;
-    'DEFAULT/use_stderr': value => $use_stderr;
   }
 
   if $identity_uri {
@@ -323,39 +321,6 @@ class glance::registry(
   } else {
     glance_registry_config {
       'DEFAULT/ca_file': ensure => absent;
-    }
-  }
-
-  # Logging
-  if $log_file {
-    glance_registry_config {
-      'DEFAULT/log_file': value  => $log_file;
-    }
-  } else {
-    glance_registry_config {
-      'DEFAULT/log_file': ensure => absent;
-    }
-  }
-
-  if $log_dir {
-    glance_registry_config {
-      'DEFAULT/log_dir': value  => $log_dir;
-    }
-  } else {
-    glance_registry_config {
-      'DEFAULT/log_dir': ensure => absent;
-    }
-  }
-
-  # Syslog
-  if $use_syslog {
-    glance_registry_config {
-      'DEFAULT/use_syslog':           value => true;
-      'DEFAULT/syslog_log_facility':  value => $log_facility;
-    }
-  } else {
-    glance_registry_config {
-      'DEFAULT/use_syslog': value => false;
     }
   }
 
