@@ -5,10 +5,6 @@ describe 'glance::backend::file' do
     { :osfamily => 'Debian' }
   end
 
-  let :pre_condition do
-    'class { "glance::api": keystone_password => "pass" }'
-  end
-
   it 'configures glance-api.conf' do
     is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file')
     is_expected.to contain_glance_api_config('glance_store/filesystem_store_datadir').with_value('/var/lib/glance/images/')
