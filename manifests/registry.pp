@@ -128,9 +128,6 @@
 #   (Optional) Run db sync on the node.
 #   Defaults to true
 #
-#  [*mysql_module*]
-#  (optional) Deprecated. Does nothing.
-#
 class glance::registry(
   $keystone_password,
   $package_ensure        = 'present',
@@ -160,7 +157,6 @@ class glance::registry(
   $ca_file               = false,
   $sync_db               = true,
   # DEPRECATED PARAMETERS
-  $mysql_module          = undef,
   $auth_host             = '127.0.0.1',
   $auth_port             = '35357',
   $auth_admin_prefix     = false,
@@ -169,10 +165,6 @@ class glance::registry(
 
   include ::glance::registry::logging
   require keystone::python
-
-  if $mysql_module {
-    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
-  }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages( 'glance-registry',

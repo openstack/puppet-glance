@@ -154,9 +154,6 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to false, not set
 #
-# [*mysql_module*]
-#   (optional) Deprecated. Does nothing.
-#
 # [*known_stores*]
 #   (optional)List of which store classes and store class locations are
 #    currently known to glance at startup.
@@ -229,7 +226,6 @@ class glance::api(
   $validate                 = false,
   $validation_options       = {},
   # DEPRECATED PARAMETERS
-  $mysql_module             = undef,
   $auth_host                = '127.0.0.1',
   $auth_url                 = 'http://localhost:5000/v2.0',
   $auth_port                = '35357',
@@ -240,10 +236,6 @@ class glance::api(
   include ::glance::policy
   include ::glance::api::logging
   require keystone::python
-
-  if $mysql_module {
-    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
-  }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages('glance-api',
