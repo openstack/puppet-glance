@@ -28,6 +28,7 @@ describe 'glance::notify::rabbitmq' do
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_notification_topic').with_value('notifications') }
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0') }
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_rate').with_value('2') }
+    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
   end
 
   describe 'when passing params and use ssl' do
@@ -39,6 +40,7 @@ describe 'glance::notify::rabbitmq' do
         :rabbit_port            => '5673',
         :rabbit_use_ssl         => true,
         :rabbit_durable_queues  => true,
+        :kombu_reconnect_delay  => '5.0'
       }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
@@ -49,6 +51,7 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_durable_queues').with_value('true') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('5.0') }
     end
   end
 

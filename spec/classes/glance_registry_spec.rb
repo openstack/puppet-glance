@@ -30,6 +30,9 @@ describe 'glance::registry' do
       :keystone_password      => 'ChangeMe',
       :purge_config           => false,
       :sync_db                => true,
+      :os_region_name         => 'RegionOne',
+      :signing_dir            => '<SERVICE DEFAULT>',
+      :token_cache_time       => '<SERVICE DEFAULT>',
     }
   end
 
@@ -49,6 +52,9 @@ describe 'glance::registry' do
       :keystone_user          => 'admin',
       :keystone_password      => 'ChangeMe',
       :sync_db                => false,
+      :os_region_name         => 'RegionOne2',
+      :signing_dir            => '/path/to/dir',
+      :token_cache_time       => '300',
     }
   ].each do |param_set|
 
@@ -103,6 +109,15 @@ describe 'glance::registry' do
           is_expected.to contain_glance_registry_config("keystone_authtoken/admin_user").with_value(param_hash[:keystone_user])
           is_expected.to contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password])
           is_expected.to contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password]).with_secret(true)
+          is_expected.to contain_glance_registry_config("keystone_authtoken/token_cache_time").with_value(param_hash[:token_cache_time])
+          is_expected.to contain_glance_registry_config("keystone_authtoken/signing_dir").with_value(param_hash[:signing_dir])
+        end
+      end
+      it 'is_expected.to lay down default glance_store registry config' do
+        [
+          'os_region_name',
+        ].each do |config|
+          is_expected.to contain_glance_registry_config("glance_store/#{config}").with_value(param_hash[config.intern])
         end
       end
     end

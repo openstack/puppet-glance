@@ -149,6 +149,20 @@
 #   (Optional) Run db sync on the node.
 #   Defaults to true
 #
+#  [*os_region_name*]
+#    (optional) Sets the keystone region to use.
+#    Defaults to 'RegionOne'.
+#
+#  [*signing_dir*]
+#    Directory used to cache files related to PKI tokens.
+#    Defaults to $::os_service_default.
+#
+#  [*token_cache_time*]
+#    In order to prevent excessive effort spent validating tokens,
+#    the middleware caches previously-seen tokens for a configurable duration (in seconds).
+#    Set to -1 to disable caching completely.
+#    Defaults to $::os_service_default.
+#
 class glance::registry(
   $keystone_password,
   $package_ensure          = 'present',
@@ -182,11 +196,14 @@ class glance::registry(
   $key_file                = false,
   $ca_file                 = false,
   $sync_db                 = true,
+  $os_region_name          = 'RegionOne',
+  $signing_dir             = $::os_service_default,
+  $token_cache_time        = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $auth_host             = '127.0.0.1',
-  $auth_port             = '35357',
-  $auth_admin_prefix     = false,
-  $auth_protocol         = 'http',
+  $auth_host               = '127.0.0.1',
+  $auth_port               = '35357',
+  $auth_admin_prefix       = false,
+  $auth_protocol           = 'http',
 ) inherits glance {
 
   include ::glance::registry::logging
@@ -215,10 +232,13 @@ class glance::registry(
     require => Class['glance']
   }
 
+  warning('Default value for os_region_name parameter is different from OpenStack project defaults')
+
   glance_registry_config {
-    'DEFAULT/workers':    value => $workers;
-    'DEFAULT/bind_host':  value => $bind_host;
-    'DEFAULT/bind_port':  value => $bind_port;
+    'DEFAULT/workers':                value => $workers;
+    'DEFAULT/bind_host':              value => $bind_host;
+    'DEFAULT/bind_port':              value => $bind_port;
+    'glance_store/os_region_name':    value => $os_region_name;
   }
 
   if $identity_uri {
@@ -292,8 +312,10 @@ class glance::registry(
   if $auth_type == 'keystone' {
     glance_registry_config {
       'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
-      'keystone_authtoken/admin_user'       : value => $keystone_user;
-      'keystone_authtoken/admin_password'   : value => $keystone_password, secret => true;
+      'keystone_authtoken/admin_user':        value => $keystone_user;
+      'keystone_authtoken/admin_password':    value => $keystone_password, secret => true;
+      'keystone_authtoken/token_cache_time':  value => $token_cache_time;
+      'keystone_authtoken/signing_dir':       value => $signing_dir;
     }
   }
 

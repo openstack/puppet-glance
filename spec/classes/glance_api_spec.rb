@@ -22,6 +22,7 @@ describe 'glance::api' do
       :log_file                 => '/var/log/glance/api.log',
       :log_dir                  => '/var/log/glance',
       :auth_type                => 'keystone',
+      :auth_region              => 'RegionOne',
       :enabled                  => true,
       :manage_service           => true,
       :backlog                  => '4096',
@@ -32,11 +33,17 @@ describe 'glance::api' do
       :keystone_tenant          => 'services',
       :keystone_user            => 'glance',
       :keystone_password        => 'ChangeMe',
+      :token_cache_time         => '<SERVICE DEFAULT>',
       :show_image_direct_url    => false,
       :purge_config             => false,
       :known_stores             => false,
+      :delayed_delete           => '<SERVICE DEFAULT>',
+      :scrub_time               => '<SERVICE DEFAULT>',
       :image_cache_dir          => '/var/lib/glance/image-cache',
+      :image_cache_stall_time   => '<SERVICE DEFAULT>',
+      :image_cache_max_size     => '<SERVICE DEFAULT>',
       :os_region_name           => 'RegionOne',
+      :signing_dir              => '<SERVICE DEFAULT>',
       :pipeline                 => 'keystone',
     }
   end
@@ -51,6 +58,7 @@ describe 'glance::api' do
       :registry_port            => '9111',
       :registry_client_protocol => 'https',
       :auth_type                => 'not_keystone',
+      :auth_region              => 'RegionOne2',
       :enabled                  => false,
       :backlog                  => '4095',
       :workers                  => '5',
@@ -60,9 +68,15 @@ describe 'glance::api' do
       :keystone_tenant          => 'admin2',
       :keystone_user            => 'admin2',
       :keystone_password        => 'ChangeMe2',
+      :token_cache_time         => '300',
       :show_image_direct_url    => true,
+      :delayed_delete           => 'true',
+      :scrub_time               => '10',
       :image_cache_dir          => '/tmp/glance',
+      :image_cache_stall_time   => '10',
+      :image_cache_max_size     => '10737418240',
       :os_region_name           => 'RegionOne2',
+      :signing_dir              => '/path/to/dir',
       :pipeline                 => 'keystone2',
     }
   ].each do |param_set|
@@ -102,6 +116,10 @@ describe 'glance::api' do
           'registry_port',
           'registry_client_protocol',
           'show_image_direct_url',
+          'delayed_delete',
+          'scrub_time',
+          'image_cache_dir',
+          'auth_region'
         ].each do |config|
           is_expected.to contain_glance_api_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
         end
@@ -111,6 +129,8 @@ describe 'glance::api' do
         [
           'registry_host',
           'registry_port',
+          'image_cache_stall_time',
+          'image_cache_max_size',
         ].each do |config|
           is_expected.to contain_glance_cache_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
         end
@@ -146,7 +166,7 @@ describe 'glance::api' do
         if params[:auth_type] == 'keystone'
           is_expected.to contain('paste_deploy/flavor').with_value('keystone+cachemanagement')
 
-          ['admin_tenant_name', 'admin_user', 'admin_password'].each do |config|
+          ['admin_tenant_name', 'admin_user', 'admin_password', 'token_cache_time', 'signing_dir'].each do |config|
             is_expected.to contain_glance_api_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
           end
           is_expected.to contain_glance_api_config('keystone_authtoken/admin_password').with_value(param_hash[:keystone_password]).with_secret(true)

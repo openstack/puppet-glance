@@ -58,6 +58,11 @@
 #    available on some distributions.
 #    Defaults to 'TLSv1'
 #
+#  [*kombu_reconnect_delay*]
+#    (optional) How long to wait before reconnecting in response to an AMQP
+#    consumer cancel notification.
+#    Defaults to $::os_service_default.
+#
 #  [*rabbit_notification_exchange*]
 #    Defaults  to 'glance'
 #
@@ -88,6 +93,7 @@ class glance::notify::rabbitmq(
   $kombu_ssl_certfile                 = undef,
   $kombu_ssl_keyfile                  = undef,
   $kombu_ssl_version                  = 'TLSv1',
+  $kombu_reconnect_delay              = $::os_service_default,
   $rabbit_notification_exchange       = 'glance',
   $rabbit_notification_topic          = 'notifications',
   $rabbit_durable_queues              = false,
@@ -125,6 +131,7 @@ class glance::notify::rabbitmq(
     'oslo_messaging_rabbit/rabbit_notification_topic':    value => $rabbit_notification_topic;
     'oslo_messaging_rabbit/heartbeat_timeout_threshold':  value => $rabbit_heartbeat_timeout_threshold;
     'oslo_messaging_rabbit/heartbeat_rate':               value => $rabbit_heartbeat_rate;
+    'oslo_messaging_rabbit/kombu_reconnect_delay':        value => $kombu_reconnect_delay;
     'oslo_messaging_rabbit/rabbit_use_ssl':               value => $rabbit_use_ssl;
     'oslo_messaging_rabbit/amqp_durable_queues':          value => $amqp_durable_queues_real;
   }
