@@ -18,8 +18,6 @@ describe 'glance::registry' do
       :workers                => facts[:processorcount],
       :log_file               => '/var/log/glance/registry.log',
       :log_dir                => '/var/log/glance',
-      :database_connection    => 'sqlite:///var/lib/glance/glance.sqlite',
-      :database_idle_timeout  => '3600',
       :enabled                => true,
       :manage_service         => true,
       :auth_type              => 'keystone',
@@ -41,8 +39,6 @@ describe 'glance::registry' do
       :bind_host              => '127.0.0.1',
       :bind_port              => '9111',
       :workers                => '5',
-      :database_connection    => 'sqlite:///var/lib/glance.sqlite',
-      :database_idle_timeout  => '360',
       :enabled                => false,
       :auth_type              => 'keystone',
       :auth_host              => '127.0.0.1',
@@ -66,6 +62,7 @@ describe 'glance::registry' do
       end
 
       it { is_expected.to contain_class 'glance::registry' }
+      it { is_expected.to contain_class 'glance::registry::db' }
       it { is_expected.to contain_class 'glance::registry::logging' }
 
       it { is_expected.to contain_service('glance-registry').with(
@@ -91,12 +88,6 @@ describe 'glance::registry' do
          'bind_host',
         ].each do |config|
           is_expected.to contain_glance_registry_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
-        end
-        [
-         'database_connection',
-         'database_idle_timeout',
-        ].each do |config|
-          is_expected.to contain_glance_registry_config("database/#{config.gsub(/database_/,'')}").with_value(param_hash[config.intern])
         end
         [
          'auth_host',

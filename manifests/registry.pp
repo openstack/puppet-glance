@@ -39,13 +39,34 @@
 #    If set to boolean false, it will not log to any directory.
 #    Defaults to undef.
 #
-# [*database_connection*]
-#   (optional) Connection url to connect to nova database.
-#   Defaults to 'sqlite:///var/lib/glance/glance.sqlite'
+#  [*database_connection*]
+#    (optional) Connection url to connect to nova database.
+#    Defaults to undef
 #
-# [*database_idle_timeout*]
-#   (optional) Timeout before idle db connections are reaped.
-#   Defaults to 3600
+#  [*database_idle_timeout*]
+#    (optional) Timeout before idle db connections are reaped.
+#    Defaults to undef
+#
+#  [*database_max_retries*]
+#    (Optional) Maximum number of database connection retries during startup.
+#    Set to -1 to specify an infinite retry count.
+#    Defaults to undef.
+#
+#  [*database_retry_interval*]
+#    (optional) Interval between retries of opening a database connection.
+#    Defaults to undef.
+#
+#  [*database_min_pool_size*]
+#    (optional) Minimum number of SQL connections to keep open in a pool.
+#    Defaults to undef.
+#
+#  [*database_max_pool_size*]
+#    (optional) Maximum number of SQL connections to keep open in a pool.
+#    Defaults to undef.
+#
+#  [*database_max_overflow*]
+#    (optional) If set, use this value for max_overflow with sqlalchemy.
+#    Defaults to undef.
 #
 #  [*auth_type*]
 #    (optional) Authentication type. Defaults to 'keystone'.
@@ -130,32 +151,37 @@
 #
 class glance::registry(
   $keystone_password,
-  $package_ensure        = 'present',
-  $verbose               = undef,
-  $debug                 = undef,
-  $bind_host             = '0.0.0.0',
-  $bind_port             = '9191',
-  $workers               = $::processorcount,
-  $log_file              = undef,
-  $log_dir               = undef,
-  $database_connection   = 'sqlite:///var/lib/glance/glance.sqlite',
-  $database_idle_timeout = 3600,
-  $auth_type             = 'keystone',
-  $auth_uri              = false,
-  $identity_uri          = false,
-  $keystone_tenant       = 'services',
-  $keystone_user         = 'glance',
-  $pipeline              = 'keystone',
-  $use_syslog            = undef,
-  $use_stderr            = undef,
-  $log_facility          = undef,
-  $manage_service        = true,
-  $enabled               = true,
-  $purge_config          = false,
-  $cert_file             = false,
-  $key_file              = false,
-  $ca_file               = false,
-  $sync_db               = true,
+  $package_ensure          = 'present',
+  $verbose                 = undef,
+  $debug                   = undef,
+  $bind_host               = '0.0.0.0',
+  $bind_port               = '9191',
+  $workers                 = $::processorcount,
+  $log_file                = undef,
+  $log_dir                 = undef,
+  $database_connection     = undef,
+  $database_idle_timeout   = undef,
+  $database_min_pool_size  = undef,
+  $database_max_pool_size  = undef,
+  $database_max_retries    = undef,
+  $database_retry_interval = undef,
+  $database_max_overflow   = undef,
+  $auth_type               = 'keystone',
+  $auth_uri                = false,
+  $identity_uri            = false,
+  $keystone_tenant         = 'services',
+  $keystone_user           = 'glance',
+  $pipeline                = 'keystone',
+  $use_syslog              = undef,
+  $use_stderr              = undef,
+  $log_facility            = undef,
+  $manage_service          = true,
+  $enabled                 = true,
+  $purge_config            = false,
+  $cert_file               = false,
+  $key_file                = false,
+  $ca_file                 = false,
+  $sync_db                 = true,
   # DEPRECATED PARAMETERS
   $auth_host             = '127.0.0.1',
   $auth_port             = '35357',
@@ -164,6 +190,7 @@ class glance::registry(
 ) inherits glance {
 
   include ::glance::registry::logging
+  include ::glance::registry::db
   require keystone::python
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
@@ -186,23 +213,6 @@ class glance::registry(
     mode    => '0640',
     notify  => Service['glance-registry'],
     require => Class['glance']
-  }
-
-  if $database_connection {
-    if($database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-      require 'mysql::bindings'
-      require 'mysql::bindings::python'
-    } elsif($database_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
-
-    } elsif($database_connection =~ /sqlite:\/\//) {
-
-    } else {
-      fail("Invalid db connection ${database_connection}")
-    }
-    glance_registry_config {
-      'database/connection':   value => $database_connection, secret => true;
-      'database/idle_timeout': value => $database_idle_timeout;
-    }
   }
 
   glance_registry_config {

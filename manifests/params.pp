@@ -19,6 +19,7 @@ class glance::params {
       } else {
         $pyceph_package_name = 'python-rbd'
       }
+      $sqlite_package_name   = undef
     }
     'Debian': {
       $api_package_name      = 'glance-api'
@@ -27,6 +28,7 @@ class glance::params {
       $registry_service_name = 'glance-registry'
       $db_sync_command       = 'glance-manage --config-file=/etc/glance/glance-registry.conf db_sync'
       $pyceph_package_name   = 'python-ceph'
+      $sqlite_package_name   = 'python-pysqlite2'
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} only support osfamily RedHat and Debian")
