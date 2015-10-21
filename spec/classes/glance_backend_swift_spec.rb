@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'glance::backend::swift' do
   let :facts do
-    {
-      :osfamily => 'Debian'
-    }
+    @default_facts.merge({
+      :osfamily       => 'Debian',
+    })
   end
 
   let :params do

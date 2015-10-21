@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'glance::backend::rbd' do
   let :facts do
-    {
-      :osfamily => 'Debian'
-    }
+      @default_facts.merge({
+        :osfamily       => 'Debian',
+      })
   end
 
   describe 'when defaults with rbd_store_user' do
@@ -48,10 +48,10 @@ describe 'glance::backend::rbd' do
 
   describe 'package on RedHat platform el6' do
     let :facts do
-      {
+      @default_facts.merge({
         :osfamily               => 'RedHat',
         :operatingsystemrelease => '6.5',
-      }
+      })
     end
     it { is_expected.to contain_package('python-ceph').with(
         :name   => 'python-ceph',
@@ -61,10 +61,10 @@ describe 'glance::backend::rbd' do
   end
   describe 'package on RedHat platform el7' do
     let :facts do
-      {
+      @default_facts.merge({
         :osfamily               => 'RedHat',
         :operatingsystemrelease => '7.0'
-      }
+      })
     end
     it { is_expected.to contain_package('python-ceph').with(
         :name   => 'python-rbd',

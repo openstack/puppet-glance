@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'glance::db::mysql' do
   let :facts do
-    {
-      :osfamily => 'Debian'
-    }
+    @default_facts.merge({
+      :osfamily       => 'Debian',
+    })
   end
 
   let :pre_condition do

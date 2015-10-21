@@ -78,7 +78,9 @@ describe 'glance::backend::cinder' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      @default_facts.merge({
+        :osfamily       => 'Debian',
+      })
     end
 
     it_configures 'glance with cinder backend'
@@ -86,7 +88,9 @@ describe 'glance::backend::cinder' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({
+        :osfamily => 'RedHat',
+      })
     end
 
     it_configures 'glance with cinder backend'

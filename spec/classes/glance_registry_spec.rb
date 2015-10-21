@@ -2,10 +2,10 @@
 describe 'glance::registry' do
 
   let :facts do
-    {
-      :osfamily       => 'Debian',
-      :processorcount => '7',
-    }
+    @default_facts.merge({
+     :osfamily       => 'Debian',
+     :processorcount => '7',
+    })
   end
 
   let :default_params do
@@ -273,7 +273,9 @@ describe 'glance::registry' do
 
   describe 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      @default_facts.merge({
+        :osfamily       => 'Debian',
+      })
     end
 
     # We only test this on Debian platforms, since on RedHat there isn't a
@@ -291,7 +293,9 @@ describe 'glance::registry' do
 
   describe 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({
+        :osfamily       => 'RedHat',
+      })
     end
     let(:params) { default_params }
 

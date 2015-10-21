@@ -3,10 +3,10 @@ require 'spec_helper'
 describe 'glance::api' do
 
   let :facts do
-    {
-      :osfamily => 'Debian',
-      :processorcount => '7',
-    }
+    @default_facts.merge({
+     :osfamily       => 'Debian',
+     :processorcount => '7',
+    })
   end
 
   let :default_params do
@@ -377,7 +377,9 @@ describe 'glance::api' do
 
   describe 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      @default_facts.merge({
+        :osfamily       => 'Debian',
+      })
     end
     let(:params) { default_params }
 
@@ -396,7 +398,9 @@ describe 'glance::api' do
 
   describe 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({
+        :osfamily       => 'RedHat',
+      })
     end
     let(:params) { default_params }
 

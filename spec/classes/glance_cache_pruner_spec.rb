@@ -48,7 +48,9 @@ describe 'glance::cache::pruner' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      @default_facts.merge({
+        :osfamily       => 'Debian',
+      })
     end
     include_examples 'glance cache pruner'
     it { is_expected.to contain_cron('glance-cache-pruner').with(:require     => 'Package[glance-api]')}
@@ -56,7 +58,9 @@ describe 'glance::cache::pruner' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({
+        :osfamily => 'RedHat',
+      })
     end
     include_examples 'glance cache pruner'
     it { is_expected.to contain_cron('glance-cache-pruner').with(:require     => 'Package[openstack-glance]')}
