@@ -22,7 +22,7 @@ describe 'glance::notify::rabbitmq' do
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5672') }
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value('localhost:5672') }
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false') }
-    it { is_expected.to contain_glance_api_config('DEFAULT/amqp_durable_queues').with_value('false') }
+    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('false') }
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('/') }
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_notification_exchange').with_value('glance') }
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_notification_topic').with_value('notifications') }
@@ -105,7 +105,7 @@ describe 'glance::notify::rabbitmq' do
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value('localhost2:5673') }
     it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true') }
-    it { is_expected.to contain_glance_api_config('DEFAULT/amqp_durable_queues').with_value('true') }
+    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
   end
 
   describe 'when passing params for multiple rabbit hosts' do
@@ -143,6 +143,6 @@ describe 'glance::notify::rabbitmq' do
         :rabbit_password        => 'pass'
       }
     end
-    it { is_expected.to contain_glance_api_config('DEFAULT/amqp_durable_queues').with_value('true') }
+    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
   end
 end
