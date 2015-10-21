@@ -285,6 +285,7 @@ class glance::api(
   include ::glance::policy
   include ::glance::api::db
   include ::glance::api::logging
+  include ::glance::cache::logging
   require keystone::python
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
@@ -343,8 +344,6 @@ class glance::api(
   }
 
   glance_cache_config {
-    'DEFAULT/verbose':                value => pick($verbose, false);
-    'DEFAULT/debug':                  value => pick($debug, false);
     'DEFAULT/image_cache_stall_time': value => $image_cache_stall_time;
     'DEFAULT/image_cache_max_size':   value => $image_cache_max_size;
     'glance_store/os_region_name':    value => $os_region_name;
