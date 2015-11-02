@@ -6,13 +6,31 @@ describe 'glance::db::sync' do
 
     it 'runs glance-manage db_sync' do
       is_expected.to contain_exec('glance-manage db_sync').with(
-        :command     => 'glance-manage --config-file=/etc/glance/glance-registry.conf db_sync',
+        :command     => 'glance-manage  db_sync',
         :path        => '/usr/bin',
         :user        => 'glance',
         :refreshonly => 'true',
         :logoutput   => 'on_failure'
       )
     end
+
+    describe "overriding extra_params" do
+      let :params do
+        {
+          :extra_params => '--config-file /etc/glance/glance.conf',
+        }
+      end
+
+      it {is_expected.to contain_exec('glance-manage db_sync').with(
+        :command     => 'glance-manage --config-file /etc/glance/glance.conf db_sync',
+        :path        => '/usr/bin',
+        :user        => 'glance',
+        :refreshonly => 'true',
+        :logoutput   => 'on_failure'
+      )
+      }
+    end
+
 
   end
 
