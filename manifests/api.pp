@@ -185,11 +185,20 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to false, not set
 #
-# [*known_stores*]
-#   (optional)List of which store classes and store class locations are
+# [*stores*]
+#   (optional) List of which store classes and store class locations are
 #    currently known to glance at startup.
 #    Defaults to false.
 #    Example: ['glance.store.filesystem.Store','glance.store.http.Store']
+#
+# [*default_store*]
+#   (optional) The default backend store, should be given as a string. Value
+#   must be provided if more than one store is listed in 'stores'.
+#   Defaults to undef
+#
+# [*multi_store*]
+#   (optional) Boolean describing if multiple backends will be configured
+#   Defaults to false
 #
 # [*image_cache_dir*]
 #   (optional) Base directory that the Image Cache uses.
@@ -234,6 +243,15 @@
 #       try_sleep: 10
 #   Defaults to {}
 #
+#  === deprecated parameters:
+#
+# [*known_stores*]
+#   (optional) DEPRECATED List of which store classes and store class
+#   locations are currently known to glance at startup. This parameter
+#   should be removed in the N release.
+#   Defaults to false.
+#   Example: ['glance.store.filesystem.Store','glance.store.http.Store']
+#
 class glance::api(
   $keystone_password,
   $package_ensure           = 'present',
@@ -270,7 +288,9 @@ class glance::api(
   $cert_file                = false,
   $key_file                 = false,
   $ca_file                  = false,
-  $known_stores             = false,
+  $stores                   = false,
+  $default_store            = undef,
+  $multi_store              = false,
   $database_connection      = undef,
   $database_idle_timeout    = undef,
   $database_min_pool_size   = undef,
@@ -286,6 +306,8 @@ class glance::api(
   $token_cache_time         = $::os_service_default,
   $validate                 = false,
   $validation_options       = {},
+  # DEPRECATED PARAMETERS
+  $known_stores             = false,
 ) inherits glance {
 
   include ::glance::policy
@@ -337,10 +359,50 @@ class glance::api(
     'glance_store/os_region_name':     value => $os_region_name;
   }
 
-  # known_stores config
-  if $known_stores {
+  # stores config
+  if $stores and $known_stores {
+    fail('known_stores and stores cannot both be assigned values')
+  } elsif $stores {
+    $stores_real = $stores
+  } elsif $known_stores {
+    warning('The known_stores parameter is deprecated, use stores instead')
+    $stores_real = $known_stores
+  }
+  if $default_store {
+    $default_store_real = $default_store
+  }
+  # determine value for glance_store/stores
+  if !empty($stores_real) {
+    if size(any2array($stores_real)) > 1 {
+      $final_stores_real = join($stores_real, ',')
+    } else {
+      $final_stores_real = $stores_real[0]
+    }
+    if !$default_store_real {
+      # set default store based on provided stores when it isn't explicitly set
+      warning("default_store not provided, it will be automatically set to ${stores_real[0]}")
+      $default_store_real = $stores_real[0]
+    }
+  } elsif $default_store_real {
+    # set stores based on default_store if only default_store is provided
+    $final_stores_real = $default_store
+  } else {
+    warning('Glance-api is being provisioned without any stores configured')
+  }
+
+  if $default_store_real and $multi_store {
     glance_api_config {
-      'glance_store/stores':  value => join($known_stores, ',');
+      'glance_store/default_store': value => $default_store_real;
+    }
+  } elsif $multi_store {
+    glance_api_config {
+      'glance_store/default_store': ensure => absent;
+    }
+  }
+
+  if $final_stores_real {
+    glance_api_config {
+      'glance_store/stores': value => $final_stores_real;
     }
   } else {
     glance_api_config {

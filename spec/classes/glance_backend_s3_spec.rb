@@ -42,7 +42,6 @@ describe 'glance::backend::s3' do
           :large_object_chunk_size  => 20,
           :object_buffer_dir        => '/tmp',
           :thread_pools             => 20,
-          :default_store            => false
         }
       end
 
@@ -57,7 +56,6 @@ describe 'glance::backend::s3' do
         is_expected.to contain_glance_api_config('glance_store/s3_store_large_object_chunk_size').with_value('20')
         is_expected.to contain_glance_api_config('glance_store/s3_store_object_buffer_dir').with_value('/tmp')
         is_expected.to contain_glance_api_config('glance_store/s3_store_thread_pools').with_value('20')
-        is_expected.to_not contain_glance_api_config('glance_store/default_store')
       end
 
     end

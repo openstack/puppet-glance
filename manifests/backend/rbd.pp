@@ -31,6 +31,10 @@
 #      to ceph cluster. If value <= 0, no timeout is set and
 #      default librados value is used.
 #
+# [*multi_store*]
+#   (optional) Boolean describing if multiple backends will be configured
+#   Defaults to false
+#
 
 class glance::backend::rbd(
   $rbd_store_user         = undef,
@@ -40,6 +44,7 @@ class glance::backend::rbd(
   $show_image_direct_url  = undef,
   $package_ensure         = 'present',
   $rados_connect_timeout  = '0',
+  $multi_store            = false,
 ) {
   include ::glance::params
 
@@ -48,12 +53,15 @@ class glance::backend::rbd(
   }
 
   glance_api_config {
-    'glance_store/default_store':          value => 'rbd';
     'glance_store/rbd_store_ceph_conf':    value => $rbd_store_ceph_conf;
     'glance_store/rbd_store_user':         value => $rbd_store_user;
     'glance_store/rbd_store_pool':         value => $rbd_store_pool;
     'glance_store/rbd_store_chunk_size':   value => $rbd_store_chunk_size;
     'glance_store/rados_connect_timeout':  value => $rados_connect_timeout;
+  }
+
+  if !$multi_store {
+    glance_api_config { 'glance_store/default_store': value => 'rbd'; }
   }
 
   package { 'python-ceph':

@@ -32,6 +32,7 @@ describe 'glance::backend::cinder' do
 
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('glance_store/default_store').with_value('cinder')
+        is_expected.to contain_glance_api_config('glance_store/default_store').with_value('cinder')
         is_expected.to contain_glance_api_config('glance_store/cinder_api_insecure').with_value(false)
         is_expected.to contain_glance_api_config('glance_store/cinder_catalog_info').with_value('volume:cinder:publicURL')
         is_expected.to contain_glance_api_config('glance_store/cinder_http_retries').with_value('3')
@@ -58,7 +59,6 @@ describe 'glance::backend::cinder' do
         }
       end
       it 'configures glance-api.conf' do
-        is_expected.to contain_glance_api_config('glance_store/default_store').with_value('cinder')
         is_expected.to contain_glance_api_config('glance_store/cinder_api_insecure').with_value(true)
         is_expected.to contain_glance_api_config('glance_store/cinder_ca_certificates_file').with_value('/etc/ssh/ca.crt')
         is_expected.to contain_glance_api_config('glance_store/cinder_catalog_info').with_value('volume:cinder:internalURL')

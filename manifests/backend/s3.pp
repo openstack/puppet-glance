@@ -46,9 +46,15 @@
 #    (Optional) The number of thread pools to perform a multipart upload in S3.
 #    Default: 10
 #
+# [*multi_store*]
+#   (optional) Boolean describing if multiple backends will be configured
+#   Defaults to false
+#
+#  === deprecated parameters:
+#
 #  [*default_store*]
-#    (Optional) Whether to set S3 as the default backend store.
-#    Default: true
+#   (Optional) DEPRECATED Whether to set S3 as the default backend store.
+#   Default: undef
 #
 class glance::backend::s3(
   $access_key,
@@ -61,7 +67,9 @@ class glance::backend::s3(
   $large_object_chunk_size  = 10,
   $object_buffer_dir        = undef,
   $thread_pools             = 10,
-  $default_store            = true
+  $multi_store              = false,
+  # deprecated parameters
+  $default_store            = undef,
 ) {
 
   if !is_integer($large_object_chunk_size) or $large_object_chunk_size < 5 {
@@ -70,6 +78,10 @@ class glance::backend::s3(
 
   if !($bucket_url_format in ['subdomain', 'path']) {
     fail('glance::backend::s3::bucket_url_format must be either "subdomain" or "path"')
+  }
+
+  if $default_store {
+    warning('The default_store parameter is deprecated in glance::backend::s3, you should declare it in glance::api')
   }
 
   glance_api_config {
@@ -84,14 +96,14 @@ class glance::backend::s3(
     'glance_store/s3_store_thread_pools':            value => $thread_pools;
   }
 
+  if !$multi_store {
+    glance_api_config { 'glance_store/default_store': value => 's3'; }
+  }
+
   if $object_buffer_dir {
     glance_api_config { 'glance_store/s3_store_object_buffer_dir':  value => $object_buffer_dir; }
   } else {
     glance_api_config { 'glance_store/s3_store_object_buffer_dir':  ensure => absent; }
-  }
-
-  if $default_store {
-    glance_api_config { 'glance_store/default_store':   value => 's3'; }
   }
 
 }

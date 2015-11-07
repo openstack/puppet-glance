@@ -57,6 +57,11 @@
 #   connection related issues.
 #    Defaults to '10'
 #
+# [*multi_store*]
+#   (optional) Boolean describing if multiple backends will be configured
+#   Defaults to false
+#
+
 class glance::backend::vsphere(
   $vcenter_host,
   $vcenter_user,
@@ -64,12 +69,13 @@ class glance::backend::vsphere(
   $vcenter_datacenter,
   $vcenter_datastore,
   $vcenter_image_dir,
-  $vcenter_api_insecure = 'False',
+  $vcenter_api_insecure       = 'False',
   $vcenter_task_poll_interval = '5',
-  $vcenter_api_retry_count = '10',
+  $vcenter_api_retry_count    = '10',
+  $multi_store                = false,
 ) {
+
   glance_api_config {
-    'glance_store/default_store': value             => 'vsphere';
     'glance_store/vmware_api_insecure': value       => $vcenter_api_insecure;
     'glance_store/vmware_server_host': value        => $vcenter_host;
     'glance_store/vmware_server_username': value    => $vcenter_user;
@@ -79,5 +85,9 @@ class glance::backend::vsphere(
     'glance_store/vmware_task_poll_interval': value => $vcenter_task_poll_interval;
     'glance_store/vmware_api_retry_count': value    => $vcenter_api_retry_count;
     'glance_store/vmware_datacenter_path': value    => $vcenter_datacenter;
+  }
+
+  if !$multi_store {
+    glance_api_config {  'glance_store/default_store': value => 'vsphere'; }
   }
 }
