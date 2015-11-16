@@ -46,12 +46,10 @@ Puppet::Type.newtype(:glance_cache_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  if Facter['osfamily'].value == 'Debian'
-    autorequire(:package) do
+  autorequire(:package) do
+    if Facter.value(:osfamily) == 'Debian'
       'glance-api'
-    end
-  elsif Facter['osfamily'].value == 'RedHat'
-    autorequire(:package) do
+    elsif Facter.value(:osfamily) == 'RedHat'
       'openstack-glance'
     end
   end
