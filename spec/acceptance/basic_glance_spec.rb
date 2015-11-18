@@ -6,51 +6,10 @@ describe 'glance class' do
 
     it 'should work with no errors' do
       pp= <<-EOS
-      Exec { logoutput => 'on_failure' }
-
-      # Common resources
-      case $::osfamily {
-        'Debian': {
-          include ::apt
-          class { '::openstack_extras::repo::debian::ubuntu':
-            release         => 'liberty',
-            package_require => true,
-          }
-        }
-        'RedHat': {
-          class { '::openstack_extras::repo::redhat::redhat':
-            release => 'liberty',
-          }
-          package { 'openstack-selinux': ensure => 'latest' }
-        }
-        default: {
-          fail("Unsupported osfamily (${::osfamily})")
-        }
-      }
-
-      class { '::mysql::server': }
-
-      # Keystone resources, needed by Glance to run
-      class { '::keystone::db::mysql':
-        # https://bugs.launchpad.net/puppet-keystone/+bug/1446375
-        collate  => 'utf8_general_ci',
-        password => 'keystone',
-      }
-      class { '::keystone':
-        verbose             => true,
-        debug               => true,
-        database_connection => 'mysql://keystone:keystone@127.0.0.1/keystone',
-        admin_token         => 'admin_token',
-        enabled             => true,
-      }
-      class { '::keystone::roles::admin':
-        email    => 'test@example.tld',
-        password => 'a_big_secret',
-      }
-      class { '::keystone::endpoint':
-        public_url => "https://${::fqdn}:5000/",
-        admin_url  => "https://${::fqdn}:35357/",
-      }
+      include ::openstack_integration
+      include ::openstack_integration::repos
+      include ::openstack_integration::mysql
+      include ::openstack_integration::keystone
 
       # Glance resources
       include ::glance
