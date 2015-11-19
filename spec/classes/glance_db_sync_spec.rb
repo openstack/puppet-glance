@@ -6,7 +6,7 @@ describe 'glance::db::sync' do
 
     it 'runs glance-manage db_sync' do
       is_expected.to contain_exec('glance-manage db_sync').with(
-        :command     => 'glance-manage  db_sync',
+        :command     => 'glance-manage --config-file /etc/glance/glance-registry.conf db_sync',
         :path        => '/usr/bin',
         :user        => 'glance',
         :refreshonly => 'true',
