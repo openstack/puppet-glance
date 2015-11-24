@@ -399,7 +399,8 @@ describe 'glance::api' do
   describe 'on RedHat platforms' do
     let :facts do
       @default_facts.merge({
-        :osfamily       => 'RedHat',
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '7',
       })
     end
     let(:params) { default_params }
