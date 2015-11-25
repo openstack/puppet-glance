@@ -1,3 +1,44 @@
+##2015-11-25 - 7.0.0
+###Summary
+
+This is a backwards-incompatible major release for OpenStack Liberty.
+
+####Backwards-incompatible changes
+- remove deprecated mysql_module
+- change section name for AMQP qpid parameters
+- change section name for AMQP rabbit parameters
+
+####Features
+- add support for RabbitMQ connection heartbeat
+- add tag to package and service resources
+- add glance::db::sync
+- add an ability to manage use_stderr parameter
+- reflect provider change in puppet-openstacklib
+- put all the logging related parameters to the logging class
+- allow customization of db sync command line
+- add S3 backend configuration for glance
+- add rados_connect_timeout parameter in glance config
+- add ability to specify number of workers for glance-registry service
+- use OpenstackClient for glance_image auth
+
+####Bugfixes
+- rely on autorequire for config resource ordering
+- make sure Facter is only executed on agent
+- file backend: do not inherit from glance::api
+- glance_image: hardcode os-image-api-version to 1
+- make sure Glance_image is executed after Keystone_endpoint
+- solve duplicate declaration issue for python-openstackclient
+- append openstacklib/lib to load path for type
+
+####Maintenance
+- fix rspec 3.x syntax
+- initial msync run for all Puppet OpenStack modules
+- try to use zuul-cloner to prepare fixtures
+- remove class_parameter_defaults puppet-lint check
+- acceptance: use common bits from puppet-openstack-integration
+- fix unit tests against Puppet 4.3.0
+- require at least 4.2.0 of stdlib
+
 ##2015-10-10 - 6.1.0
 ###Summary
 
