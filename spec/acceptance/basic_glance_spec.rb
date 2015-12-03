@@ -3,9 +3,7 @@ require 'spec_helper_acceptance'
 describe 'glance class' do
 
   context 'default parameters' do
-
-    it 'should work with no errors' do
-      pp= <<-EOS
+    pp= <<-EOS
       include ::openstack_integration
       include ::openstack_integration::repos
       include ::openstack_integration::mysql
@@ -41,8 +39,29 @@ describe 'glance class' do
         is_public        => 'yes',
         source           => 'http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-disk.img',
       }
-      EOS
+    EOS
 
+    it 'should configure the glance endpoint before the glance-api service uses it' do
+      pp2 = pp + "Service['glance-api'] -> Keystone_endpoint['RegionOne/glance']"
+      expect(apply_manifest(pp2, :expect_failures => true, :noop => true).stderr).to match(/Found 1 dependency cycle/i)
+    end
+
+    it 'should configure the glance user before the glance-api service uses it' do
+      pp2 = pp + "Service['glance-api'] -> Keystone_user_role['glance@services']"
+      expect(apply_manifest(pp2, :expect_failures => true, :noop => true).stderr).to match(/Found 1 dependency cycle/i)
+    end
+
+    it 'should configure the glance user before the glance-registry service uses it' do
+      pp2 = pp + "Service['glance-registry'] -> Keystone_user_role['glance@services']"
+      expect(apply_manifest(pp2, :expect_failures => true, :noop => true).stderr).to match(/Found 1 dependency cycle/i)
+    end
+
+    it 'should configure the glance-api service before using it to provision glance_images' do
+      pp2 = pp + "Glance_image['test_image'] -> Service['glance-api']"
+      expect(apply_manifest(pp2, :expect_failures => true, :noop => true).stderr).to match(/Found 1 dependency cycle/i)
+    end
+
+    it 'should work with no errors' do
       # Run it twice and test for idempotency
       apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes => true)

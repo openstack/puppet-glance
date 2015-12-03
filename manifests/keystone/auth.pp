@@ -182,7 +182,7 @@ class glance::keystone::auth(
   $real_service_name = pick($service_name, $auth_name)
 
   if $configure_endpoint {
-    Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'glance-api' |>
+    Keystone_endpoint["${region}/${real_service_name}"]  ~> Service<| title == 'glance-api' |>
     Keystone_endpoint["${region}/${real_service_name}"] -> Glance_image<||>
   }
 
@@ -203,8 +203,8 @@ class glance::keystone::auth(
   }
 
   if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'glance-registry' |>
-    Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'glance-api' |>
+    Keystone_user_role["${auth_name}@${tenant}"] ~> Service<| title == 'glance-registry' |>
+    Keystone_user_role["${auth_name}@${tenant}"] ~> Service<| title == 'glance-api' |>
   }
 
 }
