@@ -1,6 +1,7 @@
 # == Class: glance::notify::qpid
 #
 # used to configure qpid notifications for glance
+# Deprecated class
 #
 # === Parameters:
 #
@@ -24,20 +25,12 @@
 #   Defaults to tcp.
 #
 class glance::notify::qpid(
-  $qpid_password,
-  $qpid_username = 'guest',
-  $qpid_hostname = 'localhost',
-  $qpid_port     = '5672',
-  $qpid_protocol = 'tcp'
+  $qpid_password = undef,
+  $qpid_username = undef,
+  $qpid_hostname = undef,
+  $qpid_port     = undef,
+  $qpid_protocol = undef
 ) inherits glance::api {
 
-  glance_api_config {
-    'DEFAULT/notifier_driver':           value => 'qpid';
-    'oslo_messaging_qpid/qpid_hostname': value => $qpid_hostname;
-    'oslo_messaging_qpid/qpid_port':     value => $qpid_port;
-    'oslo_messaging_qpid/qpid_protocol': value => $qpid_protocol;
-    'oslo_messaging_qpid/qpid_username': value => $qpid_username;
-    'oslo_messaging_qpid/qpid_password': value => $qpid_password, secret => true;
-  }
-
+  warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
 }
