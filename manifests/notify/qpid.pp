@@ -31,6 +31,8 @@ class glance::notify::qpid(
   $qpid_protocol = 'tcp'
 ) inherits glance::api {
 
+  warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
+
   glance_api_config {
     'DEFAULT/notifier_driver':           value => 'qpid';
     'oslo_messaging_qpid/qpid_hostname': value => $qpid_hostname;
