@@ -115,11 +115,32 @@
 #
 # [*database_connection*]
 #   (optional) Connection url to connect to nova database.
-#   Defaults to 'sqlite:///var/lib/glance/glance.sqlite'
+#   Defaults to undef
 #
 # [*database_idle_timeout*]
 #   (optional) Timeout before idle db connections are reaped.
-#   Defaults to 3600
+#   Defaults to undef
+#
+# [*database_max_retries*]
+#   (Optional) Maximum number of database connection retries during startup.
+#   Set to -1 to specify an infinite retry count.
+#   Defaults to undef.
+#
+# [*database_retry_interval*]
+#   (optional) Interval between retries of opening a database connection.
+#   Defaults to undef.
+#
+# [*database_min_pool_size*]
+#   (optional) Minimum number of SQL connections to keep open in a pool.
+#   Defaults to undef.
+#
+# [*database_max_pool_size*]
+#   (optional) Maximum number of SQL connections to keep open in a pool.
+#   Defaults to undef.
+#
+# [*database_max_overflow*]
+#   (optional) If set, use this value for max_overflow with sqlalchemy.
+#   Defaults to undef.
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging.
@@ -219,8 +240,13 @@ class glance::api(
   $key_file                 = false,
   $ca_file                  = false,
   $known_stores             = false,
-  $database_connection      = 'sqlite:///var/lib/glance/glance.sqlite',
-  $database_idle_timeout    = 3600,
+  $database_connection      = undef,
+  $database_idle_timeout    = undef,
+  $database_min_pool_size   = undef,
+  $database_max_pool_size   = undef,
+  $database_max_retries     = undef,
+  $database_retry_interval  = undef,
+  $database_max_overflow    = undef,
   $image_cache_dir          = '/var/lib/glance/image-cache',
   $os_region_name           = 'RegionOne',
   $validate                 = false,
@@ -234,6 +260,7 @@ class glance::api(
 ) inherits glance {
 
   include ::glance::policy
+  include ::glance::api::db
   include ::glance::api::logging
   require keystone::python
 
@@ -263,23 +290,6 @@ class glance::api(
     mode    => '0640',
     notify  => Service['glance-api'],
     require => Class['glance']
-  }
-
-  if $database_connection {
-    if($database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-      require 'mysql::bindings'
-      require 'mysql::bindings::python'
-    } elsif($database_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
-
-    } elsif($database_connection =~ /sqlite:\/\//) {
-
-    } else {
-      fail("Invalid db connection ${database_connection}")
-    }
-    glance_api_config {
-      'database/connection':   value => $database_connection, secret => true;
-      'database/idle_timeout': value => $database_idle_timeout;
-    }
   }
 
   # basic service config

@@ -32,8 +32,6 @@ describe 'glance::api' do
       :keystone_tenant          => 'services',
       :keystone_user            => 'glance',
       :keystone_password        => 'ChangeMe',
-      :database_idle_timeout    => '3600',
-      :database_connection      => 'sqlite:///var/lib/glance/glance.sqlite',
       :show_image_direct_url    => false,
       :purge_config             => false,
       :known_stores             => false,
@@ -62,8 +60,6 @@ describe 'glance::api' do
       :keystone_tenant          => 'admin2',
       :keystone_user            => 'admin2',
       :keystone_password        => 'ChangeMe2',
-      :database_idle_timeout    => '36002',
-      :database_connection      => 'mysql:///var:lib@glance/glance',
       :show_image_direct_url    => true,
       :image_cache_dir          => '/tmp/glance',
       :os_region_name           => 'RegionOne2',
@@ -84,6 +80,7 @@ describe 'glance::api' do
       it { is_expected.to contain_class 'glance' }
       it { is_expected.to contain_class 'glance::policy' }
       it { is_expected.to contain_class 'glance::api::logging' }
+      it { is_expected.to contain_class 'glance::api::db' }
 
       it { is_expected.to contain_service('glance-api').with(
         'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running': 'stopped',
@@ -126,12 +123,6 @@ describe 'glance::api' do
           is_expected.to contain_glance_cache_config("glance_store/#{config}").with_value(param_hash[config.intern])
           is_expected.to contain_glance_api_config("glance_store/#{config}").with_value(param_hash[config.intern])
         end
-      end
-
-      it 'is_expected.to config db' do
-        is_expected.to contain_glance_api_config('database/connection').with_value(param_hash[:database_connection])
-        is_expected.to contain_glance_api_config('database/connection').with_value(param_hash[:database_connection]).with_secret(true)
-        is_expected.to contain_glance_api_config('database/idle_timeout').with_value(param_hash[:database_idle_timeout])
       end
 
       it 'is_expected.to have no ssl options' do
