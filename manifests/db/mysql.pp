@@ -26,10 +26,6 @@
 #  [*collate*]
 #    the database collation. Optional. Defaults to 'utf8_general_ci'
 #
-#  === Deprecated parameters:
-#
-#  [*cluster_id*] This parameter does nothing
-#
 class glance::db::mysql(
   $password,
   $dbname        = 'glance',
@@ -38,7 +34,6 @@ class glance::db::mysql(
   $allowed_hosts = undef,
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
-  $cluster_id    = 'localzone',
 ) {
 
   validate_string($password)
