@@ -43,6 +43,8 @@ class glance::registry::db (
   $database_max_overflow   = $::os_service_default,
 ) {
 
+  include ::glance::params
+
   # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function
   # to use glance::registry::<myparam> if glance::registry::db::<myparam> isn't specified.
   $database_connection_real     = pick($::glance::registry::database_connection, $database_connection)
@@ -54,13 +56,17 @@ class glance::registry::db (
   $database_max_overflow_real   = pick($::glance::registry::database_max_overflow, $database_max_overflow)
 
   validate_re($database_connection_real,
-    '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+    '^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   case $database_connection_real {
-    /^mysql:\/\//: {
-      $backend_package = false
+    /^mysql(\+pymysql)?:\/\//: {
       require 'mysql::bindings'
       require 'mysql::bindings::python'
+      if $database_connection_real =~ /^mysql\+pymysql/ {
+        $backend_package = $::glance::params::pymysql_package_name
+      } else {
+        $backend_package = false
+      }
     }
     /^postgresql:\/\//: {
       $backend_package = false

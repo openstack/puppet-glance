@@ -22,12 +22,12 @@ describe 'glance class' do
         password => 'a_big_secret',
       }
       class { '::glance::api':
-        database_connection => 'mysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
+        database_connection => 'mysql+pymysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
         verbose             => false,
         keystone_password   => 'a_big_secret',
       }
       class { '::glance::registry':
-        database_connection => 'mysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
+        database_connection => 'mysql+pymysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
         verbose             => false,
         keystone_password   => 'a_big_secret',
       }
