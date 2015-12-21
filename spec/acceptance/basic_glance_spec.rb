@@ -42,7 +42,7 @@ describe 'glance class' do
     EOS
 
     it 'should configure the glance endpoint before the glance-api service uses it' do
-      pp2 = pp + "Service['glance-api'] -> Keystone_endpoint['RegionOne/glance']"
+      pp2 = pp + "Service['glance-api'] -> Keystone_endpoint['RegionOne/glance::image']"
       expect(apply_manifest(pp2, :expect_failures => true, :noop => true).stderr).to match(/Found 1 dependency cycle/i)
     end
 
