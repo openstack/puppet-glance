@@ -22,7 +22,7 @@ describe 'glance::api' do
       :log_file                 => '/var/log/glance/api.log',
       :log_dir                  => '/var/log/glance',
       :auth_type                => 'keystone',
-      :auth_region              => 'RegionOne',
+      :auth_region              => '<SERVICE DEFAULT>',
       :enabled                  => true,
       :manage_service           => true,
       :backlog                  => '4096',

@@ -74,7 +74,7 @@
 #   (optional) The region for the authentication service.
 #   If "use_user_token" is not in effect and using keystone auth,
 #   then region name can be specified.
-#   Defaults to 'RegionOne'.
+#   Defaults to $::os_service_default.
 #
 # [*auth_host*]
 #   (optional) DEPRECATED Host running auth service.
@@ -268,7 +268,7 @@ class glance::api(
   $scrub_time               = $::os_service_default,
   $delayed_delete           = $::os_service_default,
   $auth_type                = 'keystone',
-  $auth_region              = 'RegionOne',
+  $auth_region              = $::os_service_default,
   $auth_uri                 = false,
   $identity_uri             = false,
   $pipeline                 = 'keystone',
@@ -342,8 +342,6 @@ class glance::api(
     notify  => Service['glance-api'],
     require => Class['glance']
   }
-
-  warning('Default value for auth_region parameter is different from OpenStack project defaults')
 
   # basic service config
   glance_api_config {
