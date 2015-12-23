@@ -181,6 +181,15 @@
 #   (optional) Expose image location to trusted clients.
 #   Defaults to false.
 #
+# [*show_multiple_locations*]
+#   (optional) Whether to include the backend image locations in image
+#    properties.
+#   Defaults to $::os_service_default.
+#
+# [*location_strategy*]
+#   (optional) Strategy used to determine the image location order.
+#   Defaults to $::os_service_default.
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the api config.
@@ -271,6 +280,8 @@ class glance::api(
   $use_stderr               = undef,
   $log_facility             = undef,
   $show_image_direct_url    = false,
+  $show_multiple_locations  = $::os_service_default,
+  $location_strategy        = $::os_service_default,
   $purge_config             = false,
   $cert_file                = false,
   $key_file                 = false,
@@ -336,16 +347,18 @@ class glance::api(
 
   # basic service config
   glance_api_config {
-    'DEFAULT/bind_host':             value => $bind_host;
-    'DEFAULT/bind_port':             value => $bind_port;
-    'DEFAULT/backlog':               value => $backlog;
-    'DEFAULT/workers':               value => $workers;
-    'DEFAULT/show_image_direct_url': value => $show_image_direct_url;
-    'DEFAULT/scrub_time':            value => $scrub_time;
-    'DEFAULT/delayed_delete':        value => $delayed_delete;
-    'DEFAULT/image_cache_dir':       value => $image_cache_dir;
-    'DEFAULT/auth_region':           value => $auth_region;
-    'glance_store/os_region_name':   value => $os_region_name;
+    'DEFAULT/bind_host':               value => $bind_host;
+    'DEFAULT/bind_port':               value => $bind_port;
+    'DEFAULT/backlog':                 value => $backlog;
+    'DEFAULT/workers':                 value => $workers;
+    'DEFAULT/show_image_direct_url':   value => $show_image_direct_url;
+    'DEFAULT/show_multiple_locations': value => $show_multiple_locations;
+    'DEFAULT/location_strategy':       value => $location_strategy;
+    'DEFAULT/scrub_time':              value => $scrub_time;
+    'DEFAULT/delayed_delete':          value => $delayed_delete;
+    'DEFAULT/image_cache_dir':         value => $image_cache_dir;
+    'DEFAULT/auth_region':             value => $auth_region;
+    'glance_store/os_region_name':     value => $os_region_name;
   }
 
   # known_stores config
