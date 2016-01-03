@@ -30,7 +30,7 @@ describe 'glance::registry' do
       :keystone_password      => 'ChangeMe',
       :purge_config           => false,
       :sync_db                => true,
-      :os_region_name         => 'RegionOne',
+      :os_region_name         => '<SERVICE DEFAULT>',
       :signing_dir            => '<SERVICE DEFAULT>',
       :token_cache_time       => '<SERVICE DEFAULT>',
     }

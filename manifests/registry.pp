@@ -151,7 +151,7 @@
 #
 #  [*os_region_name*]
 #    (optional) Sets the keystone region to use.
-#    Defaults to 'RegionOne'.
+#    Defaults to $::os_service_default.
 #
 #  [*signing_dir*]
 #    Directory used to cache files related to PKI tokens.
@@ -196,7 +196,7 @@ class glance::registry(
   $key_file                = false,
   $ca_file                 = false,
   $sync_db                 = true,
-  $os_region_name          = 'RegionOne',
+  $os_region_name          = $::os_service_default,
   $signing_dir             = $::os_service_default,
   $token_cache_time        = $::os_service_default,
   # DEPRECATED PARAMETERS
@@ -231,8 +231,6 @@ class glance::registry(
     notify  => Service['glance-registry'],
     require => Class['glance']
   }
-
-  warning('Default value for os_region_name parameter is different from OpenStack project defaults')
 
   glance_registry_config {
     'DEFAULT/workers':                value => $workers;
