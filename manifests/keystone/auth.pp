@@ -25,7 +25,7 @@
 #
 # [*service_name*]
 #    Name of the service. Optional.
-#    Defaults to value of auth_name.
+#    Defaults to 'Image Service'.
 #
 # [*service_type*]
 #    Type of service. Optional. Defaults to 'image'.
@@ -106,7 +106,7 @@ class glance::keystone::auth(
   $configure_endpoint  = true,
   $configure_user      = true,
   $configure_user_role = true,
-  $service_name        = undef,
+  $service_name        = 'Image Service',
   $service_type        = 'image',
   $region              = 'RegionOne',
   $tenant              = 'services',
@@ -180,10 +180,6 @@ class glance::keystone::auth(
   }
 
   $real_service_name = pick($service_name, $auth_name)
-  # TODO(mmagr): change default service names according to default_catalog in next (M) cycle
-  if !$service_name {
-    warning('Note that service_name parameter default value will be changed to "Image Service" (according to Keystone default catalog) in a future release. In case you use different value, please update your manifests accordingly.')
-  }
 
   if $configure_endpoint {
     Keystone_endpoint["${region}/${real_service_name}::${service_type}"]  ~> Service<| title == 'glance-api' |>
