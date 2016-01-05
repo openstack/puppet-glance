@@ -71,29 +71,13 @@
 #  [*auth_type*]
 #    (optional) Authentication type. Defaults to 'keystone'.
 #
-#  [*auth_host*]
-#    (optional) DEPRECATED Address of the admin authentication endpoint.
-#    Defaults to '127.0.0.1'.
-#
-#  [*auth_port*]
-#    (optional) DEPRECATED Port of the admin authentication endpoint. Defaults to '35357'.
-#
-#  [*auth_admin_prefix*]
-#    (optional) DEPRECATED path part of the auth url.
-#    This allow admin auth URIs like http://auth_host:35357/keystone/admin.
-#    (where '/keystone/admin' is auth_admin_prefix)
-#    Defaults to false for empty. If defined, should be a string with a leading '/' and no trailing '/'.
-#
-#  [*auth_protocol*]
-#    (optional) DEPRECATED Protocol to communicate with the admin authentication endpoint.
-#    Defaults to 'http'. Should be 'http' or 'https'.
-#
 #  [*auth_uri*]
 #    (optional) Complete public Identity API endpoint.
+#    Defaults to 'http://127.0.0.1:5000/'.
 #
 #  [*identity_uri*]
 #    (optional) Complete admin Identity API endpoint.
-#    Defaults to: false
+#    Defaults to 'http://127.0.0.1:35357/'.
 #
 #  [*keystone_tenant*]
 #    (optional) administrative tenant name to connect to keystone.
@@ -181,8 +165,8 @@ class glance::registry(
   $database_retry_interval = undef,
   $database_max_overflow   = undef,
   $auth_type               = 'keystone',
-  $auth_uri                = false,
-  $identity_uri            = false,
+  $auth_uri                = 'http://127.0.0.1:5000/',
+  $identity_uri            = 'http://127.0.0.1:35357/',
   $keystone_tenant         = 'services',
   $keystone_user           = 'glance',
   $pipeline                = 'keystone',
@@ -199,11 +183,6 @@ class glance::registry(
   $os_region_name          = $::os_service_default,
   $signing_dir             = $::os_service_default,
   $token_cache_time        = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $auth_host               = '127.0.0.1',
-  $auth_port               = '35357',
-  $auth_admin_prefix       = false,
-  $auth_protocol           = 'http',
 ) inherits glance {
 
   include ::glance::registry::logging
@@ -239,61 +218,6 @@ class glance::registry(
     'glance_store/os_region_name':    value => $os_region_name;
   }
 
-  if $identity_uri {
-    glance_registry_config { 'keystone_authtoken/identity_uri': value => $identity_uri; }
-  } else {
-    glance_registry_config { 'keystone_authtoken/identity_uri': ensure => absent; }
-  }
-
-  if $auth_uri {
-    glance_registry_config { 'keystone_authtoken/auth_uri': value => $auth_uri; }
-  } else {
-    glance_registry_config { 'keystone_authtoken/auth_uri': value => "${auth_protocol}://${auth_host}:5000/"; }
-  }
-
-  # if both auth_uri and identity_uri are set we skip these deprecated settings entirely
-  if !$auth_uri or !$identity_uri {
-
-    if $auth_host {
-      warning('The auth_host parameter is deprecated. Please use auth_uri and identity_uri instead.')
-      glance_registry_config { 'keystone_authtoken/auth_host': value => $auth_host; }
-    } else {
-      glance_registry_config { 'keystone_authtoken/auth_host': ensure => absent; }
-    }
-
-    if $auth_port {
-      warning('The auth_port parameter is deprecated. Please use auth_uri and identity_uri instead.')
-      glance_registry_config { 'keystone_authtoken/auth_port': value => $auth_port; }
-    } else {
-      glance_registry_config { 'keystone_authtoken/auth_port': ensure => absent; }
-    }
-
-    if $auth_protocol {
-      warning('The auth_protocol parameter is deprecated. Please use auth_uri and identity_uri instead.')
-      glance_registry_config { 'keystone_authtoken/auth_protocol': value => $auth_protocol; }
-    } else {
-      glance_registry_config { 'keystone_authtoken/auth_protocol': ensure => absent; }
-    }
-
-    if $auth_admin_prefix {
-      warning('The auth_admin_prefix  parameter is deprecated. Please use auth_uri and identity_uri instead.')
-      validate_re($auth_admin_prefix, '^(/.+[^/])?$')
-      glance_registry_config {
-        'keystone_authtoken/auth_admin_prefix': value => $auth_admin_prefix;
-      }
-    } else {
-      glance_registry_config { 'keystone_authtoken/auth_admin_prefix': ensure => absent; }
-    }
-
-  } else {
-    glance_registry_config {
-      'keystone_authtoken/auth_host': ensure => absent;
-      'keystone_authtoken/auth_port': ensure => absent;
-      'keystone_authtoken/auth_protocol': ensure => absent;
-      'keystone_authtoken/auth_admin_prefix': ensure => absent;
-    }
-  }
-
   # Set the pipeline, it is allowed to be blank
   if $pipeline != '' {
     validate_re($pipeline, '^(\w+([+]\w+)*)*$')
@@ -314,6 +238,8 @@ class glance::registry(
       'keystone_authtoken/admin_password':    value => $keystone_password, secret => true;
       'keystone_authtoken/token_cache_time':  value => $token_cache_time;
       'keystone_authtoken/signing_dir':       value => $signing_dir;
+      'keystone_authtoken/auth_uri':          value => $auth_uri;
+      'keystone_authtoken/identity_uri':      value => $identity_uri;
     }
   }
 

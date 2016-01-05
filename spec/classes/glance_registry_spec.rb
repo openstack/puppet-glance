@@ -21,10 +21,8 @@ describe 'glance::registry' do
       :enabled                => true,
       :manage_service         => true,
       :auth_type              => 'keystone',
-      :auth_host              => '127.0.0.1',
-      :auth_port              => '35357',
-      :auth_protocol          => 'http',
       :auth_uri               => 'http://127.0.0.1:5000/',
+      :identity_uri           => 'http://127.0.0.1:35357/',
       :keystone_tenant        => 'services',
       :keystone_user          => 'glance',
       :keystone_password      => 'ChangeMe',
@@ -44,10 +42,8 @@ describe 'glance::registry' do
       :workers                => '5',
       :enabled                => false,
       :auth_type              => 'keystone',
-      :auth_host              => '127.0.0.1',
-      :auth_port              => '35357',
-      :auth_protocol          => 'http',
-      :auth_uri               => 'http://127.0.0.1:5000/',
+      :auth_uri               => 'http://127.0.0.1:5000/v2.0',
+      :identity_uri           => 'http://127.0.0.1:35357/v2.0',
       :keystone_tenant        => 'admin',
       :keystone_user          => 'admin',
       :keystone_password      => 'ChangeMe',
@@ -96,13 +92,11 @@ describe 'glance::registry' do
           is_expected.to contain_glance_registry_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
         end
         [
-         'auth_host',
-         'auth_port',
-         'auth_protocol'
+         'auth_uri',
+         'identity_uri'
         ].each do |config|
           is_expected.to contain_glance_registry_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
         end
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
         if param_hash[:auth_type] == 'keystone'
           is_expected.to contain_glance_registry_config("paste_deploy/flavor").with_value('keystone')
           is_expected.to contain_glance_registry_config("keystone_authtoken/admin_tenant_name").with_value(param_hash[:keystone_tenant])
@@ -188,38 +182,6 @@ describe 'glance::registry' do
     end
   end
 
-  describe 'with overriden auth_admin_prefix' do
-    let :params do
-      {
-        :keystone_password => 'ChangeMe',
-        :auth_admin_prefix => '/keystone/main'
-      }
-    end
-
-    it { is_expected.to contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_value('/keystone/main') }
-  end
-
-  [
-    '/keystone/',
-    'keystone/',
-    'keystone',
-    '/keystone/admin/',
-    'keystone/admin/',
-    'keystone/admin'
-  ].each do |auth_admin_prefix|
-    describe "with auth_admin_prefix_containing incorrect value #{auth_admin_prefix}" do
-      let :params do
-        {
-          :keystone_password => 'ChangeMe',
-          :auth_admin_prefix => auth_admin_prefix
-        }
-      end
-
-      it { expect { is_expected.to contain_glance_registry_config('filter:authtoken/auth_admin_prefix') }.to\
-        raise_error(Puppet::Error, /validate_re\(\): "#{auth_admin_prefix}" does not match/) }
-    end
-  end
-
   describe 'with ssl options' do
     let :params do
       default_params.merge({
@@ -233,47 +195,6 @@ describe 'glance::registry' do
       it { is_expected.to contain_glance_registry_config('DEFAULT/ca_file').with_value('/tmp/ca_file') }
       it { is_expected.to contain_glance_registry_config('DEFAULT/cert_file').with_value('/tmp/cert_file') }
       it { is_expected.to contain_glance_registry_config('DEFAULT/key_file').with_value('/tmp/key_file') }
-    end
-  end
-
-
-  describe 'with identity and auth settings' do
-    let :params do
-      {
-        :keystone_password => 'ChangeMe',
-      }
-    end
-    context 'with custom keystone identity_uri' do
-      before do
-        params.merge!({
-          :identity_uri => 'https://foo.bar:1234/',
-        })
-      end
-      it 'configures identity_uri' do
-        is_expected.to contain_glance_registry_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
-        # since only auth_uri is set the deprecated auth parameters is_expected.to
-        # still get set in case they are still in use
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_host').with_value('127.0.0.1');
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_port').with_value('35357');
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_protocol').with_value('http');
-      end
-    end
-
-    context 'with custom keystone identity_uri and auth_uri' do
-      before do
-        params.merge!({
-          :identity_uri => 'https://foo.bar:35357/',
-          :auth_uri => 'https://foo.bar:5000/v2.0/',
-        })
-      end
-      it 'configures identity_uri' do
-        is_expected.to contain_glance_registry_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_host').with_ensure('absent')
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_port').with_ensure('absent')
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_protocol').with_ensure('absent')
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
-      end
     end
   end
 
