@@ -27,7 +27,7 @@ describe 'glance::backend::swift' do
       is_expected.to contain_glance_api_config('glance_store/swift_store_create_container_on_put').with_value(false)
       is_expected.to contain_glance_api_config('glance_store/swift_store_endpoint_type').with_value('internalURL')
       is_expected.to contain_glance_api_config('glance_store/swift_store_region').with_value(nil)
-      is_expected.to contain_glance_api_config('DEFAULT/swift_store_config_file').with_value('/etc/glance/glance-api.conf')
+      is_expected.to contain_glance_api_config('glance_store/swift_store_config_file').with_value('/etc/glance/glance-api.conf')
       is_expected.to contain_glance_api_config('glance_store/default_swift_reference').with_value('ref1')
       is_expected.to contain_glance_api_config('ref1/key').with_value('key')
       is_expected.to contain_glance_api_config('ref1/user').with_value('user')
