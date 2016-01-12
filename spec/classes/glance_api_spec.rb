@@ -31,6 +31,7 @@ describe 'glance::api' do
       :keystone_user            => 'glance',
       :keystone_password        => 'ChangeMe',
       :token_cache_time         => '<SERVICE DEFAULT>',
+      :memcached_servers        => '<SERVICE DEFAULT>',
       :show_image_direct_url    => false,
       :show_multiple_locations  => '<SERVICE DEFAULT>',
       :location_strategy        => '<SERVICE DEFAULT>',
@@ -158,7 +159,7 @@ describe 'glance::api' do
       it 'is_expected.to configure itself for keystone if that is the auth_type' do
         if params[:auth_type] == 'keystone'
           is_expected.to contain('paste_deploy/flavor').with_value('keystone+cachemanagement')
-
+          is_expected.to contain_glance_api_config('keystone_authtoken/memcached_servers').with_value(param_hash[:memcached_servers])
           ['admin_tenant_name', 'admin_user', 'admin_password', 'token_cache_time', 'signing_dir', 'auth_uri', 'identity_uri'].each do |config|
             is_expected.to contain_glance_api_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
           end

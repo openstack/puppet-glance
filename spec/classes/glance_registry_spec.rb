@@ -31,6 +31,7 @@ describe 'glance::registry' do
       :os_region_name         => '<SERVICE DEFAULT>',
       :signing_dir            => '<SERVICE DEFAULT>',
       :token_cache_time       => '<SERVICE DEFAULT>',
+      :memcached_servers      => '<SERVICE DEFAULT>',
     }
   end
 
@@ -99,6 +100,7 @@ describe 'glance::registry' do
         end
         if param_hash[:auth_type] == 'keystone'
           is_expected.to contain_glance_registry_config("paste_deploy/flavor").with_value('keystone')
+          is_expected.to contain_glance_registry_config('keystone_authtoken/memcached_servers').with_value(param_hash[:memcached_servers])
           is_expected.to contain_glance_registry_config("keystone_authtoken/admin_tenant_name").with_value(param_hash[:keystone_tenant])
           is_expected.to contain_glance_registry_config("keystone_authtoken/admin_user").with_value(param_hash[:keystone_user])
           is_expected.to contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password])
