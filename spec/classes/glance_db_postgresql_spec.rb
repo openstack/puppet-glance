@@ -2,21 +2,13 @@ require 'spec_helper'
 
 describe 'glance::db::postgresql' do
 
-  let :req_params do
-    { :password => 'pw' }
-  end
+  shared_examples_for 'glance::db::postgresql' do
+    let :req_params do
+      { :password => 'pw' }
+    end
 
-  let :pre_condition do
-    'include postgresql::server'
-  end
-
-  context 'on a RedHat osfamily' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily                 => 'RedHat',
-        :operatingsystemrelease   => '7.0',
-        :concat_basedir => '/var/lib/puppet/concat'
-      })
+    let :pre_condition do
+      'include postgresql::server'
     end
 
     context 'with only required parameters' do
@@ -29,30 +21,17 @@ describe 'glance::db::postgresql' do
         :password => 'md56c7c03b193c2c1e0667bc5bd891703db'
       )}
     end
-
   end
 
-  context 'on a Debian osfamily' do
-    let :facts do
-      @default_facts.merge({
-        :operatingsystemrelease => '7.8',
-        :operatingsystem        => 'Debian',
-        :osfamily               => 'Debian',
-        :concat_basedir => '/var/lib/puppet/concat'
-      })
-    end
-
-    context 'with only required parameters' do
-      let :params do
-        req_params
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts({ :concat_basedir => '/var/lib/puppet/concat' }))
       end
 
-      it { is_expected.to contain_postgresql__server__db('glance').with(
-        :user     => 'glance',
-        :password => 'md56c7c03b193c2c1e0667bc5bd891703db'
-      )}
+      it_configures 'glance::db::postgresql'
     end
-
   end
-
 end

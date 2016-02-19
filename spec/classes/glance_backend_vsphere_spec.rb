@@ -73,27 +73,17 @@ describe 'glance::backend::vsphere' do
         is_expected.to contain_glance_api_config('glance_store/vmware_api_retry_count').with_value('11')
       end
     end
-
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily       => 'Debian',
-      })
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      it_configures 'glance with vsphere backend'
     end
-
-    it_configures 'glance with vsphere backend'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily               => 'RedHat',
-        :operatingsystemrelease => '7',
-      })
-    end
-
-    it_configures 'glance with vsphere backend'
   end
 end

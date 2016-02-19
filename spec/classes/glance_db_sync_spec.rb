@@ -30,33 +30,18 @@ describe 'glance::db::sync' do
       )
       }
     end
-
-
   end
 
-  context 'on a RedHat osfamily' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily                 => 'RedHat',
-        :operatingsystemrelease   => '7.0',
-        :concat_basedir => '/var/lib/puppet/concat'
-      })
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts({ :concat_basedir => '/var/lib/puppet/concat' }))
+      end
+
+      it_configures 'glance-dbsync'
     end
-
-    it_configures 'glance-dbsync'
-  end
-
-  context 'on a Debian osfamily' do
-    let :facts do
-      @default_facts.merge({
-        :operatingsystemrelease => '7.8',
-        :operatingsystem        => 'Debian',
-        :osfamily               => 'Debian',
-        :concat_basedir => '/var/lib/puppet/concat'
-      })
-    end
-
-    it_configures 'glance-dbsync'
   end
 
 end

@@ -1,79 +1,85 @@
 require 'spec_helper'
 
 describe 'glance::db::mysql' do
-  let :facts do
-    @default_facts.merge({
-      :osfamily       => 'Debian',
-    })
-  end
-
-  let :pre_condition do
-    'include mysql::server'
-  end
-
-  describe "with default params" do
-    let :params do
-      {
-        :password => 'glancepass1',
-      }
+  shared_examples_for 'glance::db::mysql' do
+    let :pre_condition do
+      'include mysql::server'
     end
 
-    it { is_expected.to contain_openstacklib__db__mysql('glance').with(
-      :password_hash => '*41C910F70EB213CF4CB7B2F561B4995503C0A87B',
-      :charset       => 'utf8',
-      :collate       => 'utf8_general_ci',
-    )}
+    describe "with default params" do
+      let :params do
+        {
+          :password => 'glancepass1',
+        }
+      end
 
-  end
+      it { is_expected.to contain_openstacklib__db__mysql('glance').with(
+        :password_hash => '*41C910F70EB213CF4CB7B2F561B4995503C0A87B',
+        :charset       => 'utf8',
+        :collate       => 'utf8_general_ci',
+      )}
 
-  describe "overriding default params" do
-    let :params do
-      {
-        :password       => 'glancepass2',
-        :dbname         => 'glancedb2',
-        :charset        => 'utf8',
-      }
     end
 
-    it { is_expected.to contain_openstacklib__db__mysql('glance').with(
-      :password_hash => '*6F9A1CB9BD83EE06F3903BDFF9F4188764E694CA',
-      :dbname        => 'glancedb2',
-      :charset       => 'utf8'
-    )}
+    describe "overriding default params" do
+      let :params do
+        {
+          :password       => 'glancepass2',
+          :dbname         => 'glancedb2',
+          :charset        => 'utf8',
+        }
+      end
 
-  end
+      it { is_expected.to contain_openstacklib__db__mysql('glance').with(
+        :password_hash => '*6F9A1CB9BD83EE06F3903BDFF9F4188764E694CA',
+        :dbname        => 'glancedb2',
+        :charset       => 'utf8'
+      )}
 
-  describe "overriding allowed_hosts param to array" do
-    let :params do
-      {
-        :password       => 'glancepass2',
-        :dbname         => 'glancedb2',
-        :allowed_hosts  => ['127.0.0.1','%']
-      }
     end
 
-  end
+    describe "overriding allowed_hosts param to array" do
+      let :params do
+        {
+          :password       => 'glancepass2',
+          :dbname         => 'glancedb2',
+          :allowed_hosts  => ['127.0.0.1','%']
+        }
+      end
 
-  describe "overriding allowed_hosts param to string" do
-    let :params do
-      {
-        :password       => 'glancepass2',
-        :dbname         => 'glancedb2',
-        :allowed_hosts  => '192.168.1.1'
-      }
     end
 
-  end
+    describe "overriding allowed_hosts param to string" do
+      let :params do
+        {
+          :password       => 'glancepass2',
+          :dbname         => 'glancedb2',
+          :allowed_hosts  => '192.168.1.1'
+        }
+      end
 
-  describe "overriding allowed_hosts param equals to host param " do
-    let :params do
-      {
-        :password       => 'glancepass2',
-        :dbname         => 'glancedb2',
-        :allowed_hosts  => '127.0.0.1'
-      }
     end
 
+    describe "overriding allowed_hosts param equals to host param " do
+      let :params do
+        {
+          :password       => 'glancepass2',
+          :dbname         => 'glancedb2',
+          :allowed_hosts  => '127.0.0.1'
+        }
+      end
+    end
   end
 
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      it_configures 'glance::db::mysql'
+    end
+  end
 end

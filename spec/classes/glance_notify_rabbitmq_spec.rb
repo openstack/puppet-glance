@@ -1,165 +1,175 @@
 require 'spec_helper'
 describe 'glance::notify::rabbitmq' do
-  let :facts do
-    @default_facts.merge({
-     :osfamily       => 'Debian',
-    })
-  end
 
-  let :pre_condition do
-    'class { "glance::api": keystone_password => "pass" }'
-  end
-
-  describe 'when defaults with rabbit pass specified' do
-    let :params do
-      {:rabbit_password => 'pass'}
+  shared_examples_for 'glance::notify::rabbitmq' do
+    let :pre_condition do
+      'class { "glance::api": keystone_password => "pass" }'
     end
-    it { is_expected.to contain_glance_api_config('DEFAULT/notification_driver').with_value('messaging') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_password').with_value('pass') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_password').with_value(params[:rabbit_password]).with_secret(true) }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5672') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value('localhost:5672') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('false') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('/') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_notification_exchange').with_value('glance') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_notification_topic').with_value('notifications') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_rate').with_value('2') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
-  end
 
-  describe 'when passing params and use ssl' do
-    let :params do
-      {
-        :rabbit_password        => 'pass',
-        :rabbit_userid          => 'guest2',
-        :rabbit_host            => 'localhost2',
-        :rabbit_port            => '5673',
-        :rabbit_use_ssl         => true,
-        :rabbit_durable_queues  => true,
-        :kombu_reconnect_delay  => '5.0'
-      }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true') }
+    describe 'when defaults with rabbit pass specified' do
+      let :params do
+        {:rabbit_password => 'pass'}
+      end
+      it { is_expected.to contain_glance_api_config('DEFAULT/notification_driver').with_value('messaging') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_password').with_value('pass') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_password').with_value(params[:rabbit_password]).with_secret(true) }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5672') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value('localhost:5672') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('false') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('/') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_notification_exchange').with_value('glance') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_notification_topic').with_value('notifications') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_rate').with_value('2') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
+    end
+
+    describe 'when passing params and use ssl' do
+      let :params do
+        {
+          :rabbit_password        => 'pass',
+          :rabbit_userid          => 'guest2',
+          :rabbit_host            => 'localhost2',
+          :rabbit_port            => '5673',
+          :rabbit_use_ssl         => true,
+          :rabbit_durable_queues  => true,
+          :kombu_reconnect_delay  => '5.0'
+        }
+        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
+        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
+        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
+        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true') }
+        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent') }
+        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent') }
+        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent') }
+        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
+        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_durable_queues').with_value('true') }
+        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('5.0') }
+      end
+    end
+
+    describe 'with rabbit ssl cert parameters' do
+      let :params do
+        {
+          :rabbit_password        => 'pass',
+          :rabbit_use_ssl     => 'true',
+          :kombu_ssl_ca_certs => '/etc/ca.cert',
+          :kombu_ssl_certfile => '/etc/certfile',
+          :kombu_ssl_keyfile  => '/etc/key',
+          :kombu_ssl_version  => 'TLSv1',
+        }
+      end
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/etc/ca.cert') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/etc/certfile') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/etc/key') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
+    end
+
+    describe 'with rabbit ssl disabled' do
+      let :params do
+        {
+          :rabbit_password    => 'pass',
+          :rabbit_use_ssl     => false,
+          :kombu_ssl_ca_certs => 'undef',
+          :kombu_ssl_certfile => 'undef',
+          :kombu_ssl_keyfile  => 'undef',
+          :kombu_ssl_version  => 'TLSv1',
+        }
+      end
+
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_durable_queues').with_value('true') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('5.0') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent') }
+    end
+
+    describe 'when passing params for single rabbit host' do
+      let :params do
+        {
+          :rabbit_password        => 'pass',
+          :rabbit_userid          => 'guest2',
+          :rabbit_host            => 'localhost2',
+          :rabbit_port            => '5673',
+          :rabbit_use_ssl         => true,
+          :rabbit_durable_queues  => true,
+        }
+      end
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value('localhost2:5673') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
+    end
+
+    describe 'when passing params for multiple rabbit hosts' do
+      let :params do
+        {
+          :rabbit_password => 'pass',
+          :rabbit_userid   => 'guest3',
+          :rabbit_hosts    => ['nonlocalhost3:5673', 'nonlocalhost4:5673']
+        }
+      end
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest3') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value(
+                                            'nonlocalhost3:5673,nonlocalhost4:5673') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
+      it { is_expected.to_not contain_glance_api_config('oslo_messaging_rabbit/rabbit_port') }
+      it { is_expected.to_not contain_glance_api_config('oslo_messaging_rabbit/rabbit_host') }
+    end
+
+    describe 'a single rabbit_host with enable ha queues' do
+      let :params do
+         {
+          :rabbit_password  => 'pass',
+          :rabbit_userid    => 'guest3',
+          :rabbit_ha_queues => true,
+         }
+      end
+
+      it 'should contain rabbit_ha_queues' do
+        is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
+      end
+    end
+
+    describe 'when passing params for rabbitmq heartbeat' do
+      let :params do
+        {
+          :rabbit_password                    => 'pass',
+          :rabbit_heartbeat_timeout_threshold => '60',
+          :rabbit_heartbeat_rate              => '10',
+        }
+      end
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
+    end
+
+    describe 'when using deprecated params' do
+      let :params do
+        {
+          :rabbit_durable_queues  => true,
+          :rabbit_password        => 'pass'
+        }
+      end
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
     end
   end
 
-  describe 'with rabbit ssl cert parameters' do
-    let :params do
-      {
-        :rabbit_password        => 'pass',
-        :rabbit_use_ssl     => 'true',
-        :kombu_ssl_ca_certs => '/etc/ca.cert',
-        :kombu_ssl_certfile => '/etc/certfile',
-        :kombu_ssl_keyfile  => '/etc/key',
-        :kombu_ssl_version  => 'TLSv1',
-      }
-    end
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/etc/ca.cert') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/etc/certfile') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/etc/key') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
-  end
 
-  describe 'with rabbit ssl disabled' do
-    let :params do
-      {
-        :rabbit_password    => 'pass',
-        :rabbit_use_ssl     => false,
-        :kombu_ssl_ca_certs => 'undef',
-        :kombu_ssl_certfile => 'undef',
-        :kombu_ssl_keyfile  => 'undef',
-        :kombu_ssl_version  => 'TLSv1',
-      }
-    end
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent') }
-  end
-
-  describe 'when passing params for single rabbit host' do
-    let :params do
-      {
-        :rabbit_password        => 'pass',
-        :rabbit_userid          => 'guest2',
-        :rabbit_host            => 'localhost2',
-        :rabbit_port            => '5673',
-        :rabbit_use_ssl         => true,
-        :rabbit_durable_queues  => true,
-      }
+      it_configures 'glance::notify::rabbitmq'
     end
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value('localhost2:5673') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
-  end
-
-  describe 'when passing params for multiple rabbit hosts' do
-    let :params do
-      {
-        :rabbit_password => 'pass',
-        :rabbit_userid   => 'guest3',
-        :rabbit_hosts    => ['nonlocalhost3:5673', 'nonlocalhost4:5673']
-      }
-    end
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest3') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value(
-                                          'nonlocalhost3:5673,nonlocalhost4:5673') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
-    it { is_expected.to_not contain_glance_api_config('oslo_messaging_rabbit/rabbit_port') }
-    it { is_expected.to_not contain_glance_api_config('oslo_messaging_rabbit/rabbit_host') }
-  end
-
-  describe 'a single rabbit_host with enable ha queues' do
-    let :params do
-       {
-        :rabbit_password  => 'pass',
-        :rabbit_userid    => 'guest3',
-        :rabbit_ha_queues => true,
-       }
-    end
-
-    it 'should contain rabbit_ha_queues' do
-      is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
-    end
-  end
-
-  describe 'when passing params for rabbitmq heartbeat' do
-    let :params do
-      {
-        :rabbit_password                    => 'pass',
-        :rabbit_heartbeat_timeout_threshold => '60',
-        :rabbit_heartbeat_rate              => '10',
-      }
-    end
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
-  end
-
-  describe 'when using deprecated params' do
-    let :params do
-      {
-        :rabbit_durable_queues  => true,
-        :rabbit_password        => 'pass'
-      }
-    end
-    it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
   end
 end

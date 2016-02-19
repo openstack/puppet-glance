@@ -2,28 +2,13 @@ require 'spec_helper'
 
 describe 'glance' do
 
-  let :facts do
-    @default_facts.merge({
-        :osfamily       => 'Debian',
-    })
-  end
-
   let :default_params do
     {}
   end
 
-  [
-    {},
-    {}
-  ].each do |param_set|
-
-    describe "when #{param_set == {} ? "using default" : "specifying"} class parameters" do
-
-      let :param_hash do
-        param_set == {} ? default_params : params
-      end
-
-      let :params do param_set end
+  shared_examples_for 'glance' do
+    describe "when using default class parameters" do
+      let(:params) { default_params }
 
       it { is_expected.to contain_file('/etc/glance/').with(
         'ensure'  => 'directory',
@@ -38,24 +23,13 @@ describe 'glance' do
     end
   end
 
-  describe 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily       => 'Debian',
-      })
-    end
+  shared_examples_for 'glance Debian' do
     let(:params) { default_params }
 
     it { is_expected.to_not contain_package('glance') }
   end
 
-  describe 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily               => 'RedHat',
-        :operatingsystemrelease => '7',
-      })
-    end
+  shared_examples_for 'glance RedHat' do
     let(:params) { default_params }
 
     it { is_expected.to contain_package('openstack-glance').with(
@@ -63,4 +37,16 @@ describe 'glance' do
     )}
   end
 
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      it_configures 'glance'
+      it_configures "glance #{facts[:osfamily]}"
+    end
+  end
 end

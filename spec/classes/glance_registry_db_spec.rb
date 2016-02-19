@@ -52,14 +52,8 @@ describe 'glance::registry::db' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
-    end
-
-    it_configures 'glance::registry::db'
-
-   context 'using pymysql driver' do
+  shared_examples_for 'glance::registry::db Debian' do
+    context 'using pymysql driver' do
       let :params do
         { :database_connection     => 'mysql+pymysql://glance_registry:glance@localhost/glance', }
       end
@@ -74,22 +68,27 @@ describe 'glance::registry::db' do
     end
   end
 
-  context 'on Redhat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily               => 'RedHat',
-        :operatingsystemrelease => '7',
-      })
-    end
-
-    it_configures 'glance::registry::db'
-
+  shared_examples_for 'glance::registry::db RedHat' do
     context 'using pymysql driver' do
       let :params do
         { :database_connection     => 'mysql+pymysql://glance_registry:glance@localhost/glance', }
       end
 
       it { is_expected.not_to contain_package('glance-backend-package') }
+    end
+  end
+
+
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      it_configures 'glance::registry::db'
+      it_configures "glance::registry::db #{facts[:osfamily]}"
     end
   end
 
