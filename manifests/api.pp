@@ -292,7 +292,6 @@ class glance::api(
   include ::glance::api::db
   include ::glance::api::logging
   include ::glance::cache::logging
-  require keystone::python
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages('glance-api',

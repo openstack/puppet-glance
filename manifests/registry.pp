@@ -193,7 +193,6 @@ class glance::registry(
 
   include ::glance::registry::logging
   include ::glance::registry::db
-  require keystone::python
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages( 'glance-registry',
