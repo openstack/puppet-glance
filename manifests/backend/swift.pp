@@ -12,7 +12,7 @@
 #    Required. Swift store key.
 #
 #  [*swift_store_auth_address*]
-#    Optional. Default: '127.0.0.1:5000/v2.0/'
+#    Optional. Default: 'http://127.0.0.1:5000/v2.0/'
 #
 #  [*swift_store_container*]
 #    Optional. Default: 'glance'
@@ -41,7 +41,7 @@
 class glance::backend::swift(
   $swift_store_user,
   $swift_store_key,
-  $swift_store_auth_address = '127.0.0.1:5000/v2.0/',
+  $swift_store_auth_address = 'http://127.0.0.1:5000/v2.0/',
   $swift_store_container = 'glance',
   $swift_store_auth_version = '2',
   $swift_store_large_object_size = '5120',
