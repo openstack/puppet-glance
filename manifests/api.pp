@@ -354,9 +354,10 @@ class glance::api(
     'glance_store/os_region_name':    value => $os_region_name;
   }
 
+  $registry_host_real = normalize_ip_for_uri($registry_host)
   # configure api service to connect registry service
   glance_api_config {
-    'DEFAULT/registry_host':            value => $registry_host;
+    'DEFAULT/registry_host':            value => $registry_host_real;
     'DEFAULT/registry_port':            value => $registry_port;
     'DEFAULT/registry_client_protocol': value => $registry_client_protocol;
   }
