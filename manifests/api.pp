@@ -324,7 +324,6 @@ class glance::api(
     )
   }
 
-  Package[$glance::params::api_package_name] -> File['/etc/glance/']
   Package[$glance::params::api_package_name] -> Class['glance::policy']
 
   # adding all of this stuff b/c it devstack says glance-api uses the
@@ -333,15 +332,6 @@ class glance::api(
   Glance_cache_config<||> ~> Service['glance-api']
   Class['glance::policy'] ~> Service['glance-api']
   Service['glance-api']   ~> Glance_image<||>
-
-  File {
-    ensure  => present,
-    owner   => 'glance',
-    group   => 'glance',
-    mode    => '0640',
-    notify  => Service['glance-api'],
-    require => Class['glance']
-  }
 
   # basic service config
   glance_api_config {
@@ -488,15 +478,6 @@ class glance::api(
     glance_api_config {
       'DEFAULT/ca_file': ensure => absent;
     }
-  }
-
-  resources { 'glance_api_config':
-    purge => $purge_config,
-  }
-
-  file { ['/etc/glance/glance-api.conf',
-          '/etc/glance/glance-api-paste.ini',
-          '/etc/glance/glance-cache.conf']:
   }
 
   if $manage_service {

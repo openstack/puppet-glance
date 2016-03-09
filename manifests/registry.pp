@@ -203,18 +203,7 @@ class glance::registry(
     )
   }
 
-  Package[$glance::params::registry_package_name] -> File['/etc/glance/']
-
   Glance_registry_config<||> ~> Service['glance-registry']
-
-  File {
-    ensure  => present,
-    owner   => 'glance',
-    group   => 'glance',
-    mode    => '0640',
-    notify  => Service['glance-registry'],
-    require => Class['glance']
-  }
 
   glance_registry_config {
     'DEFAULT/workers':                value => $workers;
@@ -278,14 +267,6 @@ class glance::registry(
     }
   }
 
-  resources { 'glance_registry_config':
-    purge => $purge_config
-  }
-
-  file { ['/etc/glance/glance-registry.conf',
-          '/etc/glance/glance-registry-paste.ini']:
-  }
-
   if $sync_db {
     include ::glance::db::sync
   }
@@ -306,7 +287,6 @@ class glance::registry(
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    subscribe  => File['/etc/glance/glance-registry.conf'],
     require    => Class['glance'],
     tag        => 'glance-service',
   }

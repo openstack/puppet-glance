@@ -61,15 +61,14 @@ describe 'glance::registry' do
         it { is_expected.to contain_class 'glance::registry::db' }
         it { is_expected.to contain_class 'glance::registry::logging' }
 
-        it { is_expected.to contain_service('glance-registry').with(
-            'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running' : 'stopped',
-            'enable'     => param_hash[:enabled],
-            'hasstatus'  => true,
-            'hasrestart' => true,
-            'subscribe'  => 'File[/etc/glance/glance-registry.conf]',
-            'require'    => 'Class[Glance]',
-            'tag'        => 'glance-service',
-        )}
+      it { is_expected.to contain_service('glance-registry').with(
+          'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running' : 'stopped',
+          'enable'     => param_hash[:enabled],
+          'hasstatus'  => true,
+          'hasrestart' => true,
+          'require'    => 'Class[Glance]',
+          'tag'        => 'glance-service',
+      )}
 
         it 'is_expected.to not sync the db if sync_db is set to false' do
 
@@ -126,7 +125,6 @@ describe 'glance::registry' do
             'enable'     => false,
             'hasstatus'  => true,
             'hasrestart' => true,
-            'subscribe'  => 'File[/etc/glance/glance-registry.conf]',
             'require'    => 'Class[Glance]',
             'tag'        => 'glance-service',
         )}
