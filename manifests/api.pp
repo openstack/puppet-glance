@@ -175,15 +175,30 @@
 #
 # [*cert_file*]
 #   (optinal) Certificate file to use when starting API server securely
-#   Defaults to false, not set
+#   Defaults to $::os_service_default
 #
 # [*key_file*]
 #   (optional) Private key file to use when starting API server securely
-#   Defaults to false, not set
+#   Defaults to $::os_service_default
 #
 # [*ca_file*]
 #   (optional) CA certificate file to use to verify connecting clients
-#   Defaults to false, not set
+#   Defaults to $::os_service_default
+#
+# [*registry_client_cert_file*]
+#   (optinal) The path to the cert file to use in SSL connections to the
+#   registry server.
+#   Defaults to $::os_service_default
+#
+# [*registry_client_key_file*]
+#   (optinal) The path to the private key file to use in SSL connections to the
+#   registry server.
+#   Defaults to $::os_service_default
+#
+# [*registry_client_ca_file*]
+#   (optinal) The path to the CA certificate file to use in SSL connections to the
+#   registry server.
+#   Defaults to $::os_service_default
 #
 # [*stores*]
 #   (optional) List of which store classes and store class locations are
@@ -254,60 +269,63 @@
 #
 class glance::api(
   $keystone_password,
-  $package_ensure           = 'present',
-  $verbose                  = undef,
-  $debug                    = undef,
-  $bind_host                = '0.0.0.0',
-  $bind_port                = '9292',
-  $backlog                  = '4096',
-  $workers                  = $::processorcount,
-  $log_file                 = undef,
-  $log_dir                  = undef,
-  $registry_host            = '0.0.0.0',
-  $registry_port            = '9191',
-  $registry_client_protocol = 'http',
-  $scrub_time               = $::os_service_default,
-  $delayed_delete           = $::os_service_default,
-  $auth_type                = 'keystone',
-  $auth_region              = $::os_service_default,
-  $auth_uri                 = 'http://127.0.0.1:5000/',
-  $identity_uri             = 'http://127.0.0.1:35357/',
-  $memcached_servers        = $::os_service_default,
-  $pipeline                 = 'keystone',
-  $keystone_tenant          = 'services',
-  $keystone_user            = 'glance',
-  $manage_service           = true,
-  $enabled                  = true,
-  $use_syslog               = undef,
-  $use_stderr               = undef,
-  $log_facility             = undef,
-  $show_image_direct_url    = false,
-  $show_multiple_locations  = $::os_service_default,
-  $location_strategy        = $::os_service_default,
-  $purge_config             = false,
-  $cert_file                = false,
-  $key_file                 = false,
-  $ca_file                  = false,
-  $stores                   = false,
-  $default_store            = undef,
-  $multi_store              = false,
-  $database_connection      = undef,
-  $database_idle_timeout    = undef,
-  $database_min_pool_size   = undef,
-  $database_max_pool_size   = undef,
-  $database_max_retries     = undef,
-  $database_retry_interval  = undef,
-  $database_max_overflow    = undef,
-  $image_cache_max_size     = $::os_service_default,
-  $image_cache_stall_time   = $::os_service_default,
-  $image_cache_dir          = '/var/lib/glance/image-cache',
-  $os_region_name           = 'RegionOne',
-  $signing_dir              = $::os_service_default,
-  $token_cache_time         = $::os_service_default,
-  $validate                 = false,
-  $validation_options       = {},
+  $package_ensure            = 'present',
+  $verbose                   = undef,
+  $debug                     = undef,
+  $bind_host                 = '0.0.0.0',
+  $bind_port                 = '9292',
+  $backlog                   = '4096',
+  $workers                   = $::processorcount,
+  $log_file                  = undef,
+  $log_dir                   = undef,
+  $registry_host             = '0.0.0.0',
+  $registry_port             = '9191',
+  $registry_client_protocol  = 'http',
+  $scrub_time                = $::os_service_default,
+  $delayed_delete            = $::os_service_default,
+  $auth_type                 = 'keystone',
+  $auth_region               = $::os_service_default,
+  $auth_uri                  = 'http://127.0.0.1:5000/',
+  $identity_uri              = 'http://127.0.0.1:35357/',
+  $memcached_servers         = $::os_service_default,
+  $pipeline                  = 'keystone',
+  $keystone_tenant           = 'services',
+  $keystone_user             = 'glance',
+  $manage_service            = true,
+  $enabled                   = true,
+  $use_syslog                = undef,
+  $use_stderr                = undef,
+  $log_facility              = undef,
+  $show_image_direct_url     = false,
+  $show_multiple_locations   = $::os_service_default,
+  $location_strategy         = $::os_service_default,
+  $purge_config              = false,
+  $cert_file                 = $::os_service_default,
+  $key_file                  = $::os_service_default,
+  $ca_file                   = $::os_service_default,
+  $registry_client_cert_file = $::os_service_default,
+  $registry_client_key_file  = $::os_service_default,
+  $registry_client_ca_file   = $::os_service_default,
+  $stores                    = false,
+  $default_store             = undef,
+  $multi_store               = false,
+  $database_connection       = undef,
+  $database_idle_timeout     = undef,
+  $database_min_pool_size    = undef,
+  $database_max_pool_size    = undef,
+  $database_max_retries      = undef,
+  $database_retry_interval   = undef,
+  $database_max_overflow     = undef,
+  $image_cache_max_size      = $::os_service_default,
+  $image_cache_stall_time    = $::os_service_default,
+  $image_cache_dir           = '/var/lib/glance/image-cache',
+  $os_region_name            = 'RegionOne',
+  $signing_dir               = $::os_service_default,
+  $token_cache_time          = $::os_service_default,
+  $validate                  = false,
+  $validation_options        = {},
   # DEPRECATED PARAMETERS
-  $known_stores             = false,
+  $known_stores              = false,
 ) inherits glance {
 
   include ::glance::policy
@@ -452,32 +470,13 @@ class glance::api(
   }
 
   # SSL Options
-  if $cert_file {
-    glance_api_config {
-      'DEFAULT/cert_file' : value => $cert_file;
-    }
-  } else {
-    glance_api_config {
-      'DEFAULT/cert_file': ensure => absent;
-    }
-  }
-  if $key_file {
-    glance_api_config {
-      'DEFAULT/key_file'  : value => $key_file;
-    }
-  } else {
-    glance_api_config {
-      'DEFAULT/key_file': ensure => absent;
-    }
-  }
-  if $ca_file {
-    glance_api_config {
-      'DEFAULT/ca_file'   : value => $ca_file;
-    }
-  } else {
-    glance_api_config {
-      'DEFAULT/ca_file': ensure => absent;
-    }
+  glance_api_config {
+    'DEFAULT/cert_file':                 value => $cert_file;
+    'DEFAULT/key_file' :                 value => $key_file;
+    'DEFAULT/ca_file'  :                 value => $ca_file;
+    'DEFAULT/registry_client_ca_file':   value => $registry_client_ca_file;
+    'DEFAULT/registry_client_cert_file': value => $registry_client_cert_file;
+    'DEFAULT/registry_client_key_file':  value => $registry_client_key_file;
   }
 
   if $manage_service {
