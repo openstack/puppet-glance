@@ -1,0 +1,4 @@
+---
+other:
+  - Remove all Puppet resources that manage Users, Groups, and File modes
+    because upstream packaging already manages them.

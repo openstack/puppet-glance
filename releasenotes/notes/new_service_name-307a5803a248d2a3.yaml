@@ -1,0 +1,6 @@
+---
+deprecations:
+  - Change default value for service_name in glance::keystone::auth class.
+    If Glance Service name is not set to "Image Service", a warning
+    will be sent. The default value changed to match
+    with https://github.com/openstack/keystone/blob/master/etc/default_catalog.templates

@@ -1,0 +1,4 @@
+---
+features:
+  - Introduce glance::api::db and glance::registry::db classes to follow other modules.
+    They aim to configure database connection for Glance API and Glance Registry.

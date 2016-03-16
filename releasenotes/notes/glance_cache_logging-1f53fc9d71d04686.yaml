@@ -1,0 +1,3 @@
+---
+features:
+  - Create glance::cache::logging class that follow the same pattern as other modules.

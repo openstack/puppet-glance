@@ -1,0 +1,7 @@
+---
+upgrade:
+  - Before, when Glance was configured with Swift backend, credentials were stored in database.
+    It caused issues when credentials change, old images are not usable anymore.
+    Glance and Glance store projects implemented a way to use separated sections for credentials
+    without storing them in database. The puppet-glance module is now using this new method, also
+    Glance Cache configuration does not have Swift parameters anymore, so we deleted them.

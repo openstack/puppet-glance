@@ -1,0 +1,3 @@
+---
+deprecations:
+  - Use identity_uri and auth_uri by default and remove old deprecated auth parameters.

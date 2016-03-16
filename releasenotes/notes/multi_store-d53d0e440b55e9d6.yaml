@@ -1,0 +1,13 @@
+---
+features:
+  - Implement multiple store configuration.
+    It moves the default_store config option to the glance::api
+    class, and makes it possible to configure more than one store while
+    supplying a value for the default store to be used. If only one store
+    is given for glance_store/stores, the default store is automatically
+    set to be the same value. If multiple stores are given and no default
+    store is explicitly set, the config will fail and ask the user to
+    provide a default store.
+
+deprecations:
+  - Deprecate known_stores parameter in favor of stores.
