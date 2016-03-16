@@ -31,6 +31,12 @@ describe 'glance class' do
         verbose             => false,
         keystone_password   => 'a_big_secret',
       }
+      class { '::glance::glare::db':
+        database_connection => 'mysql+pymysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
+      }
+      class { '::glance::glare':
+        keystone_password   => 'a_big_secret',
+      }
 
       glance_image { 'test_image':
         ensure           => present,

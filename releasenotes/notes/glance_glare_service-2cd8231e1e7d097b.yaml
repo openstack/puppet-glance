@@ -1,0 +1,5 @@
+---
+features:
+  - Introduce glance::glare service. Glance V3 experimental
+    API has been removed in Mitaka in favour of standalone
+    Glance Artifacts Repository (GLARE) API.
