@@ -265,44 +265,44 @@ describe 'glance::api' do
     describe 'with stores override' do
       let :params do
         default_params.merge({
-          :default_store => 'glance.store.filesystem.Store',
-          :stores        => ['glance.store.filesystem.Store','glance.store.http.Store'],
+          :default_store => 'file',
+          :stores        => ['file','http'],
           :multi_store   => true,
         })
       end
 
-      it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('glance.store.filesystem.Store') }
-      it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('glance.store.filesystem.Store,glance.store.http.Store') }
+      it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
+      it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('file,http') }
     end
 
     describe 'with single store override and no default store' do
       let :params do
         default_params.merge({
-          :stores      => ['glance.store.filesystem.Store'],
+          :stores      => ['file'],
           :multi_store => true,
         })
       end
 
-      it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('glance.store.filesystem.Store') }
-      it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('glance.store.filesystem.Store') }
+      it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
+      it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('file') }
     end
 
     describe 'with multiple stores override and no default store' do
       let :params do
         default_params.merge({
-          :stores      => ['glance.store.filesystem.Store', 'glance.store.http.Store'],
+          :stores      => ['file', 'http'],
           :multi_store => true,
         })
       end
 
-      it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('glance.store.filesystem.Store') }
-      it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('glance.store.filesystem.Store,glance.store.http.Store') }
+      it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
+      it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('file,http') }
     end
 
     describe 'with both stores and known_stores provided' do
       let :params do
         default_params.merge({
-          :stores       => ['glance.store.filesystem.Store'],
+          :stores       => ['file'],
           :known_stores => ['glance.store.http.store'],
         })
       end
@@ -313,13 +313,13 @@ describe 'glance::api' do
     describe 'with known_stores not set but with default_store' do
       let :params do
         default_params.merge({
-          :default_store => 'glance.store.filesystem.Store',
+          :default_store => 'file',
           :multi_store   => true,
         })
       end
 
-      it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('glance.store.filesystem.Store') }
-      it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('glance.store.filesystem.Store') }
+      it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
+      it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('file') }
     end
 
     describe 'while validating the service with default command' do

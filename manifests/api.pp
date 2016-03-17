@@ -204,7 +204,7 @@
 #   (optional) List of which store classes and store class locations are
 #    currently known to glance at startup.
 #    Defaults to false.
-#    Example: ['glance.store.filesystem.Store','glance.store.http.Store']
+#    Example: ['file','http']
 #
 # [*default_store*]
 #   (optional) The default backend store, should be given as a string. Value
@@ -265,7 +265,7 @@
 #   locations are currently known to glance at startup. This parameter
 #   should be removed in the N release.
 #   Defaults to false.
-#   Example: ['glance.store.filesystem.Store','glance.store.http.Store']
+#   Example: ['file','http']
 #
 class glance::api(
   $keystone_password,
