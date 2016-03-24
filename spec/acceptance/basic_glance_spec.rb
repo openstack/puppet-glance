@@ -21,6 +21,9 @@ describe 'glance class' do
       class { '::glance::keystone::auth':
         password => 'a_big_secret',
       }
+      class { '::glance::keystone::glare_auth':
+        password => 'a_big_secret',
+      }
       class { '::glance::api':
         database_connection => 'mysql+pymysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
         verbose             => false,
