@@ -56,7 +56,10 @@
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
 #
-
+# [*glare_enabled*]
+#   (optional) Whether enabled Glance Glare API.
+#   Defaults to false
+#
 class glance::backend::cinder(
   $os_region_name              = undef,
   $cinder_ca_certificates_file = undef,
@@ -65,7 +68,7 @@ class glance::backend::cinder(
   $cinder_endpoint_template    = undef,
   $cinder_http_retries         = '3',
   $multi_store                 = false,
-
+  $glare_enabled               = false,
 ) {
 
   if $os_region_name {
@@ -80,6 +83,9 @@ class glance::backend::cinder(
 
   if !$multi_store {
     glance_api_config { 'glance_store/default_store': value => 'cinder'; }
+    if $glare_enabled {
+      glance_glare_config { 'glance_store/default_store': value => 'cinder'; }
+    }
   }
 
   glance_cache_config {
@@ -88,20 +94,40 @@ class glance::backend::cinder(
     'glance_store/cinder_http_retries': value => $cinder_http_retries;
   }
 
+  if $glare_enabled {
+    glance_glare_config {
+      'glance_store/cinder_api_insecure': value => $cinder_api_insecure;
+      'glance_store/cinder_catalog_info': value => $cinder_catalog_info;
+      'glance_store/cinder_http_retries': value => $cinder_http_retries;
+    }
+  }
+
   if $cinder_endpoint_template {
     glance_api_config { 'glance_store/cinder_endpoint_template':   value => $cinder_endpoint_template; }
     glance_cache_config { 'glance_store/cinder_endpoint_template': value => $cinder_endpoint_template; }
+    if $glare_enabled {
+      glance_glare_config { 'glance_store/cinder_endpoint_template': value => $cinder_endpoint_template; }
+    }
   } else {
     glance_api_config { 'glance_store/cinder_endpoint_template':   ensure => absent; }
     glance_cache_config { 'glance_store/cinder_endpoint_template': ensure => absent; }
+    if $glare_enabled {
+      glance_glare_config { 'glance_store/cinder_endpoint_template': ensure => absent; }
+    }
   }
 
   if $cinder_ca_certificates_file {
     glance_api_config { 'glance_store/cinder_ca_certificates_file':   value => $cinder_ca_certificates_file; }
     glance_cache_config { 'glance_store/cinder_ca_certificates_file': value => $cinder_ca_certificates_file; }
+    if $glare_enabled {
+      glance_glare_config { 'glance_store/cinder_ca_certificates_file': value => $cinder_ca_certificates_file; }
+    }
   } else {
     glance_api_config { 'glance_store/cinder_ca_certificates_file':   ensure => absent; }
     glance_cache_config { 'glance_store/cinder_ca_certificates_file': ensure => absent; }
+    if $glare_enabled {
+      glance_glare_config { 'glance_store/cinder_ca_certificates_file': ensure => absent; }
+    }
   }
 
 }
