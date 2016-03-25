@@ -50,6 +50,10 @@
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
 #
+# [*glare_enabled*]
+#   (optional) Whether enabled Glance Glare API.
+#   Defaults to false
+#
 #  === deprecated parameters:
 #
 #  [*default_store*]
@@ -68,6 +72,7 @@ class glance::backend::s3(
   $object_buffer_dir        = undef,
   $thread_pools             = 10,
   $multi_store              = false,
+  $glare_enabled            = false,
   # deprecated parameters
   $default_store            = undef,
 ) {
@@ -96,14 +101,37 @@ class glance::backend::s3(
     'glance_store/s3_store_thread_pools':            value => $thread_pools;
   }
 
+  if $glare_enabled {
+    glance_glare_config {
+      'glance_store/s3_store_access_key':              value => $access_key;
+      'glance_store/s3_store_secret_key':              value => $secret_key;
+      'glance_store/s3_store_host':                    value => $host;
+      'glance_store/s3_store_bucket':                  value => $bucket;
+      'glance_store/s3_store_bucket_url_format':       value => $bucket_url_format;
+      'glance_store/s3_store_create_bucket_on_put':    value => $create_bucket_on_put;
+      'glance_store/s3_store_large_object_size':       value => $large_object_size;
+      'glance_store/s3_store_large_object_chunk_size': value => $large_object_chunk_size;
+      'glance_store/s3_store_thread_pools':            value => $thread_pools;
+    }
+  }
+
   if !$multi_store {
     glance_api_config { 'glance_store/default_store': value => 's3'; }
+    if $glare_enabled {
+      glance_glare_config { 'glance_store/default_store': value => 's3'; }
+    }
   }
 
   if $object_buffer_dir {
-    glance_api_config { 'glance_store/s3_store_object_buffer_dir':  value => $object_buffer_dir; }
+    glance_api_config { 'glance_store/s3_store_object_buffer_dir': value => $object_buffer_dir; }
+    if $glare_enabled {
+      glance_glare_config { 'glance_store/s3_store_object_buffer_dir': value => $object_buffer_dir; }
+    }
   } else {
-    glance_api_config { 'glance_store/s3_store_object_buffer_dir':  ensure => absent; }
+    glance_api_config { 'glance_store/s3_store_object_buffer_dir': ensure => absent; }
+    if $glare_enabled {
+      glance_glare_config { 'glance_store/s3_store_object_buffer_dir': ensure => absent; }
+    }
   }
 
 }
