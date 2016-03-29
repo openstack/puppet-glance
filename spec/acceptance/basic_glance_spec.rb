@@ -47,6 +47,9 @@ describe 'glance class' do
         disk_format      => 'qcow2',
         is_public        => 'yes',
         source           => 'http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-disk.img',
+        min_ram          => '64',
+        min_disk         => '1024',
+        properties       => { 'icanhaz' => 'cheezburger' },
       }
     EOS
 
@@ -77,9 +80,19 @@ describe 'glance class' do
     end
 
     describe 'glance images' do
-      it 'should create a glance image' do
-        shell('openstack --os-username glance --os-password a_big_secret --os-tenant-name services --os-auth-url http://127.0.0.1:5000/v2.0 image list') do |r|
+      it 'should create a glance image with proper attributes' do
+        glance_env_opts = '--os-username glance --os-password a_big_secret --os-tenant-name services --os-auth-url http://127.0.0.1:5000/v2.0'
+        shell("openstack #{glance_env_opts} image list") do |r|
           expect(r.stdout).to match(/test_image/)
+          expect(r.stderr).to be_empty
+        end
+        shell("openstack #{glance_env_opts} image show test_image --format shell") do |r|
+          expect(r.stdout).to match(/visibility="public"/)
+          expect(r.stdout).to match(/container_format="bare"/)
+          expect(r.stdout).to match(/disk_format="qcow2"/)
+          expect(r.stdout).to match(/properties="icanhaz='cheezburger'"/)
+          expect(r.stdout).to match(/min_ram="64"/)
+          expect(r.stdout).to match(/min_disk="1024"/)
           expect(r.stderr).to be_empty
         end
       end
