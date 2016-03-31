@@ -6,16 +6,16 @@
 # === parameters:
 #
 #  [*rbd_store_user*]
-#    Optional.
+#    Optional. Default: $::os_service_default.
 #
 #  [*rbd_store_pool*]
-#    Optional. Default:'images'
+#    Optional. Default: $::os_service_default.
 #
 #  [*rbd_store_ceph_conf*]
-#    Optional. Default:'/etc/ceph/ceph.conf'
+#    Optional. Default: $::os_service_default.
 #
 #  [*rbd_store_chunk_size*]
-#    Optional. Default:'8'
+#    Optional. Default: $::os_service_default.
 #
 #  [*show_image_direct_url*]
 #    Optional. Enables direct COW from glance to rbd
@@ -30,6 +30,7 @@
 #      Optinal. Timeout value (in seconds) used when connecting
 #      to ceph cluster. If value <= 0, no timeout is set and
 #      default librados value is used.
+#      Default: $::os_service_default.
 #
 # [*multi_store*]
 #   (optional) Boolean describing if multiple backends will be configured
@@ -40,13 +41,13 @@
 #   Defaults to false
 #
 class glance::backend::rbd(
-  $rbd_store_user         = undef,
-  $rbd_store_ceph_conf    = '/etc/ceph/ceph.conf',
-  $rbd_store_pool         = 'images',
-  $rbd_store_chunk_size   = '8',
+  $rbd_store_user         = $::os_service_default,
+  $rbd_store_ceph_conf    = $::os_service_default,
+  $rbd_store_pool         = $::os_service_default,
+  $rbd_store_chunk_size   = $::os_service_default,
   $show_image_direct_url  = undef,
   $package_ensure         = 'present',
-  $rados_connect_timeout  = '0',
+  $rados_connect_timeout  = $::os_service_default,
   $multi_store            = false,
   $glare_enabled          = false,
 ) {

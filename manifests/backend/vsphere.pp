@@ -31,7 +31,7 @@
 #   verifying vCenter server certificate. If parameter is not set
 #   then system truststore is used. If parameter is set, vcenter_api_insecure
 #   value is ignored.
-#   Defaults to undef
+#   Defaults to $::os_service_default.
 #
 # [*vcenter_host*]
 #   (required) vCenter/ESXi Server target system.
@@ -57,12 +57,12 @@
 # [*vcenter_task_poll_interval*]
 #   (optional) The interval used for polling remote tasks invoked on
 #   vCenter/ESXi server.
-#   Defaults to '5'
+#   Defaults to $::os_service_default.
 #
 # [*vcenter_api_retry_count*]
 #   (optional) Number of times VMware ESX/VC server API must be retried upon
 #   connection related issues.
-#    Defaults to '10'
+#    Defaults to $::os_service_default.
 #
 # [*multi_store*]
 #   (optional) Boolean describing if multiple backends will be configured
@@ -79,10 +79,10 @@ class glance::backend::vsphere(
   $vcenter_datacenter,
   $vcenter_datastore,
   $vcenter_image_dir,
-  $vcenter_ca_file            = undef,
+  $vcenter_ca_file            = $::os_service_default,
   $vcenter_api_insecure       = 'True',
-  $vcenter_task_poll_interval = '5',
-  $vcenter_api_retry_count    = '10',
+  $vcenter_task_poll_interval = $::os_service_default,
+  $vcenter_api_retry_count    = $::os_service_default,
   $multi_store                = false,
   $glare_enabled              = false,
 ) {

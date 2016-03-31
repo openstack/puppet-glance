@@ -4,8 +4,8 @@ describe 'glance::registry' do
     {
       :verbose                => false,
       :debug                  => false,
-      :use_stderr             => true,
-      :bind_host              => '0.0.0.0',
+      :use_stderr             => '<SERVICE DEFAULT>',
+      :bind_host              => '<SERVICE DEFAULT>',
       :bind_port              => '9191',
       :workers                => facts[:processorcount],
       :log_file               => '/var/log/glance/registry.log',
@@ -24,6 +24,9 @@ describe 'glance::registry' do
       :signing_dir            => '<SERVICE DEFAULT>',
       :token_cache_time       => '<SERVICE DEFAULT>',
       :memcached_servers      => '<SERVICE DEFAULT>',
+      :ca_file                => '<SERVICE DEFAULT>',
+      :cert_file              => '<SERVICE DEFAULT>',
+      :key_file               => '<SERVICE DEFAULT>',
     }
   end
 
@@ -106,6 +109,15 @@ describe 'glance::registry' do
             'os_region_name',
           ].each do |config|
             is_expected.to contain_glance_registry_config("glance_store/#{config}").with_value(param_hash[config.intern])
+          end
+        end
+        it 'is_expected.to lay down default ssl config' do
+          [
+            'ca_file',
+            'cert_file',
+            'key_file',
+          ].each do |config|
+            is_expected.to contain_glance_registry_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end
         end
       end

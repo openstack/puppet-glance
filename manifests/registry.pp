@@ -19,7 +19,8 @@
 #    (optional) Enable debug logs (true|false). Defaults to undef.
 #
 #  [*bind_host*]
-#    (optional) The address of the host to bind to. Defaults to '0.0.0.0'.
+#    (optional) The address of the host to bind to.
+#    Defaults to $::os_service_default.
 #
 #  [*bind_port*]
 #    (optional) The port the server should bind to. Defaults to '9191'.
@@ -119,15 +120,15 @@
 #
 # [*cert_file*]
 #   (optinal) Certificate file to use when starting registry server securely
-#   Defaults to false, not set
+#   Defaults to $::os_service_default.
 #
 # [*key_file*]
 #   (optional) Private key file to use when starting registry server securely
-#   Defaults to false, not set
+#   Defaults to $::os_service_default.
 #
 # [*ca_file*]
 #   (optional) CA certificate file to use to verify connecting clients
-#   Defaults to false, not set
+#   Defaults to $::os_service_default.
 #
 # [*sync_db*]
 #   (Optional) Run db sync on the node.
@@ -157,7 +158,7 @@ class glance::registry(
   $package_ensure          = 'present',
   $verbose                 = undef,
   $debug                   = undef,
-  $bind_host               = '0.0.0.0',
+  $bind_host               = $::os_service_default,
   $bind_port               = '9191',
   $workers                 = $::processorcount,
   $log_file                = undef,
@@ -181,9 +182,9 @@ class glance::registry(
   $manage_service          = true,
   $enabled                 = true,
   $purge_config            = false,
-  $cert_file               = false,
-  $key_file                = false,
-  $ca_file                 = false,
+  $cert_file               = $::os_service_default,
+  $key_file                = $::os_service_default,
+  $ca_file                 = $::os_service_default,
   $sync_db                 = true,
   $os_region_name          = $::os_service_default,
   $signing_dir             = $::os_service_default,
@@ -239,32 +240,10 @@ class glance::registry(
   }
 
   # SSL Options
-  if $cert_file {
-    glance_registry_config {
-      'DEFAULT/cert_file' : value => $cert_file;
-    }
-  } else {
-    glance_registry_config {
-      'DEFAULT/cert_file': ensure => absent;
-    }
-  }
-  if $key_file {
-    glance_registry_config {
-      'DEFAULT/key_file'  : value => $key_file;
-    }
-  } else {
-    glance_registry_config {
-      'DEFAULT/key_file': ensure => absent;
-    }
-  }
-  if $ca_file {
-    glance_registry_config {
-      'DEFAULT/ca_file'   : value => $ca_file;
-    }
-  } else {
-    glance_registry_config {
-      'DEFAULT/ca_file': ensure => absent;
-    }
+  glance_registry_config {
+    'DEFAULT/cert_file': value => $cert_file;
+    'DEFAULT/key_file':  value => $key_file;
+    'DEFAULT/ca_file':   value => $ca_file;
   }
 
   if $sync_db {

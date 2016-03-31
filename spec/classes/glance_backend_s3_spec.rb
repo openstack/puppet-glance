@@ -19,12 +19,12 @@ describe 'glance::backend::s3' do
         is_expected.to contain_glance_api_config('glance_store/s3_store_secret_key').with_value('secret')
         is_expected.to contain_glance_api_config('glance_store/s3_store_host').with_value('host')
         is_expected.to contain_glance_api_config('glance_store/s3_store_bucket').with_value('bucket')
-        is_expected.to contain_glance_api_config('glance_store/s3_store_bucket_url_format').with_value('subdomain')
-        is_expected.to contain_glance_api_config('glance_store/s3_store_create_bucket_on_put').with_value('false')
-        is_expected.to contain_glance_api_config('glance_store/s3_store_large_object_size').with_value('100')
-        is_expected.to contain_glance_api_config('glance_store/s3_store_large_object_chunk_size').with_value('10')
-        is_expected.to contain_glance_api_config('glance_store/s3_store_object_buffer_dir').with_value(nil)
-        is_expected.to contain_glance_api_config('glance_store/s3_store_thread_pools').with_value('10')
+        is_expected.to contain_glance_api_config('glance_store/s3_store_bucket_url_format').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/s3_store_create_bucket_on_put').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/s3_store_large_object_size').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/s3_store_large_object_chunk_size').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/s3_store_object_buffer_dir').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/s3_store_thread_pools').with_value('<SERVICE DEFAULT>')
       end
       it 'not configures glance-glare.conf' do
         is_expected.to_not contain_glance_glare_config('glance_store/default_store').with_value('s3')
@@ -32,12 +32,12 @@ describe 'glance::backend::s3' do
         is_expected.to_not contain_glance_glare_config('glance_store/s3_store_secret_key').with_value('secret')
         is_expected.to_not contain_glance_glare_config('glance_store/s3_store_host').with_value('host')
         is_expected.to_not contain_glance_glare_config('glance_store/s3_store_bucket').with_value('bucket')
-        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_bucket_url_format').with_value('subdomain')
-        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_create_bucket_on_put').with_value('false')
-        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_large_object_size').with_value('100')
-        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_large_object_chunk_size').with_value('10')
-        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_object_buffer_dir').with_value(nil)
-        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_thread_pools').with_value('10')
+        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_bucket_url_format').with_value('<SERVICE DEFAULT>')
+        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_create_bucket_on_put').with_value('<SERVICE DEFAULT>')
+        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_large_object_size').with_value('<SERVICE DEFAULT>')
+        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_large_object_chunk_size').with_value('<SERVICE DEFAULT>')
+        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_object_buffer_dir').with_value('<SERVICE DEFAULT>')
+        is_expected.to_not contain_glance_glare_config('glance_store/s3_store_thread_pools').with_value('<SERVICE DEFAULT>')
       end
 
     end

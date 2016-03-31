@@ -21,22 +21,22 @@
 #    Optional. Useful when keystone auth is version 3. Default: default
 #
 #  [*swift_store_container*]
-#    Optional. Default: 'glance'
+#    Optional. Default: $::os_service_default.
 #
 #  [*swift_store_auth_version*]
 #    Optional. Default: '2'
 #
 #  [*swift_store_large_object_size*]
-#    Optional. Default: '5120'
+#    Optional. Default: $::os_service_default.
 #
 #  [*swift_store_create_container_on_put*]
-#    Optional. Default: 'False'
+#    Optional. Default: $::os_service_default.
 #
 #  [*swift_store_endpoint_type*]
 #    Optional. Default: 'internalURL'
 #
 #  [*swift_store_region*]
-#    Optional. Default: undef
+#    Optional. Default: $::os_service_default.
 #
 #  [*default_swift_reference*]
 #    Optional. The reference to the default swift
@@ -56,14 +56,14 @@ class glance::backend::swift(
   $swift_store_user,
   $swift_store_key,
   $swift_store_auth_address            = 'http://127.0.0.1:5000/v2.0/',
-  $swift_store_container               = 'glance',
+  $swift_store_container               = $::os_service_default,
   $swift_store_auth_version            = '2',
   $swift_store_auth_project_domain_id  = 'default',
   $swift_store_auth_user_domain_id     = 'default',
-  $swift_store_large_object_size       = '5120',
-  $swift_store_create_container_on_put = false,
+  $swift_store_large_object_size       = $::os_service_default,
+  $swift_store_create_container_on_put = $::os_service_default,
   $swift_store_endpoint_type           = 'internalURL',
-  $swift_store_region                  = undef,
+  $swift_store_region                  = $::os_service_default,
   $default_swift_reference             = 'ref1',
   $multi_store                         = false,
   $glare_enabled                       = false,
