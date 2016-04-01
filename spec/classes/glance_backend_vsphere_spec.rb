@@ -41,7 +41,7 @@ describe 'glance::backend::vsphere' do
       end
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('glance_store/default_store').with_value('vsphere')
-        is_expected.to contain_glance_api_config('glance_store/vmware_api_insecure').with_value('False')
+        is_expected.to contain_glance_api_config('glance_store/vmware_api_insecure').with_value('True')
         is_expected.to contain_glance_api_config('glance_store/vmware_server_host').with_value('10.0.0.1')
         is_expected.to contain_glance_api_config('glance_store/vmware_server_username').with_value('root')
         is_expected.to contain_glance_api_config('glance_store/vmware_server_password').with_value('123456')
@@ -53,7 +53,7 @@ describe 'glance::backend::vsphere' do
       end
       it 'not configures glance-glare.conf' do
         is_expected.to_not contain_glance_glare_config('glance_store/default_store').with_value('vsphere')
-        is_expected.to_not contain_glance_glare_config('glance_store/vmware_api_insecure').with_value('False')
+        is_expected.to_not contain_glance_glare_config('glance_store/vmware_api_insecure').with_value('True')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_server_host').with_value('10.0.0.1')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_server_username').with_value('root')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_server_password').with_value('123456')
@@ -74,20 +74,20 @@ describe 'glance::backend::vsphere' do
           :vcenter_datacenter         => 'Datacenter',
           :vcenter_datastore          => 'Datastore',
           :vcenter_image_dir          => '/openstack_glance',
-          :vcenter_api_insecure       => 'True',
+          :vcenter_ca_file            => '/etc/glance/vcenter-ca.pem',
           :vcenter_task_poll_interval => '6',
           :vcenter_api_retry_count    => '11',
           :glare_enabled              => true,
         }
       end
       it 'configures glance-api.conf' do
-        is_expected.to contain_glance_api_config('glance_store/vmware_api_insecure').with_value('True')
+        is_expected.to contain_glance_api_config('glance_store/vmware_ca_file').with_value('/etc/glance/vcenter-ca.pem')
         is_expected.to contain_glance_api_config('glance_store/vmware_task_poll_interval').with_value('6')
         is_expected.to contain_glance_api_config('glance_store/vmware_api_retry_count').with_value('11')
       end
 
       it 'configures glance-glare.conf' do
-        is_expected.to contain_glance_glare_config('glance_store/vmware_api_insecure').with_value('True')
+        is_expected.to contain_glance_glare_config('glance_store/vmware_ca_file').with_value('/etc/glance/vcenter-ca.pem')
         is_expected.to contain_glance_glare_config('glance_store/vmware_task_poll_interval').with_value('6')
         is_expected.to contain_glance_glare_config('glance_store/vmware_api_retry_count').with_value('11')
       end
