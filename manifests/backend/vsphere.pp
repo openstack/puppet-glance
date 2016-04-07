@@ -24,7 +24,14 @@
 # [*vcenter_api_insecure*]
 #   (optional) Allow to perform insecure SSL requests to vCenter/ESXi.
 #   Should be a valid string boolean value
-#   Defaults to 'False'
+#   Defaults to 'True'
+#
+# [*vcenter_ca_file*]
+#   (optional) The name of the CA bundle file which will be used in
+#   verifying vCenter server certificate. If parameter is not set
+#   then system truststore is used. If parameter is set, vcenter_api_insecure
+#   value is ignored.
+#   Defaults to undef
 #
 # [*vcenter_host*]
 #   (required) vCenter/ESXi Server target system.
@@ -72,7 +79,8 @@ class glance::backend::vsphere(
   $vcenter_datacenter,
   $vcenter_datastore,
   $vcenter_image_dir,
-  $vcenter_api_insecure       = 'False',
+  $vcenter_ca_file            = undef,
+  $vcenter_api_insecure       = 'True',
   $vcenter_task_poll_interval = '5',
   $vcenter_api_retry_count    = '10',
   $multi_store                = false,
@@ -81,6 +89,7 @@ class glance::backend::vsphere(
 
   glance_api_config {
     'glance_store/vmware_api_insecure': value       => $vcenter_api_insecure;
+    'glance_store/vmware_ca_file': value            => $vcenter_ca_file;
     'glance_store/vmware_server_host': value        => $vcenter_host;
     'glance_store/vmware_server_username': value    => $vcenter_user;
     'glance_store/vmware_server_password': value    => $vcenter_password;
@@ -94,6 +103,7 @@ class glance::backend::vsphere(
   if $glare_enabled {
     glance_glare_config {
       'glance_store/vmware_api_insecure': value       => $vcenter_api_insecure;
+      'glance_store/vmware_ca_file': value            => $vcenter_ca_file;
       'glance_store/vmware_server_host': value        => $vcenter_host;
       'glance_store/vmware_server_username': value    => $vcenter_user;
       'glance_store/vmware_server_password': value    => $vcenter_password;
