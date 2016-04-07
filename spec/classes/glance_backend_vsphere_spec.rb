@@ -47,9 +47,10 @@ describe 'glance::backend::vsphere' do
         is_expected.to contain_glance_api_config('glance_store/vmware_server_password').with_value('123456')
         is_expected.to contain_glance_api_config('glance_store/vmware_datastore_name').with_value('Datastore')
         is_expected.to contain_glance_api_config('glance_store/vmware_store_image_dir').with_value('/openstack_glance')
-        is_expected.to contain_glance_api_config('glance_store/vmware_task_poll_interval').with_value('5')
-        is_expected.to contain_glance_api_config('glance_store/vmware_api_retry_count').with_value('10')
+        is_expected.to contain_glance_api_config('glance_store/vmware_task_poll_interval').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/vmware_api_retry_count').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/vmware_datacenter_path').with_value('Datacenter')
+        is_expected.to contain_glance_api_config('glance_store/vmware_ca_file').with_value('<SERVICE DEFAULT>')
       end
       it 'not configures glance-glare.conf' do
         is_expected.to_not contain_glance_glare_config('glance_store/default_store').with_value('vsphere')
@@ -59,9 +60,10 @@ describe 'glance::backend::vsphere' do
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_server_password').with_value('123456')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_datastore_name').with_value('Datastore')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_store_image_dir').with_value('/openstack_glance')
-        is_expected.to_not contain_glance_glare_config('glance_store/vmware_task_poll_interval').with_value('5')
-        is_expected.to_not contain_glance_glare_config('glance_store/vmware_api_retry_count').with_value('10')
+        is_expected.to_not contain_glance_glare_config('glance_store/vmware_task_poll_interval').with_value('<SERVICE DEFAULT>')
+        is_expected.to_not contain_glance_glare_config('glance_store/vmware_api_retry_count').with_value('<SERVICE DEFAULT>')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_datacenter_path').with_value('Datacenter')
+        is_expected.to_not contain_glance_glare_config('glance_store/vmware_ca_file').with_value('<SERVICE DEFAULT>')
       end
     end
 

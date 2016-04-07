@@ -22,7 +22,7 @@
 #
 # [*bind_host*]
 #   (optional) The address of the host to bind to.
-#   Default: 0.0.0.0
+#   Default: $::os_service_default.
 #
 # [*bind_port*]
 #   (optional) The port the server should bind to.
@@ -30,7 +30,7 @@
 #
 # [*backlog*]
 #   (optional) Backlog requests when creating socket
-#   Default: 4096
+#   Default: $::os_service_default.
 #
 # [*workers*]
 #   (optional) Number of Glance API worker processes to start
@@ -52,11 +52,11 @@
 #
 # [*registry_port*]
 #   (optional) The port of the Glance registry service.
-#   Default: 9191
+#   Default: $::os_service_default.
 #
 # [*registry_client_protocol*]
 #   (optional) The protocol of the Glance registry service.
-#   Default: http
+#   Default: $::os_service_default.
 #
 # [*scrub_time*]
 #   (optional) The amount of time in seconds to delay before performing a delete.
@@ -157,7 +157,7 @@
 #
 # [*show_image_direct_url*]
 #   (optional) Expose image location to trusted clients.
-#   Defaults to false.
+#   Defaults to $::os_service_default.
 #
 # [*show_multiple_locations*]
 #   (optional) Whether to include the backend image locations in image
@@ -272,15 +272,15 @@ class glance::api(
   $package_ensure            = 'present',
   $verbose                   = undef,
   $debug                     = undef,
-  $bind_host                 = '0.0.0.0',
+  $bind_host                 = $::os_service_default,
   $bind_port                 = '9292',
-  $backlog                   = '4096',
+  $backlog                   = $::os_service_default,
   $workers                   = $::processorcount,
   $log_file                  = undef,
   $log_dir                   = undef,
   $registry_host             = '0.0.0.0',
-  $registry_port             = '9191',
-  $registry_client_protocol  = 'http',
+  $registry_port             = $::os_service_default,
+  $registry_client_protocol  = $::os_service_default,
   $scrub_time                = $::os_service_default,
   $delayed_delete            = $::os_service_default,
   $auth_type                 = 'keystone',
@@ -296,7 +296,7 @@ class glance::api(
   $use_syslog                = undef,
   $use_stderr                = undef,
   $log_facility              = undef,
-  $show_image_direct_url     = false,
+  $show_image_direct_url     = $::os_service_default,
   $show_multiple_locations   = $::os_service_default,
   $location_strategy         = $::os_service_default,
   $purge_config              = false,
