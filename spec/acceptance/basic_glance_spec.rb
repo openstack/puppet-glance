@@ -53,26 +53,6 @@ describe 'glance class' do
       }
     EOS
 
-    it 'should configure the glance endpoint before the glance-api service uses it' do
-      pp2 = pp + "Service['glance-api'] -> Keystone_endpoint['RegionOne/Image Service::image']"
-      expect(apply_manifest(pp2, :expect_failures => true, :noop => true).stderr).to match(/Found 1 dependency cycle/i)
-    end
-
-    it 'should configure the glance user before the glance-api service uses it' do
-      pp2 = pp + "Service['glance-api'] -> Keystone_user_role['glance@services']"
-      expect(apply_manifest(pp2, :expect_failures => true, :noop => true).stderr).to match(/Found 1 dependency cycle/i)
-    end
-
-    it 'should configure the glance user before the glance-registry service uses it' do
-      pp2 = pp + "Service['glance-registry'] -> Keystone_user_role['glance@services']"
-      expect(apply_manifest(pp2, :expect_failures => true, :noop => true).stderr).to match(/Found 1 dependency cycle/i)
-    end
-
-    it 'should configure the glance-api service before using it to provision glance_images' do
-      pp2 = pp + "Glance_image['test_image'] -> Service['glance-api']"
-      expect(apply_manifest(pp2, :expect_failures => true, :noop => true).stderr).to match(/Found 1 dependency cycle/i)
-    end
-
     it 'should work with no errors' do
       # Run it twice and test for idempotency
       apply_manifest(pp, :catch_failures => true)
