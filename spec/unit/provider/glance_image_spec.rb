@@ -79,9 +79,9 @@ visibility="public"
     describe '.instances' do
       it 'finds every image' do
         provider.class.stubs(:openstack)
-                      .with('image', 'list', '--quiet', '--format', 'csv', [])
-                      .returns('"ID","Name","Status"
-"5345b502-efe4-4852-a45d-edaba3a3acc6","image1","active"
+                      .with('image', 'list', '--quiet', '--format', 'csv', '--long')
+                      .returns('"ID","Name","Disk Format","Container Format","Size","Status"
+"5345b502-efe4-4852-a45d-edaba3a3acc6","image1","raw","bare",1270,"active"
 ')
         provider.class.stubs(:openstack)
                       .with('image', 'show', '--format', 'shell', '5345b502-efe4-4852-a45d-edaba3a3acc6')
@@ -169,9 +169,9 @@ visibility="public"
     describe '.instances' do
       it 'finds every image' do
         provider.class.stubs(:openstack)
-                      .with('image', 'list', '--quiet', '--format', 'csv', [])
-                      .returns('"ID","Name","Status"
-"5345b502-efe4-4852-a45d-edaba3a3acc6","image1","active"
+                      .with('image', 'list', '--quiet', '--format', 'csv', '--long')
+                      .returns('"ID","Name","Disk Format","Container Format","Size","Status"
+"5345b502-efe4-4852-a45d-edaba3a3acc6","image1","raw","bare",1270,"active"
 ')
         provider.class.stubs(:openstack)
                       .with('image', 'show', '--format', 'shell', '5345b502-efe4-4852-a45d-edaba3a3acc6')
