@@ -93,7 +93,7 @@ Puppet::Type.type(:glance_image).provide(
   end
 
   def self.instances
-    list = request('image', 'list')
+    list = request('image', 'list', '--long')
     list.collect do |image|
       attrs = request('image', 'show', image[:id])
       properties = Hash[attrs[:properties].scan(/(\S+)='([^']*)'/)] rescue nil
