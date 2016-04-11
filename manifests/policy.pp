@@ -36,4 +36,6 @@ class glance::policy(
 
   create_resources('openstacklib::policy::base', $policies)
 
+  oslo::policy { ['glance_api_config', 'glance_registry_config']: policy_file => $policy_path }
+
 }

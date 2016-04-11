@@ -43,49 +43,17 @@ class glance::glare::db (
   $database_max_overflow   = $::os_service_default,
 ) {
 
-  include ::glance::params
-
   validate_re($database_connection,
     '^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
-  case $database_connection {
-    /^mysql(\+pymysql)?:\/\//: {
-      require 'mysql::bindings'
-      require 'mysql::bindings::python'
-      if $database_connection =~ /^mysql\+pymysql/ {
-        $backend_package = $::glance::params::pymysql_package_name
-      } else {
-        $backend_package = false
-      }
-    }
-    /^postgresql:\/\//: {
-      $backend_package = false
-      require 'postgresql::lib::python'
-    }
-    /^sqlite:\/\//: {
-      $backend_package = $::glance::params::sqlite_package_name
-    }
-    default: {
-      fail('Unsupported backend configured')
-    }
-  }
-
-  if $backend_package and !defined(Package[$backend_package]) {
-    package {'glance-backend-package':
-      ensure => present,
-      name   => $backend_package,
-      tag    => 'openstack',
-    }
-  }
-
-  glance_glare_config {
-    'database/connection':     value => $database_connection, secret => true;
-    'database/idle_timeout':   value => $database_idle_timeout;
-    'database/min_pool_size':  value => $database_min_pool_size;
-    'database/max_retries':    value => $database_max_retries;
-    'database/retry_interval': value => $database_retry_interval;
-    'database/max_pool_size':  value => $database_max_pool_size;
-    'database/max_overflow':   value => $database_max_overflow;
+  oslo::db { 'glance_glare_config':
+    connection     => $database_connection,
+    idle_timeout   => $database_idle_timeout,
+    min_pool_size  => $database_min_pool_size,
+    max_retries    => $database_max_retries,
+    retry_interval => $database_retry_interval,
+    max_pool_size  => $database_max_pool_size,
+    max_overflow   => $database_max_overflow,
   }
 
 }
