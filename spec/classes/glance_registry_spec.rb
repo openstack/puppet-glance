@@ -79,6 +79,11 @@ describe 'glance::registry' do
             is_expected.not_to contain_exec('glance-manage db_sync')
           end
         end
+        it 'passes purge to resource' do
+          is_expected.to contain_resources('glance_registry_config').with({
+            :purge => false
+          })
+        end
         it 'is_expected.to configure itself' do
           [
            'workers',

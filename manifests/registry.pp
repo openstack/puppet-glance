@@ -206,6 +206,10 @@ class glance::registry(
 
   Glance_registry_config<||> ~> Service['glance-registry']
 
+  resources { 'glance_registry_config':
+    purge => $purge_config
+  }
+
   glance_registry_config {
     'DEFAULT/workers':                value => $workers;
     'DEFAULT/bind_host':              value => $bind_host;

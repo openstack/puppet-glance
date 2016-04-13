@@ -154,6 +154,12 @@ describe 'glance::api' do
           is_expected.to contain_glance_api_config('DEFAULT/registry_client_key_file').with_value('<SERVICE DEFAULT>')
         end
 
+        it 'passes purge to resource' do
+          is_expected.to contain_resources('glance_api_config').with({
+            :purge => false
+          })
+        end
+
         it 'is_expected.to configure itself for keystone if that is the auth_type' do
           if params[:auth_type] == 'keystone'
             is_expected.to contain('paste_deploy/flavor').with_value('keystone+cachemanagement')

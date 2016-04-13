@@ -418,6 +418,10 @@ class glance::api(
     }
   }
 
+  resources { 'glance_api_config':
+    purge => $purge_config,
+  }
+
   glance_cache_config {
     'DEFAULT/image_cache_stall_time': value => $image_cache_stall_time;
     'DEFAULT/image_cache_max_size':   value => $image_cache_max_size;
