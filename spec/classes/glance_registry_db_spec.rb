@@ -44,7 +44,7 @@ describe 'glance::registry::db' do
 
     context 'with incorrect pymysql database_connection string' do
       let :params do
-        { :database_connection     => 'foo+pymysql://glance_registry:glance@localhost/glance', }
+        { :database_connection => 'foo+pymysql://glance_registry:glance@localhost/glance', }
       end
 
       it_raises 'a Puppet::Error', /validate_re/
@@ -55,11 +55,11 @@ describe 'glance::registry::db' do
   shared_examples_for 'glance::registry::db Debian' do
     context 'using pymysql driver' do
       let :params do
-        { :database_connection     => 'mysql+pymysql://glance_registry:glance@localhost/glance', }
+        { :database_connection => 'mysql+pymysql://glance_registry:glance@localhost/glance', }
       end
 
       it 'install the proper backend package' do
-        is_expected.to contain_package('glance-backend-package').with(
+        is_expected.to contain_package('db_backend_package').with(
           :ensure => 'present',
           :name   => 'python-pymysql',
           :tag    => 'openstack'
@@ -71,10 +71,10 @@ describe 'glance::registry::db' do
   shared_examples_for 'glance::registry::db RedHat' do
     context 'using pymysql driver' do
       let :params do
-        { :database_connection     => 'mysql+pymysql://glance_registry:glance@localhost/glance', }
+        { :database_connection => 'mysql+pymysql://glance_registry:glance@localhost/glance', }
       end
 
-      it { is_expected.not_to contain_package('glance-backend-package') }
+      it { is_expected.not_to contain_package('db_backend_package') }
     end
   end
 

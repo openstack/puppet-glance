@@ -6,63 +6,63 @@
 #
 #  [*verbose*]
 #    (Optional) Should the daemons log verbose messages
-#    Defaults to 'false'
+#    Defaults to $::os_service_default.
 #
 #  [*debug*]
 #    (Optional) Should the daemons log debug messages
-#    Defaults to 'false'
+#    Defaults to $::os_service_default.
 #
 #  [*use_syslog*]
 #    (Optional) Use syslog for logging.
-#    Defaults to 'false'
+#    Defaults to $::os_service_default.
 #
 #  [*use_stderr*]
 #    (optional) Use stderr for logging
-#    Defaults to 'true'
+#    Defaults to $::os_service_default.
 #
 #  [*log_facility*]
 #    (Optional) Syslog facility to receive log lines.
-#    Defaults to 'LOG_USER'
+#    Defaults to $::os_service_default.
 #
 #  [*log_dir*]
 #    (optional) Directory where logs should be stored.
 #    If set to boolean false, it will not log to any directory.
-#    Defaults to '/var/log/glance'
+#    Defaults to '/var/log/glance'.
 #
 #  [*log_file*]
 #    (optional) File where logs should be stored.
-#    Defaults to '/var/log/glance/registry.log'
+#    Defaults to '/var/log/glance/registry.log'.
 #
 #  [*logging_context_format_string*]
 #    (optional) Format string to use for log messages with context.
-#    Defaults to undef.
+#    Defaults to $::os_service_default.
 #    Example: '%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s\
 #              [%(request_id)s %(user_identity)s] %(instance)s%(message)s'
 #
 #  [*logging_default_format_string*]
 #    (optional) Format string to use for log messages without context.
-#    Defaults to undef.
+#    Defaults to $::os_service_default.
 #    Example: '%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s\
 #              [-] %(instance)s%(message)s'
 #
 #  [*logging_debug_format_suffix*]
 #    (optional) Formatted data to append to log format when level is DEBUG.
-#    Defaults to undef.
+#    Defaults to $::os_service_default.
 #    Example: '%(funcName)s %(pathname)s:%(lineno)d'
 #
 #  [*logging_exception_prefix*]
 #    (optional) Prefix each line of exception output with this format.
-#    Defaults to undef.
+#    Defaults to $::os_service_default.
 #    Example: '%(asctime)s.%(msecs)03d %(process)d TRACE %(name)s %(instance)s'
 #
 #  [*log_config_append*]
 #    The name of an additional logging configuration file.
-#    Defaults to undef.
+#    Defaults to $::os_service_default.
 #    See https://docs.python.org/2/howto/logging.html
 #
 #  [*default_log_levels*]
 #    (optional) Hash of logger (keys) and level (values) pairs.
-#    Defaults to undef.
+#    Defaults to $::os_service_default.
 #    Example:
 #      { 'amqp' => 'WARN', 'amqplib' => 'WARN', 'boto' => 'WARN',
 #        'qpid' => 'WARN', 'sqlalchemy' => 'WARN', 'suds' => 'INFO',
@@ -71,27 +71,27 @@
 #
 #  [*publish_errors*]
 #    (optional) Publish error events (boolean value).
-#    Defaults to undef (false if unconfigured).
+#    Defaults to $::os_service_default (false if unconfigured).
 #
 #  [*fatal_deprecations*]
 #    (optional) Make deprecations fatal (boolean value)
-#    Defaults to undef (false if unconfigured).
+#    Defaults to $::os_service_default (false if unconfigured).
 #
 #  [*instance_format*]
 #    (optional) If an instance is passed with the log message, format it
 #               like this (string value).
-#    Defaults to undef.
+#    Defaults to $::os_service_default.
 #    Example: '[instance: %(uuid)s] '
 #
 #  [*instance_uuid_format*]
 #    (optional) If an instance UUID is passed with the log message, format
 #               it like this (string value).
-#    Defaults to undef.
+#    Defaults to $::os_service_default.
 #    Example: instance_uuid_format='[instance: %(uuid)s] '
 #
 #  [*log_date_format*]
 #    (optional) Format string for %%(asctime)s in log records.
-#    Defaults to undef.
+#    Defaults to $::os_service_default.
 #    Example: 'Y-%m-%d %H:%M:%S'
 
 class glance::registry::logging(
@@ -125,31 +125,25 @@ class glance::registry::logging(
   $verbose_real  = pick($::glance::registry::verbose,$verbose)
   $debug_real = pick($::glance::registry::debug,$debug)
 
-  if is_service_default($default_log_levels) {
-    $default_log_levels_real = $default_log_levels
-  } else {
-    $default_log_levels_real = join(sort(join_keys_to_values($default_log_levels, '=')), ',')
-  }
-
-  glance_registry_config {
-    'DEFAULT/debug':                         value => $debug_real;
-    'DEFAULT/verbose':                       value => $verbose_real;
-    'DEFAULT/use_stderr':                    value => $use_stderr_real;
-    'DEFAULT/use_syslog':                    value => $use_syslog_real;
-    'DEFAULT/log_dir':                       value => $log_dir_real;
-    'DEFAULT/log_file':                      value => $log_file_real;
-    'DEFAULT/syslog_log_facility':           value => $log_facility_real;
-    'DEFAULT/logging_context_format_string': value => $logging_context_format_string;
-    'DEFAULT/logging_default_format_string': value => $logging_default_format_string;
-    'DEFAULT/logging_debug_format_suffix':   value => $logging_debug_format_suffix;
-    'DEFAULT/logging_exception_prefix':      value => $logging_exception_prefix;
-    'DEFAULT/log_config_append':             value => $log_config_append;
-    'DEFAULT/default_log_levels':            value => $default_log_levels_real;
-    'DEFAULT/publish_errors':                value => $publish_errors;
-    'DEFAULT/fatal_deprecations':            value => $fatal_deprecations;
-    'DEFAULT/instance_format':               value => $instance_format;
-    'DEFAULT/instance_uuid_format':          value => $instance_uuid_format;
-    'DEFAULT/log_date_format':               value => $log_date_format;
+  oslo::log { 'glance_registry_config':
+    debug                         => $debug_real,
+    verbose                       => $verbose_real,
+    use_stderr                    => $use_stderr_real,
+    use_syslog                    => $use_syslog_real,
+    log_dir                       => $log_dir_real,
+    log_file                      => $log_file_real,
+    syslog_log_facility           => $log_facility_real,
+    logging_context_format_string => $logging_context_format_string,
+    logging_default_format_string => $logging_default_format_string,
+    logging_debug_format_suffix   => $logging_debug_format_suffix,
+    logging_exception_prefix      => $logging_exception_prefix,
+    log_config_append             => $log_config_append,
+    default_log_levels            => $default_log_levels,
+    publish_errors                => $publish_errors,
+    fatal_deprecations            => $fatal_deprecations,
+    instance_format               => $instance_format,
+    instance_uuid_format          => $instance_uuid_format,
+    log_date_format               => $log_date_format,
   }
 
 }
