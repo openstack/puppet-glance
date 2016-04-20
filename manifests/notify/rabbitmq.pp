@@ -96,9 +96,6 @@
 #    messaging, messagingv2, routing, log, test, noop (multi valued)
 #   Defaults to $::os_service_default
 #
-#  [*notification_driver*]
-#    Notification driver to use. Defaults to $::os_service_default.
-
 class glance::notify::rabbitmq(
   $rabbit_password                    = $::os_service_default,
   $rabbit_userid                      = $::os_service_default,
