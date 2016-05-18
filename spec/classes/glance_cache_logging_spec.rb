@@ -28,7 +28,6 @@ describe 'glance::cache::logging' do
      :log_facility => 'LOG_FOO',
      :log_dir => '/var/log',
      :log_file => '/var/tmp/glance_cache_random.log',
-     :verbose => true,
      :debug => true,
     }
   end
@@ -60,7 +59,6 @@ describe 'glance::cache::logging' do
       is_expected.to contain_glance_cache_config('DEFAULT/use_stderr').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_glance_cache_config('DEFAULT/use_syslog').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_glance_cache_config('DEFAULT/debug').with(:value => '<SERVICE DEFAULT>')
-      is_expected.to contain_glance_cache_config('DEFAULT/verbose').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_glance_cache_config('DEFAULT/log_dir').with(:value => '/var/log/glance')
       is_expected.to contain_glance_cache_config('DEFAULT/log_file').with(:value => '/var/log/glance/cache.log')
     end
@@ -73,7 +71,6 @@ describe 'glance::cache::logging' do
       is_expected.to contain_glance_cache_config('DEFAULT/syslog_log_facility').with(:value => 'LOG_FOO')
       is_expected.to contain_glance_cache_config('DEFAULT/log_dir').with(:value => '/var/log')
       is_expected.to contain_glance_cache_config('DEFAULT/log_file').with(:value => '/var/tmp/glance_cache_random.log')
-      is_expected.to contain_glance_cache_config('DEFAULT/verbose').with(:value => 'true')
       is_expected.to contain_glance_cache_config('DEFAULT/debug').with(:value => 'true')
     end
   end

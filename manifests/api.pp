@@ -12,10 +12,6 @@
 #   setting is ignored and the setting from the glance class is used
 #   because there is only one glance package. Defaults to 'present'.
 #
-# [*verbose*]
-#   (optional) Rather to log the glance api service at verbose level.
-#   Default: undef
-#
 # [*debug*]
 #   (optional) Rather to log the glance api service at debug level.
 #   Default: undef
@@ -267,10 +263,13 @@
 #   Defaults to false.
 #   Example: ['file','http']
 #
+# [*verbose*]
+#   (optional) Deprecated. Rather to log the glance api service at verbose level.
+#   Default: undef
+
 class glance::api(
   $keystone_password,
   $package_ensure            = 'present',
-  $verbose                   = undef,
   $debug                     = undef,
   $bind_host                 = $::os_service_default,
   $bind_port                 = '9292',
@@ -326,12 +325,17 @@ class glance::api(
   $validation_options        = {},
   # DEPRECATED PARAMETERS
   $known_stores              = false,
+  $verbose                   = undef,
 ) inherits glance {
 
   include ::glance::policy
   include ::glance::api::db
   include ::glance::api::logging
   include ::glance::cache::logging
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages('glance-api',

@@ -4,10 +4,6 @@
 #
 # == parameters
 #
-#  [*verbose*]
-#    (Optional) Should the daemons log verbose messages
-#    Defaults to $::os_service_default.
-#
 #  [*debug*]
 #    (Optional) Should the daemons log debug messages
 #    Defaults to $::os_service_default.
@@ -92,6 +88,13 @@
 #    (optional) Format string for %%(asctime)s in log records.
 #    Defaults to $::os_service_default.
 #    Example: 'Y-%m-%d %H:%M:%S'
+#
+#  DEPRECATED PARAMETERS
+#
+#  [*verbose*]
+#    (Optional) Deprecated. Should the daemons log verbose messages
+#    Defaults to undef
+
 
 class glance::cache::logging(
   $use_syslog                    = $::os_service_default,
@@ -99,7 +102,6 @@ class glance::cache::logging(
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/glance',
   $log_file                      = '/var/log/glance/cache.log',
-  $verbose                       = $::os_service_default,
   $debug                         = $::os_service_default,
   $logging_context_format_string = $::os_service_default,
   $logging_default_format_string = $::os_service_default,
@@ -112,18 +114,22 @@ class glance::cache::logging(
   $instance_format               = $::os_service_default,
   $instance_uuid_format          = $::os_service_default,
   $log_date_format               = $::os_service_default,
+  # Deprecated
+  $verbose                       = undef,
 ) {
 
   $use_syslog_real   = pick($::glance::api::use_syslog,$use_syslog)
   $use_stderr_real   = pick($::glance::api::use_stderr,$use_stderr)
   $log_facility_real = pick($::glance::api::log_facility,$log_facility)
   $log_dir_real      = pick($::glance::api::log_dir,$log_dir)
-  $verbose_real      = pick($::glance::api::verbose,$verbose)
   $debug_real        = pick($::glance::api::debug,$debug)
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   oslo::log { 'glance_cache_config':
     debug                         => $debug_real,
-    verbose                       => $verbose_real,
     use_stderr                    => $use_stderr_real,
     use_syslog                    => $use_syslog_real,
     log_dir                       => $log_dir_real,

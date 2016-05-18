@@ -28,7 +28,6 @@ describe 'glance::glare::logging' do
      :log_facility => 'LOG_FOO',
      :log_dir => '/var/log',
      :log_file => '/var/tmp/glance_glare_random.log',
-     :verbose => true,
      :debug => true,
     }
   end
@@ -61,7 +60,6 @@ describe 'glance::glare::logging' do
       is_expected.to contain_glance_glare_config('DEFAULT/use_stderr').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_glance_glare_config('DEFAULT/log_dir').with(:value => '/var/log/glance')
       is_expected.to contain_glance_glare_config('DEFAULT/log_file').with(:value => '/var/log/glance/glare.log')
-      is_expected.to contain_glance_glare_config('DEFAULT/verbose').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_glance_glare_config('DEFAULT/debug').with(:value => '<SERVICE DEFAULT>')
     end
   end
@@ -73,7 +71,6 @@ describe 'glance::glare::logging' do
       is_expected.to contain_glance_glare_config('DEFAULT/syslog_log_facility').with(:value => 'LOG_FOO')
       is_expected.to contain_glance_glare_config('DEFAULT/log_dir').with(:value => '/var/log')
       is_expected.to contain_glance_glare_config('DEFAULT/log_file').with(:value => '/var/tmp/glance_glare_random.log')
-      is_expected.to contain_glance_glare_config('DEFAULT/verbose').with(:value => 'true')
       is_expected.to contain_glance_glare_config('DEFAULT/debug').with(:value => 'true')
     end
   end

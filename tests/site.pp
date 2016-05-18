@@ -6,7 +6,6 @@ Exec { logoutput => 'on_failure' }
 node glance_keystone_mysql {
   class { '::mysql::server': }
   class { '::keystone':
-    verbose      => true,
     debug        => true,
     catalog_type => 'sql',
     admin_token  => 'admin_token',
@@ -19,7 +18,6 @@ node glance_keystone_mysql {
     password => 'ChangeMe',
   }
   class { '::glance::api':
-    verbose             => true,
     debug               => true,
     auth_type           => 'keystone',
     keystone_tenant     => 'services',
@@ -39,7 +37,6 @@ node glance_keystone_mysql {
   }
 
   class { '::glance::registry':
-    verbose             => true,
     debug               => true,
     auth_type           => 'keystone',
     keystone_tenant     => 'services',

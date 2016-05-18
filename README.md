@@ -44,7 +44,6 @@ To utilize the glance module's functionality you will need to declare multiple r
 
 ```puppet
 class { 'glance::api':
-  verbose             => true,
   keystone_tenant     => 'services',
   keystone_user       => 'glance',
   keystone_password   => '12345',
@@ -52,7 +51,6 @@ class { 'glance::api':
 }
 
 class { 'glance::registry':
-  verbose             => true,
   keystone_tenant     => 'services',
   keystone_user       => 'glance',
   keystone_password   => '12345',
@@ -112,12 +110,12 @@ class { 'glance::notify::rabbitmq':
 The `glance_api_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/glance/glance-api.conf` file.
 
 ```puppet
-glance_api_config { 'DEFAULT/verbose' :
-  value => true,
+glance_api_config { 'DEFAULT/image_cache_dir' :
+  value => /var/lib/glance/image-cache,
 }
 ```
 
-This will write `verbose=true` in the `[DEFAULT]` section.
+This will write `image_cache_dir=/var/lib/glance/image-cache` in the `[DEFAULT]` section.
 
 ##### name
 
@@ -140,12 +138,12 @@ If value is equal to ensure_absent_val then the resource will behave as if `ensu
 The `glance_registry_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/glance/glance-registry.conf` file.
 
 ```puppet
-glance_registry_config { 'DEFAULT/verbose' :
-  value => true,
+glance_registry_config { 'DEFAULT/workers' :
+  value => 1,
 }
 ```
 
-This will write `verbose=true` in the `[DEFAULT]` section.
+This will write `workers=1` in the `[DEFAULT]` section.
 
 ##### name
 
@@ -168,12 +166,12 @@ If value is equal to ensure_absent_val then the resource will behave as if `ensu
 The `glance_cache_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/glance/glance-cache.conf` file.
 
 ```puppet
-glance_cache_config { 'DEFAULT/verbose' :
-  value => true,
+glance_cache_config { 'DEFAULT/image_cache_stall_time' :
+  value => 86400,
 }
 ```
 
-This will write `verbose=true` in the `[DEFAULT]` section.
+This will write `image_cache_stall_time=86400` in the `[DEFAULT]` section.
 
 ##### name
 

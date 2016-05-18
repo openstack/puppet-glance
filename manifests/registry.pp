@@ -12,9 +12,6 @@
 #    platforms this setting is ignored and the setting from the glance class is
 #    used because there is only one glance package.
 #
-#  [*verbose*]
-#    (optional) Enable verbose logs (true|false). Defaults to undef.
-#
 #  [*debug*]
 #    (optional) Enable debug logs (true|false). Defaults to undef.
 #
@@ -153,10 +150,14 @@
 #    Set to -1 to disable caching completely.
 #    Defaults to $::os_service_default.
 #
+#  DEPRECATED PARAMETERS
+#
+#  [*verbose*]
+#    (optional) Deprecated. Enable verbose logs (true|false). Defaults to undef.
+#
 class glance::registry(
   $keystone_password,
   $package_ensure          = 'present',
-  $verbose                 = undef,
   $debug                   = undef,
   $bind_host               = $::os_service_default,
   $bind_port               = '9191',
@@ -190,10 +191,16 @@ class glance::registry(
   $signing_dir             = $::os_service_default,
   $memcached_servers       = $::os_service_default,
   $token_cache_time        = $::os_service_default,
+  # Deprecated
+  $verbose                 = undef,
 ) inherits glance {
 
   include ::glance::registry::logging
   include ::glance::registry::db
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages( 'glance-registry',

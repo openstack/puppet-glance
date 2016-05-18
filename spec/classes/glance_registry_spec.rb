@@ -2,7 +2,6 @@
 describe 'glance::registry' do
   let :default_params do
     {
-      :verbose                => false,
       :debug                  => false,
       :use_stderr             => '<SERVICE DEFAULT>',
       :bind_host              => '<SERVICE DEFAULT>',

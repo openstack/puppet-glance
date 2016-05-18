@@ -4,7 +4,6 @@ describe 'glance::api' do
 
   let :default_params do
     {
-      :verbose                  => false,
       :debug                    => false,
       :use_stderr               => '<SERVICE DEFAULT>',
       :bind_host                => '<SERVICE DEFAULT>',
@@ -47,7 +46,6 @@ describe 'glance::api' do
   shared_examples_for 'glance::api' do
     [{:keystone_password => 'ChangeMe'},
      {
-        :verbose                  => true,
         :debug                    => true,
         :bind_host                => '127.0.0.1',
         :bind_port                => '9222',

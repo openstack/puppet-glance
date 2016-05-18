@@ -4,10 +4,6 @@
 #
 # === Parameters
 #
-#  [*verbose*]
-#    (Optional) Should the daemons log verbose messages.
-#    Defaults to $::os_service_default.
-#
 #  [*debug*]
 #    (Optional) Should the daemons log debug messages.
 #    Defaults to $::os_service_default.
@@ -93,13 +89,18 @@
 #   Defaults to $::os_service_default.
 #   Example: 'Y-%m-%d %H:%M:%S'
 #
+#  DEPRECATED PARAMETERS
+#
+#  [*verbose*]
+#    (Optional) Deprecated. Should the daemons log verbose messages.
+#    Defaults to undef
+#
 class glance::glare::logging(
   $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/glance',
   $log_file                      = '/var/log/glance/glare.log',
-  $verbose                       = $::os_service_default,
   $debug                         = $::os_service_default,
   $logging_context_format_string = $::os_service_default,
   $logging_default_format_string = $::os_service_default,
@@ -112,11 +113,16 @@ class glance::glare::logging(
   $instance_format               = $::os_service_default,
   $instance_uuid_format          = $::os_service_default,
   $log_date_format               = $::os_service_default,
+  # Deprecated
+  $verbose                       = undef,
 ) {
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   oslo::log { 'glance_glare_config':
     debug                         => $debug,
-    verbose                       => $verbose,
     use_stderr                    => $use_stderr,
     use_syslog                    => $use_syslog,
     log_dir                       => $log_dir,
