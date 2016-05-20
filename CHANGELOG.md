@@ -1,3 +1,26 @@
+##2016-05-20 - 7.1.0
+
+###Summary
+
+This is a feature and bugfix release in the Liberty series.
+
+####Features
+
+- Supports IPv6 in registry_host
+- Use glance-swift conf for swift backend
+- Update Glance Swift backend configuration
+
+####Bugfixes
+
+- Fix Swift store configuration
+- Stop collecting glance services by name and Make Keystone_endpoint match
+  service by name/type
+
+####Maintenance
+
+- Add deprecation warning for Qpid rpc driver
+
+
 ##2015-11-25 - 7.0.0
 ###Summary
 
