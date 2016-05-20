@@ -25,7 +25,7 @@
 #
 # [*service_name*]
 #    Name of the service. Optional.
-#    Defaults to 'Image Service'.
+#    Defaults to 'glance'.
 #
 # [*service_type*]
 #    Type of service. Optional. Defaults to 'image'.
@@ -67,7 +67,7 @@ class glance::keystone::auth(
   $configure_endpoint  = true,
   $configure_user      = true,
   $configure_user_role = true,
-  $service_name        = 'Image Service',
+  $service_name        = 'glance',
   $service_type        = 'image',
   $region              = 'RegionOne',
   $tenant              = 'services',
