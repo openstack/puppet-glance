@@ -42,6 +42,7 @@ Puppet::Type.type(:glance_image).provide(
     opts << "--disk-format=#{@resource[:disk_format]}"
     opts << "--min-disk=#{@resource[:min_disk]}" if @resource[:min_disk]
     opts << "--min-ram=#{@resource[:min_ram]}" if @resource[:min_ram]
+    opts << "--id=#{@resource[:id]}" if @resource[:id]
     opts << props_to_s(@resource[:properties]) if @resource[:properties]
     opts << location
 
@@ -89,7 +90,7 @@ Puppet::Type.type(:glance_image).provide(
   end
 
   def id=(id)
-    fail('id is read only')
+    fail('id for existing images can not be modified')
   end
 
   def self.instances

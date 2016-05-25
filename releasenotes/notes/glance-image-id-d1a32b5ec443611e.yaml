@@ -1,0 +1,5 @@
+---
+features:
+  - Add the ability to create an image with a id
+    specified by the user. The provider now accepts
+    id parameter to create the image.
