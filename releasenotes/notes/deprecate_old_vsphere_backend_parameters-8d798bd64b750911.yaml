@@ -1,0 +1,5 @@
+---
+upgrade:
+  - vmware_api_insecure deprecated, use vmware_insecure
+    vmware_datacenter_path and vmware_datastore_name
+    deprecated, use vmware_datastores
