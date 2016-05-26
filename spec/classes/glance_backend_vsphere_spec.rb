@@ -34,35 +34,32 @@ describe 'glance::backend::vsphere' do
           :vcenter_host       => '10.0.0.1',
           :vcenter_user       => 'root',
           :vcenter_password   => '123456',
-          :vcenter_datacenter => 'Datacenter',
-          :vcenter_datastore  => 'Datastore',
+          :vcenter_datastores => 'Datacenter:Datastore',
           :vcenter_image_dir  => '/openstack_glance',
         }
       end
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('glance_store/default_store').with_value('vsphere')
-        is_expected.to contain_glance_api_config('glance_store/vmware_api_insecure').with_value('True')
+        is_expected.to contain_glance_api_config('glance_store/vmware_insecure').with_value('True')
         is_expected.to contain_glance_api_config('glance_store/vmware_server_host').with_value('10.0.0.1')
         is_expected.to contain_glance_api_config('glance_store/vmware_server_username').with_value('root')
         is_expected.to contain_glance_api_config('glance_store/vmware_server_password').with_value('123456')
-        is_expected.to contain_glance_api_config('glance_store/vmware_datastore_name').with_value('Datastore')
         is_expected.to contain_glance_api_config('glance_store/vmware_store_image_dir').with_value('/openstack_glance')
         is_expected.to contain_glance_api_config('glance_store/vmware_task_poll_interval').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/vmware_api_retry_count').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_glance_api_config('glance_store/vmware_datacenter_path').with_value('Datacenter')
+        is_expected.to contain_glance_api_config('glance_store/vmware_datastores').with_value('Datacenter:Datastore')
         is_expected.to contain_glance_api_config('glance_store/vmware_ca_file').with_value('<SERVICE DEFAULT>')
       end
       it 'not configures glance-glare.conf' do
         is_expected.to_not contain_glance_glare_config('glance_store/default_store').with_value('vsphere')
-        is_expected.to_not contain_glance_glare_config('glance_store/vmware_api_insecure').with_value('True')
+        is_expected.to_not contain_glance_glare_config('glance_store/vmware_insecure').with_value('True')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_server_host').with_value('10.0.0.1')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_server_username').with_value('root')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_server_password').with_value('123456')
-        is_expected.to_not contain_glance_glare_config('glance_store/vmware_datastore_name').with_value('Datastore')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_store_image_dir').with_value('/openstack_glance')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_task_poll_interval').with_value('<SERVICE DEFAULT>')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_api_retry_count').with_value('<SERVICE DEFAULT>')
-        is_expected.to_not contain_glance_glare_config('glance_store/vmware_datacenter_path').with_value('Datacenter')
+        is_expected.to_not contain_glance_glare_config('glance_store/vmware_datastores').with_value('Datacenter:Datastore')
         is_expected.to_not contain_glance_glare_config('glance_store/vmware_ca_file').with_value('<SERVICE DEFAULT>')
       end
     end
@@ -73,8 +70,7 @@ describe 'glance::backend::vsphere' do
           :vcenter_host               => '10.0.0.1',
           :vcenter_user               => 'root',
           :vcenter_password           => '123456',
-          :vcenter_datacenter         => 'Datacenter',
-          :vcenter_datastore          => 'Datastore',
+          :vcenter_datastores         => 'Datacenter:Datastore',
           :vcenter_image_dir          => '/openstack_glance',
           :vcenter_ca_file            => '/etc/glance/vcenter-ca.pem',
           :vcenter_task_poll_interval => '6',
