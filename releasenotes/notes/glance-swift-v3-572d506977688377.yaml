@@ -1,0 +1,11 @@
+---
+upgrade:
+  - Glance users who wish to configure the Swift backend
+    can make use of swift_store_auth_project_domain_id and
+    swift_store_auth_user_domain_id to configure the required
+    keystone domain settings.
+fixes:
+  - Previously glance swift authentication would work only
+    with keystone auth <= 2. This fix allows you to properly
+    configured the (required) keystone domains for keystone
+    v3 authentication.
