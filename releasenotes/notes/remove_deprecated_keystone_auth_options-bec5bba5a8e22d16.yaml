@@ -1,0 +1,3 @@
+---
+other:
+  - Removed deprecated options for glance::keystone::auth class.

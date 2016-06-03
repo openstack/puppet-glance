@@ -77,31 +77,6 @@ describe 'glance::keystone::auth' do
       ) }
     end
 
-    describe 'with deprecated endpoints parameters' do
-
-      let :params do
-        {
-          :password          => 'pass',
-          :public_address    => '10.0.0.1',
-          :admin_address     => '10.0.0.2',
-          :internal_address  => '10.0.0.3',
-          :port              => '9393',
-          :region            => 'RegionTwo',
-          :public_protocol   => 'https',
-          :admin_protocol    => 'https',
-          :internal_protocol => 'https'
-        }
-      end
-
-      it { is_expected.to contain_keystone_endpoint('RegionTwo/Image Service::image').with(
-        :ensure       => 'present',
-        :public_url   => 'https://10.0.0.1:9393',
-        :admin_url    => 'https://10.0.0.2:9393',
-        :internal_url => 'https://10.0.0.3:9393'
-      )}
-
-    end
-
     describe 'when endpoint is not set' do
 
       let :params do
