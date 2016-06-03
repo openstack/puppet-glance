@@ -1,6 +1,6 @@
 {
   "name": "openstack-glance",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "author": "Puppet Labs and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Glance",
   "license": "Apache-2.0",
@@ -32,9 +32,9 @@
   "description": "Installs and configures OpenStack Glance (Image Service).",
   "dependencies": [
     { "name": "puppetlabs/inifile", "version_requirement": ">=1.0.0 <2.0.0" },
-    { "name": "openstack/keystone", "version_requirement": ">=8.0.0 <9.0.0" },
+    { "name": "openstack/keystone", "version_requirement": ">=9.0.0 <10.0.0" },
     { "name": "puppetlabs/stdlib", "version_requirement": ">=4.2.0 <5.0.0" },
-    { "name": "openstack/openstacklib", "version_requirement": ">=8.0.0 <9.0.0" },
-    { "name": "openstack/oslo", "version_requirement": "<9.0.0" }
+    { "name": "openstack/openstacklib", "version_requirement": ">=9.0.0 <10.0.0" },
+    { "name": "openstack/oslo", "version_requirement": ">=9.0.0 <10.0.0" }
   ]
 }
