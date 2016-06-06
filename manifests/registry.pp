@@ -38,7 +38,7 @@
 #    Defaults to undef.
 #
 #  [*database_connection*]
-#    (optional) Connection url to connect to nova database.
+#    (optional) Connection url to connect to glance database.
 #    Defaults to undef
 #
 #  [*database_idle_timeout*]
