@@ -54,6 +54,7 @@
 # === Examples
 #
 #  class { 'glance::keystone::auth':
+#    password     => '123456',
 #    public_url   => 'https://10.0.0.10:9292',
 #    internal_url => 'https://10.0.0.11:9292',
 #    admin_url    => 'https://10.0.0.11:9292',
