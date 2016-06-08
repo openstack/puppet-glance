@@ -76,20 +76,19 @@ class glance::keystone::auth(
   $internal_url        = 'http://127.0.0.1:9292',
 ) {
 
-  $real_service_name = pick($service_name, $auth_name)
-
   if $configure_endpoint {
-    Keystone_endpoint["${region}/${real_service_name}::${service_type}"]  ~> Service<| title == 'glance-api' |>
-    Keystone_endpoint["${region}/${real_service_name}::${service_type}"] -> Glance_image<||>
+    Keystone_endpoint["${region}/${service_name}::${service_type}"]  ~> Service<| title == 'glance-api' |>
+    Keystone_endpoint["${region}/${service_name}::${service_type}"] -> Glance_image<||>
   }
 
-  keystone::resource::service_identity { $auth_name:
+  keystone::resource::service_identity { 'glance':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     service_type        => $service_type,
     service_description => $service_description,
-    service_name        => $real_service_name,
+    service_name        => $service_name,
+    auth_name           => $auth_name,
     region              => $region,
     password            => $password,
     email               => $email,
