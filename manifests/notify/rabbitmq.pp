@@ -119,6 +119,8 @@ class glance::notify::rabbitmq(
   $notification_driver                = $::os_service_default,
 ) {
 
+  include ::glance::deps
+
   oslo::messaging::rabbit { ['glance_api_config', 'glance_registry_config']:
     rabbit_password             => $rabbit_password,
     rabbit_userid               => $rabbit_userid,

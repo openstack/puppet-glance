@@ -68,9 +68,10 @@ describe 'glance::registry' do
           'enable'     => param_hash[:enabled],
           'hasstatus'  => true,
           'hasrestart' => true,
-          'require'    => 'Class[Glance]',
           'tag'        => 'glance-service',
       )}
+      it { is_expected.to contain_service('glance-registry').that_subscribes_to('Anchor[glance::service::begin]')}
+      it { is_expected.to contain_service('glance-registry').that_notifies('Anchor[glance::service::end]')}
 
         it 'is_expected.to not sync the db if sync_db is set to false' do
 
@@ -141,9 +142,10 @@ describe 'glance::registry' do
             'enable'     => false,
             'hasstatus'  => true,
             'hasrestart' => true,
-            'require'    => 'Class[Glance]',
             'tag'        => 'glance-service',
         )}
+      it { is_expected.to contain_service('glance-registry').that_subscribes_to('Anchor[glance::service::begin]')}
+      it { is_expected.to contain_service('glance-registry').that_notifies('Anchor[glance::service::end]')}
     end
 
     describe 'with overridden pipeline' do

@@ -43,6 +43,8 @@ class glance::api::db (
   $database_max_overflow   = $::os_service_default,
 ) {
 
+  include ::glance::deps
+
   # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function
   # to use glance::api::<myparam> if glance::api::db::<myparam> isn't specified.
   $database_connection_real     = pick($::glance::api::database_connection, $database_connection)

@@ -32,6 +32,8 @@ class glance::db::postgresql(
   $privileges = 'ALL',
 ) {
 
+  include ::glance::deps
+
   ::openstacklib::db::postgresql { 'glance':
     password_hash => postgresql_password($user, $password),
     dbname        => $dbname,
@@ -40,6 +42,8 @@ class glance::db::postgresql(
     privileges    => $privileges,
   }
 
-  ::Openstacklib::Db::Postgresql['glance'] ~> Exec<| title == 'glance-manage db_sync' |>
+  Anchor['glance::db::begin']
+  ~> Class['glance::db::postgresql']
+  ~> Anchor['glance::db::end']
 
 }

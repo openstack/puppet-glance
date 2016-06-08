@@ -120,6 +120,8 @@ class glance::backend::vsphere(
   $vcenter_api_insecure       = undef,
 ) {
 
+  include ::glance::deps
+
   if $vcenter_api_insecure {
     warning('The vcenter_api_insecure parameter is deprecated, use parameter vcenter_insecure')
     $vmware_insecure_real = $vcenter_api_insecure

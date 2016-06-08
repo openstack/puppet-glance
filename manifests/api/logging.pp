@@ -117,6 +117,8 @@ class glance::api::logging(
   $verbose                       = undef,
 ) {
 
+  include ::glance::deps
+
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use glance::<myparam> first then glance::logging::<myparam>.
   $use_syslog_real = pick($::glance::api::use_syslog,$use_syslog)

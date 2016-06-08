@@ -13,6 +13,7 @@ class glance(
   $package_ensure = 'present'
 ) {
 
+  include ::glance::deps
   include ::glance::params
 
   if ( $glance::params::api_package_name == $glance::params::registry_package_name ) {

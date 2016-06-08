@@ -51,6 +51,8 @@ class glance::backend::rbd(
   $multi_store            = false,
   $glare_enabled          = false,
 ) {
+
+  include ::glance::deps
   include ::glance::params
 
   if $show_image_direct_url {
@@ -85,6 +87,7 @@ class glance::backend::rbd(
   package { 'python-ceph':
     ensure => $package_ensure,
     name   => $::glance::params::pyceph_package_name,
+    tag    => 'glance-support-package',
   }
 
 }

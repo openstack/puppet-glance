@@ -118,6 +118,8 @@ class glance::cache::logging(
   $verbose                       = undef,
 ) {
 
+  include ::glance::deps
+
   $use_syslog_real   = pick($::glance::api::use_syslog,$use_syslog)
   $use_stderr_real   = pick($::glance::api::use_stderr,$use_stderr)
   $log_facility_real = pick($::glance::api::log_facility,$log_facility)

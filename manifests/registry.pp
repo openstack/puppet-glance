@@ -195,6 +195,7 @@ class glance::registry(
   $verbose                 = undef,
 ) inherits glance {
 
+  include ::glance::deps
   include ::glance::registry::logging
   include ::glance::registry::db
 
@@ -210,8 +211,6 @@ class glance::registry(
       }
     )
   }
-
-  Glance_registry_config<||> ~> Service['glance-registry']
 
   resources { 'glance_registry_config':
     purge => $purge_config
@@ -277,7 +276,6 @@ class glance::registry(
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Class['glance'],
     tag        => 'glance-service',
   }
 

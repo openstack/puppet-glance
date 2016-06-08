@@ -49,6 +49,8 @@ class glance::registry::db (
   $database_max_overflow   = $::os_service_default,
 ) {
 
+  include ::glance::deps
+
   # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function
   # to use glance::registry::<myparam> if glance::registry::db::<myparam> isn't specified.
   $database_connection_real     = pick($::glance::registry::database_connection, $database_connection)

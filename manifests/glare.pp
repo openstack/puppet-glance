@@ -142,6 +142,7 @@ class glance::glare(
   $token_cache_time          = $::os_service_default,
 ) inherits glance {
 
+  include ::glance::deps
   include ::glance::policy
   include ::glance::glare::db
   include ::glance::glare::logging
@@ -152,11 +153,6 @@ class glance::glare(
       tag    => ['openstack', 'glance-package'],
     })
   }
-
-  Package[$::glance::params::glare_package_name] -> Class['glance::policy']
-
-  Glance_glare_config<||> ~> Service['glance-glare']
-  Class['glance::policy'] ~> Service['glance-glare']
 
   glance_glare_config {
     'DEFAULT/bind_host':           value => $bind_host;

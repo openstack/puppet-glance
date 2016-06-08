@@ -18,8 +18,8 @@ describe 'glance::cache::cleaner' do
           :weekday     => '*'
         )
 
-        is_expected.to contain_cron('glance-cache-cleaner').with(
-          :require => "Package[#{platform_params[:api_package_name]}]"
+        is_expected.to contain_cron('glance-cache-cleaner').that_requires(
+          'Anchor[glance::config::end]'
         )
       end
     end

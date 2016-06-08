@@ -138,7 +138,7 @@ describe 'glance::keystone::auth' do
         }
       end
 
-      it { is_expected.to contain_keystone_endpoint('RegionOne/glance::image').with_notify(["Service[glance-api]"]) }
+      it { is_expected.to contain_keystone_endpoint('RegionOne/glance::image').that_notifies(["Anchor[glance::service::begin]"]) }
       end
 
     describe 'when overriding service name' do

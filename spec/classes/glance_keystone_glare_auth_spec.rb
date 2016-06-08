@@ -138,7 +138,7 @@ describe 'glance::keystone::glare_auth' do
         }
       end
 
-      it { is_expected.to contain_keystone_endpoint('RegionOne/Glance Artifacts::artifact').with_notify(["Service[glance-glare]"]) }
+      it { is_expected.to contain_keystone_endpoint('RegionOne/Glance Artifacts::artifact').with_notify(["Anchor[glance::service::begin]"]) }
       end
 
     describe 'when overriding service name' do

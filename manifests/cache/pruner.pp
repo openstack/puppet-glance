@@ -33,6 +33,7 @@ class glance::cache::pruner(
   $command_options  = '',
 ) {
 
+  include ::glance::deps
   include ::glance::params
 
   cron { 'glance-cache-pruner':
@@ -44,7 +45,7 @@ class glance::cache::pruner(
     monthday    => $monthday,
     month       => $month,
     weekday     => $weekday,
-    require     => Package[$::glance::params::api_package_name],
+    require     => Anchor['glance::config::end'],
 
   }
 }

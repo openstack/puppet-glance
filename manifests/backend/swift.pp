@@ -69,6 +69,8 @@ class glance::backend::swift(
   $glare_enabled                       = false,
 ) {
 
+  include ::glance::deps
+
   glance_api_config {
     'glance_store/swift_store_region':         value => $swift_store_region;
     'glance_store/swift_store_container':      value => $swift_store_container;

@@ -23,6 +23,8 @@ class glance::backend::file(
   $glare_enabled            = false,
 ) {
 
+  include ::glance::deps
+
   glance_api_config {
     'glance_store/filesystem_store_datadir': value => $filesystem_store_datadir;
   }

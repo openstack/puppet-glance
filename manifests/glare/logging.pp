@@ -117,6 +117,8 @@ class glance::glare::logging(
   $verbose                       = undef,
 ) {
 
+  include ::glance::deps
+
   if $verbose {
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
   }

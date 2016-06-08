@@ -71,6 +71,8 @@ class glance::backend::cinder(
   $glare_enabled               = false,
 ) {
 
+  include ::glance::deps
+
   if $os_region_name {
     notice('The os_region_name parameter is deprecated and has no effect. Use glance::api::os_region_name instead.')
   }

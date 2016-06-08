@@ -36,6 +36,8 @@ class glance::db::mysql(
   $collate       = 'utf8_general_ci',
 ) {
 
+  include ::glance::deps
+
   validate_string($password)
 
   ::openstacklib::db::mysql { 'glance':
@@ -48,6 +50,7 @@ class glance::db::mysql(
     allowed_hosts => $allowed_hosts,
   }
 
-  ::Openstacklib::Db::Mysql['glance'] ~> Exec<| title == 'glance-manage db_sync' |>
-
+  Anchor['glance::db::begin']
+  ~> Class['glance::db::mysql']
+  ~> Anchor['glance::db::end']
 }

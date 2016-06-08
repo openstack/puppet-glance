@@ -17,8 +17,8 @@ describe 'glance::cache::pruner' do
           :month       => '*',
           :weekday     => '*'
         )
-        is_expected.to contain_cron('glance-cache-pruner').with(
-          :require => "Package[#{platform_params[:api_package_name]}]"
+        is_expected.to contain_cron('glance-cache-pruner').that_requires(
+          'Anchor[glance::config::end]'
         )
       end
     end

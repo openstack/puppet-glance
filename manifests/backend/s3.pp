@@ -77,6 +77,8 @@ class glance::backend::s3(
   $default_store            = undef,
 ) {
 
+  include ::glance::deps
+
   if !is_service_default($large_object_chunk_size){
     if !is_integer($large_object_chunk_size) or $large_object_chunk_size < 5 {
       fail('glance::backend::s3::large_object_chunk_size must be an integer >= 5')

@@ -50,6 +50,9 @@ class glance::config (
   $glare_paste_ini_config     = {},
   $cache_config               = {},
 ) {
+
+  include ::glance::deps
+
   validate_hash($api_config)
   validate_hash($api_paste_ini_config)
   validate_hash($registry_config)
