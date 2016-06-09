@@ -1,0 +1,5 @@
+---
+fixes:
+  - The keystone auth classes (for glance and glare) has been updated to be
+    able to specify a custom auth_name that may not contain the name of the
+    service.
