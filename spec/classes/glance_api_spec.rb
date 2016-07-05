@@ -14,7 +14,6 @@ describe 'glance::api' do
       :log_file                 => '/var/log/glance/api.log',
       :log_dir                  => '/var/log/glance',
       :auth_type                => 'keystone',
-      :auth_region              => '<SERVICE DEFAULT>',
       :enabled                  => true,
       :manage_service           => true,
       :backlog                  => '<SERVICE DEFAULT>',
@@ -53,7 +52,6 @@ describe 'glance::api' do
         :registry_port            => '9111',
         :registry_client_protocol => 'https',
         :auth_type                => 'not_keystone',
-        :auth_region              => 'RegionOne2',
         :enabled                  => false,
         :backlog                  => '4095',
         :workers                  => '5',
@@ -117,7 +115,6 @@ describe 'glance::api' do
             'delayed_delete',
             'scrub_time',
             'image_cache_dir',
-            'auth_region'
           ].each do |config|
             is_expected.to contain_glance_api_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end

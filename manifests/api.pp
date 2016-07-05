@@ -66,12 +66,6 @@
 #   (optional) Type is authorization being used.
 #   Defaults to 'keystone'
 #
-# [*auth_region*]
-#   (optional) The region for the authentication service.
-#   If "use_user_token" is not in effect and using keystone auth,
-#   then region name can be specified.
-#   Defaults to $::os_service_default.
-#
 # [*auth_uri*]
 #   (optional) Complete public Identity API endpoint.
 #   Defaults to 'http://127.0.0.1:5000/'.
@@ -266,7 +260,13 @@
 # [*verbose*]
 #   (optional) Deprecated. Rather to log the glance api service at verbose level.
 #   Default: undef
-
+#
+# [*auth_region*]
+#   (optional) The region for the authentication service.
+#   If "use_user_token" is not in effect and using keystone auth,
+#   then region name can be specified.
+#   Defaults to undef
+#
 class glance::api(
   $keystone_password,
   $package_ensure            = 'present',
@@ -283,7 +283,6 @@ class glance::api(
   $scrub_time                = $::os_service_default,
   $delayed_delete            = $::os_service_default,
   $auth_type                 = 'keystone',
-  $auth_region               = $::os_service_default,
   $auth_uri                  = 'http://127.0.0.1:5000/',
   $identity_uri              = 'http://127.0.0.1:35357/',
   $memcached_servers         = $::os_service_default,
@@ -326,6 +325,7 @@ class glance::api(
   # DEPRECATED PARAMETERS
   $known_stores              = false,
   $verbose                   = undef,
+  $auth_region               = undef,
 ) inherits glance {
 
   include ::glance::deps
@@ -336,6 +336,10 @@ class glance::api(
 
   if $verbose {
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
+
+  if $auth_region {
+    warning('auth_region is deprecated, has no effect and and will be removed in the O release.')
   }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
@@ -359,7 +363,6 @@ class glance::api(
     'DEFAULT/scrub_time':              value => $scrub_time;
     'DEFAULT/delayed_delete':          value => $delayed_delete;
     'DEFAULT/image_cache_dir':         value => $image_cache_dir;
-    'DEFAULT/auth_region':             value => $auth_region;
     'glance_store/os_region_name':     value => $os_region_name;
   }
 
