@@ -413,7 +413,7 @@ describe 'glance::api' do
 
   describe 'on unknown platforms' do
     let :facts do
-      { :osfamily => 'unknown' }
+      OSDefaults.get_facts({ :osfamily => 'unknown' })
     end
     let(:params) { default_params }
 
