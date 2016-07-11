@@ -7,7 +7,6 @@ describe 'glance::glare' do
       :bind_host                => '0.0.0.0',
       :bind_port                => '9494',
       :auth_type                => 'keystone',
-      :auth_region              => '<SERVICE DEFAULT>',
       :enabled                  => true,
       :manage_service           => true,
       :backlog                  => '4096',
@@ -33,7 +32,6 @@ describe 'glance::glare' do
         :bind_host                => '127.0.0.1',
         :bind_port                => '9222',
         :auth_type                => 'not_keystone',
-        :auth_region              => 'RegionOne2',
         :enabled                  => false,
         :backlog                  => '4095',
         :workers                  => '5',
@@ -78,7 +76,6 @@ describe 'glance::glare' do
           [
             'bind_host',
             'bind_port',
-            'auth_region'
           ].each do |config|
             is_expected.to contain_glance_glare_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end
