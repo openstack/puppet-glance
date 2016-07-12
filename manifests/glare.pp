@@ -29,12 +29,6 @@
 #   (optional) Type is authorization being used.
 #   Defaults to 'keystone'
 #
-# [*auth_region*]
-#   (optional) The region for the authentication service.
-#   If "use_user_token" is not in effect and using keystone auth,
-#   then region name can be specified.
-#   Defaults to $::os_service_default.
-#
 # [*auth_uri*]
 #   (optional) Complete public Identity API endpoint.
 #   Defaults to 'http://127.0.0.1:5000/'.
@@ -114,6 +108,14 @@
 #   Set to -1 to disable caching completely.
 #   Defaults to $::os_service_default.
 #
+# == DEPRECATED PARAMETERS
+#
+# [*auth_region*]
+#   (optional) The region for the authentication service.
+#   If "use_user_token" is not in effect and using keystone auth,
+#   then region name can be specified.
+#   Defaults to $::os_service_default.
+#
 class glance::glare(
   $package_ensure            = 'present',
   $bind_host                 = '0.0.0.0',
@@ -121,7 +123,6 @@ class glance::glare(
   $backlog                   = '4096',
   $workers                   = $::processorcount,
   $auth_type                 = 'keystone',
-  $auth_region               = $::os_service_default,
   $auth_uri                  = 'http://127.0.0.1:5000/',
   $identity_uri              = 'http://127.0.0.1:35357/',
   $memcached_servers         = $::os_service_default,
@@ -140,12 +141,18 @@ class glance::glare(
   $os_region_name            = 'RegionOne',
   $signing_dir               = $::os_service_default,
   $token_cache_time          = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $auth_region               = $::os_service_default,
 ) inherits glance {
 
   include ::glance::deps
   include ::glance::policy
   include ::glance::glare::db
   include ::glance::glare::logging
+
+  if $auth_region {
+    warning('auth_region is deprecated, has no effect and and will be removed in the O release.')
+  }
 
   if ( $glance::params::glare_package_name != $glance::params::registry_package_name ) {
     ensure_packages('glance-glare', {
@@ -159,7 +166,6 @@ class glance::glare(
     'DEFAULT/bind_port':           value => $bind_port;
     'DEFAULT/backlog':             value => $backlog;
     'DEFAULT/workers':             value => $workers;
-    'DEFAULT/auth_region':         value => $auth_region;
     'glance_store/os_region_name': value => $os_region_name;
   }
 
