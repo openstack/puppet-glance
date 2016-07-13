@@ -234,6 +234,14 @@ describe 'glance::api' do
       end
     end
 
+    describe 'setting enable_proxy_headers_parsing' do
+      let :params do
+        default_params.merge({:enable_proxy_headers_parsing => true })
+      end
+
+      it { is_expected.to contain_glance_api_config('oslo_middleware/enable_proxy_headers_parsing').with_value(true) }
+    end
+
     describe 'with ssl options' do
       let :params do
         default_params.merge({

@@ -228,6 +228,11 @@
 #   Set to -1 to disable caching completely.
 #   Defaults to $::os_service_default.
 #
+# [*enable_proxy_headers_parsing*]
+#   (Optional) Enable paste middleware to handle SSL requests through
+#   HTTPProxyToWSGI middleware.
+#   Defaults to $::os_service_default.
+#
 # [*validate*]
 #   (optional) Whether to validate the service is working after any service refreshes
 #   Defaults to false
@@ -269,63 +274,64 @@
 #
 class glance::api(
   $keystone_password,
-  $package_ensure            = 'present',
-  $debug                     = undef,
-  $bind_host                 = $::os_service_default,
-  $bind_port                 = '9292',
-  $backlog                   = $::os_service_default,
-  $workers                   = $::processorcount,
-  $log_file                  = undef,
-  $log_dir                   = undef,
-  $registry_host             = '0.0.0.0',
-  $registry_port             = $::os_service_default,
-  $registry_client_protocol  = $::os_service_default,
-  $scrub_time                = $::os_service_default,
-  $delayed_delete            = $::os_service_default,
-  $auth_type                 = 'keystone',
-  $auth_uri                  = 'http://127.0.0.1:5000/',
-  $identity_uri              = 'http://127.0.0.1:35357/',
-  $memcached_servers         = $::os_service_default,
-  $pipeline                  = 'keystone',
-  $keystone_tenant           = 'services',
-  $keystone_user             = 'glance',
-  $manage_service            = true,
-  $enabled                   = true,
-  $use_syslog                = undef,
-  $use_stderr                = undef,
-  $log_facility              = undef,
-  $show_image_direct_url     = $::os_service_default,
-  $show_multiple_locations   = $::os_service_default,
-  $location_strategy         = $::os_service_default,
-  $purge_config              = false,
-  $cert_file                 = $::os_service_default,
-  $key_file                  = $::os_service_default,
-  $ca_file                   = $::os_service_default,
-  $registry_client_cert_file = $::os_service_default,
-  $registry_client_key_file  = $::os_service_default,
-  $registry_client_ca_file   = $::os_service_default,
-  $stores                    = false,
-  $default_store             = undef,
-  $multi_store               = false,
-  $database_connection       = undef,
-  $database_idle_timeout     = undef,
-  $database_min_pool_size    = undef,
-  $database_max_pool_size    = undef,
-  $database_max_retries      = undef,
-  $database_retry_interval   = undef,
-  $database_max_overflow     = undef,
-  $image_cache_max_size      = $::os_service_default,
-  $image_cache_stall_time    = $::os_service_default,
-  $image_cache_dir           = '/var/lib/glance/image-cache',
-  $os_region_name            = 'RegionOne',
-  $signing_dir               = $::os_service_default,
-  $token_cache_time          = $::os_service_default,
-  $validate                  = false,
-  $validation_options        = {},
+  $package_ensure                       = 'present',
+  $debug                                = undef,
+  $bind_host                            = $::os_service_default,
+  $bind_port                            = '9292',
+  $backlog                              = $::os_service_default,
+  $workers                              = $::processorcount,
+  $log_file                             = undef,
+  $log_dir                              = undef,
+  $registry_host                        = '0.0.0.0',
+  $registry_port                        = $::os_service_default,
+  $registry_client_protocol             = $::os_service_default,
+  $scrub_time                           = $::os_service_default,
+  $delayed_delete                       = $::os_service_default,
+  $auth_type                            = 'keystone',
+  $auth_uri                             = 'http://127.0.0.1:5000/',
+  $identity_uri                         = 'http://127.0.0.1:35357/',
+  $memcached_servers                    = $::os_service_default,
+  $pipeline                             = 'keystone',
+  $keystone_tenant                      = 'services',
+  $keystone_user                        = 'glance',
+  $manage_service                       = true,
+  $enabled                              = true,
+  $use_syslog                           = undef,
+  $use_stderr                           = undef,
+  $log_facility                         = undef,
+  $show_image_direct_url                = $::os_service_default,
+  $show_multiple_locations              = $::os_service_default,
+  $location_strategy                    = $::os_service_default,
+  $purge_config                         = false,
+  $cert_file                            = $::os_service_default,
+  $key_file                             = $::os_service_default,
+  $ca_file                              = $::os_service_default,
+  $registry_client_cert_file            = $::os_service_default,
+  $registry_client_key_file             = $::os_service_default,
+  $registry_client_ca_file              = $::os_service_default,
+  $stores                               = false,
+  $default_store                        = undef,
+  $multi_store                          = false,
+  $database_connection                  = undef,
+  $database_idle_timeout                = undef,
+  $database_min_pool_size               = undef,
+  $database_max_pool_size               = undef,
+  $database_max_retries                 = undef,
+  $database_retry_interval              = undef,
+  $database_max_overflow                = undef,
+  $image_cache_max_size                 = $::os_service_default,
+  $image_cache_stall_time               = $::os_service_default,
+  $image_cache_dir                      = '/var/lib/glance/image-cache',
+  $os_region_name                       = 'RegionOne',
+  $signing_dir                          = $::os_service_default,
+  $token_cache_time                     = $::os_service_default,
+  $enable_proxy_headers_parsing         = $::os_service_default,
+  $validate                             = false,
+  $validation_options                   = {},
   # DEPRECATED PARAMETERS
-  $known_stores              = false,
-  $verbose                   = undef,
-  $auth_region               = undef,
+  $known_stores                         = false,
+  $verbose                              = undef,
+  $auth_region                          = undef,
 ) inherits glance {
 
   include ::glance::deps
@@ -470,6 +476,10 @@ class glance::api(
       'DEFAULT/admin_user'       : value => $keystone_user;
       'DEFAULT/admin_password'   : value => $keystone_password, secret => true;
     }
+  }
+
+  oslo::middleware { 'glance_api_config':
+    enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
   }
 
   # SSL Options
