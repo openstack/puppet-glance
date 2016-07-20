@@ -65,7 +65,7 @@ Puppet::Type.newtype(:glance_image) do
 
   newproperty(:disk_format) do
     desc "The format of the disk"
-    newvalues(:ami, :ari, :aki, :vhd, :vmd, :raw, :qcow2, :vdi, :iso)
+    newvalues(:ami, :ari, :aki, :vhd, :vmdk, :raw, :qcow2, :vdi, :iso)
   end
 
   newparam(:source) do
