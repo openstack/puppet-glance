@@ -1,0 +1,25 @@
+---
+features:
+  - Configure keystonemiddleware in a consistent way with all options required for Keystone v3.
+deprecations:
+  - glance::api::identity_uri is deprecated, use glance::api::authtoken::auth_url instead.
+  - glance::api::auth_uri is deprecated, use glance::api::authtoken::auth_uri instead.
+  - glance::api::keystone_tenant is deprecated, use glance::api::authtoken::project_name instead.
+  - glance::api::keystone_user is deprecated, use glance::api::authtoken::username instead.
+  - glance::api::keystone_password is deprecated, use glance::api::authtoken::password instead.
+  - glance::api::memcached_servers is deprecated, use glance::api::authtoken::memcached_servers instead.
+  - glance::glare::identity_uri is deprecated, use glance::glare::authtoken::auth_url instead.
+  - glance::glare::auth_uri is deprecated, use glance::glare::authtoken::auth_uri instead.
+  - glance::glare::keystone_tenant is deprecated, use glance::glare::authtoken::project_name instead.
+  - glance::glare::keystone_user is deprecated, use glance::glare::authtoken::username instead.
+  - glance::glare::keystone_password is deprecated, use glance::glare::authtoken::password instead.
+  - glance::glare::memcached_servers is deprecated, use glance::glare::authtoken::memcached_servers instead.
+  - glance::registry::identity_uri is deprecated, use glance::registry::authtoken::auth_url instead.
+  - glance::registry::auth_uri is deprecated, use glance::registry::authtoken::auth_uri instead.
+  - glance::registry::keystone_tenant is deprecated, use glance::registry::authtoken::project_name instead.
+  - glance::registry::keystone_user is deprecated, use glance::registry::authtoken::username instead.
+  - glance::registry::keystone_password is deprecated, use glance::registry::authtoken::password instead.
+  - glance::registry::memcached_servers is deprecated, use glance::registry::authtoken::memcached_servers instead.
+  - glance::api::auth_type is deprecated, use glance::api::auth_strategy instead.
+  - glance::glare::auth_type is deprecated, use glance::glare::auth_strategy instead.
+  - glance::registry::auth_type is deprecated, use glance::registry::auth_strategy instead.

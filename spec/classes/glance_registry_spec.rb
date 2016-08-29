@@ -1,3 +1,4 @@
+require 'spec_helper'
 
 describe 'glance::registry' do
   let :default_params do
@@ -12,17 +13,10 @@ describe 'glance::registry' do
       :enabled                => true,
       :manage_service         => true,
       :auth_type              => 'keystone',
-      :auth_uri               => 'http://127.0.0.1:5000/',
-      :identity_uri           => 'http://127.0.0.1:35357/',
-      :keystone_tenant        => 'services',
-      :keystone_user          => 'glance',
       :keystone_password      => 'ChangeMe',
       :purge_config           => false,
       :sync_db                => true,
       :os_region_name         => '<SERVICE DEFAULT>',
-      :signing_dir            => '<SERVICE DEFAULT>',
-      :token_cache_time       => '<SERVICE DEFAULT>',
-      :memcached_servers      => '<SERVICE DEFAULT>',
       :ca_file                => '<SERVICE DEFAULT>',
       :cert_file              => '<SERVICE DEFAULT>',
       :key_file               => '<SERVICE DEFAULT>',
@@ -38,15 +32,9 @@ describe 'glance::registry' do
         :workers                => '5',
         :enabled                => false,
         :auth_type              => 'keystone',
-        :auth_uri               => 'http://127.0.0.1:5000/v2.0',
-        :identity_uri           => 'http://127.0.0.1:35357/v2.0',
-        :keystone_tenant        => 'admin',
-        :keystone_user          => 'admin',
         :keystone_password      => 'ChangeMe',
         :sync_db                => false,
         :os_region_name         => 'RegionOne2',
-        :signing_dir            => '/path/to/dir',
-        :token_cache_time       => '300',
       }
     ].each do |param_set|
 
@@ -92,21 +80,8 @@ describe 'glance::registry' do
           ].each do |config|
             is_expected.to contain_glance_registry_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end
-          [
-           'auth_uri',
-           'identity_uri'
-          ].each do |config|
-            is_expected.to contain_glance_registry_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
-          end
           if param_hash[:auth_type] == 'keystone'
             is_expected.to contain_glance_registry_config("paste_deploy/flavor").with_value('keystone')
-            is_expected.to contain_glance_registry_config('keystone_authtoken/memcached_servers').with_value(param_hash[:memcached_servers])
-            is_expected.to contain_glance_registry_config("keystone_authtoken/admin_tenant_name").with_value(param_hash[:keystone_tenant])
-            is_expected.to contain_glance_registry_config("keystone_authtoken/admin_user").with_value(param_hash[:keystone_user])
-            is_expected.to contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password])
-            is_expected.to contain_glance_registry_config("keystone_authtoken/admin_password").with_value(param_hash[:keystone_password]).with_secret(true)
-            is_expected.to contain_glance_registry_config("keystone_authtoken/token_cache_time").with_value(param_hash[:token_cache_time])
-            is_expected.to contain_glance_registry_config("keystone_authtoken/signing_dir").with_value(param_hash[:signing_dir])
           end
         end
         it 'is_expected.to lay down default glance_store registry config' do
@@ -206,6 +181,32 @@ describe 'glance::registry' do
         it { is_expected.to contain_glance_registry_config('DEFAULT/ca_file').with_value('/tmp/ca_file') }
         it { is_expected.to contain_glance_registry_config('DEFAULT/cert_file').with_value('/tmp/cert_file') }
         it { is_expected.to contain_glance_registry_config('DEFAULT/key_file').with_value('/tmp/key_file') }
+      end
+    end
+
+    describe 'with deprecated auth parameters' do
+      let :params do
+        default_params.merge({
+          :auth_type         => 'keystone',
+          :keystone_tenant   => 'services',
+          :keystone_user     => 'glance',
+          :keystone_password => 'password',
+          :token_cache_time  => '1000',
+          :memcached_servers => 'localhost:11211',
+          :signing_dir       => '/tmp/keystone',
+          :auth_uri          => 'http://127.0.0.1:5000',
+          :identity_uri      => 'http://127.0.0.1:35357',
+        })
+      end
+      it 'deprecated auth parameters' do
+        is_expected.to contain_glance_registry_config('keystone_authtoken/memcached_servers').with_value(params[:memcached_servers])
+        is_expected.to contain_glance_registry_config('keystone_authtoken/username').with_value(params[:keystone_user])
+        is_expected.to contain_glance_registry_config('keystone_authtoken/project_name').with_value(params[:keystone_tenant])
+        is_expected.to contain_glance_registry_config('keystone_authtoken/password').with_value(params[:keystone_password])
+        is_expected.to contain_glance_registry_config('keystone_authtoken/token_cache_time').with_value(params[:token_cache_time])
+        is_expected.to contain_glance_registry_config('keystone_authtoken/signing_dir').with_value(params[:signing_dir])
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_uri').with_value(params[:auth_uri])
+        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_url').with_value(params[:identity_uri])
       end
     end
   end

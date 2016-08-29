@@ -11,18 +11,11 @@ describe 'glance::glare' do
       :manage_service           => true,
       :backlog                  => '4096',
       :workers                  => '7',
-      :keystone_tenant          => 'services',
-      :keystone_user            => 'glance',
       :keystone_password        => 'ChangeMe',
-      :token_cache_time         => '<SERVICE DEFAULT>',
-      :memcached_servers        => '<SERVICE DEFAULT>',
       :stores                   => false,
       :default_store            => false,
       :os_region_name           => 'RegionOne',
-      :signing_dir              => '<SERVICE DEFAULT>',
       :pipeline                 => 'keystone',
-      :auth_uri                 => 'http://127.0.0.1:5000/',
-      :identity_uri             => 'http://127.0.0.1:35357/',
     }
   end
 
@@ -35,15 +28,9 @@ describe 'glance::glare' do
         :enabled                  => false,
         :backlog                  => '4095',
         :workers                  => '5',
-        :keystone_tenant          => 'admin2',
-        :keystone_user            => 'admin2',
         :keystone_password        => 'ChangeMe2',
-        :token_cache_time         => '300',
         :os_region_name           => 'RegionOne2',
-        :signing_dir              => '/path/to/dir',
         :pipeline                 => 'keystone2',
-        :auth_uri                 => 'http://127.0.0.1:5000/v2.0',
-        :identity_uri             => 'http://127.0.0.1:35357/v2.0',
       }
     ].each do |param_set|
 
@@ -98,11 +85,6 @@ describe 'glance::glare' do
         it 'is_expected.to configure itself for keystone if that is the auth_type' do
           if params[:auth_type] == 'keystone'
             is_expected.to contain('paste_deploy/flavor').with_value('keystone+cachemanagement')
-            is_expected.to contain_glance_glare_config('keystone_authtoken/memcached_servers').with_value(param_hash[:memcached_servers])
-            ['admin_tenant_name', 'admin_user', 'admin_password', 'token_cache_time', 'signing_dir', 'auth_uri', 'identity_uri'].each do |config|
-              is_expected.to contain_glance_glare_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
-            end
-            is_expected.to contain_glance_glare_config('keystone_authtoken/admin_password').with_value(param_hash[:keystone_password]).with_secret(true)
           end
         end
       end
@@ -249,6 +231,32 @@ describe 'glance::glare' do
 
       it { is_expected.to contain_glance_glare_config('glance_store/default_store').with_value('glance.store.filesystem.Store') }
       it { is_expected.to contain_glance_glare_config('glance_store/stores').with_value('glance.store.filesystem.Store') }
+    end
+
+    describe 'with deprecated auth parameters' do
+      let :params do
+        default_params.merge({
+          :auth_type         => 'keystone',
+          :keystone_tenant   => 'services',
+          :keystone_user     => 'glance',
+          :keystone_password => 'password',
+          :token_cache_time  => '1000',
+          :memcached_servers => 'localhost:11211',
+          :signing_dir       => '/tmp/keystone',
+          :auth_uri          => 'http://127.0.0.1:5000',
+          :identity_uri      => 'http://127.0.0.1:35357',
+        })
+      end
+      it 'deprecated auth parameters' do
+        is_expected.to contain_glance_glare_config('keystone_authtoken/memcached_servers').with_value(params[:memcached_servers])
+        is_expected.to contain_glance_glare_config('keystone_authtoken/username').with_value(params[:keystone_user])
+        is_expected.to contain_glance_glare_config('keystone_authtoken/project_name').with_value(params[:keystone_tenant])
+        is_expected.to contain_glance_glare_config('keystone_authtoken/password').with_value(params[:keystone_password])
+        is_expected.to contain_glance_glare_config('keystone_authtoken/token_cache_time').with_value(params[:token_cache_time])
+        is_expected.to contain_glance_glare_config('keystone_authtoken/signing_dir').with_value(params[:signing_dir])
+        is_expected.to contain_glance_glare_config('keystone_authtoken/auth_uri').with_value(params[:auth_uri])
+        is_expected.to contain_glance_glare_config('keystone_authtoken/auth_url').with_value(params[:identity_uri])
+      end
     end
   end
 

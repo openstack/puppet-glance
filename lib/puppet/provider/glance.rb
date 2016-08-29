@@ -18,9 +18,9 @@ class Puppet::Provider::Glance < Puppet::Provider::Openstack
   end
 
   def self.glance_request(service, action, error, properties=nil)
-    @credentials.username = glance_credentials['admin_user']
-    @credentials.password = glance_credentials['admin_password']
-    @credentials.project_name = glance_credentials['admin_tenant_name']
+    @credentials.username = glance_credentials['username']
+    @credentials.password = glance_credentials['password']
+    @credentials.project_name = glance_credentials['project_name']
     @credentials.auth_url = auth_endpoint
     raise error unless @credentials.set?
     Puppet::Provider::Openstack.request(service, action, properties, @credentials)
@@ -35,18 +35,18 @@ class Puppet::Provider::Glance < Puppet::Provider::Openstack
       glance_file['keystone_authtoken']['auth_host'] and
       glance_file['keystone_authtoken']['auth_port'] and
       glance_file['keystone_authtoken']['auth_protocol'] and
-      glance_file['keystone_authtoken']['admin_tenant_name'] and
-      glance_file['keystone_authtoken']['admin_user'] and
-      glance_file['keystone_authtoken']['admin_password'] and
+      glance_file['keystone_authtoken']['project_name'] and
+      glance_file['keystone_authtoken']['username'] and
+      glance_file['keystone_authtoken']['password'] and
       glance_file['glance_store']['os_region_name']
 
         g = {}
         g['auth_host'] = glance_file['keystone_authtoken']['auth_host'].strip
         g['auth_port'] = glance_file['keystone_authtoken']['auth_port'].strip
         g['auth_protocol'] = glance_file['keystone_authtoken']['auth_protocol'].strip
-        g['admin_tenant_name'] = glance_file['keystone_authtoken']['admin_tenant_name'].strip
-        g['admin_user'] = glance_file['keystone_authtoken']['admin_user'].strip
-        g['admin_password'] = glance_file['keystone_authtoken']['admin_password'].strip
+        g['project_name'] = glance_file['keystone_authtoken']['project_name'].strip
+        g['username'] = glance_file['keystone_authtoken']['username'].strip
+        g['password'] = glance_file['keystone_authtoken']['password'].strip
         g['os_region_name'] = glance_file['glance_store']['os_region_name'].strip
 
         # auth_admin_prefix not required to be set.
@@ -54,17 +54,17 @@ class Puppet::Provider::Glance < Puppet::Provider::Openstack
 
         return g
     elsif glance_file and glance_file['keystone_authtoken'] and
-      glance_file['keystone_authtoken']['identity_uri'] and
-      glance_file['keystone_authtoken']['admin_tenant_name'] and
-      glance_file['keystone_authtoken']['admin_user'] and
-      glance_file['keystone_authtoken']['admin_password'] and
+      glance_file['keystone_authtoken']['auth_url'] and
+      glance_file['keystone_authtoken']['project_name'] and
+      glance_file['keystone_authtoken']['username'] and
+      glance_file['keystone_authtoken']['password'] and
       glance_file['glance_store']['os_region_name']
 
         g = {}
-        g['identity_uri'] = glance_file['keystone_authtoken']['identity_uri'].strip
-        g['admin_tenant_name'] = glance_file['keystone_authtoken']['admin_tenant_name'].strip
-        g['admin_user'] = glance_file['keystone_authtoken']['admin_user'].strip
-        g['admin_password'] = glance_file['keystone_authtoken']['admin_password'].strip
+        g['auth_url'] = glance_file['keystone_authtoken']['auth_url'].strip
+        g['project_name'] = glance_file['keystone_authtoken']['project_name'].strip
+        g['username'] = glance_file['keystone_authtoken']['username'].strip
+        g['password'] = glance_file['keystone_authtoken']['password'].strip
         g['os_region_name'] = glance_file['glance_store']['os_region_name'].strip
 
         return g
@@ -79,8 +79,8 @@ class Puppet::Provider::Glance < Puppet::Provider::Openstack
 
   def self.get_auth_endpoint
     g = glance_credentials
-    if g.key?('identity_uri')
-      "#{g['identity_uri']}/"
+    if g.key?('auth_url')
+      "#{g['auth_url']}/"
     else
       "#{g['auth_protocol']}://#{g['auth_host']}:#{g['auth_port']}#{g['auth_admin_prefix']}/v2.0/"
     end

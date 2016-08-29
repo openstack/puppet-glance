@@ -13,16 +13,12 @@ describe 'glance::api' do
       :registry_client_protocol => '<SERVICE DEFAULT>',
       :log_file                 => '/var/log/glance/api.log',
       :log_dir                  => '/var/log/glance',
-      :auth_type                => 'keystone',
+      :auth_strategy            => 'keystone',
       :enabled                  => true,
       :manage_service           => true,
       :backlog                  => '<SERVICE DEFAULT>',
       :workers                  => '7',
-      :keystone_tenant          => 'services',
-      :keystone_user            => 'glance',
       :keystone_password        => 'ChangeMe',
-      :token_cache_time         => '<SERVICE DEFAULT>',
-      :memcached_servers        => '<SERVICE DEFAULT>',
       :show_image_direct_url    => '<SERVICE DEFAULT>',
       :show_multiple_locations  => '<SERVICE DEFAULT>',
       :location_strategy        => '<SERVICE DEFAULT>',
@@ -35,14 +31,12 @@ describe 'glance::api' do
       :image_cache_stall_time   => '<SERVICE DEFAULT>',
       :image_cache_max_size     => '<SERVICE DEFAULT>',
       :os_region_name           => 'RegionOne',
-      :signing_dir              => '<SERVICE DEFAULT>',
       :pipeline                 => 'keystone',
-      :auth_uri                 => 'http://127.0.0.1:5000/',
-      :identity_uri             => 'http://127.0.0.1:35357/',
     }
   end
 
   shared_examples_for 'glance::api' do
+
     [{:keystone_password => 'ChangeMe'},
      {
         :debug                    => true,
@@ -51,14 +45,11 @@ describe 'glance::api' do
         :registry_host            => '127.0.0.1',
         :registry_port            => '9111',
         :registry_client_protocol => 'https',
-        :auth_type                => 'not_keystone',
+        :auth_strategy            => 'not_keystone',
         :enabled                  => false,
         :backlog                  => '4095',
         :workers                  => '5',
-        :keystone_tenant          => 'admin2',
-        :keystone_user            => 'admin2',
-        :keystone_password        => 'ChangeMe2',
-        :token_cache_time         => '300',
+        :keystone_password        => 'ChangeMe',
         :show_image_direct_url    => true,
         :show_multiple_locations  => true,
         :location_strategy        => 'store_type',
@@ -68,14 +59,11 @@ describe 'glance::api' do
         :image_cache_stall_time   => '10',
         :image_cache_max_size     => '10737418240',
         :os_region_name           => 'RegionOne2',
-        :signing_dir              => '/path/to/dir',
         :pipeline                 => 'keystone2',
-        :auth_uri                 => 'http://127.0.0.1:5000/v2.0',
-        :identity_uri             => 'http://127.0.0.1:35357/v2.0',
       }
     ].each do |param_set|
 
-      describe "when #{param_set == {:keystone_password => 'ChangeMe'} ? "using default" : "specifying"} class parameters" do
+      describe "when #{param_set.empty? ? "using default" : "specifying"} class parameters" do
 
         let :param_hash do
           default_params.merge(param_set)
@@ -154,22 +142,6 @@ describe 'glance::api' do
             :purge => false
           })
         end
-
-        it 'is_expected.to configure itself for keystone if that is the auth_type' do
-          if params[:auth_type] == 'keystone'
-            is_expected.to contain('paste_deploy/flavor').with_value('keystone+cachemanagement')
-            is_expected.to contain_glance_api_config('keystone_authtoken/memcached_servers').with_value(param_hash[:memcached_servers])
-            ['admin_tenant_name', 'admin_user', 'admin_password', 'token_cache_time', 'signing_dir', 'auth_uri', 'identity_uri'].each do |config|
-              is_expected.to contain_glance_api_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
-            end
-            is_expected.to contain_glance_api_config('keystone_authtoken/admin_password').with_value(param_hash[:keystone_password]).with_secret(true)
-
-            ['admin_tenant_name', 'admin_user', 'admin_password'].each do |config|
-              is_expected.to contain_glance_cache_config("keystone_authtoken/#{config}").with_value(param_hash[config.intern])
-            end
-            is_expected.to contain_glance_cache_config('keystone_authtoken/admin_password').with_value(param_hash[:keystone_password]).with_secret(true)
-          end
-        end
       end
 
     end
@@ -178,8 +150,8 @@ describe 'glance::api' do
       let :params do
         {
           :keystone_password => 'ChangeMe',
-          :manage_service => false,
-          :enabled        => false,
+          :manage_service    => false,
+          :enabled           => false,
         }
       end
 
@@ -224,7 +196,6 @@ describe 'glance::api' do
       describe "with pipeline incorrect value #{pipeline}" do
         let :params do
           {
-            :keystone_password => 'ChangeMe',
             :pipeline          => pipeline
           }
         end
@@ -342,7 +313,7 @@ describe 'glance::api' do
         :provider    => 'shell',
         :tries       => '10',
         :try_sleep   => '2',
-        :command     => 'glance --os-auth-url http://127.0.0.1:5000/ --os-tenant-name services --os-username glance --os-password ChangeMe image-list',
+        :command     => 'glance --os-auth-url http://127.0.0.1:5000 --os-project-name services --os-username glance --os-password ChangeMe image-list',
       )}
 
       it { is_expected.to contain_anchor('create glance-api anchor').with(
@@ -379,6 +350,32 @@ describe 'glance::api' do
       it { is_expected.to contain_anchor('create glance-api anchor').with(
         :require => 'Exec[execute glance-api validation]',
       )}
+    end
+
+    describe 'with deprecated auth parameters' do
+      let :params do
+        default_params.merge({
+          :auth_type         => 'keystone',
+          :keystone_tenant   => 'services',
+          :keystone_user     => 'glance',
+          :keystone_password => 'password',
+          :token_cache_time  => '1000',
+          :memcached_servers => 'localhost:11211',
+          :signing_dir       => '/tmp/keystone',
+          :auth_uri          => 'http://127.0.0.1:5000',
+          :identity_uri      => 'http://127.0.0.1:35357',
+        })
+      end
+      it 'deprecated auth parameters' do
+        is_expected.to contain_glance_api_config('keystone_authtoken/memcached_servers').with_value(params[:memcached_servers])
+        is_expected.to contain_glance_api_config('keystone_authtoken/username').with_value(params[:keystone_user])
+        is_expected.to contain_glance_api_config('keystone_authtoken/project_name').with_value(params[:keystone_tenant])
+        is_expected.to contain_glance_api_config('keystone_authtoken/password').with_value(params[:keystone_password])
+        is_expected.to contain_glance_api_config('keystone_authtoken/token_cache_time').with_value(params[:token_cache_time])
+        is_expected.to contain_glance_api_config('keystone_authtoken/signing_dir').with_value(params[:signing_dir])
+        is_expected.to contain_glance_api_config('keystone_authtoken/auth_uri').with_value(params[:auth_uri])
+        is_expected.to contain_glance_api_config('keystone_authtoken/auth_url').with_value(params[:identity_uri])
+      end
     end
   end
 
