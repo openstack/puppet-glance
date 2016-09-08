@@ -27,6 +27,7 @@
 #
 #  [*log_file*]
 #    (optional) File where logs should be stored.
+#    If set to $::os_service_default, it will not log to any file.
 #    Defaults to '/var/log/glance/api.log'.
 #
 #  [*logging_context_format_string*]
