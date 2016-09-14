@@ -1,9 +1,8 @@
-
 # uses the keystone packages
 # to ensure that we use the latest precise packages
 Exec { logoutput => 'on_failure' }
 
-node glance_keystone_mysql {
+node 'glance_keystone_mysql' {
   class { '::mysql::server': }
   class { '::keystone':
     debug        => true,
