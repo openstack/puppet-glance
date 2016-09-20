@@ -1,0 +1,5 @@
+---
+features:
+  - Add parameters to configure tasks & taskflow executor. Allows mainly to
+    allow enabling automatic image conversion at import with the
+    'conversion_format' parameter.

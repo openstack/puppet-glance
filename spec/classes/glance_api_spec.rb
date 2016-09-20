@@ -32,6 +32,12 @@ describe 'glance::api' do
       :image_cache_max_size     => '<SERVICE DEFAULT>',
       :os_region_name           => 'RegionOne',
       :pipeline                 => 'keystone',
+      :task_time_to_live        => '<SERVICE DEFAULT>',
+      :task_executor            => '<SERVICE DEFAULT>',
+      :task_work_dir            => '<SERVICE DEFAULT>',
+      :taskflow_engine_mode     => '<SERVICE DEFAULT>',
+      :taskflow_max_workers     => '<SERVICE DEFAULT>',
+      :conversion_format        => '<SERVICE DEFAULT>',
     }
   end
 
@@ -126,6 +132,15 @@ describe 'glance::api' do
             is_expected.to contain_glance_cache_config("glance_store/#{config}").with_value(param_hash[config.intern])
             is_expected.to contain_glance_api_config("glance_store/#{config}").with_value(param_hash[config.intern])
           end
+        end
+
+        it 'is_expected.to lay down default task & taskflow_executor config' do
+          is_expected.to contain_glance_api_config('task/task_time_to_live').with_value(param_hash[:task_time_to_live])
+          is_expected.to contain_glance_api_config('task/task_executor').with_value(param_hash[:task_executor])
+          is_expected.to contain_glance_api_config('task/work_dir').with_value(param_hash[:task_work_dir])
+          is_expected.to contain_glance_api_config('taskflow_executor/engine_mode').with_value(param_hash[:taskflow_engine_mode])
+          is_expected.to contain_glance_api_config('taskflow_executor/max_workers').with_value(param_hash[:taskflow_max_workers])
+          is_expected.to contain_glance_api_config('taskflow_executor/conversion_format').with_value(param_hash[:conversion_format])
         end
 
         it 'is_expected.to have no ssl options' do
@@ -234,6 +249,7 @@ describe 'glance::api' do
         it { is_expected.to contain_glance_api_config('DEFAULT/registry_client_cert_file').with_value('/tmp/registry_cert_file') }
       end
     end
+
     describe 'with stores by default' do
       let :params do
         default_params
@@ -300,6 +316,28 @@ describe 'glance::api' do
 
       it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
       it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('file') }
+    end
+
+    describe 'with task & taskflow configuration' do
+      let :params do
+        default_params.merge({
+          :task_time_to_live    => 72,
+          :task_executor        => 'taskflow-next-gen',
+          :task_work_dir        => '/tmp/large',
+          :taskflow_engine_mode => 'serial',
+          :taskflow_max_workers => 1,
+          :conversion_format    => 'raw',
+        })
+      end
+
+      it 'is_expected.to lay down default task & taskflow_executor config' do
+        is_expected.to contain_glance_api_config('task/task_time_to_live').with_value(72)
+        is_expected.to contain_glance_api_config('task/task_executor').with_value('taskflow-next-gen')
+        is_expected.to contain_glance_api_config('task/work_dir').with_value('/tmp/large')
+        is_expected.to contain_glance_api_config('taskflow_executor/engine_mode').with_value('serial')
+        is_expected.to contain_glance_api_config('taskflow_executor/max_workers').with_value(1)
+        is_expected.to contain_glance_api_config('taskflow_executor/conversion_format').with_value('raw')
+      end
     end
 
     describe 'while validating the service with default command' do

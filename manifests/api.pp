@@ -190,6 +190,34 @@
 #   (optional) Base directory that the Image Cache uses.
 #    Defaults to '/var/lib/glance/image-cache'.
 #
+# [*task_time_to_live*]
+#   (optional) Time in hours for which a task lives after.
+#   Defaults to $::os_service_default
+#
+# [*task_executor*]
+#   (optional) Task executor to be used t orun task scripts.
+#   Defaults to $::os_service_default
+#
+# [*task_work_dir*]
+#   (optional) Absolute path to the work directory to use for asynchronous
+#   task operations.
+#   Defaults to $::os_service_default
+#
+# [*taskflow_engine_mode*]
+#   (optional) Set the taskflow engine mode.
+#   Allowed values: 'parallel', 'serial'.
+#   Defaults to $::os_service_default
+#
+# [*taskflow_max_workers*]
+#   (optional) Integer value to limit the number of taskflow workers. Only
+#   relevant if taskflow_engine_mode is 'parallel'.
+#   Defaults to $::os_service_default
+#
+# [*conversion_format*]
+#   (optional) Allow automatic image conversion.
+#   Allowed values: 'qcow2', 'raw', 'vmdk', false.
+#   Defaults to $::os_service_default (disabled)
+#
 # [*os_region_name*]
 #   (optional) Sets the keystone region to use.
 #   Defaults to 'RegionOne'.
@@ -330,6 +358,12 @@ class glance::api(
   $image_cache_max_size                 = $::os_service_default,
   $image_cache_stall_time               = $::os_service_default,
   $image_cache_dir                      = '/var/lib/glance/image-cache',
+  $task_time_to_live                    = $::os_service_default,
+  $task_executor                        = $::os_service_default,
+  $task_work_dir                        = $::os_service_default,
+  $taskflow_engine_mode                 = $::os_service_default,
+  $taskflow_max_workers                 = $::os_service_default,
+  $conversion_format                    = $::os_service_default,
   $os_region_name                       = 'RegionOne',
   $enable_proxy_headers_parsing         = $::os_service_default,
   $validate                             = false,
@@ -424,6 +458,16 @@ class glance::api(
     'DEFAULT/delayed_delete':          value => $delayed_delete;
     'DEFAULT/image_cache_dir':         value => $image_cache_dir;
     'glance_store/os_region_name':     value => $os_region_name;
+  }
+
+  # task/taskflow_executor config.
+  glance_api_config {
+    'task/task_time_to_live':              value => $task_time_to_live;
+    'task/task_executor':                  value => $task_executor;
+    'task/work_dir':                       value => $task_work_dir;
+    'taskflow_executor/engine_mode':       value => $taskflow_engine_mode;
+    'taskflow_executor/max_workers':       value => $taskflow_max_workers;
+    'taskflow_executor/conversion_format': value => $conversion_format,
   }
 
   # stores config
