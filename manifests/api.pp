@@ -599,7 +599,9 @@ class glance::api(
     $auth_uri_real          = pick($auth_uri, $::glance::api::authtoken::auth_uri)
     $defaults = {
       'glance-api' => {
+        # lint:ignore:140chars
         'command'  => "glance --os-auth-url ${auth_uri_real} --os-project-name ${keystone_tenant_real} --os-username ${keystone_username_real} --os-password ${keystone_password_real} image-list",
+        # lint:endignore
       }
     }
     $validation_options_hash = merge ($defaults, $validation_options)

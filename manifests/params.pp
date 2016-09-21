@@ -32,7 +32,8 @@ class glance::params {
       $pyceph_package_name   = 'python-ceph'
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} only support osfamily RedHat and Debian")
+      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
+            module ${module_name} only support osfamily RedHat and Debian")
     }
   }
 
