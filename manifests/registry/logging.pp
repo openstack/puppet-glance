@@ -90,12 +90,6 @@
 #    Defaults to $::os_service_default.
 #    Example: 'Y-%m-%d %H:%M:%S'
 #
-#  DEPRECATED PARAMETERS
-#
-#  [*verbose*]
-#    (Optional) Deprecated. Should the daemons log verbose messages
-#    Defaults to undef
-#
 class glance::registry::logging(
   $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
@@ -114,8 +108,6 @@ class glance::registry::logging(
   $instance_format               = $::os_service_default,
   $instance_uuid_format          = $::os_service_default,
   $log_date_format               = $::os_service_default,
-  # Deprecated
-  $verbose                       = undef,
 ) {
 
   include ::glance::deps
@@ -128,10 +120,6 @@ class glance::registry::logging(
   $log_dir_real = pick($::glance::registry::log_dir,$log_dir)
   $log_file_real = pick($::glance::registry::log_file,$log_file)
   $debug_real = pick($::glance::registry::debug,$debug)
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   oslo::log { 'glance_registry_config':
     debug                         => $debug_real,

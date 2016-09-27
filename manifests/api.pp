@@ -256,10 +256,6 @@
 #   Defaults to false.
 #   Example: ['file','http']
 #
-# [*verbose*]
-#   (optional) Deprecated. Rather to log the glance api service at verbose level.
-#   Default: undef
-#
 # [*auth_region*]
 #   (optional) The region for the authentication service.
 #   If "use_user_token" is not in effect and using keystone auth,
@@ -370,7 +366,6 @@ class glance::api(
   $validation_options                   = {},
   # DEPRECATED PARAMETERS
   $known_stores                         = false,
-  $verbose                              = undef,
   $auth_region                          = undef,
   $keystone_password                    = undef,
   $auth_type                            = undef,
@@ -388,10 +383,6 @@ class glance::api(
   include ::glance::api::db
   include ::glance::api::logging
   include ::glance::cache::logging
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   if $auth_region {
     warning('auth_region is deprecated, has no effect and and will be removed in the O release.')

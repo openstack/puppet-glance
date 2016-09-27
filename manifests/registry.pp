@@ -119,9 +119,6 @@
 #
 #  DEPRECATED PARAMETERS
 #
-#  [*verbose*]
-#    (optional) Deprecated. Enable verbose logs (true|false). Defaults to undef.
-#
 #  [*keystone_password*]
 #    (optional) The keystone password for administrative user.
 #    Deprecated and will be replaced by ::glance::registry::authtoken::password
@@ -198,7 +195,6 @@ class glance::registry(
   $sync_db                 = true,
   $os_region_name          = $::os_service_default,
   # Deprecated
-  $verbose                 = undef,
   $keystone_password       = undef,
   $auth_type               = undef,
   $auth_uri                = undef,
@@ -213,10 +209,6 @@ class glance::registry(
   include ::glance::deps
   include ::glance::registry::logging
   include ::glance::registry::db
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   if $keystone_password {
     warning('glance::registry::keystone_password is deprecated, please use glance::registry::authtoken::password')
