@@ -7,7 +7,7 @@ describe 'glance::registry' do
       :use_stderr             => '<SERVICE DEFAULT>',
       :bind_host              => '<SERVICE DEFAULT>',
       :bind_port              => '9191',
-      :workers                => facts[:processorcount],
+      :workers                => facts[:os_workers],
       :log_file               => '/var/log/glance/registry.log',
       :log_dir                => '/var/log/glance',
       :enabled                => true,

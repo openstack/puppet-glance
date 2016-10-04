@@ -23,7 +23,7 @@
 #
 # [*workers*]
 #   (optional) Number of Glance Glare worker processes to start
-#   Default: $::processorcount
+#   Default: $::os_workers.
 #
 # [*auth_strategy*]
 #   (optional) Type is authorization being used.
@@ -134,7 +134,7 @@ class glance::glare(
   $bind_host                 = '0.0.0.0',
   $bind_port                 = '9494',
   $backlog                   = '4096',
-  $workers                   = $::processorcount,
+  $workers                   = $::os_workers,
   $auth_strategy             = 'keystone',
   $pipeline                  = 'keystone',
   $manage_service            = true,

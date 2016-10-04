@@ -22,7 +22,7 @@
 #  [*workers*]
 #    (optional) The number of child process workers that will be
 #    created to service Registry requests.
-#    Defaults to: $::processorcount
+#    Defaults to: $::os_workers.
 #
 #  [*log_file*]
 #    (optional) Log file for glance-registry.
@@ -174,7 +174,7 @@ class glance::registry(
   $debug                   = undef,
   $bind_host               = $::os_service_default,
   $bind_port               = '9191',
-  $workers                 = $::processorcount,
+  $workers                 = $::os_workers,
   $log_file                = undef,
   $log_dir                 = undef,
   $database_connection     = undef,

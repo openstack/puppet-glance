@@ -27,7 +27,7 @@
 #
 # [*workers*]
 #   (optional) Number of Glance API worker processes to start
-#   Default: $::processorcount
+#   Default: $::os_workers.
 #
 # [*log_file*]
 #   (optional) The path of file used for logging
@@ -320,7 +320,7 @@ class glance::api(
   $bind_host                            = $::os_service_default,
   $bind_port                            = '9292',
   $backlog                              = $::os_service_default,
-  $workers                              = $::processorcount,
+  $workers                              = $::os_workers,
   $log_file                             = undef,
   $log_dir                              = undef,
   $registry_host                        = '0.0.0.0',
