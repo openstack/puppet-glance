@@ -31,7 +31,7 @@
 #
 #  [*log_dir*]
 #    (optional) directory to which glance logs are sent.
-#    If set to boolean false, it will not log to any directory.
+#    If set to $::os_service_default, it will not log to any directory.
 #    Defaults to undef.
 #
 #  [*database_connection*]
