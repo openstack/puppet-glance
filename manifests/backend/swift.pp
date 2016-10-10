@@ -70,6 +70,9 @@ class glance::backend::swift(
 ) {
 
   include ::glance::deps
+  include ::swift::client
+  Class['swift::client'] -> Anchor['glance::install::end']
+  Service<| tag == 'swift-service' |> -> Service['glance-api']
 
   glance_api_config {
     'glance_store/swift_store_region':         value => $swift_store_region;

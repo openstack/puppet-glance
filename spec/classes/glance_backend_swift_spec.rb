@@ -15,6 +15,8 @@ describe 'glance::backend::swift' do
 
     describe 'when default parameters' do
 
+      it { is_expected.to contain_class 'swift::client' }
+
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('glance_store/default_store').with_value('swift')
         is_expected.to contain_glance_api_config('glance_store/swift_store_large_object_size').with_value('<SERVICE DEFAULT>')
