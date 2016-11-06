@@ -1,17 +1,20 @@
 require 'spec_helper'
 
 describe 'glance::glare' do
-
+  let :pre_condition do
+    "class {'::glance::glare::authtoken':
+      password => 'ChangeMe',
+    }"
+  end
   let :default_params do
     {
       :bind_host                => '0.0.0.0',
       :bind_port                => '9494',
-      :auth_type                => 'keystone',
+      :auth_strategy            => 'keystone',
       :enabled                  => true,
       :manage_service           => true,
       :backlog                  => '4096',
       :workers                  => '7',
-      :keystone_password        => 'ChangeMe',
       :stores                   => false,
       :default_store            => false,
       :os_region_name           => 'RegionOne',
@@ -24,17 +27,16 @@ describe 'glance::glare' do
      {
         :bind_host                => '127.0.0.1',
         :bind_port                => '9222',
-        :auth_type                => 'not_keystone',
+        :auth_strategy                => 'not_keystone',
         :enabled                  => false,
         :backlog                  => '4095',
         :workers                  => '5',
-        :keystone_password        => 'ChangeMe2',
         :os_region_name           => 'RegionOne2',
         :pipeline                 => 'keystone2',
       }
     ].each do |param_set|
 
-      describe "when #{param_set == {:keystone_password => 'ChangeMe'} ? "using default" : "specifying"} class parameters" do
+      describe "when not using default class parameters" do
 
         let :param_hash do
           default_params.merge(param_set)
@@ -82,8 +84,8 @@ describe 'glance::glare' do
           is_expected.to contain_glance_glare_config('DEFAULT/key_file').with_value('<SERVICE DEFAULT>')
         end
 
-        it 'is_expected.to configure itself for keystone if that is the auth_type' do
-          if params[:auth_type] == 'keystone'
+        it 'is_expected.to configure itself for keystone if that is the auth_strategy' do
+          if params[:auth_strategy] == 'keystone'
             is_expected.to contain('paste_deploy/flavor').with_value('keystone+cachemanagement')
           end
         end
@@ -94,7 +96,6 @@ describe 'glance::glare' do
     describe 'with disabled service managing' do
       let :params do
         {
-          :keystone_password => 'ChangeMe',
           :manage_service => false,
           :enabled        => false,
         }
@@ -112,8 +113,7 @@ describe 'glance::glare' do
     describe 'with overridden pipeline' do
       let :params do
         {
-          :keystone_password => 'ChangeMe',
-          :pipeline          => 'something',
+          :pipeline => 'something',
         }
       end
 
@@ -123,8 +123,7 @@ describe 'glance::glare' do
     describe 'with blank pipeline' do
       let :params do
         {
-          :keystone_password => 'ChangeMe',
-          :pipeline          => '',
+          :pipeline => '',
         }
       end
 
@@ -141,8 +140,7 @@ describe 'glance::glare' do
       describe "with pipeline incorrect value #{pipeline}" do
         let :params do
           {
-            :keystone_password => 'ChangeMe',
-            :pipeline          => pipeline
+            :pipeline => pipeline
           }
         end
 
@@ -232,33 +230,7 @@ describe 'glance::glare' do
       it { is_expected.to contain_glance_glare_config('glance_store/default_store').with_value('glance.store.filesystem.Store') }
       it { is_expected.to contain_glance_glare_config('glance_store/stores').with_value('glance.store.filesystem.Store') }
     end
-
-    describe 'with deprecated auth parameters' do
-      let :params do
-        default_params.merge({
-          :auth_type         => 'keystone',
-          :keystone_tenant   => 'services',
-          :keystone_user     => 'glance',
-          :keystone_password => 'password',
-          :token_cache_time  => '1000',
-          :memcached_servers => 'localhost:11211',
-          :signing_dir       => '/tmp/keystone',
-          :auth_uri          => 'http://127.0.0.1:5000',
-          :identity_uri      => 'http://127.0.0.1:35357',
-        })
-      end
-      it 'deprecated auth parameters' do
-        is_expected.to contain_glance_glare_config('keystone_authtoken/memcached_servers').with_value(params[:memcached_servers])
-        is_expected.to contain_glance_glare_config('keystone_authtoken/username').with_value(params[:keystone_user])
-        is_expected.to contain_glance_glare_config('keystone_authtoken/project_name').with_value(params[:keystone_tenant])
-        is_expected.to contain_glance_glare_config('keystone_authtoken/password').with_value(params[:keystone_password])
-        is_expected.to contain_glance_glare_config('keystone_authtoken/token_cache_time').with_value(params[:token_cache_time])
-        is_expected.to contain_glance_glare_config('keystone_authtoken/signing_dir').with_value(params[:signing_dir])
-        is_expected.to contain_glance_glare_config('keystone_authtoken/auth_uri').with_value(params[:auth_uri])
-        is_expected.to contain_glance_glare_config('keystone_authtoken/auth_url').with_value(params[:identity_uri])
-      end
-    end
-  end
+end
 
   shared_examples_for 'glance::glare Debian' do
     let(:params) { default_params }

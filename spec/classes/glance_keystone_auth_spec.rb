@@ -128,7 +128,8 @@ describe 'glance::keystone::auth' do
 
     describe 'when configuring glance-api and the keystone endpoint' do
       let :pre_condition do
-        "class { 'glance::api': keystone_password => 'test' }"
+        "class { 'glance::api::authtoken': password => 'test' }
+         include ::glance::api"
       end
 
       let :params do

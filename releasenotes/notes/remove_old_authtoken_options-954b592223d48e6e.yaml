@@ -1,0 +1,29 @@
+---
+other:
+  - removed deprecated glance::api::keystone_user
+  - removed deprecated glance::api::keystone_password
+  - removed deprecated glance::api::keystone_tenant
+  - removed deprecatedglance::api::identity_uri
+  - removed deprecated glance::api::auth_uri
+  - removed deprecated glance::api::memcached_servers
+  - removed deprecated glance::api::token_cache_time
+  - removed deprecated glance::api::signing_dir
+  - removed deprecated glance::api::auth_type
+  - removed deprecated glance::glare::keystone_user
+  - removed deprecated glance::glare::keystone_password
+  - removed deprecated glance::glare::keystone_tenant
+  - removed deprecated glance::glare::identity_uri
+  - removed deprecated glance::glare::auth_uri
+  - removed deprecated glance::glare::memcached_servers
+  - removed deprecated glance::glare::token_cache_time
+  - removed deprecated glance::glare::signing_dir
+  - removed deprecated glance::glare::auth_type
+  - removed deprecated glance::registry::keystone_user
+  - removed deprecated glance::registry::keystone_password
+  - removed deprecated glance::registry::keystone_tenant
+  - removed deprecated glance::registry::identity_uri
+  - removed deprecated glance::registry::auth_uri
+  - removed deprecated glance::registry::memcached_servers
+  - removed deprecated glance::registry::token_cache_time
+  - removed deprecated glance::registry::signing_dir
+  - removed deprecated glance::registry::auth_type
