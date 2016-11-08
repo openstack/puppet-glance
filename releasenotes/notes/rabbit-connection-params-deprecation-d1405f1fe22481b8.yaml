@@ -1,0 +1,9 @@
+---
+deprecations:
+  - glance::notify::rabbitmq::rabbit_host,
+    glance::notify::rabbitmq::rabbit_hosts,
+    glance::notify::rabbitmq::rabbit_password,
+    glance::notify::rabbitmq::rabbit_port,
+    glance::notify::rabbitmq::rabbit_userid and
+    glance::notify::rabbitmq::rabbit_virtual_host are deprecated.
+    glance::notify::rabbitmq::default_transport_url should be used instead.
