@@ -1,6 +1,12 @@
 #
 # used to configure rabbitmq notifications for glance
 #
+# [*default_transport_url*]
+#    (optional) A URL representing the messaging driver to use and its full
+#    configuration. Transport URLs take the form:
+#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#    Defaults to $::os_service_default
+#
 #  [*rabbit_password*]
 #   (Optional) The RabbitMQ password. (string value)
 #   Defaults to $::os_service_default
@@ -97,6 +103,7 @@
 #   Defaults to $::os_service_default
 #
 class glance::notify::rabbitmq(
+  $default_transport_url              = $::os_service_default,
   $rabbit_password                    = $::os_service_default,
   $rabbit_userid                      = $::os_service_default,
   $rabbit_host                        = $::os_service_default,
@@ -141,6 +148,9 @@ class glance::notify::rabbitmq(
     kombu_compression           => $kombu_compression,
   }
 
+  oslo::messaging::default { ['glance_api_config', 'glance_registry_config']:
+    transport_url => $default_transport_url,
+  }
 
   oslo::messaging::notifications { ['glance_api_config', 'glance_registry_config']:
     driver => $notification_driver,
