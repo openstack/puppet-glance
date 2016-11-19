@@ -23,7 +23,7 @@ require 'spec_helper'
 describe 'glance::backend::vsphere' do
 
   let :pre_condition do
-    'class { "glance::api": keystone_password => "pass" }'
+    'class { "glance::api::authtoken": password => "pass" }'
   end
 
   shared_examples_for 'glance with vsphere backend' do

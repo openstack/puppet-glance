@@ -73,62 +73,6 @@
 #   (optional) Sets the keystone region to use.
 #   Defaults to 'RegionOne'.
 #
-# == DEPRECATED PARAMETERS
-#
-# [*auth_region*]
-#   (optional) The region for the authentication service.
-#   If "use_user_token" is not in effect and using keystone auth,
-#   then region name can be specified.
-#   Defaults to $::os_service_default.
-#
-# [*auth_type*]
-#   (optional) Type is authorization being used.
-#   Deprecated and replaced by ::glance::glare::auth_strategy
-#   Defaults to undef.
-#
-# [*auth_uri*]
-#   (optional) Complete public Identity API endpoint.
-#   Deprecated and will be replaced by ::glance::glare::authtoken::auth_uri
-#   Defaults to undef.
-#
-# [*identity_uri*]
-#   (optional) Complete admin Identity API endpoint.
-#   Deprecated and will be replaced by ::glance::glare::authtoken::auth_url
-#   Defaults to undef.
-#
-# [*keystone_tenant*]
-#   (optional) Tenant to authenticate to.
-#   Deprecated and will be replaced by ::glance::glare::authtoken::project_name
-#   Defaults to undef.
-#
-# [*keystone_user*]
-#   (optional) User to authenticate as with keystone.
-#   Deprecated and will be replaced by ::glance::glare::authtoken::username
-#   Defaults to undef.
-#
-# [*keystone_password*]
-#   (optional) Password used to authentication.
-#   Deprecated and will be replaced by ::glance::glare::authtoken::password
-#   Defaults to undef.
-#
-# [*signing_dir*]
-#   (optional) Directory used to cache files related to PKI tokens.
-#   Deprecated and will be replaced by ::glance::glare::authtoken::signing_dir
-#   Defaults to undef.
-#
-# [*memcached_servers*]
-#   (optinal) a list of memcached server(s) to use for caching. If left undefined,
-#   tokens will instead be cached in-process.
-#   Deprecated and will be replaced by ::glance::glare::authtoken::memcached_servers
-#   Defaults to undef.
-#
-# [*token_cache_time*]
-#   (optional) In order to prevent excessive effort spent validating tokens,
-#   the middleware caches previously-seen tokens for a configurable duration (in seconds).
-#   Set to -1 to disable caching completely.
-#   Deprecated and will be replaced by ::glance::glare::authtoken::token_cache_time
-#   Defaults to undef.
-#
 class glance::glare(
   $package_ensure            = 'present',
   $bind_host                 = '0.0.0.0',
@@ -146,66 +90,12 @@ class glance::glare(
   $default_store             = undef,
   $multi_store               = false,
   $os_region_name            = 'RegionOne',
-  # DEPRECATED PARAMETERS
-  $auth_region               = undef,
-  $auth_type                 = undef,
-  $auth_uri                  = undef,
-  $identity_uri              = undef,
-  $memcached_servers         = undef,
-  $keystone_tenant           = undef,
-  $keystone_user             = undef,
-  $keystone_password         = undef,
-  $signing_dir               = undef,
-  $token_cache_time          = undef,
 ) inherits glance {
 
   include ::glance::deps
   include ::glance::policy
   include ::glance::glare::db
   include ::glance::glare::logging
-
-  if $auth_region {
-    warning('auth_region is deprecated, has no effect and and will be removed in the O release.')
-  }
-
-  if $keystone_password {
-    warning('glance::glare::keystone_password is deprecated, please use glance::glare::authtoken::password')
-  }
-
-  if $auth_type {
-    warning('glance::glare::auth_type is deprecated, please use glance::glare::auth_strategy')
-    $auth_strategy_real = $auth_type
-  } else {
-    $auth_strategy_real = $auth_strategy
-  }
-
-  if $auth_uri {
-    warning('glance::glare::auth_uri is deprecated, please use glance::glare::authtoken::auth_uri')
-  }
-
-  if $identity_uri {
-    warning('glance::glare::identity_uri is deprecated, please use glance::glare::authtoken::auth_url')
-  }
-
-  if $keystone_tenant {
-    warning('glance::glare::keystone_tenant is deprecated, please use glance::glare::authtoken::project_name')
-  }
-
-  if $keystone_user {
-    warning('glance::glare::keystone_user is deprecated, please use glance::glare::authtoken::username')
-  }
-
-  if $memcached_servers {
-    warning('glance::glare::memcached_servers is deprecated, please use glance::glare::authtoken::memcached_servers')
-  }
-
-  if $signing_dir {
-    warning('glance::glare::signing_dir is deprecated, please use glance::glare::authtoken::signing_dir')
-  }
-
-  if $token_cache_time {
-    warning('glance::glare::token_cache_time is deprecated, please use glance::glare::authtoken::token_cache_time')
-  }
 
   if ( $glance::params::glare_package_name != $glance::params::registry_package_name ) {
     ensure_packages('glance-glare', {

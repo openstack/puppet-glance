@@ -256,60 +256,6 @@
 #   Defaults to false.
 #   Example: ['file','http']
 #
-# [*auth_region*]
-#   (optional) The region for the authentication service.
-#   If "use_user_token" is not in effect and using keystone auth,
-#   then region name can be specified.
-#   Defaults to undef
-#
-# [*keystone_password*]
-#   (Optional) Password used to authentication.
-#   Deprecated and will be replaced by ::glance::api::authtoken::password
-#   Defaults to undef.
-#
-# [*auth_type*]
-#   (optional) Type is authorization being used.
-#   Deprecated and replaced by ::glance::api::auth_strategy
-#   Defaults to undef.
-#
-# [*auth_uri*]
-#   (optional) Complete public Identity API endpoint.
-#   Deprecated and will be replaced by ::glance::api::authtoken::auth_uri
-#   Defaults to undef.
-#
-# [*identity_uri*]
-#   (optional) Complete admin Identity API endpoint.
-#   Deprecated and will be replaced by ::glance::api::authtoken::auth_url
-#   Defaults to undef.
-#
-# [*keystone_tenant*]
-#   (optional) Tenant to authenticate to.
-#   Deprecated and will be replaced by ::glance::api::authtoken::project_name
-#   Defaults to undef.
-#
-# [*keystone_user*]
-#   (optional) User to authenticate as with keystone.
-#   Deprecated and will be replaced by ::glance::api::authtoken::username
-#   Defaults to undef.
-#
-# [*signing_dir*]
-#   (optional) Directory used to cache files related to PKI tokens.
-#   Deprecated and will be replaced by ::glance::api::authtoken::signing_dir
-#   Defaults to undef.
-#
-# [*memcached_servers*]
-#   (optinal) a list of memcached server(s) to use for caching. If left undefined,
-#   tokens will instead be cached in-process.
-#   Deprecated and will be replaced by ::glance::api::authtoken::memcached_servers
-#   Defaults to undef.
-#
-# [*token_cache_time*]
-#   (optional) In order to prevent excessive effort spent validating tokens,
-#   the middleware caches previously-seen tokens for a configurable duration (in seconds).
-#   Set to -1 to disable caching completely.
-#   Deprecated and will be replaced by ::glance::api::authtoken::token_cache_time
-#   Defaults to undef.
-#
 class glance::api(
   $package_ensure                       = 'present',
   $debug                                = undef,
@@ -366,16 +312,6 @@ class glance::api(
   $validation_options                   = {},
   # DEPRECATED PARAMETERS
   $known_stores                         = false,
-  $auth_region                          = undef,
-  $keystone_password                    = undef,
-  $auth_type                            = undef,
-  $auth_uri                             = undef,
-  $identity_uri                         = undef,
-  $keystone_tenant                      = undef,
-  $keystone_user                        = undef,
-  $memcached_servers                    = undef,
-  $signing_dir                          = undef,
-  $token_cache_time                     = undef,
 ) inherits glance {
 
   include ::glance::deps
@@ -383,49 +319,6 @@ class glance::api(
   include ::glance::api::db
   include ::glance::api::logging
   include ::glance::cache::logging
-
-  if $auth_region {
-    warning('auth_region is deprecated, has no effect and and will be removed in the O release.')
-  }
-
-  if $keystone_password {
-    warning('glance::api::keystone_password is deprecated, please use glance::api::authtoken::password')
-  }
-
-  if $auth_type {
-    warning('glance::api::auth_type is deprecated, please use glance::api::auth_strategy')
-    $auth_strategy_real = $auth_type
-  } else {
-    $auth_strategy_real = $auth_strategy
-  }
-
-  if $auth_uri {
-    warning('glance::api::auth_uri is deprecated, please use glance::api::authtoken::auth_uri')
-  }
-
-  if $identity_uri {
-    warning('glance::api::identity_uri is deprecated, please use glance::api::authtoken::auth_url')
-  }
-
-  if $keystone_tenant {
-    warning('glance::api::keystone_tenant is deprecated, please use glance::api::authtoken::project_name')
-  }
-
-  if $keystone_user {
-    warning('glance::api::keystone_user is deprecated, please use glance::api::authtoken::username')
-  }
-
-  if $memcached_servers {
-    warning('glance::api::memcached_servers is deprecated, please use glance::api::authtoken::memcached_servers')
-  }
-
-  if $signing_dir {
-    warning('glance::api::signing_dir is deprecated, please use glance::api::authtoken::signing_dir')
-  }
-
-  if $token_cache_time {
-    warning('glance::api::token_cache_time is deprecated, please use glance::api::authtoken::token_cache_time')
-  }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages('glance-api',
@@ -473,8 +366,8 @@ class glance::api(
   if $default_store {
     $default_store_real = $default_store
   }
-  # determine value for glance_store/stores
   if !empty($stores_real) {
+    # determine value for glance_store/stores
     if size(any2array($stores_real)) > 1 {
       $final_stores_real = join($stores_real, ',')
     } else {
@@ -548,7 +441,7 @@ class glance::api(
   }
 
   # keystone config
-  if $auth_strategy_real == 'keystone' {
+  if $auth_strategy == 'keystone' {
     include ::glance::api::authtoken
   }
 
@@ -584,14 +477,14 @@ class glance::api(
   }
 
   if $validate {
-    $keystone_tenant_real   = pick($keystone_tenant, $::glance::api::authtoken::project_name)
-    $keystone_username_real = pick($keystone_user, $::glance::api::authtoken::username)
-    $keystone_password_real = pick($keystone_password, $::glance::api::authtoken::password)
-    $auth_uri_real          = pick($auth_uri, $::glance::api::authtoken::auth_uri)
+    $keystone_project_name = $::glance::api::authtoken::project_name
+    $keystone_username     = $::glance::api::authtoken::username
+    $keystone_password     = $::glance::api::authtoken::password
+    $auth_uri              = $::glance::api::authtoken::auth_uri
     $defaults = {
       'glance-api' => {
         # lint:ignore:140chars
-        'command'  => "glance --os-auth-url ${auth_uri_real} --os-project-name ${keystone_tenant_real} --os-username ${keystone_username_real} --os-password ${keystone_password_real} image-list",
+        'command'  => "glance --os-auth-url ${auth_uri} --os-project-name ${keystone_project_name} --os-username ${keystone_username} --os-password ${keystone_password} image-list",
         # lint:endignore
       }
     }

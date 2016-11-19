@@ -117,55 +117,6 @@
 #    (optional) Sets the keystone region to use.
 #    Defaults to $::os_service_default.
 #
-#  DEPRECATED PARAMETERS
-#
-#  [*keystone_password*]
-#    (optional) The keystone password for administrative user.
-#    Deprecated and will be replaced by ::glance::registry::authtoken::password
-#    Default to undef.
-#
-#  [*auth_type*]
-#    (optional) Authentication type. Defaults to undef.
-#    Deprecated and will be replaced by ::glance::registry::auth_strategy
-#
-#  [*auth_uri*]
-#    (optional) Complete public Identity API endpoint.
-#    Deprecated and will be replaced by ::glance::registry::authtoken::auth_uri
-#    Defaults to undef.
-#
-#  [*identity_uri*]
-#    (optional) Complete admin Identity API endpoint.
-#    Deprecated and will be replaced by ::glance::registry::authtoken::auth_url
-#    Defaults to undef.
-#
-#  [*keystone_tenant*]
-#    (optional) administrative tenant name to connect to keystone.
-#    Deprecated and will be replaced by ::glance::registry::authtoken::project_name
-#    Defaults to undef.
-#
-#  [*keystone_user*]
-#    (optional) administrative user name to connect to keystone.
-#    Deprecated and will be replaced by ::glance::registry::authtoken::username
-#    Defaults to undef.
-#
-#  [*signing_dir*]
-#    Directory used to cache files related to PKI tokens.
-#    Deprecated and will be replaced by ::glance::registry::authtoken::signing_dir
-#    Defaults to undef.
-#
-#  [*memcached_servers*]
-#   (optinal) a list of memcached server(s) to use for caching. If left undefined,
-#   tokens will instead be cached in-process.
-#    Deprecated and will be replaced by ::glance::registry::authtoken::memcached_servers
-#   Defaults to undef.
-#
-#  [*token_cache_time*]
-#    In order to prevent excessive effort spent validating tokens,
-#    the middleware caches previously-seen tokens for a configurable duration (in seconds).
-#    Set to -1 to disable caching completely.
-#    Deprecated and will be replaced by ::glance::registry::authtoken::token_cache_time
-#    Defaults to undef.
-#
 class glance::registry(
   $package_ensure          = 'present',
   $debug                   = undef,
@@ -194,60 +145,11 @@ class glance::registry(
   $ca_file                 = $::os_service_default,
   $sync_db                 = true,
   $os_region_name          = $::os_service_default,
-  # Deprecated
-  $keystone_password       = undef,
-  $auth_type               = undef,
-  $auth_uri                = undef,
-  $identity_uri            = undef,
-  $keystone_tenant         = undef,
-  $keystone_user           = undef,
-  $signing_dir             = undef,
-  $memcached_servers       = undef,
-  $token_cache_time        = undef,
 ) inherits glance {
 
   include ::glance::deps
   include ::glance::registry::logging
   include ::glance::registry::db
-
-  if $keystone_password {
-    warning('glance::registry::keystone_password is deprecated, please use glance::registry::authtoken::password')
-  }
-
-  if $auth_type {
-    warning('glance::registry::auth_type is deprecated, please use glance::registry::auth_strategy')
-    $auth_strategy_real = $auth_type
-  } else {
-    $auth_strategy_real = $auth_strategy
-  }
-
-  if $auth_uri {
-    warning('glance::registry::auth_uri is deprecated, please use glance::registry::authtoken::auth_uri')
-  }
-
-  if $identity_uri {
-    warning('glance::registry::identity_uri is deprecated, please use glance::registry::authtoken::auth_url')
-  }
-
-  if $keystone_tenant {
-    warning('glance::registry::keystone_tenant is deprecated, please use glance::registry::authtoken::project_name')
-  }
-
-  if $keystone_user {
-    warning('glance::registry::keystone_user is deprecated, please use glance::registry::authtoken::username')
-  }
-
-  if $memcached_servers {
-    warning('glance::registry::memcached_servers is deprecated, please use glance::registry::authtoken::memcached_servers')
-  }
-
-  if $signing_dir {
-    warning('glance::registry::signing_dir is deprecated, please use glance::registry::authtoken::signing_dir')
-  }
-
-  if $token_cache_time {
-    warning('glance::registry::token_cache_time is deprecated, please use glance::registry::authtoken::token_cache_time')
-  }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages( 'glance-registry',
@@ -282,7 +184,7 @@ class glance::registry(
   }
 
   # keystone config
-  if $auth_strategy_real == 'keystone' {
+  if $auth_strategy == 'keystone' {
     include ::glance::registry::authtoken
   }
 

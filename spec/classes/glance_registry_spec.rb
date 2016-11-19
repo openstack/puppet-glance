@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe 'glance::registry' do
+  let :pre_condition do
+    "class { 'glance::registry::authtoken':
+      password => 'ChangeMe',
+    }"
+  end
+
   let :default_params do
     {
       :debug                  => false,
@@ -12,8 +18,6 @@ describe 'glance::registry' do
       :log_dir                => '/var/log/glance',
       :enabled                => true,
       :manage_service         => true,
-      :auth_type              => 'keystone',
-      :keystone_password      => 'ChangeMe',
       :purge_config           => false,
       :sync_db                => true,
       :os_region_name         => '<SERVICE DEFAULT>',
@@ -25,20 +29,17 @@ describe 'glance::registry' do
 
   shared_examples_for 'glance::registry' do
     [
-      {:keystone_password => 'ChangeMe'},
       {
         :bind_host              => '127.0.0.1',
         :bind_port              => '9111',
         :workers                => '5',
         :enabled                => false,
-        :auth_type              => 'keystone',
-        :keystone_password      => 'ChangeMe',
         :sync_db                => false,
         :os_region_name         => 'RegionOne2',
       }
     ].each do |param_set|
 
-      describe "when #{param_set == {:keystone_password => 'ChangeMe'} ? "using default" : "specifying"} class parameters" do
+      describe "when using default class parameters" do
         let :param_hash do
           default_params.merge(param_set)
         end
@@ -80,7 +81,7 @@ describe 'glance::registry' do
           ].each do |config|
             is_expected.to contain_glance_registry_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end
-          if param_hash[:auth_type] == 'keystone'
+          if param_hash[:auth_strategy] == 'keystone'
             is_expected.to contain_glance_registry_config("paste_deploy/flavor").with_value('keystone')
           end
         end
@@ -106,7 +107,6 @@ describe 'glance::registry' do
     describe 'with disabled service managing' do
       let :params do
         {
-          :keystone_password => 'ChangeMe',
           :manage_service => false,
           :enabled        => false,
         }
@@ -128,7 +128,6 @@ describe 'glance::registry' do
       # but there is no reason that there can't be more options in the future.
       let :params do
         {
-          :keystone_password => 'ChangeMe',
           :pipeline          => 'validoptionstring',
         }
       end
@@ -139,7 +138,6 @@ describe 'glance::registry' do
     describe 'with blank pipeline' do
       let :params do
         {
-          :keystone_password => 'ChangeMe',
           :pipeline          => '',
         }
       end
@@ -157,8 +155,7 @@ describe 'glance::registry' do
       describe "with pipeline incorrect value #{pipeline}" do
         let :params do
           {
-            :keystone_password => 'ChangeMe',
-            :auth_type         => 'keystone',
+            :auth_strategy     => 'keystone',
             :pipeline          => pipeline
           }
         end
@@ -184,31 +181,6 @@ describe 'glance::registry' do
       end
     end
 
-    describe 'with deprecated auth parameters' do
-      let :params do
-        default_params.merge({
-          :auth_type         => 'keystone',
-          :keystone_tenant   => 'services',
-          :keystone_user     => 'glance',
-          :keystone_password => 'password',
-          :token_cache_time  => '1000',
-          :memcached_servers => 'localhost:11211',
-          :signing_dir       => '/tmp/keystone',
-          :auth_uri          => 'http://127.0.0.1:5000',
-          :identity_uri      => 'http://127.0.0.1:35357',
-        })
-      end
-      it 'deprecated auth parameters' do
-        is_expected.to contain_glance_registry_config('keystone_authtoken/memcached_servers').with_value(params[:memcached_servers])
-        is_expected.to contain_glance_registry_config('keystone_authtoken/username').with_value(params[:keystone_user])
-        is_expected.to contain_glance_registry_config('keystone_authtoken/project_name').with_value(params[:keystone_tenant])
-        is_expected.to contain_glance_registry_config('keystone_authtoken/password').with_value(params[:keystone_password])
-        is_expected.to contain_glance_registry_config('keystone_authtoken/token_cache_time').with_value(params[:token_cache_time])
-        is_expected.to contain_glance_registry_config('keystone_authtoken/signing_dir').with_value(params[:signing_dir])
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_uri').with_value(params[:auth_uri])
-        is_expected.to contain_glance_registry_config('keystone_authtoken/auth_url').with_value(params[:identity_uri])
-      end
-    end
   end
 
   shared_examples_for 'glance::registry Debian' do
