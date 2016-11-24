@@ -223,6 +223,8 @@ class glance::registry::authtoken(
   $token_cache_time               = $::os_service_default,
 ) {
 
+  include ::glance::deps
+
   if is_service_default($password) {
     fail('Please set password for Glance service user')
   }
