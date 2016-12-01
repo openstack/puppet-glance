@@ -10,7 +10,13 @@ describe 'glance::db::sync' do
         :path        => '/usr/bin',
         :user        => 'glance',
         :refreshonly => 'true',
-        :logoutput   => 'on_failure'
+        :try_sleep   => 5,
+        :tries       => 10,
+        :logoutput   => 'on_failure',
+        :subscribe   => ['Anchor[glance::install::end]',
+                         'Anchor[glance::config::end]',
+                         'Anchor[glance::dbsync::begin]'],
+        :notify      => 'Anchor[glance::dbsync::end]',
       )
     end
 
@@ -26,7 +32,13 @@ describe 'glance::db::sync' do
         :path        => '/usr/bin',
         :user        => 'glance',
         :refreshonly => 'true',
-        :logoutput   => 'on_failure'
+        :try_sleep   => 5,
+        :tries       => 10,
+        :logoutput   => 'on_failure',
+        :subscribe   => ['Anchor[glance::install::end]',
+                         'Anchor[glance::config::end]',
+                         'Anchor[glance::dbsync::begin]'],
+        :notify      => 'Anchor[glance::dbsync::end]',
       )
       }
     end
