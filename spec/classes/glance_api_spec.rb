@@ -45,6 +45,8 @@ describe 'glance::api' do
       :enable_v1_api            => '<SERVICE DEFAULT>',
       :enable_v2_api            => '<SERVICE DEFAULT>',
       :sync_db                  => true,
+      :limit_param_default      => '<SERVICE DEFAULT>',
+      :api_limit_max            => '<SERVICE DEFAULT>',
     }
   end
 
@@ -72,6 +74,8 @@ describe 'glance::api' do
         :os_region_name           => 'RegionOne2',
         :pipeline                 => 'keystone2',
         :sync_db                  => false,
+        :limit_param_default      => '10',
+        :api_limit_max            => '10',
       }
     ].each do |param_set|
 
@@ -124,6 +128,8 @@ describe 'glance::api' do
             'image_cache_dir',
             'enable_v1_api',
             'enable_v2_api',
+            'limit_param_default',
+            'api_limit_max',
           ].each do |config|
             is_expected.to contain_glance_api_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end
