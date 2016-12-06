@@ -247,6 +247,15 @@
 #       try_sleep: 10
 #   Defaults to {}
 #
+# [*limit_param_default*]
+#   (optional) Default value for the number of items returned by a request if not
+#   specified explicitly in the request (integer value)
+#   Default: $::os_service_default.
+#
+# [*api_limit_max*]
+#   (optional) Maximum number of results that could be returned by a request
+#   Default: $::os_service_default.
+#
 #  === deprecated parameters:
 #
 # [*known_stores*]
@@ -368,6 +377,8 @@ class glance::api(
   $enable_proxy_headers_parsing         = $::os_service_default,
   $validate                             = false,
   $validation_options                   = {},
+  $limit_param_default                  = $::os_service_default,
+  $api_limit_max                        = $::os_service_default,
   # DEPRECATED PARAMETERS
   $known_stores                         = false,
   $verbose                              = undef,
@@ -457,6 +468,8 @@ class glance::api(
     'DEFAULT/scrub_time':              value => $scrub_time;
     'DEFAULT/delayed_delete':          value => $delayed_delete;
     'DEFAULT/image_cache_dir':         value => $image_cache_dir;
+    'DEFAULT/limit_param_default':     value => $limit_param_default;
+    'DEFAULT/api_limit_max':           value => $api_limit_max;
     'glance_store/os_region_name':     value => $os_region_name;
   }
 

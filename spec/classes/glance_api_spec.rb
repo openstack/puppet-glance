@@ -38,6 +38,8 @@ describe 'glance::api' do
       :taskflow_engine_mode     => '<SERVICE DEFAULT>',
       :taskflow_max_workers     => '<SERVICE DEFAULT>',
       :conversion_format        => '<SERVICE DEFAULT>',
+      :limit_param_default      => '<SERVICE DEFAULT>',
+      :api_limit_max            => '<SERVICE DEFAULT>',
     }
   end
 
@@ -66,6 +68,8 @@ describe 'glance::api' do
         :image_cache_max_size     => '10737418240',
         :os_region_name           => 'RegionOne2',
         :pipeline                 => 'keystone2',
+        :limit_param_default      => '10',
+        :api_limit_max            => '10',
       }
     ].each do |param_set|
 
@@ -109,6 +113,8 @@ describe 'glance::api' do
             'delayed_delete',
             'scrub_time',
             'image_cache_dir',
+            'limit_param_default',
+            'api_limit_max',
           ].each do |config|
             is_expected.to contain_glance_api_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end
