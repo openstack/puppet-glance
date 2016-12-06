@@ -262,6 +262,15 @@
 #       try_sleep: 10
 #   Defaults to {}
 #
+# [*limit_param_default*]
+#   (optional) Default value for the number of items returned by a request if not
+#   specified explicitly in the request (integer value)
+#   Default: $::os_service_default.
+#
+# [*api_limit_max*]
+#   (optional) Maximum number of results that could be returned by a request
+#   Default: $::os_service_default.
+#
 #  === deprecated parameters:
 #
 # [*known_stores*]
@@ -328,6 +337,8 @@ class glance::api(
   $sync_db                              = true,
   $validate                             = false,
   $validation_options                   = {},
+  $limit_param_default                  = $::os_service_default,
+  $api_limit_max                        = $::os_service_default,
   # DEPRECATED PARAMETERS
   $known_stores                         = false,
 ) inherits glance {
@@ -365,6 +376,8 @@ class glance::api(
     'DEFAULT/image_cache_dir':         value => $image_cache_dir;
     'DEFAULT/enable_v1_api':           value => $enable_v1_api;
     'DEFAULT/enable_v2_api':           value => $enable_v2_api;
+    'DEFAULT/limit_param_default':     value => $limit_param_default;
+    'DEFAULT/api_limit_max':           value => $api_limit_max;
     'glance_store/os_region_name':     value => $os_region_name;
   }
 
