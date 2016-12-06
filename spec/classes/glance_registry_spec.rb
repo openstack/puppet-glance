@@ -24,6 +24,7 @@ describe 'glance::registry' do
       :ca_file                => '<SERVICE DEFAULT>',
       :cert_file              => '<SERVICE DEFAULT>',
       :key_file               => '<SERVICE DEFAULT>',
+      :enable_v1_registry     => '<SERVICE DEFAULT>',
     }
   end
 
@@ -78,6 +79,7 @@ describe 'glance::registry' do
            'workers',
            'bind_port',
            'bind_host',
+           'enable_v1_registry',
           ].each do |config|
             is_expected.to contain_glance_registry_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end

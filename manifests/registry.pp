@@ -117,6 +117,14 @@
 #    (optional) Sets the keystone region to use.
 #    Defaults to $::os_service_default.
 #
+#  [*enable_v1_registry*]
+#    (optional) Deploy the v1 API Registry service.
+#    If glance::api::enable_v1_api is set to True, this option also needs to be
+#    set to True.
+#    If your OpenStack deployment is only using Glance API v2, this option
+#    should be set to False.
+#    Defaults to $::os_service_default.
+#
 class glance::registry(
   $package_ensure          = 'present',
   $debug                   = undef,
@@ -145,6 +153,7 @@ class glance::registry(
   $ca_file                 = $::os_service_default,
   $sync_db                 = true,
   $os_region_name          = $::os_service_default,
+  $enable_v1_registry      = $::os_service_default,
 ) inherits glance {
 
   include ::glance::deps
@@ -168,6 +177,7 @@ class glance::registry(
     'DEFAULT/workers':                value => $workers;
     'DEFAULT/bind_host':              value => $bind_host;
     'DEFAULT/bind_port':              value => $bind_port;
+    'DEFAULT/enable_v1_registry':     value => $enable_v1_registry;
     'glance_store/os_region_name':    value => $os_region_name;
   }
 
