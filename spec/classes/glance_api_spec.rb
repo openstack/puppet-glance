@@ -42,6 +42,8 @@ describe 'glance::api' do
       :taskflow_engine_mode     => '<SERVICE DEFAULT>',
       :taskflow_max_workers     => '<SERVICE DEFAULT>',
       :conversion_format        => '<SERVICE DEFAULT>',
+      :enable_v1_api            => '<SERVICE DEFAULT>',
+      :enable_v2_api            => '<SERVICE DEFAULT>',
     }
   end
 
@@ -111,6 +113,8 @@ describe 'glance::api' do
             'delayed_delete',
             'scrub_time',
             'image_cache_dir',
+            'enable_v1_api',
+            'enable_v2_api',
           ].each do |config|
             is_expected.to contain_glance_api_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end

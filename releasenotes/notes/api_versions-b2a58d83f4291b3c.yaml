@@ -1,0 +1,11 @@
+---
+features:
+  - Allow to configure Glance API v1 with enable_v1_api boolean.
+    If set to True, the glance::registry::enable_v1_registry also needs to
+    be set to True. Note that if you set these values to True, Glance will
+    send some deprecation warnings.
+    This option is separated from enable_v2_api, and both API versions can be
+    deployed together.
+  - Allow to configure Glance API v2 with enable_v2_api boolean.
+    This option is separated from enable_v1_api, and both API versions can be
+    deployed together.

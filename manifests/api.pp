@@ -227,6 +227,17 @@
 #   HTTPProxyToWSGI middleware.
 #   Defaults to $::os_service_default.
 #
+# [*enable_v1_api*]
+#   (Optional) Enable or not Glance API v1.
+#   If you enable this option, you'll get a deprecation warning in Glance
+#   logs.  If enable_v2_api is set to True, glance::registry::enable_v1_registry
+#   must be configured to True, since Registry is required in API v1.
+#   Defaults to $::os_service_default.
+#
+# [*enable_v2_api*]
+#   (Optional) Enable or not Glance API v2.
+#   Defaults to $::os_service_default.
+#
 # [*validate*]
 #   (optional) Whether to validate the service is working after any service refreshes
 #   Defaults to false
@@ -308,6 +319,8 @@ class glance::api(
   $conversion_format                    = $::os_service_default,
   $os_region_name                       = 'RegionOne',
   $enable_proxy_headers_parsing         = $::os_service_default,
+  $enable_v1_api                        = $::os_service_default,
+  $enable_v2_api                        = $::os_service_default,
   $validate                             = false,
   $validation_options                   = {},
   # DEPRECATED PARAMETERS
@@ -341,6 +354,8 @@ class glance::api(
     'DEFAULT/scrub_time':              value => $scrub_time;
     'DEFAULT/delayed_delete':          value => $delayed_delete;
     'DEFAULT/image_cache_dir':         value => $image_cache_dir;
+    'DEFAULT/enable_v1_api':           value => $enable_v1_api;
+    'DEFAULT/enable_v2_api':           value => $enable_v2_api;
     'glance_store/os_region_name':     value => $os_region_name;
   }
 
