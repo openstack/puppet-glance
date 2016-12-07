@@ -44,6 +44,7 @@ describe 'glance::api' do
       :conversion_format        => '<SERVICE DEFAULT>',
       :enable_v1_api            => '<SERVICE DEFAULT>',
       :enable_v2_api            => '<SERVICE DEFAULT>',
+      :sync_db                  => true,
     }
   end
 
@@ -70,6 +71,7 @@ describe 'glance::api' do
         :image_cache_max_size     => '10737418240',
         :os_region_name           => 'RegionOne2',
         :pipeline                 => 'keystone2',
+        :sync_db                  => false,
       }
     ].each do |param_set|
 
@@ -87,6 +89,13 @@ describe 'glance::api' do
         it { is_expected.to contain_class 'glance::policy' }
         it { is_expected.to contain_class 'glance::api::logging' }
         it { is_expected.to contain_class 'glance::api::db' }
+
+        it 'is_expected.to not sync the db if sync_db is set to false' do
+
+          if !param_hash[:sync_db]
+            is_expected.not_to contain_exec('glance-manage db_sync')
+          end
+        end
 
         it { is_expected.to contain_service('glance-api').with(
           'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running': 'stopped',

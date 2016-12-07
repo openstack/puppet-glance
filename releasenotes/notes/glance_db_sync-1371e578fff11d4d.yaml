@@ -1,0 +1,6 @@
+---
+deprecations:
+  - Deprecate glance::registry::sync_db. The option will be removed in a future release.
+    Now we should use glance::api::sync_db.
+    The reason of this change is because Glance Registry is no longer required with API v2
+    and API v1 has been deprecated since Mitaka.

@@ -63,12 +63,6 @@ describe 'glance::registry' do
       it { is_expected.to contain_service('glance-registry').that_subscribes_to('Anchor[glance::service::begin]')}
       it { is_expected.to contain_service('glance-registry').that_notifies('Anchor[glance::service::end]')}
 
-        it 'is_expected.to not sync the db if sync_db is set to false' do
-
-          if !param_hash[:sync_db]
-            is_expected.not_to contain_exec('glance-manage db_sync')
-          end
-        end
         it 'passes purge to resource' do
           is_expected.to contain_resources('glance_registry_config').with({
             :purge => false
