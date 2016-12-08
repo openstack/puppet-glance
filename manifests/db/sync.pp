@@ -7,10 +7,10 @@
 #   (optional) String of extra command line parameters to append
 #   to the glance-manage db sync command. These will be inserted
 #   in the command line between 'glance-manage' and 'db sync'.
-#   Defaults to '--config-file /etc/glance/glance-registry.conf'
+#   Defaults to ''
 #
 class glance::db::sync(
-  $extra_params = '--config-file /etc/glance/glance-registry.conf',
+  $extra_params = '',
 ) {
 
   include ::glance::deps
