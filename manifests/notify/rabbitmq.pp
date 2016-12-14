@@ -7,6 +7,11 @@
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #    Defaults to $::os_service_default
 #
+# [*notification_transport_url*]
+#   (optional) Connection url for oslo messaging notification backend. An
+#   example rabbit url would be, rabbit://user:pass@host:port/virtual_host
+#   Defaults to $::os_service_default
+#
 # [*rabbit_ha_queues*]
 #   (Optional) Use HA queues in RabbitMQ (x-ha-policy: all). If you change this
 #   option, you must wipe the RabbitMQ database. (boolean value)
@@ -106,6 +111,7 @@
 #
 class glance::notify::rabbitmq(
   $default_transport_url              = $::os_service_default,
+  $notification_transport_url         = $::os_service_default,
   $rabbit_ha_queues                   = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = $::os_service_default,
   $rabbit_heartbeat_rate              = $::os_service_default,
@@ -169,8 +175,9 @@ deprecated. Please use glance::notify::rabbitmq::default_transport_url instead."
   }
 
   oslo::messaging::notifications { ['glance_api_config', 'glance_registry_config']:
-    driver => $notification_driver,
-    topics => $rabbit_notification_topic,
+    driver        => $notification_driver,
+    transport_url => $notification_transport_url,
+    topics        => $rabbit_notification_topic,
   }
 
   glance_api_config {
