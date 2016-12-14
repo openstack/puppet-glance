@@ -1,0 +1,4 @@
+---
+features:
+  - Add the ability to configure the oslo messaging notification transport url
+    via glance::notify::rabbit::notficiation_transport_url
