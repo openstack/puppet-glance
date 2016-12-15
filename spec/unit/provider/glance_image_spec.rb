@@ -22,7 +22,7 @@ describe provider_class do
         :is_public        => 'yes',
         :container_format => 'bare',
         :disk_format      => 'qcow2',
-        :source           => 'http://example.com/image1.img',
+        :source           => '/var/tmp/image1.img',
         :min_ram          => 1024,
         :min_disk         => 1024,
       }
@@ -40,7 +40,7 @@ describe provider_class do
       describe '#create' do
         it 'creates an image' do
           provider.class.stubs(:openstack)
-                        .with('image', 'create', '--format', 'shell', ['image1', '--public', '--container-format=bare', '--disk-format=qcow2', '--min-disk=1024', '--min-ram=1024', '--copy-from=http://example.com/image1.img' ])
+                        .with('image', 'create', '--format', 'shell', ['image1', '--public', '--container-format=bare', '--disk-format=qcow2', '--min-disk=1024', '--min-ram=1024', '--file=/var/tmp/image1.img'])
                         .returns('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
 container_format="bare"
 created_at="2016-03-29T20:52:24Z"
@@ -92,7 +92,7 @@ deleted="False"
 deleted_at="None"
 disk_format="qcow2"
 id="5345b502-efe4-4852-a45d-edaba3a3acc6"
-is_public="True"
+visibility="public"
 min_disk="1024"
 min_ram="1024"
 name="image1"
@@ -182,7 +182,7 @@ deleted="False"
 deleted_at="None"
 disk_format="qcow2"
 id="5345b502-efe4-4852-a45d-edaba3a3acc6"
-is_public="True"
+visibility="public"
 min_disk="1024"
 min_ram="1024"
 name="image1"
@@ -272,7 +272,7 @@ disk_format="qcow2"
 id="2b4be0b8-aec0-43af-a404-33c3335a0b3f"
 min_disk="0"
 min_ram="0"
-is_public="True"
+visibility="public"
 name="image1"
 owner="None"
 properties="{}"

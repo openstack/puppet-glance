@@ -1,4 +1,6 @@
 require File.join(File.dirname(__FILE__), '..','..','..', 'puppet/provider/glance')
+require 'tempfile'
+require 'net/http'
 
 Puppet::Type.type(:glance_image).provide(
   :openstack,
@@ -10,10 +12,9 @@ Puppet::Type.type(:glance_image).provide(
 
   @credentials = Puppet::Provider::Openstack::CredentialsV2_0.new
 
-  # TODO(aschultz): v2 is now supported but the options are different and
-  # it doesn't support the source being remote. We'll have to rework this
-  # to support v2
-  ENV['OS_IMAGE_API_VERSION'] = '1'
+  # TODO(flaper87): v2 is now the default. Force the use of v2,
+  # to avoid supporting both versions and other edge cases.
+  ENV['OS_IMAGE_API_VERSION'] = '2'
 
   def initialize(value={})
     super(value)
@@ -21,13 +22,30 @@ Puppet::Type.type(:glance_image).provide(
   end
 
   def create
+    temp_file = false
     if @resource[:source]
       # copy_from cannot handle file://
       if @resource[:source] =~ /^\// # local file
         location = "--file=#{@resource[:source]}"
       else
-        location = "--copy-from=#{@resource[:source]}"
+        temp_file = Tempfile.new('puppet-glance-image')
+
+        uri = URI(@resource[:source])
+        Net::HTTP.start(uri.host, uri.port,
+                        :use_ssl => uri.scheme == 'https') do |http|
+          request = Net::HTTP::Get.new uri
+          http.request request do |response|
+            open temp_file.path, 'w' do |io|
+              response.read_body do |segment|
+                io.write(segment)
+              end
+            end
+          end
+        end
+
+        location = "--file=#{temp_file.path}"
       end
+
     # location cannot handle file://
     # location does not import, so no sense in doing anything more than this
     elsif @resource[:location]
@@ -46,8 +64,14 @@ Puppet::Type.type(:glance_image).provide(
     opts << props_to_s(@resource[:properties]) if @resource[:properties]
     opts << location
 
-    @property_hash = self.class.request('image', 'create', opts)
-    @property_hash[:ensure] = :present
+    begin
+      @property_hash = self.class.request('image', 'create', opts)
+      @property_hash[:ensure] = :present
+    ensure
+      if temp_file
+        temp_file.close(true)
+      end
+    end
   end
 
   def exists?
@@ -101,7 +125,7 @@ Puppet::Type.type(:glance_image).provide(
       new(
         :ensure           => :present,
         :name             => attrs[:name],
-        :is_public        => attrs[:is_public].downcase.chomp == 'true'? true : false,
+        :is_public        => attrs[:visibility].downcase.chomp == 'public'? true : false,
         :container_format => attrs[:container_format],
         :id               => attrs[:id],
         :disk_format      => attrs[:disk_format],

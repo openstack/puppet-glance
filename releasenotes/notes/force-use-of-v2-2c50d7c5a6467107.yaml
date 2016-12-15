@@ -1,0 +1,13 @@
+---
+prelude: >
+    Glance API v1 is now deprecated and tools depending on it should move onto
+    as their default, and perhaps only supported, version.
+deprecations:
+  - |
+    This change deprecates the use of v1 (by forcing v2). This assumes the
+    Glance service it will talk to has v2 enabled. In order to guarantee
+    compatibility, this changes introduces a similar, fake, copy-from behavior
+    which downloads the remote image into the server (a temporary file) where
+    the provider is running and then uploads it to Glance. Consumers of this
+    provider must be aware of space limitations and the possibility of there not
+    being enough space for this operation to succeed.
