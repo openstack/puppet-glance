@@ -24,6 +24,10 @@ class glance::deps {
   ~> Service<| tag == 'glance-service' |>
   ~> anchor { 'glance::service::end': }
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db<||> -> Anchor['glance::dbsync::begin']
+
   # Ensure files are modified in the config block
   Anchor['glance::config::begin']
   -> File_line<| tag == 'glance-file-line' |>
