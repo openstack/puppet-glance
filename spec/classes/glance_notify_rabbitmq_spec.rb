@@ -4,6 +4,7 @@ describe 'glance::notify::rabbitmq' do
   shared_examples_for 'glance::notify::rabbitmq' do
     describe 'when defaults with rabbit pass specified' do
       it { is_expected.to contain_glance_api_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>').with_secret(true) }
@@ -21,6 +22,7 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
 
       it { is_expected.to contain_glance_registry_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>').with_secret(true) }
