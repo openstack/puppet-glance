@@ -4,6 +4,8 @@ describe 'glance::notify::rabbitmq' do
   shared_examples_for 'glance::notify::rabbitmq' do
     describe 'when defaults with rabbit pass specified' do
       it { is_expected.to contain_glance_api_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_glance_api_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_glance_api_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>') }
@@ -22,6 +24,8 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
 
       it { is_expected.to contain_glance_registry_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_glance_registry_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_glance_registry_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>') }
@@ -199,10 +203,16 @@ describe 'glance::notify::rabbitmq' do
       let :params do
         {
           :default_transport_url => 'rabbit://user:pass@host:1234/virt',
+          :rpc_response_timeout  => '120',
+          :control_exchange      => 'glance',
         }
       end
       it { is_expected.to contain_glance_api_config('DEFAULT/transport_url').with_value('rabbit://user:pass@host:1234/virt') }
+      it { is_expected.to contain_glance_api_config('DEFAULT/rpc_response_timeout').with_value('120') }
+      it { is_expected.to contain_glance_api_config('DEFAULT/control_exchange').with_value('glance') }
       it { is_expected.to contain_glance_registry_config('DEFAULT/transport_url').with_value('rabbit://user:pass@host:1234/virt') }
+      it { is_expected.to contain_glance_registry_config('DEFAULT/rpc_response_timeout').with_value('120') }
+      it { is_expected.to contain_glance_registry_config('DEFAULT/control_exchange').with_value('glance') }
     end
 
   end
