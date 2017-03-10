@@ -21,9 +21,6 @@ describe 'glance class' do
       class { '::glance::keystone::auth':
         password => 'a_big_secret',
       }
-      class { '::glance::keystone::glare_auth':
-        password => 'a_big_secret',
-      }
       class { '::glance::api::authtoken':
         password => 'a_big_secret',
       }
@@ -36,13 +33,6 @@ describe 'glance class' do
       class { '::glance::registry':
         database_connection => 'mysql+pymysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
       }
-      class { '::glance::glare::db':
-        database_connection => 'mysql+pymysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
-      }
-      class { '::glance::glare::authtoken':
-        password => 'a_big_secret',
-      }
-      include ::glance::glare
 
       glance_image { 'test_image':
         ensure           => present,
