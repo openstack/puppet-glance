@@ -58,24 +58,17 @@ describe 'glance::notify::rabbitmq' do
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
-        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true') }
-        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>') }
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_durable_queues').with_value(true) }
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('5.0') }
 
         it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
         it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
         it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>') }
         it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_durable_queues').with_value(true) }
         it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('5.0') }
+        it { is_expected.to contain_oslo__messaging__rabbit('glance_registry_config').with(
+          :rabbit_use_ssl => true,
+        )}
       end
     end
 
@@ -89,17 +82,14 @@ describe 'glance::notify::rabbitmq' do
           :kombu_ssl_version  => 'TLSv1',
         }
       end
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/etc/ca.cert') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/etc/certfile') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/etc/key') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
 
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/etc/ca.cert') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/etc/certfile') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/etc/key') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
+      it { is_expected.to contain_oslo__messaging__rabbit('glance_api_config').with(
+        :rabbit_use_ssl     => true,
+        :kombu_ssl_ca_certs => '/etc/ca.cert',
+        :kombu_ssl_certfile => '/etc/certfile',
+        :kombu_ssl_keyfile  => '/etc/key',
+        :kombu_ssl_version  => 'TLSv1',
+      )}
     end
 
     describe 'with rabbit ssl disabled' do
@@ -109,17 +99,10 @@ describe 'glance::notify::rabbitmq' do
         }
       end
 
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false) }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>') }
 
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false) }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_oslo__messaging__rabbit('glance_api_config').with(
+        :rabbit_use_ssl => false,
+      )}
     end
 
     describe 'when passing params for single rabbit host' do
@@ -137,15 +120,19 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
+      it { is_expected.to contain_oslo__messaging__rabbit('glance_api_config').with(
+        :rabbit_use_ssl => true,
+      )}
 
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(true) }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
+      it { is_expected.to contain_oslo__messaging__rabbit('glance_registry_config').with(
+        :rabbit_use_ssl => true,
+      )}
     end
 
     describe 'when passing params for multiple rabbit hosts' do
