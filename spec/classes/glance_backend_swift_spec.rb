@@ -34,17 +34,6 @@ describe 'glance::backend::swift' do
         is_expected.to contain_glance_swift_config('ref1/user_domain_id').with_value('default')
         is_expected.to contain_glance_swift_config('ref1/project_domain_id').with_value('default')
       end
-
-      it 'not configures glance-glare.conf' do
-        is_expected.to_not contain_glance_glare_config('glance_store/default_store').with_value('swift')
-        is_expected.to_not contain_glance_glare_config('glance_store/swift_store_large_object_size').with_value('<SERVICE DEFAULT>')
-        is_expected.to_not contain_glance_glare_config('glance_store/swift_store_container').with_value('<SERVICE DEFAULT>')
-        is_expected.to_not contain_glance_glare_config('glance_store/swift_store_create_container_on_put').with_value('<SERVICE DEFAULT>')
-        is_expected.to_not contain_glance_glare_config('glance_store/swift_store_endpoint_type').with_value('internalURL')
-        is_expected.to_not contain_glance_glare_config('glance_store/swift_store_region').with_value('<SERVICE DEFAULT>')
-        is_expected.to_not contain_glance_glare_config('glance_store/swift_store_config_file').with_value('/etc/glance/glance-swift.conf')
-        is_expected.to_not contain_glance_glare_config('glance_store/default_swift_reference').with_value('ref1')
-      end
     end
 
     describe 'when overriding parameters' do
@@ -62,7 +51,6 @@ describe 'glance::backend::swift' do
           :swift_store_endpoint_type           => 'publicURL',
           :swift_store_region                  => 'RegionTwo',
           :default_swift_reference             => 'swift_creds',
-          :glare_enabled                       => true,
         }
       end
 
@@ -79,15 +67,6 @@ describe 'glance::backend::swift' do
         is_expected.to contain_glance_swift_config('swift_creds/auth_address').with_value('127.0.0.2:8080/v1.0/')
         is_expected.to contain_glance_swift_config('swift_creds/user_domain_id').with_value('user_domain')
         is_expected.to contain_glance_swift_config('swift_creds/project_domain_id').with_value('proj_domain')
-      end
-
-      it 'configures glance-glare.conf' do
-        is_expected.to contain_glance_glare_config('glance_store/swift_store_container').with_value('swift')
-        is_expected.to contain_glance_glare_config('glance_store/swift_store_create_container_on_put').with_value(true)
-        is_expected.to contain_glance_glare_config('glance_store/swift_store_large_object_size').with_value('100')
-        is_expected.to contain_glance_glare_config('glance_store/swift_store_endpoint_type').with_value('publicURL')
-        is_expected.to contain_glance_glare_config('glance_store/swift_store_region').with_value('RegionTwo')
-        is_expected.to contain_glance_glare_config('glance_store/default_swift_reference').with_value('swift_creds')
       end
     end
   end

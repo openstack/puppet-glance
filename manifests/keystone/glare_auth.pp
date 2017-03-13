@@ -1,105 +1,43 @@
 # == Class: glance::keystone::glare_auth
 #
-# Sets up glare users, service and endpoint for Glance Glare
+# Sets up glare users, service and endpoint for Glance Glare. Deprecated.
 #
-# == Parameters:
+# == Deprecated parameters
 #
 # [*password*]
-#   Password for glare user. Required.
-#
 # [*email*]
-#   Email for glance user. Optional. Defaults to 'glare@localhost'.
-#
 # [*auth_name*]
-#   Username for glare service. Optional. Defaults to 'glare'.
-#
 # [*configure_endpoint*]
-#   Should glare endpoint be configured? Optional. Defaults to 'true'.
-#
 # [*configure_user*]
-#   Should the service user be configured? Optional. Defaults to 'true'.
-#
 # [*configure_user_role*]
-#   Should the admin role be configured for the service user?
-#   Optional. Defaults to 'true'.
-#
 # [*service_name*]
-#    Name of the service. Optional.
-#    Defaults to 'Glance Artifacts'.
-#
 # [*service_type*]
-#    Type of service. Optional. Defaults to 'artifact'.
-#
 # [*service_description*]
-#    Description for keystone service. Optional. Defaults to 'Glance Artifact Service'.
-#
 # [*region*]
-#    Region for endpoint. Optional. Defaults to 'RegionOne'.
-#
 # [*tenant*]
-#    Tenant for glare user. Optional. Defaults to 'services'.
-#
 # [*public_url*]
-#   (optional) The endpoint's public url. (Defaults to 'http://127.0.0.1:9494')
-#   This url should *not* contain any trailing '/'.
-#
 # [*admin_url*]
-#   (optional) The endpoint's admin url. (Defaults to 'http://127.0.0.1:9494')
-#   This url should *not* contain any trailing '/'.
-#
 # [*internal_url*]
-#   (optional) The endpoint's internal url. (Defaults to 'http://127.0.0.1:9494')
-#   This url should *not* contain any trailing '/'.
-#
-# === Examples
-#
-#  class { 'glance::keystone::glare_auth':
-#    public_url   => 'https://10.0.0.10:9494',
-#    internal_url => 'https://10.0.0.11:9494',
-#    admin_url    => 'https://10.0.0.11:9494',
-#  }
 #
 class glance::keystone::glare_auth(
-  $password,
-  $email               = 'glare@localhost',
-  $auth_name           = 'glare',
-  $configure_endpoint  = true,
-  $configure_user      = true,
-  $configure_user_role = true,
-  $service_name        = 'Glance Artifacts',
-  $service_type        = 'artifact',
-  $region              = 'RegionOne',
-  $tenant              = 'services',
-  $service_description = 'Glance Artifact Service',
-  $public_url          = 'http://127.0.0.1:9494',
-  $admin_url           = 'http://127.0.0.1:9494',
-  $internal_url        = 'http://127.0.0.1:9494',
+  $password            = undef,
+  $email               = undef,
+  $auth_name           = undef,
+  $configure_endpoint  = undef,
+  $configure_user      = undef,
+  $configure_user_role = undef,
+  $service_name        = undef,
+  $service_type        = undef,
+  $region              = undef,
+  $tenant              = undef,
+  $service_description = undef,
+  $public_url          = undef,
+  $admin_url           = undef,
+  $internal_url        = undef,
 ) {
 
-  include ::glance::deps
+  warning("Class ::glance::keystone::glare_auth is deprecated since Glare was \
+removed from Glance. Now Glare is separated project and all configuration was \
+moved to puppet-glare module as well.")
 
-  if $configure_endpoint {
-    Keystone_endpoint["${region}/${service_name}::${service_type}"]  ~> Anchor['glance::service::begin']
-  }
-
-  keystone::resource::service_identity { 'glare':
-    configure_user      => $configure_user,
-    configure_user_role => $configure_user_role,
-    configure_endpoint  => $configure_endpoint,
-    service_type        => $service_type,
-    service_description => $service_description,
-    service_name        => $service_name,
-    auth_name           => $auth_name,
-    region              => $region,
-    password            => $password,
-    email               => $email,
-    tenant              => $tenant,
-    public_url          => $public_url,
-    admin_url           => $admin_url,
-    internal_url        => $internal_url,
-  }
-
-  if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] ~> Anchor['glance::service::begin']
-  }
 }

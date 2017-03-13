@@ -50,15 +50,14 @@
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
 #
-# [*glare_enabled*]
-#   (optional) Whether enabled Glance Glare API.
-#   Defaults to false
-#
 #  === deprecated parameters:
 #
 #  [*default_store*]
 #   (Optional) DEPRECATED Whether to set S3 as the default backend store.
 #   Default: undef
+#  [*glare_enabled*]
+#   (optional) Whether enabled Glance Glare API.
+#   Defaults to undef
 #
 class glance::backend::s3(
   $access_key,
@@ -72,9 +71,9 @@ class glance::backend::s3(
   $object_buffer_dir        = $::os_service_default,
   $thread_pools             = $::os_service_default,
   $multi_store              = false,
-  $glare_enabled            = false,
   # deprecated parameters
   $default_store            = undef,
+  $glare_enabled            = undef,
 ) {
 
   include ::glance::deps
@@ -96,6 +95,11 @@ class glance::backend::s3(
     warning('The default_store parameter is deprecated in glance::backend::s3, you should declare it in glance::api')
   }
 
+  if $glare_enabled != undef {
+    warning("Since Glare was removed from Glance and now it is separate project, \
+you should use puppet-glare module for configuring Glare service.")
+  }
+
   glance_api_config {
     'glance_store/s3_store_access_key':              value => $access_key;
     'glance_store/s3_store_secret_key':              value => $secret_key;
@@ -109,26 +113,8 @@ class glance::backend::s3(
     'glance_store/s3_store_object_buffer_dir':       value => $object_buffer_dir;
   }
 
-  if $glare_enabled {
-    glance_glare_config {
-      'glance_store/s3_store_access_key':              value => $access_key;
-      'glance_store/s3_store_secret_key':              value => $secret_key;
-      'glance_store/s3_store_host':                    value => $host;
-      'glance_store/s3_store_bucket':                  value => $bucket;
-      'glance_store/s3_store_bucket_url_format':       value => $bucket_url_format;
-      'glance_store/s3_store_create_bucket_on_put':    value => $create_bucket_on_put;
-      'glance_store/s3_store_large_object_size':       value => $large_object_size;
-      'glance_store/s3_store_large_object_chunk_size': value => $large_object_chunk_size;
-      'glance_store/s3_store_thread_pools':            value => $thread_pools;
-      'glance_store/s3_store_object_buffer_dir':       value => $object_buffer_dir;
-    }
-  }
-
   if !$multi_store {
     glance_api_config { 'glance_store/default_store': value => 's3'; }
-    if $glare_enabled {
-      glance_glare_config { 'glance_store/default_store': value => 's3'; }
-    }
   }
 
 }

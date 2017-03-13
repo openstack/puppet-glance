@@ -12,14 +12,9 @@ describe 'glance::backend::file' do
       is_expected.to contain_glance_cache_config('glance_store/filesystem_store_datadir').with_value('/var/lib/glance/images/')
     end
 
-      it 'configures glance-glare.conf' do
-        is_expected.to_not contain_glance_glare_config('glance_store/filesystem_store_datadir').with_value('/tmp/')
-      end
-
     describe 'when overriding datadir' do
       let :params do
-        {:filesystem_store_datadir => '/tmp/',
-         :glare_enabled            => true,}
+        {:filesystem_store_datadir => '/tmp/'}
       end
 
       it 'configures glance-api.conf' do
@@ -30,9 +25,6 @@ describe 'glance::backend::file' do
         is_expected.to contain_glance_cache_config('glance_store/filesystem_store_datadir').with_value('/tmp/')
       end
 
-      it 'configures glance-glare.conf' do
-        is_expected.to contain_glance_glare_config('glance_store/filesystem_store_datadir').with_value('/tmp/')
-      end
     end
   end
 

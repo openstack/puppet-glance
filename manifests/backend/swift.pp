@@ -48,9 +48,11 @@
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
 #
+# === Deprecated parameters
+#
 # [*glare_enabled*]
 #   (optional) Whether enabled Glance Glare API.
-#   Defaults to false
+#   Defaults to undef
 #
 class glance::backend::swift(
   $swift_store_user,
@@ -66,13 +68,19 @@ class glance::backend::swift(
   $swift_store_region                  = $::os_service_default,
   $default_swift_reference             = 'ref1',
   $multi_store                         = false,
-  $glare_enabled                       = false,
+  # deprecated
+  $glare_enabled                       = undef,
 ) {
 
   include ::glance::deps
   include ::swift::client
   Class['swift::client'] -> Anchor['glance::install::end']
   Service<| tag == 'swift-service' |> -> Service['glance-api']
+
+  if $glare_enabled != undef {
+    warning("Since Glare was removed from Glance and now it is separate project, \
+you should use puppet-glare module for configuring Glare service.")
+  }
 
   glance_api_config {
     'glance_store/swift_store_region':         value => $swift_store_region;
@@ -88,27 +96,8 @@ class glance::backend::swift(
     'glance_store/default_swift_reference':    value => $default_swift_reference;
   }
 
-  if $glare_enabled {
-    glance_glare_config {
-      'glance_store/swift_store_region':         value => $swift_store_region;
-      'glance_store/swift_store_container':      value => $swift_store_container;
-      'glance_store/swift_store_create_container_on_put':
-        value => $swift_store_create_container_on_put;
-      'glance_store/swift_store_large_object_size':
-        value => $swift_store_large_object_size;
-      'glance_store/swift_store_endpoint_type':
-        value => $swift_store_endpoint_type;
-
-      'glance_store/swift_store_config_file':    value => '/etc/glance/glance-swift.conf';
-      'glance_store/default_swift_reference':    value => $default_swift_reference;
-    }
-  }
-
   if !$multi_store {
     glance_api_config { 'glance_store/default_store': value => 'swift'; }
-    if $glare_enabled {
-      glance_glare_config { 'glance_store/default_store': value => 'swift'; }
-    }
   }
 
   glance_swift_config {

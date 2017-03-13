@@ -40,9 +40,11 @@
 #    Optional. Boolean describing if multiple backends will be configured
 #    Defaults to false
 #
+# === Deprecated parameters:
+#
 #  [*glare_enabled*]
-#    Optional. Whether enabled Glance Glare API.
-#    Defaults to false
+#    (optional) Whether enabled Glance Glare API.
+#    Defaults to undef
 #
 class glance::backend::rbd(
   $rbd_store_user         = $::os_service_default,
@@ -54,7 +56,8 @@ class glance::backend::rbd(
   $package_ensure         = 'present',
   $rados_connect_timeout  = $::os_service_default,
   $multi_store            = false,
-  $glare_enabled          = false,
+  # deprecated
+  $glare_enabled          = undef,
 ) {
 
   include ::glance::deps
@@ -72,21 +75,13 @@ class glance::backend::rbd(
     'glance_store/rados_connect_timeout':  value => $rados_connect_timeout;
   }
 
-  if $glare_enabled {
-    glance_glare_config {
-      'glance_store/rbd_store_ceph_conf':    value => $rbd_store_ceph_conf;
-      'glance_store/rbd_store_user':         value => $rbd_store_user;
-      'glance_store/rbd_store_pool':         value => $rbd_store_pool;
-      'glance_store/rbd_store_chunk_size':   value => $rbd_store_chunk_size;
-      'glance_store/rados_connect_timeout':  value => $rados_connect_timeout;
-    }
+  if $glare_enabled != undef {
+    warning("Since Glare was removed from Glance and now it is separate project, \
+you should use puppet-glare module for configuring Glare service.")
   }
 
   if !$multi_store {
     glance_api_config { 'glance_store/default_store': value => 'rbd'; }
-    if $glare_enabled {
-      glance_glare_config { 'glance_store/default_store': value => 'rbd'; }
-    }
   }
 
   if $manage_packages {
