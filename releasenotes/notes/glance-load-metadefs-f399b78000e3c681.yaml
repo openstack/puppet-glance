@@ -1,0 +1,4 @@
+---
+fixes:
+  - Load the default predefined namespaces for the Glance
+    Metadata Definitions Catalog when syncing the Glance DB.
