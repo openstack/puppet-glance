@@ -351,6 +351,7 @@ class glance::api(
 
   if $sync_db {
     include ::glance::db::sync
+    include ::glance::db::metadefs
   }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
