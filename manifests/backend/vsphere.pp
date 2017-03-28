@@ -146,7 +146,7 @@ class glance::backend::vsphere(
     'glance_store/vmware_ca_file': value            => $vcenter_ca_file;
     'glance_store/vmware_server_host': value        => $vcenter_host;
     'glance_store/vmware_server_username': value    => $vcenter_user;
-    'glance_store/vmware_server_password': value    => $vcenter_password;
+    'glance_store/vmware_server_password': value    => $vcenter_password, secret => true;
     'glance_store/vmware_store_image_dir': value    => $vcenter_image_dir;
     'glance_store/vmware_task_poll_interval': value => $vcenter_task_poll_interval;
     'glance_store/vmware_api_retry_count': value    => $vcenter_api_retry_count;
@@ -159,7 +159,7 @@ class glance::backend::vsphere(
       'glance_store/vmware_ca_file': value            => $vcenter_ca_file;
       'glance_store/vmware_server_host': value        => $vcenter_host;
       'glance_store/vmware_server_username': value    => $vcenter_user;
-      'glance_store/vmware_server_password': value    => $vcenter_password;
+      'glance_store/vmware_server_password': value    => $vcenter_password, secret => true;
       'glance_store/vmware_store_image_dir': value    => $vcenter_image_dir;
       'glance_store/vmware_task_poll_interval': value => $vcenter_task_poll_interval;
       'glance_store/vmware_api_retry_count': value    => $vcenter_api_retry_count;
