@@ -4,14 +4,16 @@ describe 'glance::registry::db' do
 
   shared_examples 'glance::registry::db' do
     context 'with default parameters' do
-      it { is_expected.to contain_glance_registry_config('database/db_max_retries').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('database/connection').with_value('sqlite:///var/lib/glance/glance.sqlite').with_secret(true) }
-      it { is_expected.to contain_glance_registry_config('database/idle_timeout').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('database/min_pool_size').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('database/max_retries').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('database/retry_interval').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('database/max_pool_size').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('database/max_overflow').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_oslo__db('glance_registry_config').with(
+        :db_max_retries => '<SERVICE DEFAULT>',
+        :connection     => 'sqlite:///var/lib/glance/glance.sqlite',
+        :idle_timeout   => '<SERVICE DEFAULT>',
+        :min_pool_size  => '<SERVICE DEFAULT>',
+        :max_pool_size  => '<SERVICE DEFAULT>',
+        :max_retries    => '<SERVICE DEFAULT>',
+        :retry_interval => '<SERVICE DEFAULT>',
+        :max_overflow   => '<SERVICE DEFAULT>',
+      )}
     end
 
     context 'with specific parameters' do
@@ -27,14 +29,16 @@ describe 'glance::registry::db' do
         }
       end
 
-      it { is_expected.to contain_glance_registry_config('database/db_max_retries').with_value('-1') }
-      it { is_expected.to contain_glance_registry_config('database/connection').with_value('mysql+pymysql://glance_registry:glance@localhost/glance').with_secret(true) }
-      it { is_expected.to contain_glance_registry_config('database/idle_timeout').with_value('3601') }
-      it { is_expected.to contain_glance_registry_config('database/min_pool_size').with_value('2') }
-      it { is_expected.to contain_glance_registry_config('database/max_retries').with_value('11') }
-      it { is_expected.to contain_glance_registry_config('database/retry_interval').with_value('11') }
-      it { is_expected.to contain_glance_registry_config('database/max_pool_size').with_value('11') }
-      it { is_expected.to contain_glance_registry_config('database/max_overflow').with_value('21') }
+      it { is_expected.to contain_oslo__db('glance_registry_config').with(
+        :db_max_retries => '-1',
+        :connection     => 'mysql+pymysql://glance_registry:glance@localhost/glance',
+        :idle_timeout   => '3601',
+        :min_pool_size  => '2',
+        :max_pool_size  => '11',
+        :max_retries    => '11',
+        :retry_interval => '11',
+        :max_overflow   => '21',
+      )}
     end
 
     context 'with MySQL-python library as backend package' do

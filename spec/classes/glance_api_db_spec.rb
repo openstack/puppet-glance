@@ -4,13 +4,15 @@ describe 'glance::api::db' do
 
   shared_examples 'glance::api::db' do
     context 'with default parameters' do
-      it { is_expected.to contain_glance_api_config('database/connection').with_value('sqlite:///var/lib/glance/glance.sqlite').with_secret(true) }
-      it { is_expected.to contain_glance_api_config('database/idle_timeout').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('database/min_pool_size').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('database/max_retries').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('database/retry_interval').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('database/max_pool_size').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('database/max_overflow').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_oslo__db('glance_api_config').with(
+        :connection     => 'sqlite:///var/lib/glance/glance.sqlite',
+        :idle_timeout   => '<SERVICE DEFAULT>',
+        :min_pool_size  => '<SERVICE DEFAULT>',
+        :max_pool_size  => '<SERVICE DEFAULT>',
+        :max_retries    => '<SERVICE DEFAULT>',
+        :retry_interval => '<SERVICE DEFAULT>',
+        :max_overflow   => '<SERVICE DEFAULT>',
+      )}
     end
 
     context 'with specific parameters' do
@@ -25,13 +27,15 @@ describe 'glance::api::db' do
         }
       end
 
-      it { is_expected.to contain_glance_api_config('database/connection').with_value('mysql+pymysql://glance_api:glance@localhost/glance').with_secret(true) }
-      it { is_expected.to contain_glance_api_config('database/idle_timeout').with_value('3601') }
-      it { is_expected.to contain_glance_api_config('database/min_pool_size').with_value('2') }
-      it { is_expected.to contain_glance_api_config('database/max_retries').with_value('11') }
-      it { is_expected.to contain_glance_api_config('database/retry_interval').with_value('11') }
-      it { is_expected.to contain_glance_api_config('database/max_pool_size').with_value('11') }
-      it { is_expected.to contain_glance_api_config('database/max_overflow').with_value('21') }
+      it { is_expected.to contain_oslo__db('glance_api_config').with(
+        :connection     => 'mysql+pymysql://glance_api:glance@localhost/glance',
+        :idle_timeout   => '3601',
+        :min_pool_size  => '2',
+        :max_pool_size  => '11',
+        :max_retries    => '11',
+        :retry_interval => '11',
+        :max_overflow   => '21',
+      )}
     end
 
     context 'with MySQL-python library as backend package' do
