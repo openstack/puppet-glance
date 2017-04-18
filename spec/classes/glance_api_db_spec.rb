@@ -5,6 +5,7 @@ describe 'glance::api::db' do
   shared_examples 'glance::api::db' do
     context 'with default parameters' do
       it { is_expected.to contain_oslo__db('glance_api_config').with(
+        :db_max_retries => '<SERVICE DEFAULT>',
         :connection     => 'sqlite:///var/lib/glance/glance.sqlite',
         :idle_timeout   => '<SERVICE DEFAULT>',
         :min_pool_size  => '<SERVICE DEFAULT>',
@@ -21,6 +22,7 @@ describe 'glance::api::db' do
           :database_idle_timeout   => '3601',
           :database_min_pool_size  => '2',
           :database_max_retries    => '11',
+          :database_db_max_retries => '-1',
           :database_retry_interval => '11',
           :database_max_pool_size  => '11',
           :database_max_overflow   => '21',
@@ -33,6 +35,7 @@ describe 'glance::api::db' do
         :min_pool_size  => '2',
         :max_pool_size  => '11',
         :max_retries    => '11',
+        :db_max_retries => '-1',
         :retry_interval => '11',
         :max_overflow   => '21',
       )}

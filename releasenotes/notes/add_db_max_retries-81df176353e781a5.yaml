@@ -1,0 +1,6 @@
+---
+features:
+  - Add new option glance::api::db::database_db_max_retries.
+    The database_db_max_retries parameter regulates the
+    number of reconnection attempts performed after an
+    error raised rather than at startup.
