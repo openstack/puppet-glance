@@ -21,24 +21,28 @@
 #    Optional. Enables direct COW from glance to rbd
 #    DEPRECATED, use show_image_direct_url in glance::api
 #
+#  [*manage_packages*]
+#    Optional. Whether we should manage the packages.
+#    Defaults to true,
+#
 #  [*package_ensure*]
-#      (optional) Desired ensure state of packages.
-#      accepts latest or specific versions.
-#      Defaults to present.
+#    Optional. Desired ensure state of packages.
+#    accepts latest or specific versions.
+#    Defaults to present.
 #
 #  [*rados_connect_timeout*]
-#      Optinal. Timeout value (in seconds) used when connecting
-#      to ceph cluster. If value <= 0, no timeout is set and
-#      default librados value is used.
-#      Default: $::os_service_default.
+#    Optinal. Timeout value (in seconds) used when connecting
+#    to ceph cluster. If value <= 0, no timeout is set and
+#    default librados value is used.
+#    Default: $::os_service_default.
 #
-# [*multi_store*]
-#   (optional) Boolean describing if multiple backends will be configured
-#   Defaults to false
+#  [*multi_store*]
+#    Optional. Boolean describing if multiple backends will be configured
+#    Defaults to false
 #
-# [*glare_enabled*]
-#   (optional) Whether enabled Glance Glare API.
-#   Defaults to false
+#  [*glare_enabled*]
+#    Optional. Whether enabled Glance Glare API.
+#    Defaults to false
 #
 class glance::backend::rbd(
   $rbd_store_user         = $::os_service_default,
@@ -46,6 +50,7 @@ class glance::backend::rbd(
   $rbd_store_pool         = $::os_service_default,
   $rbd_store_chunk_size   = $::os_service_default,
   $show_image_direct_url  = undef,
+  $manage_packages        = true,
   $package_ensure         = 'present',
   $rados_connect_timeout  = $::os_service_default,
   $multi_store            = false,
@@ -84,10 +89,12 @@ class glance::backend::rbd(
     }
   }
 
-  package { 'python-ceph':
-    ensure => $package_ensure,
-    name   => $::glance::params::pyceph_package_name,
-    tag    => 'glance-support-package',
+  if $manage_packages {
+    package { 'python-ceph':
+      ensure => $package_ensure,
+      name   => $::glance::params::pyceph_package_name,
+      tag    => 'glance-support-package',
+    }
   }
 
 }
