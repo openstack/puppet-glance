@@ -78,4 +78,13 @@ describe 'glance::backend::rbd' do
       )
     }
   end
+
+  describe 'when not managing packages' do
+    let :params do
+      {
+        :manage_packages       => false,
+      }
+    end
+    it { is_expected.not_to contain_package('python-ceph') }
+  end
 end
