@@ -25,12 +25,14 @@ describe 'glance class' do
         password => 'a_big_secret',
       }
       class { '::glance::api':
+        debug               => true,
         database_connection => 'mysql+pymysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
       }
       class { '::glance::registry::authtoken':
         password => 'a_big_secret',
       }
       class { '::glance::registry':
+        debug               => true,
         database_connection => 'mysql+pymysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
       }
 
