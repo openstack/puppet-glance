@@ -20,8 +20,12 @@ describe 'glance::policy' do
         :key   => 'context_is_admin',
         :value => 'foo:bar'
       })
-      is_expected.to contain_glance_api_config('oslo_policy/policy_file').with_value('/etc/glance/policy.json')
-      is_expected.to contain_glance_registry_config('oslo_policy/policy_file').with_value('/etc/glance/policy.json')
+      is_expected.to contain_oslo__policy('glance_api_config').with(
+        :policy_file => '/etc/glance/policy.json',
+      )
+      is_expected.to contain_oslo__policy('glance_registry_config').with(
+        :policy_file => '/etc/glance/policy.json',
+      )
     end
   end
 
