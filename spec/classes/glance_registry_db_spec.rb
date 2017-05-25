@@ -66,7 +66,7 @@ describe 'glance::registry::db' do
       end
 
       it 'install the proper backend package' do
-        is_expected.to contain_package('db_backend_package').with(
+        is_expected.to contain_package('python-pymysql').with(
           :ensure => 'present',
           :name   => 'python-pymysql',
           :tag    => 'openstack'
@@ -81,7 +81,6 @@ describe 'glance::registry::db' do
         { :database_connection => 'mysql+pymysql://glance_registry:glance@localhost/glance', }
       end
 
-      it { is_expected.not_to contain_package('db_backend_package') }
     end
   end
 
