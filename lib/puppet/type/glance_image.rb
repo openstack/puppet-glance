@@ -89,9 +89,7 @@ Puppet::Type.newtype(:glance_image) do
     munge do |value|
       return value if value.is_a? Hash
 
-      # wrap property value in commas
-      value.gsub!(/=(\w+)/, '=\'\1\'')
-      Hash[value.scan(/(\S+)='([^']*)'/)]
+      Hash[value.scan(/([^,=]+)=([^,]*)/)]
     end
 
     validate do |value|
