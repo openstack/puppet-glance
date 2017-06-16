@@ -1,5 +1,5 @@
 {
-    "author": "Puppet Labs and OpenStack Contributors",
+    "author": "OpenStack",
     "dependencies": [
         {
             "name": "puppetlabs/inifile",
