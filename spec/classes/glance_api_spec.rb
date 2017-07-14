@@ -364,17 +364,11 @@ describe 'glance::api' do
           :validate => true,
         })
       end
-      it { is_expected.to contain_exec('execute glance-api validation').with(
-        :path        => '/usr/bin:/bin:/usr/sbin:/sbin',
-        :provider    => 'shell',
-        :tries       => '10',
-        :try_sleep   => '2',
-        :command     => 'glance --os-auth-url http://127.0.0.1:5000 --os-project-name services --os-username glance --os-password ChangeMe image-list',
+      it { is_expected.to contain_openstacklib__service_validation('glance-api').with(
+        :command   => 'glance --os-auth-url http://127.0.0.1:5000 --os-project-name services --os-username glance --os-password ChangeMe image-list',
+        :subscribe => 'Service[glance-api]',
       )}
 
-      it { is_expected.to contain_anchor('create glance-api anchor').with(
-        :require => 'Exec[execute glance-api validation]',
-      )}
     end
 
     describe 'Support IPv6' do
@@ -395,17 +389,11 @@ describe 'glance::api' do
           :validation_options  => { 'glance-api' => { 'command' => 'my-script' } }
         })
       end
-      it { is_expected.to contain_exec('execute glance-api validation').with(
-        :path        => '/usr/bin:/bin:/usr/sbin:/sbin',
-        :provider    => 'shell',
-        :tries       => '10',
-        :try_sleep   => '2',
-        :command     => 'my-script',
+      it { is_expected.to contain_openstacklib__service_validation('glance-api').with(
+        :command   => 'my-script',
+        :subscribe => 'Service[glance-api]',
       )}
 
-      it { is_expected.to contain_anchor('create glance-api anchor').with(
-        :require => 'Exec[execute glance-api validation]',
-      )}
     end
   end
 
