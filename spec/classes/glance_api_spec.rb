@@ -371,17 +371,6 @@ describe 'glance::api' do
 
     end
 
-    describe 'Support IPv6' do
-      let :params do
-        default_params.merge({
-          :registry_host => '2001::1',
-        })
-      end
-      it { is_expected.to contain_glance_api_config('DEFAULT/registry_host').with(
-        :value => '[2001::1]'
-      )}
-    end
-
     describe 'while validating the service with custom command' do
       let :params do
         default_params.merge({
