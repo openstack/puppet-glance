@@ -38,9 +38,9 @@
 #   (Multi-valued) A list of datastores where the image
 #   can be stored. This option may be specified multiple times
 #   for specifying multiple datastores. The datastore name should
-#   be specified after its datacenter path, seperated by ":".
+#   be specified after its datacenter path, separated by ":".
 #   An optional weight may be given after the datastore name,
-#   seperated again by ":". Thus, the required format
+#   separated again by ":". Thus, the required format
 #   becomes <datacenter_path>:<datastore_name>:<optional_weight>.
 #   When adding an image, the datastore with highest weight will be selected,
 #   unless there is not enough free space available in cases where the image
