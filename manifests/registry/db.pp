@@ -1,6 +1,6 @@
 # == Class: glance::registry::db
 #
-#  Configure the Glance database
+#  Configure the Glance database in the registry configuration file.
 #
 # === Parameters
 #

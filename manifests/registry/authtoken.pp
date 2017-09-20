@@ -1,6 +1,6 @@
 # class: glance::registry::authtoken
 #
-# Configure the keystone_authtoken section in the Glance API configuration file
+# Configure the keystone_authtoken section in the glance registry configuration file.
 #
 # === Parameters
 #
