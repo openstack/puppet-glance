@@ -78,10 +78,6 @@
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false.
 #
-# [*glare_enabled*]
-#   (optional) Whether enabled Glance Glare API.
-#   Defaults to false.
-#
 # DEPRECATED PARAMETERS
 #
 # [*vcenter_api_insecure*]
@@ -102,6 +98,10 @@
 #   and will be removed.
 #   Defaults to undef.
 #
+# [*glare_enabled*]
+#   (optional) Whether enabled Glance Glare API.
+#   Defaults to undef.
+#
 class glance::backend::vsphere(
   $vcenter_host,
   $vcenter_user,
@@ -113,14 +113,19 @@ class glance::backend::vsphere(
   $vcenter_task_poll_interval = $::os_service_default,
   $vcenter_api_retry_count    = $::os_service_default,
   $multi_store                = false,
-  $glare_enabled              = false,
   # DEPRECATED PARAMETERS
   $vcenter_datacenter         = undef,
   $vcenter_datastore          = undef,
   $vcenter_api_insecure       = undef,
+  $glare_enabled              = undef,
 ) {
 
   include ::glance::deps
+
+  if $glare_enabled != undef {
+    warning("Since Glare was removed from Glance and now it is separate project, \
+you should use puppet-glare module for configuring Glare service.")
+  }
 
   if $vcenter_api_insecure {
     warning('The vcenter_api_insecure parameter is deprecated, use parameter vcenter_insecure')
@@ -153,24 +158,7 @@ class glance::backend::vsphere(
     'glance_store/vmware_datastores': value         => $vmware_datastores_real;
   }
 
-  if $glare_enabled {
-    glance_glare_config {
-      'glance_store/vmware_insecure': value           => $vmware_insecure_real;
-      'glance_store/vmware_ca_file': value            => $vcenter_ca_file;
-      'glance_store/vmware_server_host': value        => $vcenter_host;
-      'glance_store/vmware_server_username': value    => $vcenter_user;
-      'glance_store/vmware_server_password': value    => $vcenter_password, secret => true;
-      'glance_store/vmware_store_image_dir': value    => $vcenter_image_dir;
-      'glance_store/vmware_task_poll_interval': value => $vcenter_task_poll_interval;
-      'glance_store/vmware_api_retry_count': value    => $vcenter_api_retry_count;
-      'glance_store/vmware_datastores': value         => $vmware_datastores_real;
-    }
-  }
-
   if !$multi_store {
     glance_api_config {  'glance_store/default_store': value => 'vsphere'; }
-    if $glare_enabled {
-      glance_glare_config {  'glance_store/default_store': value => 'vsphere'; }
-    }
   }
 }

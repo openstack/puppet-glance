@@ -40,8 +40,6 @@ class glance::deps {
   Anchor['glance::config::begin'] -> Glance_api_config<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_api_paste_ini<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_cache_config<||> ~> Anchor['glance::config::end']
-  Anchor['glance::config::begin'] -> Glance_glare_config<||> ~> Anchor['glance::config::end']
-  Anchor['glance::config::begin'] -> Glance_glare_paste_ini<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_registry_config<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_registry_paste_ini<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_swift_config<||> ~> Anchor['glance::config::end']

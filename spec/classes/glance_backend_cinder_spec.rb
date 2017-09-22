@@ -46,13 +46,6 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_cache_config('glance_store/cinder_ca_certificates_file').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('glance_store/cinder_endpoint_template').with_value('<SERVICE DEFAULT>')
       end
-      it 'not configures glance-glare.conf' do
-        is_expected.to_not contain_glance_glare_config('glance_store/cinder_api_insecure').with_value('<SERVICE DEFAULT>')
-        is_expected.to_not contain_glance_glare_config('glance_store/cinder_catalog_info').with_value('<SERVICE DEFAULT>')
-        is_expected.to_not contain_glance_glare_config('glance_store/cinder_http_retries').with_value('<SERVICE DEFAULT>')
-        is_expected.to_not contain_glance_glare_config('glance_store/cinder_ca_certificates_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to_not contain_glance_glare_config('glance_store/cinder_endpoint_template').with_value('<SERVICE DEFAULT>')
-      end
     end
 
     context 'when overriding parameters' do
@@ -63,7 +56,6 @@ describe 'glance::backend::cinder' do
           :cinder_catalog_info         => 'volume:cinder:internalURL',
           :cinder_endpoint_template    => 'http://srv-foo:8776/v1/%(project_id)s',
           :cinder_http_retries         => '10',
-          :glare_enabled               => true,
         }
       end
       it 'configures glance-api.conf' do
@@ -79,13 +71,6 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_cache_config('glance_store/cinder_catalog_info').with_value('volume:cinder:internalURL')
         is_expected.to contain_glance_cache_config('glance_store/cinder_endpoint_template').with_value('http://srv-foo:8776/v1/%(project_id)s')
         is_expected.to contain_glance_cache_config('glance_store/cinder_http_retries').with_value('10')
-      end
-      it 'configures glance-glare.conf' do
-        is_expected.to contain_glance_glare_config('glance_store/cinder_api_insecure').with_value(true)
-        is_expected.to contain_glance_glare_config('glance_store/cinder_ca_certificates_file').with_value('/etc/ssh/ca.crt')
-        is_expected.to contain_glance_glare_config('glance_store/cinder_catalog_info').with_value('volume:cinder:internalURL')
-        is_expected.to contain_glance_glare_config('glance_store/cinder_endpoint_template').with_value('http://srv-foo:8776/v1/%(project_id)s')
-        is_expected.to contain_glance_glare_config('glance_store/cinder_http_retries').with_value('10')
       end
     end
   end

@@ -1,0 +1,4 @@
+---
+deprecations:
+  - Drop Glare service from puppet-glance, since Glare service was removed
+    from Glance itself and now it is separate project.
