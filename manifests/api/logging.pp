@@ -117,7 +117,11 @@ class glance::api::logging(
   $use_syslog_real = pick($::glance::api::use_syslog,$use_syslog)
   $use_stderr_real = pick($::glance::api::use_stderr,$use_stderr)
   $log_facility_real = pick($::glance::api::log_facility,$log_facility)
-  $log_dir_real = pick($::glance::api::log_dir,$log_dir)
+  if $log_dir != '' {
+    $log_dir_real = pick($::glance::api::log_dir,$log_dir)
+  } else {
+    $log_dir_real = $log_dir
+  }
   $log_file_real = pick($::glance::api::log_file,$log_file)
   $debug_real = pick($::glance::api::debug,$debug)
 
