@@ -122,7 +122,11 @@ class glance::api::logging(
   } else {
     $log_dir_real = $log_dir
   }
-  $log_file_real = pick($::glance::api::log_file,$log_file)
+  if $log_file != '' {
+    $log_file_real = pick($::glance::api::log_file,$log_file)
+  } else {
+    $log_file_real = $log_file
+  }
   $debug_real = pick($::glance::api::debug,$debug)
 
   oslo::log { 'glance_api_config':
