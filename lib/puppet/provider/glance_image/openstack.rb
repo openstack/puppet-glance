@@ -10,7 +10,7 @@ Puppet::Type.type(:glance_image).provide(
     Provider to manage glance_image type.
   EOT
 
-  @credentials = Puppet::Provider::Openstack::CredentialsV2_0.new
+  @credentials = Puppet::Provider::Openstack::CredentialsV3.new
 
   # TODO(flaper87): v2 is now the default. Force the use of v2,
   # to avoid supporting both versions and other edge cases.
