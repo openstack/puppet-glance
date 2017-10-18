@@ -27,7 +27,15 @@
 #    Optional. Default: '2'
 #
 #  [*swift_store_large_object_size*]
-#    Optional. Default: $::os_service_default.
+#    Optional. What size, in MB, should Glance start chunking image files
+#    and do a large object manifest in Swift?
+#    Default: $::os_service_default.
+#
+#  [*swift_store_large_object_chunk_size*]
+#    Optional. When doing a large object manifest, what size, in MB, should
+#    Glance write chunks to Swift? This amount of data is written
+#    to a temporary disk buffer during the process of chunking.
+#    Default: $::os_service_default.
 #
 #  [*swift_store_create_container_on_put*]
 #    Optional. Default: $::os_service_default.
@@ -61,6 +69,7 @@ class glance::backend::swift(
   $swift_store_auth_project_domain_id  = 'default',
   $swift_store_auth_user_domain_id     = 'default',
   $swift_store_large_object_size       = $::os_service_default,
+  $swift_store_large_object_chunk_size = $::os_service_default,
   $swift_store_create_container_on_put = $::os_service_default,
   $swift_store_endpoint_type           = 'internalURL',
   $swift_store_region                  = $::os_service_default,
@@ -81,6 +90,8 @@ class glance::backend::swift(
       value => $swift_store_create_container_on_put;
     'glance_store/swift_store_large_object_size':
       value => $swift_store_large_object_size;
+    'glance_store/swift_store_large_object_chunk_size':
+      value => $swift_store_large_object_chunk_size;
     'glance_store/swift_store_endpoint_type':
       value => $swift_store_endpoint_type;
 
