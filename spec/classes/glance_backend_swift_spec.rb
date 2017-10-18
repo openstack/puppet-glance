@@ -21,6 +21,7 @@ describe 'glance::backend::swift' do
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('glance_store/default_store').with_value('swift')
         is_expected.to contain_glance_api_config('glance_store/swift_store_large_object_size').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/swift_store_large_object_chunk_size').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/swift_store_container').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/swift_store_create_container_on_put').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/swift_store_endpoint_type').with_value('internalURL')
@@ -56,6 +57,7 @@ describe 'glance::backend::swift' do
           :swift_store_auth_project_domain_id  => 'proj_domain',
           :swift_store_auth_user_domain_id     => 'user_domain',
           :swift_store_large_object_size       => '100',
+          :swift_store_large_object_chunk_size => '50',
           :swift_store_auth_address            => '127.0.0.2:8080/v1.0/',
           :swift_store_container               => 'swift',
           :swift_store_create_container_on_put => true,
@@ -70,6 +72,7 @@ describe 'glance::backend::swift' do
         is_expected.to contain_glance_api_config('glance_store/swift_store_container').with_value('swift')
         is_expected.to contain_glance_api_config('glance_store/swift_store_create_container_on_put').with_value(true)
         is_expected.to contain_glance_api_config('glance_store/swift_store_large_object_size').with_value('100')
+        is_expected.to contain_glance_api_config('glance_store/swift_store_large_object_chunk_size').with_value('50')
         is_expected.to contain_glance_api_config('glance_store/swift_store_endpoint_type').with_value('publicURL')
         is_expected.to contain_glance_api_config('glance_store/swift_store_region').with_value('RegionTwo')
         is_expected.to contain_glance_api_config('glance_store/default_swift_reference').with_value('swift_creds')

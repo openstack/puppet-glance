@@ -1,0 +1,8 @@
+---
+features:
+  - Add new option glance::backend::swift::swift_store_large_object_chunk_size
+    The swift_store_large_object_chunk_size is to be used in conjunction with
+    swift_store_large_object_size.
+    While swift_store_large_object_size is the trigger for glance to start
+    chunking images, swift_store_large_object_chunk_size is the size of the
+    chunks.
