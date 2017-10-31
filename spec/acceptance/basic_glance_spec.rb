@@ -36,7 +36,7 @@ describe 'glance class' do
         container_format => 'bare',
         disk_format      => 'qcow2',
         is_public        => 'yes',
-        source           => 'http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-disk.img',
+        source           => 'http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img',
         min_ram          => '64',
         min_disk         => '1024',
         properties       => { 'icanhaz' => 'cheezburger' },
