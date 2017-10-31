@@ -190,6 +190,10 @@
 #   (optional) Base directory that the Image Cache uses.
 #    Defaults to '/var/lib/glance/image-cache'.
 #
+# [*image_member_quota*]
+#   (optional) The maximum number of image members allowed per image.
+#    Defaults to $::os_service_default
+#
 # [*task_time_to_live*]
 #   (optional) Time in hours for which a task lives after.
 #   Defaults to $::os_service_default
@@ -324,6 +328,7 @@ class glance::api(
   $image_cache_max_size                 = $::os_service_default,
   $image_cache_stall_time               = $::os_service_default,
   $image_cache_dir                      = '/var/lib/glance/image-cache',
+  $image_member_quota                   = $::os_service_default,
   $task_time_to_live                    = $::os_service_default,
   $task_executor                        = $::os_service_default,
   $task_work_dir                        = $::os_service_default,
@@ -375,6 +380,7 @@ class glance::api(
     'DEFAULT/scrub_time':              value => $scrub_time;
     'DEFAULT/delayed_delete':          value => $delayed_delete;
     'DEFAULT/image_cache_dir':         value => $image_cache_dir;
+    'DEFAULT/image_member_quota':      value => $image_member_quota;
     'DEFAULT/enable_v1_api':           value => $enable_v1_api;
     'DEFAULT/enable_v2_api':           value => $enable_v2_api;
     'DEFAULT/limit_param_default':     value => $limit_param_default;
