@@ -6,14 +6,14 @@ Puppet::Type.newtype(:glance_image) do
 
     glance_image { "Ubuntu 12.04 cloudimg amd64":
       ensure           => present,
-      name             => "Ubuntu 12.04 cloudimg amd64"
+      name             => "Ubuntu 12.04 cloudimg amd64",
       is_public        => yes,
-      container_format => ovf,
+      container_format => 'ovf',
       disk_format      => 'qcow2',
-      source           => 'http://uec-images.ubuntu.com/releases/precise/release/ubuntu-12.04-server-cloudimg-amd64-disk1.img'
+      source           => 'http://uec-images.ubuntu.com/releases/precise/release/ubuntu-12.04-server-cloudimg-amd64-disk1.img',
       min_ram          => 1234,
       min_disk         => 1234,
-      properties       => { 'img_key' => img_value }
+      properties       => { 'img_key' => img_value },
     }
 
     Known problems / limitations:
