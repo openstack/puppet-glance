@@ -387,6 +387,21 @@ describe 'glance::api' do
       )}
 
     end
+
+    describe 'with barbican parameters' do
+      let :params do
+        default_params.merge!({
+          :keymgr_backend             => 'castellan.key_manager.barbican_key_manager.BarbicanKeyManager',
+          :keymgr_encryption_api_url  => 'https://localhost:9311/v1',
+          :keymgr_encryption_auth_url => 'https://localhost:5000/v3',
+        })
+      end
+      it 'should set keymgr parameters' do
+        is_expected.to contain_glance_api_config('key_manager/backend').with_value('castellan.key_manager.barbican_key_manager.BarbicanKeyManager')
+        is_expected.to contain_glance_api_config('barbican/barbican_endpoint').with_value('https://localhost:9311/v1')
+        is_expected.to contain_glance_api_config('barbican/auth_endpoint').with_value('https://localhost:5000/v3')
+      end
+    end
   end
 
   shared_examples_for 'glance::api Debian' do

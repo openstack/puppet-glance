@@ -275,6 +275,21 @@
 #   (optional) Maximum number of results that could be returned by a request
 #   Default: $::os_service_default.
 #
+# [*keymgr_backend*]
+#   (optional) Key Manager service class.
+#   Example of valid value: castellan.key_manager.barbican_key_manager.BarbicanKeyManager
+#   Defaults to undef.
+#
+# [*keymgr_encryption_api_url*]
+#   (optional) Key Manager service URL
+#   Example of valid value: https://localhost:9311/v1
+#   Defaults to undef
+#
+# [*keymgr_encryption_auth_url*]
+#   (optional) Auth URL for keymgr authentication. Should be in format
+#   http://auth_url:5000/v3
+#   Defaults to undef
+#
 #  === deprecated parameters:
 #
 # [*known_stores*]
@@ -344,6 +359,9 @@ class glance::api(
   $validation_options                   = {},
   $limit_param_default                  = $::os_service_default,
   $api_limit_max                        = $::os_service_default,
+  $keymgr_backend                       = undef,
+  $keymgr_encryption_api_url            = undef,
+  $keymgr_encryption_auth_url           = undef,
   # DEPRECATED PARAMETERS
   $known_stores                         = false,
 ) inherits glance {
@@ -500,6 +518,14 @@ class glance::api(
     'DEFAULT/registry_client_ca_file':   value => $registry_client_ca_file;
     'DEFAULT/registry_client_cert_file': value => $registry_client_cert_file;
     'DEFAULT/registry_client_key_file':  value => $registry_client_key_file;
+  }
+
+  if $keymgr_backend {
+    glance_api_config {
+      'key_manager/backend':        value => $keymgr_backend;
+      'barbican/barbican_endpoint': value => $keymgr_encryption_api_url;
+      'barbican/auth_endpoint':     value => $keymgr_encryption_auth_url;
+    }
   }
 
   if $manage_service {

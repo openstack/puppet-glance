@@ -1,0 +1,5 @@
+---
+features:
+  - Add new options glance::api::keymgr_* to allow
+    glance-api to interact with Barbican to store and
+    retrieve secrets for features like image signing.
