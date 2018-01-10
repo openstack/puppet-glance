@@ -23,19 +23,22 @@
 #   (optional) Path to the glance policy.json file
 #   Defaults to /etc/glance/policy.json
 #
-class glance::policy(
+class glance::policy (
   $policies    = {},
   $policy_path = '/etc/glance/policy.json',
 ) {
 
   include ::glance::deps
+  include ::glance::params
 
   validate_hash($policies)
 
   Openstacklib::Policy::Base {
-    file_path => $policy_path,
-    require   => Anchor['glance::config::begin'],
-    notify    => Anchor['glance::config::end'],
+    file_path  => $policy_path,
+    file_user  => 'root',
+    file_group => $::glance::params::group,
+    require    => Anchor['glance::config::begin'],
+    notify     => Anchor['glance::config::end'],
   }
 
   create_resources('openstacklib::policy::base', $policies)

@@ -7,6 +7,7 @@ class glance::params {
 
   $cache_cleaner_command = 'glance-cache-cleaner'
   $cache_pruner_command  = 'glance-cache-pruner'
+  $group                 = 'glance'
 
   case $::osfamily {
     'RedHat': {

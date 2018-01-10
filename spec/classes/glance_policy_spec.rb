@@ -17,8 +17,10 @@ describe 'glance::policy' do
 
     it 'set up the policies' do
       is_expected.to contain_openstacklib__policy__base('context_is_admin').with({
-        :key   => 'context_is_admin',
-        :value => 'foo:bar'
+        :key        => 'context_is_admin',
+        :value      => 'foo:bar',
+        :file_user  => 'root',
+        :file_group => 'glance',
       })
       is_expected.to contain_oslo__policy('glance_api_config').with(
         :policy_file => '/etc/glance/policy.json',
