@@ -236,7 +236,7 @@
 #   If you enable this option, you'll get a deprecation warning in Glance
 #   logs.  If enable_v2_api is set to True, glance::registry::enable_v1_registry
 #   must be configured to True, since Registry is required in API v1.
-#   Defaults to $::os_service_default.
+#   Defaults to false.
 #
 # [*enable_v2_api*]
 #   (Optional) Enable or not Glance API v2.
@@ -352,7 +352,7 @@ class glance::api(
   $conversion_format                    = $::os_service_default,
   $os_region_name                       = 'RegionOne',
   $enable_proxy_headers_parsing         = $::os_service_default,
-  $enable_v1_api                        = $::os_service_default,
+  $enable_v1_api                        = false,
   $enable_v2_api                        = $::os_service_default,
   $sync_db                              = true,
   $validate                             = false,

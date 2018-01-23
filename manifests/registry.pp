@@ -119,7 +119,7 @@
 #    set to True.
 #    If your OpenStack deployment is only using Glance API v2, this option
 #    should be set to False.
-#    Defaults to $::os_service_default.
+#    Defaults to false.
 #
 # DEPRECATED PARAMETERS
 #
@@ -154,7 +154,7 @@ class glance::registry(
   $key_file                = $::os_service_default,
   $ca_file                 = $::os_service_default,
   $os_region_name          = $::os_service_default,
-  $enable_v1_registry      = $::os_service_default,
+  $enable_v1_registry      = false,
   # DEPRECATED
   $sync_db                 = undef,
 ) inherits glance {

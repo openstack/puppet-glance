@@ -1,0 +1,6 @@
+---
+other:
+  - Change default value to false for enable_api_v1 in glance::api class.
+    Change default value to false for enable_registry_v1 in glance::registry class.
+    If enable_api_v1 and enable_registry_v1 options are set to $::os_service_default,
+    a warning will be sent. 

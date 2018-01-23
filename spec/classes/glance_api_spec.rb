@@ -43,7 +43,7 @@ describe 'glance::api' do
       :taskflow_engine_mode     => '<SERVICE DEFAULT>',
       :taskflow_max_workers     => '<SERVICE DEFAULT>',
       :conversion_format        => '<SERVICE DEFAULT>',
-      :enable_v1_api            => '<SERVICE DEFAULT>',
+      :enable_v1_api            => false,
       :enable_v2_api            => '<SERVICE DEFAULT>',
       :sync_db                  => true,
       :limit_param_default      => '<SERVICE DEFAULT>',

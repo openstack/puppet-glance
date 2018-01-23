@@ -24,7 +24,7 @@ describe 'glance::registry' do
       :ca_file                => '<SERVICE DEFAULT>',
       :cert_file              => '<SERVICE DEFAULT>',
       :key_file               => '<SERVICE DEFAULT>',
-      :enable_v1_registry     => '<SERVICE DEFAULT>',
+      :enable_v1_registry     => false,
     }
   end
 
