@@ -121,12 +121,6 @@
 #    should be set to False.
 #    Defaults to false.
 #
-# DEPRECATED PARAMETERS
-#
-# [*sync_db*]
-#   (Optional) Run db sync on the node.
-#   Defaults to undef
-#
 class glance::registry(
   $package_ensure          = 'present',
   $debug                   = undef,
@@ -155,8 +149,6 @@ class glance::registry(
   $ca_file                 = $::os_service_default,
   $os_region_name          = $::os_service_default,
   $enable_v1_registry      = false,
-  # DEPRECATED
-  $sync_db                 = undef,
 ) inherits glance {
 
   include ::glance::deps
@@ -206,11 +198,6 @@ class glance::registry(
     'DEFAULT/cert_file': value => $cert_file;
     'DEFAULT/key_file':  value => $key_file;
     'DEFAULT/ca_file':   value => $ca_file;
-  }
-
-  if $sync_db {
-    warning('sync_db is deprecated in glance::registry. This option will be removed in a future release. Please use glance::api::sync_db.')
-    include ::glance::db::sync
   }
 
   if $manage_service {

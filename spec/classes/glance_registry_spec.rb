@@ -19,7 +19,6 @@ describe 'glance::registry' do
       :enabled                => true,
       :manage_service         => true,
       :purge_config           => false,
-      :sync_db                => true,
       :os_region_name         => '<SERVICE DEFAULT>',
       :ca_file                => '<SERVICE DEFAULT>',
       :cert_file              => '<SERVICE DEFAULT>',
@@ -35,7 +34,6 @@ describe 'glance::registry' do
         :bind_port              => '9111',
         :workers                => '5',
         :enabled                => false,
-        :sync_db                => false,
         :os_region_name         => 'RegionOne2',
       }
     ].each do |param_set|

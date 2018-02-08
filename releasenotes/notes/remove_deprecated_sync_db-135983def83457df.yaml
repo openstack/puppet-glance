@@ -1,0 +1,3 @@
+---
+other:
+  - Remove deprecated glance::registry::sync_db option.
