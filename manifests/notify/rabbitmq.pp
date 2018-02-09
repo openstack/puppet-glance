@@ -68,6 +68,12 @@
 #   to an AMQP consumer cancel notification. (floating point value)
 #   Defaults to $::os_service_default
 #
+# [*kombu_failover_strategy*]
+#   (Optional) Determines how the next RabbitMQ node is chosen in case the one
+#   we are currently connected to becomes unavailable. Takes effect only if
+#   more than one RabbitMQ node is provided in config. (string value)
+#   Defaults to $::os_service_default
+#
 #  [*rabbit_notification_exchange*]
 #    Exchange name for sending notifications (string value)
 #    Defaults to $::os_service_default
@@ -133,6 +139,7 @@ class glance::notify::rabbitmq(
   $kombu_ssl_keyfile                  = $::os_service_default,
   $kombu_ssl_version                  = $::os_service_default,
   $kombu_reconnect_delay              = $::os_service_default,
+  $kombu_failover_strategy            = $::os_service_default,
   $rabbit_notification_exchange       = $::os_service_default,
   $rabbit_notification_topic          = $::os_service_default,
   $amqp_durable_queues                = $::os_service_default,
@@ -178,6 +185,7 @@ deprecated. Please use glance::notify::rabbitmq::default_transport_url instead."
     kombu_ssl_keyfile           => $kombu_ssl_keyfile,
     kombu_ssl_version           => $kombu_ssl_version,
     kombu_reconnect_delay       => $kombu_reconnect_delay,
+    kombu_failover_strategy     => $kombu_failover_strategy,
     amqp_durable_queues         => $amqp_durable_queues,
     kombu_compression           => $kombu_compression,
   }
