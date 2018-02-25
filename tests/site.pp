@@ -22,7 +22,7 @@ node 'glance_keystone_mysql' {
     keystone_tenant     => 'services',
     keystone_user       => 'glance',
     keystone_password   => 'glance_password',
-    database_connection => 'mysql://glance:glance@127.0.0.1/glance',
+    database_connection => 'mysql+pymysql://glance:glance@127.0.0.1/glance',
   }
   class { '::glance::backend::file': }
 
@@ -41,7 +41,7 @@ node 'glance_keystone_mysql' {
     keystone_tenant     => 'services',
     keystone_user       => 'glance',
     keystone_password   => 'glance_password',
-    database_connection => 'mysql://glance:glance@127.0.0.1/glance',
+    database_connection => 'mysql+pymysql://glance:glance@127.0.0.1/glance',
   }
   class { '::glance::keystone::auth':
     password => 'glance_pass',
