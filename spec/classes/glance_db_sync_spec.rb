@@ -17,6 +17,7 @@ describe 'glance::db::sync' do
                          'Anchor[glance::config::end]',
                          'Anchor[glance::dbsync::begin]'],
         :notify      => 'Anchor[glance::dbsync::end]',
+        :tag         => 'openstack-db',
       )
     end
 
@@ -39,6 +40,7 @@ describe 'glance::db::sync' do
                          'Anchor[glance::config::end]',
                          'Anchor[glance::dbsync::begin]'],
         :notify      => 'Anchor[glance::dbsync::end]',
+        :tag         => 'openstack-db',
       )
       }
     end
