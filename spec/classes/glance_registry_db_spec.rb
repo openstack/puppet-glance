@@ -43,7 +43,7 @@ describe 'glance::registry::db' do
 
     context 'with MySQL-python library as backend package' do
       let :params do
-        { :database_connection => 'mysql://glance_registry:glance@localhost/glance' }
+        { :database_connection => 'mysql+pymysql://glance_registry:glance@localhost/glance' }
       end
 
       it { is_expected.to contain_package('python-mysqldb').with(:ensure => 'present') }

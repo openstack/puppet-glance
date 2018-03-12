@@ -52,14 +52,14 @@ class { 'glance::api':
   keystone_tenant     => 'services',
   keystone_user       => 'glance',
   keystone_password   => '12345',
-  database_connection => 'mysql://glance:12345@127.0.0.1/glance',
+  database_connection => 'mysql+pymysql://glance:12345@127.0.0.1/glance',
 }
 
 class { 'glance::registry':
   keystone_tenant     => 'services',
   keystone_user       => 'glance',
   keystone_password   => '12345',
-  database_connection => 'mysql://glance:12345@127.0.0.1/glance',
+  database_connection => 'mysql+pymysql://glance:12345@127.0.0.1/glance',
 }
 
 class { 'glance::backend::file': }

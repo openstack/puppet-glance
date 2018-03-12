@@ -43,7 +43,7 @@ describe 'glance::api::db' do
 
     context 'with MySQL-python library as backend package' do
       let :params do
-        { :database_connection => 'mysql://glance_api:glance@localhost/glance' }
+        { :database_connection => 'mysql+pymysql://glance_api:glance@localhost/glance' }
       end
 
       it { is_expected.to contain_package('python-mysqldb').with(:ensure => 'present') }
