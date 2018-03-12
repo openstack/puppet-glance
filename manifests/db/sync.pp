@@ -30,6 +30,7 @@ class glance::db::sync(
       Anchor['glance::dbsync::begin']
     ],
     notify      => Anchor['glance::dbsync::end'],
+    tag         => 'openstack-db',
   }
 
 }
