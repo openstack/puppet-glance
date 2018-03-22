@@ -8,28 +8,7 @@ describe 'glance class' do
       include ::openstack_integration::repos
       include ::openstack_integration::mysql
       include ::openstack_integration::keystone
-
-      # Glance resources
-      include ::glance
-      include ::glance::client
-      include ::glance::backend::file
-      class { '::glance::db::mysql':
-        # https://bugs.launchpad.net/puppet-glance/+bug/1446375
-        collate  => 'utf8_general_ci',
-        password => 'a_big_secret',
-      }
-      class { '::glance::keystone::auth':
-        password => 'a_big_secret',
-      }
-      class { '::glance::api::authtoken':
-        password => 'a_big_secret',
-      }
-      class { '::glance::api':
-        debug               => true,
-        database_connection => 'mysql+pymysql://glance:a_big_secret@127.0.0.1/glance?charset=utf8',
-        enable_v1_api       => false,
-        enable_v2_api       => true,
-      }
+      include ::openstack_integration::glance
 
       glance_image { 'test_image':
         ensure           => present,
