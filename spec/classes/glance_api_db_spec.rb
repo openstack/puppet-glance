@@ -13,6 +13,7 @@ describe 'glance::api::db' do
         :max_retries    => '<SERVICE DEFAULT>',
         :retry_interval => '<SERVICE DEFAULT>',
         :max_overflow   => '<SERVICE DEFAULT>',
+        :pool_timeout   => '<SERVICE DEFAULT>',
       )}
     end
 
@@ -26,6 +27,7 @@ describe 'glance::api::db' do
           :database_retry_interval => '11',
           :database_max_pool_size  => '11',
           :database_max_overflow   => '21',
+          :database_pool_timeout   => '21',
         }
       end
 
@@ -38,6 +40,7 @@ describe 'glance::api::db' do
         :db_max_retries => '-1',
         :retry_interval => '11',
         :max_overflow   => '21',
+        :pool_timeout   => '21',
       )}
     end
 
