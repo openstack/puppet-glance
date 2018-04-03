@@ -549,7 +549,7 @@ class glance::api(
     $keystone_project_name = $::glance::api::authtoken::project_name
     $keystone_username     = $::glance::api::authtoken::username
     $keystone_password     = $::glance::api::authtoken::password
-    $auth_uri              = $::glance::api::authtoken::auth_uri
+    $auth_uri              = $::glance::api::authtoken::www_authenticate_uri
     $defaults = {
       'glance-api' => {
         # lint:ignore:140chars

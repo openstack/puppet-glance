@@ -42,7 +42,7 @@
 #   (Optional) Authentication type to load
 #   Defaults to 'password'
 #
-# [*auth_uri*]
+# [*www_authenticate_uri*]
 #   (Optional) Complete public Identity API endpoint.
 #   Defaults to 'http://127.0.0.1:5000'.
 #
@@ -178,6 +178,12 @@
 #   (in seconds). Set to -1 to disable caching completely. Integer value
 #   Defaults to $::os_service_default.
 #
+# DEPRECATED PARAMETERS
+#
+# [*auth_uri*]
+#   (Optional) Complete public Identity API endpoint.
+#   Defaults to undef
+#
 class glance::api::authtoken(
   $username                       = 'glance',
   $password                       = $::os_service_default,
@@ -188,7 +194,7 @@ class glance::api::authtoken(
   $insecure                       = $::os_service_default,
   $auth_section                   = $::os_service_default,
   $auth_type                      = 'password',
-  $auth_uri                       = 'http://127.0.0.1:5000',
+  $www_authenticate_uri           = 'http://127.0.0.1:5000',
   $auth_version                   = $::os_service_default,
   $cache                          = $::os_service_default,
   $cafile                         = $::os_service_default,
@@ -213,6 +219,8 @@ class glance::api::authtoken(
   $manage_memcache_package        = false,
   $region_name                    = $::os_service_default,
   $token_cache_time               = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $auth_uri                       = undef,
 ) {
 
   include ::glance::deps
@@ -221,12 +229,17 @@ class glance::api::authtoken(
     fail('Please set password for Glance service user')
   }
 
+  if $auth_uri {
+    warning('The auth_uri parameter is deprecated. Please use www_authenticate_uri instead.')
+  }
+  $www_authenticate_uri_real = pick($auth_uri, $www_authenticate_uri)
+
   keystone::resource::authtoken { 'glance_api_config':
       username                       => $username,
       password                       => $password,
       project_name                   => $project_name,
       auth_url                       => $auth_url,
-      auth_uri                       => $auth_uri,
+      www_authenticate_uri           => $www_authenticate_uri_real,
       auth_version                   => $auth_version,
       auth_type                      => $auth_type,
       auth_section                   => $auth_section,
