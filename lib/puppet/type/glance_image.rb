@@ -11,6 +11,7 @@ Puppet::Type.newtype(:glance_image) do
       container_format => 'ovf',
       disk_format      => 'qcow2',
       source           => 'http://uec-images.ubuntu.com/releases/precise/release/ubuntu-12.04-server-cloudimg-amd64-disk1.img',
+      proxy            => 'http://127.0.0.1:8080',
       min_ram          => 1234,
       min_disk         => 1234,
       properties       => { 'img_key' => img_value },
@@ -70,6 +71,11 @@ Puppet::Type.newtype(:glance_image) do
 
   newparam(:source) do
     desc "The source of the image to import from"
+    newvalues(/\S+/)
+  end
+
+  newparam(:proxy) do
+    desc "The proxy server to use if source should be downloaded"
     newvalues(/\S+/)
   end
 

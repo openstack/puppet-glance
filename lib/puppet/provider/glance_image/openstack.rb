@@ -24,6 +24,15 @@ Puppet::Type.type(:glance_image).provide(
   def create
     temp_file = false
     if @resource[:source]
+      if @resource[:proxy]
+        proxy_uri = URI(@resource[:proxy])
+        proxy_host = proxy_uri.host
+        proxy_port = proxy_uri.port
+      else
+        proxy_host = nil
+        proxy_port = nil
+      end
+
       # copy_from cannot handle file://
       if @resource[:source] =~ /^\// # local file
         location = "--file=#{@resource[:source]}"
@@ -31,7 +40,7 @@ Puppet::Type.type(:glance_image).provide(
         temp_file = Tempfile.new('puppet-glance-image')
 
         uri = URI(@resource[:source])
-        Net::HTTP.start(uri.host, uri.port,
+        Net::HTTP.start(uri.host, uri.port, proxy_host, proxy_port,
                         :use_ssl => uri.scheme == 'https') do |http|
           request = Net::HTTP::Get.new uri
           http.request request do |response|

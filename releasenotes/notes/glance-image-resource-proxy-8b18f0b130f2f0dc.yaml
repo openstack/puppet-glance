@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The glance_image resource now provides a proxy parameter which can be used
+    to specify a proxy to use when downloading a remote image using the source
+    parameter. The new proxy parameter is optional.
