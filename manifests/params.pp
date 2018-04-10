@@ -3,7 +3,12 @@
 class glance::params {
   include ::openstacklib::defaults
 
-  $client_package_name = 'python-glanceclient'
+  if ($::os_package_type == 'debian') {
+    $pyvers = '3'
+  } else {
+    $pyvers = ''
+  }
+  $client_package_name = "python${pyvers}-glanceclient"
 
   $cache_cleaner_command = 'glance-cache-cleaner'
   $cache_pruner_command  = 'glance-cache-pruner'
@@ -26,7 +31,7 @@ class glance::params {
       $registry_package_name = 'glance-registry'
       $api_service_name      = 'glance-api'
       $registry_service_name = 'glance-registry'
-      $pyceph_package_name   = 'python-ceph'
+      $pyceph_package_name   = "python${pyvers}-ceph"
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \

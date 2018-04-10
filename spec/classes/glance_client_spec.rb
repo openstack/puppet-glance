@@ -5,7 +5,7 @@ describe 'glance::client' do
   shared_examples 'glance client' do
     it { is_expected.to contain_class('glance::params') }
     it { is_expected.to contain_package('python-glanceclient').with(
-        :name   => 'python-glanceclient',
+        :name   => platform_params[:client_package_name],
         :ensure => 'present',
         :tag    => ['openstack', 'glance-support-package'],
       )
@@ -18,6 +18,19 @@ describe 'glance::client' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
+      end
+
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          if facts[:os_package_type] == 'debian'
+            { :client_package_name => 'python3-glanceclient' }
+          else
+            { :client_package_name => 'python-glanceclient' }
+          end
+        when 'RedHat'
+          { :client_package_name => 'python-glanceclient' }
+        end
       end
 
       it_configures 'glance client'
