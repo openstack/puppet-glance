@@ -7,7 +7,7 @@
         },
         {
             "name": "openstack/keystone",
-            "version_requirement": ">=12.3.0 <13.0.0"
+            "version_requirement": ">=13.0.0 <14.0.0"
         },
         {
             "name": "puppetlabs/stdlib",
@@ -15,15 +15,15 @@
         },
         {
             "name": "openstack/swift",
-            "version_requirement": ">=12.3.0 <13.0.0"
+            "version_requirement": ">=13.0.0 <14.0.0"
         },
         {
             "name": "openstack/openstacklib",
-            "version_requirement": ">=12.3.0 <13.0.0"
+            "version_requirement": ">=13.0.0 <14.0.0"
         },
         {
             "name": "openstack/oslo",
-            "version_requirement": ">=12.3.0 <13.0.0"
+            "version_requirement": ">=13.0.0 <14.0.0"
         }
     ],
     "description": "Installs and configures OpenStack Glance (Image Service).",
@@ -69,5 +69,5 @@
     ],
     "source": "git://github.com/openstack/puppet-glance.git",
     "summary": "Puppet module for OpenStack Glance",
-    "version": "12.4.0"
+    "version": "13.0.0"
 }
