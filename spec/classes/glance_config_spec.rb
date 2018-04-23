@@ -15,6 +15,8 @@ describe 'glance::config' do
         :api_paste_ini_config => config_hash }
     end
 
+    it { is_expected.to contain_class('glance::deps') }
+
     it 'configures arbitrary glance-api configurations' do
       is_expected.to contain_glance_api_config('DEFAULT/foo').with_value('fooValue')
       is_expected.to contain_glance_api_config('DEFAULT/bar').with_value('barValue')
