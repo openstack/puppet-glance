@@ -190,6 +190,11 @@
 #   (optional) Base directory that the Image Cache uses.
 #    Defaults to '/var/lib/glance/image-cache'.
 #
+# [*node_staging_uri*]
+# (optional) The URL provides location where the temporary data will be
+#  stored when image import method is set to 'glance-direct'
+#  Defaults to $::os_service_default.
+#
 # [*image_member_quota*]
 #   (optional) The maximum number of image members allowed per image.
 #    Defaults to $::os_service_default
@@ -343,6 +348,7 @@ class glance::api(
   $image_cache_max_size                 = $::os_service_default,
   $image_cache_stall_time               = $::os_service_default,
   $image_cache_dir                      = '/var/lib/glance/image-cache',
+  $node_staging_uri                     = $::os_service_default,
   $image_member_quota                   = $::os_service_default,
   $task_time_to_live                    = $::os_service_default,
   $task_executor                        = $::os_service_default,
@@ -398,6 +404,7 @@ class glance::api(
     'DEFAULT/scrub_time':              value => $scrub_time;
     'DEFAULT/delayed_delete':          value => $delayed_delete;
     'DEFAULT/image_cache_dir':         value => $image_cache_dir;
+    'DEFAULT/node_staging_uri':        value => $node_staging_uri;
     'DEFAULT/image_member_quota':      value => $image_member_quota;
     'DEFAULT/enable_v1_api':           value => $enable_v1_api;
     'DEFAULT/enable_v2_api':           value => $enable_v2_api;
