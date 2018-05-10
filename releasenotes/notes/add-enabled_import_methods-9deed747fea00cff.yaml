@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Add new option glance::api::enabled_import_methods.
+    This option specifies the list of enabled Image Import Methods.
