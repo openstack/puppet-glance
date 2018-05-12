@@ -50,13 +50,13 @@ To utilize the glance module's functionality you will need to declare multiple r
 ```puppet
 class { 'glance::api::authtoken':
   password => '12345',
-  auth_url => 'http://172.17.0.3:35357',
+  auth_url => 'http://172.17.0.3:5000',
   auth_uri => 'http://172.17.0.3:5000',
 }
 
 class { 'glance::registry::authtoken':
   password => '12345',
-  auth_url => 'http://172.17.0.3:35357',
+  auth_url => 'http://172.17.0.3:5000',
   auth_uri => 'http://172.17.0.3:5000',
 }
 
