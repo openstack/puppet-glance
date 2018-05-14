@@ -397,6 +397,13 @@ class glance::api(
     )
   }
 
+  if $enabled_import_methods != $::os_service_default {
+    # This option is a ListOpt that requires explicit brackets.
+    $enabled_import_methods_real = sprintf('[%s]', join(any2array($enabled_import_methods), ','))
+  } else {
+    $enabled_import_methods_real = $enabled_import_methods
+  }
+
   # basic service config
   glance_api_config {
     'DEFAULT/bind_host':               value => $bind_host;
@@ -409,7 +416,7 @@ class glance::api(
     'DEFAULT/scrub_time':              value => $scrub_time;
     'DEFAULT/delayed_delete':          value => $delayed_delete;
     'DEFAULT/image_cache_dir':         value => $image_cache_dir;
-    'DEFAULT/enabled_import_methods':  value => $enabled_import_methods;
+    'DEFAULT/enabled_import_methods':  value => $enabled_import_methods_real;
     'DEFAULT/node_staging_uri':        value => $node_staging_uri;
     'DEFAULT/image_member_quota':      value => $image_member_quota;
     'DEFAULT/enable_v1_api':           value => $enable_v1_api;

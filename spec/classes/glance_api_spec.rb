@@ -132,7 +132,6 @@ describe 'glance::api' do
             'delayed_delete',
             'scrub_time',
             'image_cache_dir',
-            'enabled_import_methods',
             'node_staging_uri',
             'image_member_quota',
             'enable_v1_api',
@@ -142,6 +141,12 @@ describe 'glance::api' do
           ].each do |config|
             is_expected.to contain_glance_api_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end
+        end
+
+        it 'is_expected.to lay down default enabled_import_methods config' do
+          # Verify brackets "[]" are added to satisfy the ListOpt syntax.
+          is_expected.to contain_glance_api_config("DEFAULT/enabled_import_methods").with_value(
+                           "[%s]" % param_hash[:enabled_import_methods])
         end
 
         it 'is_expected.to lay down default cache config' do
