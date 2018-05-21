@@ -27,7 +27,6 @@ describe 'glance::api' do
       :show_multiple_locations  => '<SERVICE DEFAULT>',
       :location_strategy        => '<SERVICE DEFAULT>',
       :purge_config             => false,
-      :known_stores             => false,
       :delayed_delete           => '<SERVICE DEFAULT>',
       :scrub_time               => '<SERVICE DEFAULT>',
       :default_store            => false,
@@ -278,7 +277,7 @@ describe 'glance::api' do
         default_params
       end
 
-      it { is_expected.to_not contain_glance_api_config('glance_store/stores').with_value('false') }
+      it { is_expected.to_not contain_glance_api_config('glance_store/stores').with_value('<SERVICE DEFAULT>') }
     end
 
     describe 'with stores override' do
@@ -318,18 +317,7 @@ describe 'glance::api' do
       it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('file,http') }
     end
 
-    describe 'with both stores and known_stores provided' do
-      let :params do
-        default_params.merge({
-          :stores       => ['file'],
-          :known_stores => ['glance.store.http.store'],
-        })
-      end
-
-      it { is_expected.to raise_error(Puppet::Error, /known_stores and stores cannot both be assigned values/) }
-    end
-
-    describe 'with known_stores not set but with default_store' do
+    describe 'with default_store' do
       let :params do
         default_params.merge({
           :default_store => 'file',

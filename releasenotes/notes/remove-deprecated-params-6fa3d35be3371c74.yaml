@@ -1,0 +1,47 @@
+---
+upgrade:
+  - |
+    The deprecated parameter glance::api::known_stores is removed.
+    Please use glance::api::stores instead.
+  - |
+    The deprecated parameter glance::backend::vsphere::glare_enabled is removed.
+    Please use the puppet-glare module instead.
+  - |
+    The deprecated parameter glance::backend::vsphere::vcenter_api_insecure is removed.
+    Please use vcenter_insecure.
+  - |
+    The deprecated parameters vcenter_datacenter and vcenter_datastore in glance::backend::vsphere
+    is removed. Please use vcenter_datastores instead.
+  - |
+    The deprecated parameter glance::backend::s3::default_store is removed.
+    Please set this in glance::api.
+  - |
+    The deprecated parameter glance::backend::s3::glare_enabled is removed.
+    Please use the puppet-glare module instead.
+  - |
+    The deprecated parameter glance::backend::rbd::glare_enabled is removed.
+    Please use the puppet-glare module instead.
+  - |
+    The deprecated parameter glance::backend::rbd::show_image_direct_url is removed.
+    Please set this parameter in glance::api.
+  - |
+    The deprecated parameters glance::notify::rabbitmq::rabbit_host, glance::notify::rabbitmq::rabbit_hosts,
+    glance::notify::rabbitmq::rabbit_password, glance::notify::rabbitmq::rabbit_port, glance::notify::rabbitmq::rabbit_userid
+    and glance::notify::rabbitmq::rabbit_virtual_host is removed.
+    Please use glance::notify::rabbitmq::default_transport_url instead.
+  - |
+    The deprecated parameters glance::config::clare_config and glance::config::glare_paste_ini_config
+    is removed. Please use the puppet-glare module instead.
+  - |
+    The deprecated parameter glance::backend::file::glare_enabled is removed.
+    Please use the puppet-glare module instead.
+  - |
+    The deprecated parameter glance::backend::cinder::glare_enabled is removed.
+    Please use the puppet-glare module instead.
+  - |
+    The deprecated parameter glance::backend::swift::glare_enabled is removed.
+    Please use the puppet-glare module instead.
+  - |
+    The deprecated classes glance::glare, glance::keystone::glare_auth, glance::glare::authtoken,
+    glance::glare::db, glance::glare::logging is removed.
+    Please use the puppet-glare module instead.

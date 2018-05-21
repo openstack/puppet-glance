@@ -17,10 +17,6 @@
 #  [*rbd_store_chunk_size*]
 #    Optional. Default: $::os_service_default.
 #
-#  [*show_image_direct_url*]
-#    Optional. Enables direct COW from glance to rbd
-#    DEPRECATED, use show_image_direct_url in glance::api
-#
 #  [*manage_packages*]
 #    Optional. Whether we should manage the packages.
 #    Defaults to true,
@@ -40,32 +36,19 @@
 #    Optional. Boolean describing if multiple backends will be configured
 #    Defaults to false
 #
-# === Deprecated parameters:
-#
-#  [*glare_enabled*]
-#    (optional) Whether enabled Glance Glare API.
-#    Defaults to undef
-#
 class glance::backend::rbd(
   $rbd_store_user         = $::os_service_default,
   $rbd_store_ceph_conf    = $::os_service_default,
   $rbd_store_pool         = $::os_service_default,
   $rbd_store_chunk_size   = $::os_service_default,
-  $show_image_direct_url  = undef,
   $manage_packages        = true,
   $package_ensure         = 'present',
   $rados_connect_timeout  = $::os_service_default,
   $multi_store            = false,
-  # deprecated
-  $glare_enabled          = undef,
 ) {
 
   include ::glance::deps
   include ::glance::params
-
-  if $show_image_direct_url {
-    notice('parameter show_image_direct_url is deprecated, use parameter in glance::api')
-  }
 
   glance_api_config {
     'glance_store/rbd_store_ceph_conf':    value => $rbd_store_ceph_conf;
@@ -73,11 +56,6 @@ class glance::backend::rbd(
     'glance_store/rbd_store_pool':         value => $rbd_store_pool;
     'glance_store/rbd_store_chunk_size':   value => $rbd_store_chunk_size;
     'glance_store/rados_connect_timeout':  value => $rados_connect_timeout;
-  }
-
-  if $glare_enabled != undef {
-    warning("Since Glare was removed from Glance and now it is separate project, \
-you should use puppet-glare module for configuring Glare service.")
   }
 
   if !$multi_store {

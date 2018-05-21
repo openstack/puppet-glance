@@ -35,33 +35,15 @@
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
-# === Deprecated parameters
-#
-# [*glare_config*]
-#   (optional) Allow configuration of glance-glare.conf configurations.
-#   Defaults to undef.
-#
-# [*glare_paste_ini_config*]
-#   (optional) Allow configuration of glance-glare-paste.ini configurations.
-#   Defaults to undef.
-#
 class glance::config (
   $api_config                 = {},
   $api_paste_ini_config       = {},
   $registry_config            = {},
   $registry_paste_ini_config  = {},
   $cache_config               = {},
-  # deprecated
-  $glare_config               = undef,
-  $glare_paste_ini_config     = undef,
 ) {
 
   include ::glance::deps
-
-  if $glare_config != undef or $glare_paste_ini_config != undef{
-    warning("Since Glare was removed from Glance and now it is separate project, \
-you should use puppet-glare module for configuring Glare service.")
-  }
 
   validate_hash($api_config)
   validate_hash($api_paste_ini_config)

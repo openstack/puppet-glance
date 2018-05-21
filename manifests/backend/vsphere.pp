@@ -78,30 +78,6 @@
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false.
 #
-# DEPRECATED PARAMETERS
-#
-# [*vcenter_api_insecure*]
-#   (optional) DEPRECATED. Allow to perform insecure SSL requests to ESX/VC.
-#   Defaults to undef.
-#
-# [*vcenter_datacenter*]
-#   (optional) DEPRECATED. Inventory path to a datacenter.
-#   If the vmware_server_host specified is an ESX/ESXi,
-#   the vcenter_datacenter is optional. If specified,
-#   it should be "ha-datacenter". This option is deprecated
-#   in favor of vcenter_datastores and will be removed.
-#   Defaults to undef.
-#
-# [*vcenter_datastore*]
-#   (optional) DEPRECATED. Datastore associated with the datacenter.
-#   This option is deprecated in favor of vcenter_datastores
-#   and will be removed.
-#   Defaults to undef.
-#
-# [*glare_enabled*]
-#   (optional) Whether enabled Glance Glare API.
-#   Defaults to undef.
-#
 class glance::backend::vsphere(
   $vcenter_host,
   $vcenter_user,
@@ -113,41 +89,12 @@ class glance::backend::vsphere(
   $vcenter_task_poll_interval = $::os_service_default,
   $vcenter_api_retry_count    = $::os_service_default,
   $multi_store                = false,
-  # DEPRECATED PARAMETERS
-  $vcenter_datacenter         = undef,
-  $vcenter_datastore          = undef,
-  $vcenter_api_insecure       = undef,
-  $glare_enabled              = undef,
 ) {
 
   include ::glance::deps
 
-  if $glare_enabled != undef {
-    warning("Since Glare was removed from Glance and now it is separate project, \
-you should use puppet-glare module for configuring Glare service.")
-  }
-
-  if $vcenter_api_insecure {
-    warning('The vcenter_api_insecure parameter is deprecated, use parameter vcenter_insecure')
-    $vmware_insecure_real = $vcenter_api_insecure
-  }
-  else {
-    $vmware_insecure_real = $vcenter_insecure
-  }
-
-  if $vcenter_datacenter and $vcenter_datastore {
-    warning('The vcenter_datacenter and vcenter_datastore parameters is deprecated, use parameter vcenter_datastores')
-    $vmware_datastores_real = "${vcenter_datacenter}:${vcenter_datastore}"
-  }
-  elsif !is_service_default($vcenter_datastores) {
-    $vmware_datastores_real = $vcenter_datastores
-  }
-  else {
-    fail('Parameter vcenter_datastores or vcenter_datacenter and vcenter_datastore must be provided')
-  }
-
   glance_api_config {
-    'glance_store/vmware_insecure': value           => $vmware_insecure_real;
+    'glance_store/vmware_insecure': value           => $vcenter_insecure;
     'glance_store/vmware_ca_file': value            => $vcenter_ca_file;
     'glance_store/vmware_server_host': value        => $vcenter_host;
     'glance_store/vmware_server_username': value    => $vcenter_user;
@@ -155,7 +102,7 @@ you should use puppet-glare module for configuring Glare service.")
     'glance_store/vmware_store_image_dir': value    => $vcenter_image_dir;
     'glance_store/vmware_task_poll_interval': value => $vcenter_task_poll_interval;
     'glance_store/vmware_api_retry_count': value    => $vcenter_api_retry_count;
-    'glance_store/vmware_datastores': value         => $vmware_datastores_real;
+    'glance_store/vmware_datastores': value         => $vcenter_datastores;
   }
 
   if !$multi_store {
