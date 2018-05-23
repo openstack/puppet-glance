@@ -50,15 +50,6 @@
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
 #
-#  === deprecated parameters:
-#
-#  [*default_store*]
-#   (Optional) DEPRECATED Whether to set S3 as the default backend store.
-#   Default: undef
-#  [*glare_enabled*]
-#   (optional) Whether enabled Glance Glare API.
-#   Defaults to undef
-#
 class glance::backend::s3(
   $access_key,
   $secret_key,
@@ -71,9 +62,6 @@ class glance::backend::s3(
   $object_buffer_dir        = $::os_service_default,
   $thread_pools             = $::os_service_default,
   $multi_store              = false,
-  # deprecated parameters
-  $default_store            = undef,
-  $glare_enabled            = undef,
 ) {
 
   include ::glance::deps
@@ -84,20 +72,10 @@ class glance::backend::s3(
     }
   }
 
-
   if !is_service_default($bucket_url_format){
     if !($bucket_url_format in ['subdomain', 'path']) {
       fail('glance::backend::s3::bucket_url_format must be either "subdomain" or "path"')
     }
-  }
-
-  if $default_store {
-    warning('The default_store parameter is deprecated in glance::backend::s3, you should declare it in glance::api')
-  }
-
-  if $glare_enabled != undef {
-    warning("Since Glare was removed from Glance and now it is separate project, \
-you should use puppet-glare module for configuring Glare service.")
   }
 
   glance_api_config {

@@ -8,15 +8,8 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_api_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>').with_secret(true) }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/default_notification_exchange').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>') }
@@ -29,15 +22,8 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_registry_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>').with_secret(true) }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/default_notification_exchange').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>') }
@@ -49,25 +35,15 @@ describe 'glance::notify::rabbitmq' do
     describe 'when passing params and use ssl' do
       let :params do
         {
-          :rabbit_password         => 'pass',
-          :rabbit_userid           => 'guest2',
-          :rabbit_host             => 'localhost2',
-          :rabbit_port             => '5673',
           :rabbit_use_ssl          => true,
           :rabbit_durable_queues   => true,
           :kombu_reconnect_delay   => '5.0',
           :kombu_failover_strategy => 'shuffle',
         }
-        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
-        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
-        it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_durable_queues').with_value(true) }
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('5.0') }
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('shuffle') }
 
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
         it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_durable_queues').with_value(true) }
         it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('5.0') }
         it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('shuffle') }
@@ -113,68 +89,29 @@ describe 'glance::notify::rabbitmq' do
     describe 'when passing params for single rabbit host' do
       let :params do
         {
-          :rabbit_password     => 'pass',
-          :rabbit_userid       => 'guest2',
-          :rabbit_host         => 'localhost2',
-          :rabbit_port         => '5673',
           :rabbit_use_ssl      => true,
           :amqp_durable_queues => true,
         }
       end
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
       it { is_expected.to contain_oslo__messaging__rabbit('glance_api_config').with(
         :rabbit_use_ssl => true,
       )}
 
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
       it { is_expected.to contain_oslo__messaging__rabbit('glance_registry_config').with(
         :rabbit_use_ssl => true,
       )}
     end
 
-    describe 'when passing params for multiple rabbit hosts' do
+    describe 'when setting rabbit_ha_queues' do
       let :params do
         {
-          :rabbit_password => 'pass',
-          :rabbit_userid   => 'guest3',
-          :rabbit_hosts    => ['nonlocalhost3:5673', 'nonlocalhost4:5673']
+          :rabbit_ha_queues => true,
         }
       end
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest3') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_hosts').with_value('nonlocalhost3:5673,nonlocalhost4:5673') }
+
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true) }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
-
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest3') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_hosts').with_value('nonlocalhost3:5673,nonlocalhost4:5673') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true) }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
-    end
-
-    describe 'a single rabbit_host with enable ha queues' do
-      let :params do
-         {
-          :rabbit_password  => 'pass',
-          :rabbit_userid    => 'guest3',
-          :rabbit_ha_queues => true,
-         }
-      end
-
-      it 'should contain rabbit_ha_queues' do
-        is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
-
-        is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
-      end
     end
 
     describe 'when passing params for rabbitmq heartbeat' do

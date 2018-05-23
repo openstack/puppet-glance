@@ -299,15 +299,6 @@
 #   http://auth_url:5000/v3
 #   Defaults to undef
 #
-#  === deprecated parameters:
-#
-# [*known_stores*]
-#   (optional) DEPRECATED List of which store classes and store class
-#   locations are currently known to glance at startup. This parameter
-#   should be removed in the N release.
-#   Defaults to false.
-#   Example: ['file','http']
-#
 class glance::api(
   $package_ensure                       = 'present',
   $debug                                = undef,
@@ -373,8 +364,6 @@ class glance::api(
   $keymgr_backend                       = undef,
   $keymgr_encryption_api_url            = undef,
   $keymgr_encryption_auth_url           = undef,
-  # DEPRECATED PARAMETERS
-  $known_stores                         = false,
 ) inherits glance {
 
   include ::glance::deps
@@ -436,33 +425,24 @@ class glance::api(
     'taskflow_executor/conversion_format': value => $conversion_format,
   }
 
-  # stores config
-  if $stores and $known_stores {
-    fail('known_stores and stores cannot both be assigned values')
-  } elsif $stores {
-    $stores_real = $stores
-  } elsif $known_stores {
-    warning('The known_stores parameter is deprecated, use stores instead')
-    $stores_real = $known_stores
-  }
   if $default_store {
     $default_store_real = $default_store
   }
-  if !empty($stores_real) {
+  if ($stores and !empty($stores)) {
     # determine value for glance_store/stores
-    if size(any2array($stores_real)) > 1 {
-      $final_stores_real = join($stores_real, ',')
+    if size(any2array($stores)) > 1 {
+      $stores_real = join($stores, ',')
     } else {
-      $final_stores_real = $stores_real[0]
+      $stores_real = $stores[0]
     }
     if !$default_store_real {
       # set default store based on provided stores when it isn't explicitly set
-      warning("default_store not provided, it will be automatically set to ${stores_real[0]}")
-      $default_store_real = $stores_real[0]
+      warning("default_store not provided, it will be automatically set to ${stores[0]}")
+      $default_store_real = $stores[0]
     }
   } elsif $default_store_real {
     # set stores based on default_store if only default_store is provided
-    $final_stores_real = $default_store
+    $stores_real = $default_store
   } else {
     warning('Glance-api is being provisioned without any stores configured')
   }
@@ -477,9 +457,9 @@ class glance::api(
     }
   }
 
-  if $final_stores_real {
+  if $stores_real {
     glance_api_config {
-      'glance_store/stores': value => $final_stores_real;
+      'glance_store/stores': value => $stores_real;
     }
   } else {
     glance_api_config {

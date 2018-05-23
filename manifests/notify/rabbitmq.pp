@@ -97,34 +97,6 @@
 #    messaging, messagingv2, routing, log, test, noop (multi valued)
 #   Defaults to $::os_service_default
 #
-# === DEPRECATED PARAMTERS
-#
-#  [*rabbit_password*]
-#   (Optional) The RabbitMQ password. (string value)
-#   Defaults to $::os_service_default
-#
-#  [*rabbit_userid*]
-#   (Optional) The RabbitMQ userid. (string value)
-#   Defaults to $::os_service_default
-#
-#  [*rabbit_host*]
-#   (Optional) The RabbitMQ broker address where a single node is used.
-#   (string value)
-#   Defaults to $::os_service_default
-#
-#  [*rabbit_hosts*]
-#   (Optional) RabbitMQ HA cluster host:port pairs. (array value)
-#   Defaults to $::os_service_default
-#
-#  [*rabbit_port*]
-#   (Optional) The RabbitMQ broker port where a single node is used.
-#   (port value)
-#   Defaults to $::os_service_default
-#
-#  [*rabbit_virtual_host*]
-#   (Optional) The RabbitMQ virtual host. (string value)
-#   Defaults to $::os_service_default
-#
 class glance::notify::rabbitmq(
   $default_transport_url              = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
@@ -145,37 +117,11 @@ class glance::notify::rabbitmq(
   $amqp_durable_queues                = $::os_service_default,
   $kombu_compression                  = $::os_service_default,
   $notification_driver                = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $rabbit_password                    = $::os_service_default,
-  $rabbit_userid                      = $::os_service_default,
-  $rabbit_host                        = $::os_service_default,
-  $rabbit_port                        = $::os_service_default,
-  $rabbit_hosts                       = $::os_service_default,
-  $rabbit_virtual_host                = $::os_service_default,
 ) {
 
   include ::glance::deps
 
-  if !is_service_default($rabbit_host) or
-    !is_service_default($rabbit_hosts) or
-    !is_service_default($rabbit_password) or
-    !is_service_default($rabbit_port) or
-    !is_service_default($rabbit_userid) or
-    !is_service_default($rabbit_virtual_host) {
-    warning("glance::notify::rabbitmq::rabbit_host, \
-glance::notify::rabbitmq::rabbit_hosts, glance::notify::rabbitmq::rabbit_password, \
-glance::notify::rabbitmq::rabbit_port, glance::notify::rabbitmq::rabbit_userid \
-and glance::notify::rabbitmq::rabbit_virtual_host are \
-deprecated. Please use glance::notify::rabbitmq::default_transport_url instead.")
-  }
-
   oslo::messaging::rabbit { ['glance_api_config', 'glance_registry_config']:
-    rabbit_password             => $rabbit_password,
-    rabbit_userid               => $rabbit_userid,
-    rabbit_host                 => $rabbit_host,
-    rabbit_port                 => $rabbit_port,
-    rabbit_hosts                => $rabbit_hosts,
-    rabbit_virtual_host         => $rabbit_virtual_host,
     rabbit_ha_queues            => $rabbit_ha_queues,
     heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate              => $rabbit_heartbeat_rate,
