@@ -389,7 +389,7 @@ class glance::api(
   }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
-    ensure_packages('glance-api',
+    ensure_packages($glance::params::api_package_name,
       {
         ensure => $package_ensure,
         tag    => ['openstack', 'glance-package'],
