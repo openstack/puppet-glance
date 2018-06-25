@@ -3,16 +3,18 @@
 class glance::params {
   include ::openstacklib::defaults
 
-  $client_package_name = 'python-glanceclient'
+  if ($::os_package_type == 'debian') or ($::operatingsystem == 'Fedora') {
+    $pyvers = '3'
+  } else {
+    $pyvers = ''
+  }
+  $client_package_name = "python${pyvers}-glanceclient"
 
   $cache_cleaner_command = 'glance-cache-cleaner'
   $cache_pruner_command  = 'glance-cache-pruner'
 
   case $::osfamily {
     'RedHat': {
-      $api_package_name      = 'openstack-glance'
-      $glare_package_name    = 'openstack-glance'
-      $registry_package_name = 'openstack-glance'
       $api_service_name      = 'openstack-glance-api'
       $glare_service_name    = 'openstack-glance-glare'
       $registry_service_name = 'openstack-glance-registry'
@@ -20,6 +22,13 @@ class glance::params {
         $pyceph_package_name = 'python-ceph'
       } else {
         $pyceph_package_name = 'python-rbd'
+      }
+      if ($::operatingsystem != 'Fedora') {
+        $api_package_name      = 'openstack-glance'
+        $registry_package_name = 'openstack-glance'
+      } else {
+        $api_package_name      = 'openstack-glance-api'
+        $registry_package_name = 'openstack-glance-registry'
       }
     }
     'Debian': {

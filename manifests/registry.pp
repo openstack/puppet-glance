@@ -164,7 +164,7 @@ class glance::registry(
   include ::glance::registry::db
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
-    ensure_packages( 'glance-registry',
+    ensure_packages($glance::params::registry_package_name,
       {
         ensure => $package_ensure,
         tag    => ['openstack', 'glance-package'],
