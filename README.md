@@ -246,3 +246,8 @@ Contributors
 ------------
 
 * https://github.com/openstack/puppet-glance/graphs/contributors
+
+Repository
+-------------
+
+* https://git.openstack.org/cgit/openstack/puppet-glance
