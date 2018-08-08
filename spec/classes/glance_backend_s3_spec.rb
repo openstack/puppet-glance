@@ -15,8 +15,8 @@ describe 'glance::backend::s3' do
 
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('glance_store/default_store').with_value('s3')
-        is_expected.to contain_glance_api_config('glance_store/s3_store_access_key').with_value('access')
-        is_expected.to contain_glance_api_config('glance_store/s3_store_secret_key').with_value('secret')
+        is_expected.to contain_glance_api_config('glance_store/s3_store_access_key').with_value('access').with_secret(true)
+        is_expected.to contain_glance_api_config('glance_store/s3_store_secret_key').with_value('secret').with_secret(true)
         is_expected.to contain_glance_api_config('glance_store/s3_store_host').with_value('host')
         is_expected.to contain_glance_api_config('glance_store/s3_store_bucket').with_value('bucket')
         is_expected.to contain_glance_api_config('glance_store/s3_store_bucket_url_format').with_value('<SERVICE DEFAULT>')
@@ -60,8 +60,8 @@ describe 'glance::backend::s3' do
       end
 
       it 'configures glance-api.conf' do
-        is_expected.to contain_glance_api_config('glance_store/s3_store_access_key').with_value('access2')
-        is_expected.to contain_glance_api_config('glance_store/s3_store_secret_key').with_value('secret2')
+        is_expected.to contain_glance_api_config('glance_store/s3_store_access_key').with_value('access2').with_secret(true)
+        is_expected.to contain_glance_api_config('glance_store/s3_store_secret_key').with_value('secret2').with_secret(true)
         is_expected.to contain_glance_api_config('glance_store/s3_store_host').with_value('host2')
         is_expected.to contain_glance_api_config('glance_store/s3_store_bucket').with_value('bucket2')
         is_expected.to contain_glance_api_config('glance_store/s3_store_bucket_url_format').with_value('path')
