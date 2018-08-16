@@ -140,7 +140,7 @@ Puppet::Type.type(:glance_image).provide(
         :disk_format      => attrs[:disk_format],
         :min_disk         => attrs[:min_disk],
         :min_ram          => attrs[:min_ram],
-        :properties       => properties
+        :properties       => exclude_readonly_props(properties)
       )
     end
   end
@@ -173,7 +173,19 @@ Puppet::Type.type(:glance_image).provide(
 
   private
 
+  def self.exclude_readonly_props(props)
+    if props == nil
+      return nil
+    end
+    hidden = ['os_hash_algo', 'os_hash_value', 'os_hidden']
+    rv = props.select { |k, v| not hidden.include?(k) }
+    return rv
+  end
+
   def props_to_s(props)
-    props.flat_map{ |k, v| ['--property', "#{k}=#{v}"] }
+    hidden = ['os_hash_algo', 'os_hash_value', 'os_hidden']
+    props.flat_map{ |k, v|
+      ['--property', "#{k}=#{v}"] unless hidden.include?(k)
+    }.compact
   end
 end
