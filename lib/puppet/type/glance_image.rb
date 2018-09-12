@@ -15,6 +15,7 @@ Puppet::Type.newtype(:glance_image) do
       min_ram          => 1234,
       min_disk         => 1234,
       properties       => { 'img_key' => img_value },
+      image_tag        => 'amphora',
     }
 
     Known problems / limitations:
@@ -105,6 +106,11 @@ Puppet::Type.newtype(:glance_image) do
         raise ArgumentError, "Key/value pairs should be separated by an =" unless property.include?('=')
       end
     end
+  end
+
+  newproperty(:image_tag) do
+    desc "The image tag"
+    newvalues(/\S+/)
   end
 
   # Require the Glance service to be running

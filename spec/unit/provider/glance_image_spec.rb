@@ -290,4 +290,90 @@ virtual_size="None"
 
   end
 
+  describe 'when creating image with tag' do
+
+    let(:tenant_attrs) do
+      {
+        :ensure           => 'present',
+        :name             => 'image1',
+        :is_public        => 'yes',
+        :container_format => 'bare',
+        :disk_format      => 'qcow2',
+        :source           => '/var/tmp/image1.img',
+        :image_tag        => 'testtag',
+      }
+    end
+
+    let(:resource) do
+      Puppet::Type::Glance_image.new(tenant_attrs)
+    end
+
+    let(:provider) do
+      provider_class.new(resource)
+    end
+
+    it_behaves_like 'authenticated with environment variables' do
+      describe '#create' do
+        it 'creates an image' do
+          provider.class.stubs(:openstack)
+                        .with('image', 'create', '--format', 'shell', ['image1', '--public', '--container-format=bare', '--disk-format=qcow2', '--tag=testtag', '--file=/var/tmp/image1.img' ])
+                        .returns('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
+container_format="bare"
+created_at="2016-03-29T20:52:24Z"
+disk_format="qcow2"
+file="/v2/images/8801c5b0-c505-4a15-8ca3-1d2383f8c015/file"
+id="8801c5b0-c505-4a15-8ca3-1d2383f8c015"
+name="image1"
+owner="5a9e521e17014804ab8b4e8b3de488a4"
+tag="testtag"
+protected="False"
+schema="/v2/schemas/image"
+size="13287936"
+status="active"
+tags=""
+updated_at="2016-03-29T20:52:40Z"
+virtual_size="None"
+visibility="public"
+')
+          provider.create
+          expect(provider.exists?).to be_truthy
+        end
+      end
+    end
+
+    describe '.instances' do
+      it 'finds every image' do
+        provider.class.stubs(:openstack)
+                      .with('image', 'list', '--quiet', '--format', 'csv', '--long')
+                      .returns('"ID","Name","Disk Format","Container Format","Size","Status","Tags"
+"5345b502-efe4-4852-a45d-edaba3a3acc6","image1","raw","bare",1270,"active","testtag"
+')
+        provider.class.stubs(:openstack)
+                      .with('image', 'show', '--format', 'shell', '5345b502-efe4-4852-a45d-edaba3a3acc6')
+                      .returns('checksum="09b9c392dc1f6e914cea287cb6be34b0"
+container_format="bare"
+created_at="2015-04-08T18:28:01"
+deleted="False"
+deleted_at="None"
+disk_format="qcow2"
+id="5345b502-efe4-4852-a45d-edaba3a3acc6"
+visibility="public"
+name="image1"
+owner="None"
+tag="testtag"
+tags=""
+protected="False"
+size="1270"
+status="active"
+updated_at="2015-04-10T18:18:18"
+virtual_size="None"
+')
+        instances = provider_class.instances
+        expect(instances.count).to eq(1)
+#        expect(instances[0].image_tag).to eq('testtag')
+      end
+    end
+
+  end
+
 end

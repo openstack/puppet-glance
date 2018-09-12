@@ -71,6 +71,7 @@ Puppet::Type.type(:glance_image).provide(
     opts << "--min-ram=#{@resource[:min_ram]}" if @resource[:min_ram]
     opts << "--id=#{@resource[:id]}" if @resource[:id]
     opts << props_to_s(@resource[:properties]) if @resource[:properties]
+    opts << "--tag=#{@resource[:image_tag]}" if @resource[:image_tag]
     opts << location
 
     begin
@@ -122,6 +123,10 @@ Puppet::Type.type(:glance_image).provide(
     @property_flush[:properties] = value
   end
 
+  def image_tag=(value)
+    @property_flush[:image_tag] = value
+  end
+
   def id=(id)
     fail('id for existing images can not be modified')
   end
@@ -140,7 +145,8 @@ Puppet::Type.type(:glance_image).provide(
         :disk_format      => attrs[:disk_format],
         :min_disk         => attrs[:min_disk],
         :min_ram          => attrs[:min_ram],
-        :properties       => exclude_readonly_props(properties)
+        :properties       => exclude_readonly_props(properties),
+        :image_tag        => attrs[:image_tag]
       )
     end
   end
@@ -165,6 +171,7 @@ Puppet::Type.type(:glance_image).provide(
       (opts << "--min-ram=#{@property_flush[:min_ram]}") if @property_flush[:min_ram]
       (opts << "--min-disk=#{@property_flush[:min_disk]}") if @property_flush[:min_disk]
       (opts << props_to_s(@property_flush[:properties])) if @property_flush[:properties]
+      (opts << "--tag=#{@property_flush[:image_tag]}") if @property_flush[:image_tag]
 
       self.class.request('image', 'set', opts)
       @property_flush.clear
