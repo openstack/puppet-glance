@@ -109,12 +109,20 @@ class { 'glance::keystone::auth':
 
 ```puppet
 class { 'glance::notify::rabbitmq':
-  rabbit_password               => 'pass',
-  rabbit_userid                 => 'guest',
-  rabbit_hosts                  => [
-    'localhost:5672', 'remotehost:5672'
-  ],
-  rabbit_use_ssl                => false,
+  default_transport_url      => os_transport_url({
+    'transport'    => 'rabbit',
+    'hosts'        => ['host1', 'host2'],
+    'username'     => 'glance',
+    'password'     => 'secret',
+    'virtual_host' => 'glance',
+  )},
+  notification_transport_url => os_transport_url({
+    'transport'    => 'rabbit',
+    'hosts'        => ['host1', 'host2'],
+    'username'     => 'notify',
+    'password'     => 'secret',
+    'virtual_host' => 'notify',
+  )},
 }
 ```
 
