@@ -25,6 +25,8 @@ describe 'glance::api' do
       :workers                  => '7',
       :show_image_direct_url    => '<SERVICE DEFAULT>',
       :show_multiple_locations  => '<SERVICE DEFAULT>',
+      :filesystem_store_metadata_file => '<SERVICE DEFAULT>',
+      :filesystem_store_file_perm => '<SERVICE DEFAULT>',
       :location_strategy        => '<SERVICE DEFAULT>',
       :purge_config             => false,
       :delayed_delete           => '<SERVICE DEFAULT>',
@@ -67,6 +69,8 @@ describe 'glance::api' do
         :workers                  => '5',
         :show_image_direct_url    => true,
         :show_multiple_locations  => true,
+        :filesystem_store_metadata_file => '/etc/glance/glance-metadata-file.conf',
+        :filesystem_store_file_perm => '0644',
         :location_strategy        => 'store_type',
         :delayed_delete           => 'true',
         :scrub_time               => '10',
@@ -164,6 +168,15 @@ describe 'glance::api' do
             'os_region_name',
           ].each do |config|
             is_expected.to contain_glance_cache_config("glance_store/#{config}").with_value(param_hash[config.intern])
+            is_expected.to contain_glance_api_config("glance_store/#{config}").with_value(param_hash[config.intern])
+          end
+        end
+
+        it 'is_expected.to lay down default glance_store api config' do
+          [
+            'filesystem_store_metadata_file',
+            'filesystem_store_file_perm',
+          ].each do |config|
             is_expected.to contain_glance_api_config("glance_store/#{config}").with_value(param_hash[config.intern])
           end
         end
