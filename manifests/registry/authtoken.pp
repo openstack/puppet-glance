@@ -178,12 +178,6 @@
 #   (in seconds). Set to -1 to disable caching completely. Integer value
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*auth_uri*]
-#   (Optional) Complete public Identity API endpoint.
-#   Defaults to undef
-#
 class glance::registry::authtoken(
   $username                       = 'glance',
   $password                       = $::os_service_default,
@@ -219,8 +213,6 @@ class glance::registry::authtoken(
   $manage_memcache_package        = false,
   $region_name                    = $::os_service_default,
   $token_cache_time               = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $auth_uri                       = undef,
 ) {
 
   include ::glance::deps
@@ -229,17 +221,12 @@ class glance::registry::authtoken(
     fail('Please set password for Glance service user')
   }
 
-  if $auth_uri {
-    warning('The auth_uri parameter is deprecated. Please use www_authenticate_uri instead.')
-  }
-  $www_authenticate_uri_real = pick($auth_uri, $www_authenticate_uri)
-
   keystone::resource::authtoken { 'glance_registry_config':
       username                       => $username,
       password                       => $password,
       project_name                   => $project_name,
       auth_url                       => $auth_url,
-      www_authenticate_uri           => $www_authenticate_uri_real,
+      www_authenticate_uri           => $www_authenticate_uri,
       auth_version                   => $auth_version,
       auth_type                      => $auth_type,
       auth_section                   => $auth_section,

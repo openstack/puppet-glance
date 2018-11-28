@@ -566,12 +566,11 @@ class glance::api(
     $keystone_project_name = $::glance::api::authtoken::project_name
     $keystone_username     = $::glance::api::authtoken::username
     $keystone_password     = $::glance::api::authtoken::password
-    # TODO(tobasco): Remove pick when auth_uri is removed.
-    $auth_uri              = pick($::glance::api::authtoken::auth_uri, $::glance::api::authtoken::www_authenticate_uri)
+    $auth_url              = $::glance::api::authtoken::www_authenticate_uri
     $defaults = {
       'glance-api' => {
         # lint:ignore:140chars
-        'command'  => "glance --os-auth-url ${auth_uri} --os-project-name ${keystone_project_name} --os-username ${keystone_username} --os-password ${keystone_password} image-list",
+        'command'  => "glance --os-auth-url ${auth_url} --os-project-name ${keystone_project_name} --os-username ${keystone_username} --os-password ${keystone_password} image-list",
         # lint:endignore
       }
     }
