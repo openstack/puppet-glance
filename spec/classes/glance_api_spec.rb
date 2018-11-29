@@ -9,15 +9,11 @@ describe 'glance::api' do
 
   let :default_params do
     {
-      :debug                    => false,
-      :use_stderr               => '<SERVICE DEFAULT>',
       :bind_host                => '<SERVICE DEFAULT>',
       :bind_port                => '9292',
       :registry_host            => '0.0.0.0',
       :registry_port            => '<SERVICE DEFAULT>',
       :registry_client_protocol => '<SERVICE DEFAULT>',
-      :log_file                 => '/var/log/glance/api.log',
-      :log_dir                  => '/var/log/glance',
       :auth_strategy            => 'keystone',
       :enabled                  => true,
       :manage_service           => true,
@@ -59,7 +55,6 @@ describe 'glance::api' do
   shared_examples_for 'glance::api' do
 
     [{
-        :debug                    => true,
         :bind_host                => '127.0.0.1',
         :bind_port                => '9222',
         :registry_host            => '127.0.0.1',
@@ -104,7 +99,6 @@ describe 'glance::api' do
 
         it { is_expected.to contain_class 'glance' }
         it { is_expected.to contain_class 'glance::policy' }
-        it { is_expected.to contain_class 'glance::api::logging' }
         it { is_expected.to contain_class 'glance::api::db' }
 
         it 'is_expected.to not sync the db if sync_db is set to false' do
@@ -127,7 +121,6 @@ describe 'glance::api' do
 
         it 'is_expected.to lay down default api config' do
           [
-            'use_stderr',
             'bind_host',
             'bind_port',
             'registry_host',

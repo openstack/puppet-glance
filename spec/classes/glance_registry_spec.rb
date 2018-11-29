@@ -9,13 +9,9 @@ describe 'glance::registry' do
 
   let :default_params do
     {
-      :debug                  => false,
-      :use_stderr             => '<SERVICE DEFAULT>',
       :bind_host              => '<SERVICE DEFAULT>',
       :bind_port              => '9191',
       :workers                => facts[:os_workers],
-      :log_file               => '/var/log/glance/registry.log',
-      :log_dir                => '/var/log/glance',
       :enabled                => true,
       :manage_service         => true,
       :purge_config           => false,
@@ -49,7 +45,6 @@ describe 'glance::registry' do
 
         it { is_expected.to contain_class 'glance::registry' }
         it { is_expected.to contain_class 'glance::registry::db' }
-        it { is_expected.to contain_class 'glance::registry::logging' }
 
       it { is_expected.to contain_service('glance-registry').with(
           'ensure'     => (param_hash[:manage_service] && param_hash[:enabled]) ? 'running' : 'stopped',

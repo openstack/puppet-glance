@@ -9,9 +9,6 @@
 #    platforms this setting is ignored and the setting from the glance class is
 #    used because there is only one glance package.
 #
-#  [*debug*]
-#    (optional) Enable debug logs (true|false). Defaults to undef.
-#
 #  [*bind_host*]
 #    (optional) The address of the host to bind to.
 #    Defaults to $::os_service_default.
@@ -23,16 +20,6 @@
 #    (optional) The number of child process workers that will be
 #    created to service Registry requests.
 #    Defaults to: $::os_workers.
-#
-#  [*log_file*]
-#    (optional) Log file for glance-registry.
-#    If set to $::os_service_default, it will not log to any file.
-#    Defaults to undef.
-#
-#  [*log_dir*]
-#    (optional) directory to which glance logs are sent.
-#    If set to $::os_service_default, it will not log to any directory.
-#    Defaults to undef.
 #
 #  [*database_connection*]
 #    (optional) Connection url to connect to glance database.
@@ -71,18 +58,6 @@
 #    (optional) Partial name of a pipeline in your paste configuration
 #     file with the service name removed.
 #     Defaults to 'keystone'.
-#
-#  [*use_syslog*]
-#    (optional) Use syslog for logging.
-#    Defaults to undef.
-#
-#  [*use_stderr*]
-#    (optional) Use stderr for logging
-#    Defaults to undef.
-#
-#  [*log_facility*]
-#    (optional) Syslog facility to receive log lines.
-#    Defaults to undef.
 #
 #  [*manage_service*]
 #    (optional) If Puppet should manage service startup / shutdown.
@@ -123,12 +98,9 @@
 #
 class glance::registry(
   $package_ensure          = 'present',
-  $debug                   = undef,
   $bind_host               = $::os_service_default,
   $bind_port               = '9191',
   $workers                 = $::os_workers,
-  $log_file                = undef,
-  $log_dir                 = undef,
   $database_connection     = undef,
   $database_idle_timeout   = undef,
   $database_min_pool_size  = undef,
@@ -138,9 +110,6 @@ class glance::registry(
   $database_max_overflow   = undef,
   $auth_strategy           = 'keystone',
   $pipeline                = 'keystone',
-  $use_syslog              = undef,
-  $use_stderr              = undef,
-  $log_facility            = undef,
   $manage_service          = true,
   $enabled                 = true,
   $purge_config            = false,
@@ -152,7 +121,6 @@ class glance::registry(
 ) inherits glance {
 
   include ::glance::deps
-  include ::glance::registry::logging
   include ::glance::registry::db
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {

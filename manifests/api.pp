@@ -9,10 +9,6 @@
 #   setting is ignored and the setting from the glance class is used
 #   because there is only one glance package. Defaults to 'present'.
 #
-# [*debug*]
-#   (optional) Rather to log the glance api service at debug level.
-#   Default: undef
-#
 # [*bind_host*]
 #   (optional) The address of the host to bind to.
 #   Default: $::os_service_default.
@@ -28,16 +24,6 @@
 # [*workers*]
 #   (optional) Number of Glance API worker processes to start
 #   Default: $::os_workers.
-#
-# [*log_file*]
-#   (optional) The path of file used for logging
-#   If set to $::os_service_default, it will not log to any file.
-#   Default: undef
-#
-#  [*log_dir*]
-#    (optional) directory to which glance logs are sent.
-#    If set to $::os_service_default, it will not log to any directory.
-#    Defaults to undef
 #
 # [*registry_host*]
 #   (optional) The address used to connect to the registry service.
@@ -121,18 +107,6 @@
 # [*image_conversion_output_format*]
 #  (optional) Desired output format for image conversion plugin.
 #   Defaults to $::os_service_default.
-#
-# [*use_syslog*]
-#   (optional) Use syslog for logging.
-#   Defaults to undef
-#
-# [*use_stderr*]
-#   (optional) Use stderr for logging
-#   Defaults to undef
-#
-# [*log_facility*]
-#   (optional) Syslog facility to receive log lines.
-#   Defaults to undef
 #
 # [*show_image_direct_url*]
 #   (optional) Expose image location to trusted clients.
@@ -319,13 +293,10 @@
 #
 class glance::api(
   $package_ensure                       = 'present',
-  $debug                                = undef,
   $bind_host                            = $::os_service_default,
   $bind_port                            = '9292',
   $backlog                              = $::os_service_default,
   $workers                              = $::os_workers,
-  $log_file                             = undef,
-  $log_dir                              = undef,
   $registry_host                        = '0.0.0.0',
   $registry_port                        = $::os_service_default,
   $registry_client_protocol             = $::os_service_default,
@@ -335,9 +306,6 @@ class glance::api(
   $pipeline                             = 'keystone',
   $manage_service                       = true,
   $enabled                              = true,
-  $use_syslog                           = undef,
-  $use_stderr                           = undef,
-  $log_facility                         = undef,
   $show_image_direct_url                = $::os_service_default,
   $show_multiple_locations              = $::os_service_default,
   $filesystem_store_metadata_file       = $::os_service_default,
@@ -391,8 +359,6 @@ class glance::api(
   include ::glance::deps
   include ::glance::policy
   include ::glance::api::db
-  include ::glance::api::logging
-  include ::glance::cache::logging
 
   if $sync_db {
     include ::glance::db::sync
