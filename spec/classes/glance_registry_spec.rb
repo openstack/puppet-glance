@@ -212,7 +212,7 @@ describe 'glance::registry' do
 
   describe 'on unknown platforms' do
     let :facts do
-      OSDefaults.get_facts({ :osfamily => 'unknown' })
+      OSDefaults.get_facts({ :osfamily => 'unknown', :os => { :family => 'unknown', :release => { :major => '1'}}})
     end
     let(:params) { default_params }
 
