@@ -114,6 +114,14 @@
 #   (optional) The amount of time to let an image remain in the cache without being accessed.
 #   Defaults to $::os_service_default.
 #
+# [*image_import_plugins*]
+#  (optional) (Array) List of enabled Image Import Plugins.
+#   Defaults to $::os_service_default.
+#
+# [*image_conversion_output_format*]
+#  (optional) Desired output format for image conversion plugin.
+#   Defaults to $::os_service_default.
+#
 # [*use_syslog*]
 #   (optional) Use syslog for logging.
 #   Defaults to undef
@@ -343,6 +351,8 @@ class glance::api(
   $image_cache_max_size                 = $::os_service_default,
   $image_cache_stall_time               = $::os_service_default,
   $image_cache_dir                      = '/var/lib/glance/image-cache',
+  $image_import_plugins                 = $::os_service_default,
+  $image_conversion_output_format       = $::os_service_default,
   $enabled_import_methods               = $::os_service_default,
   $node_staging_uri                     = $::os_service_default,
   $image_member_quota                   = $::os_service_default,
@@ -476,6 +486,18 @@ class glance::api(
     'DEFAULT/image_cache_max_size':   value => $image_cache_max_size;
     'glance_store/os_region_name':    value => $os_region_name;
   }
+
+  if $image_import_plugins != $::os_service_default {
+    $image_import_plugins_real = sprintf('[%s]', join(any2array($image_import_plugins), ','))
+  } else {
+    $image_import_plugins_real = $image_import_plugins
+  }
+
+  glance_image_import_config {
+    'image_import_opts/image_import_plugins':           value => $image_import_plugins_real;
+    'image_conversion/output_format':                   value => $image_conversion_output_format;
+  }
+
 
   # configure api service to connect registry service
   glance_api_config {

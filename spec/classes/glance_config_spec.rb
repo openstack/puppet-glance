@@ -61,6 +61,18 @@ describe 'glance::config' do
     end
   end
 
+  shared_examples_for 'glance_image_import_config' do
+    let :params do
+      { :image_import_config => config_hash }
+    end
+
+    it 'configures arbitrary glance-image-import configurations' do
+      is_expected.to contain_glance_image_import_config('DEFAULT/foo').with_value('fooValue')
+      is_expected.to contain_glance_image_import_config('DEFAULT/bar').with_value('barValue')
+      is_expected.to contain_glance_image_import_config('DEFAULT/baz').with_ensure('absent')
+    end
+  end
+
   on_supported_os({
     :supported_os   => OSDefaults.get_supported_os
   }).each do |os,facts|
@@ -72,6 +84,7 @@ describe 'glance::config' do
       it_configures 'glance_api_config'
       it_configures 'glance_registry_config'
       it_configures 'glance_cache_config'
+      it_configures 'glance_image_import_config'
     end
   end
 end

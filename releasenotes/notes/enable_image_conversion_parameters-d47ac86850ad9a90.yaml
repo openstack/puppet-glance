@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Add new parameter 'image_import_plugins', to enable plugins
+    used by image import process.
+    Add parameter 'output_format', to provide desired output
+    format for image conversion plugin.
