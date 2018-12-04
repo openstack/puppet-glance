@@ -33,6 +33,8 @@ describe 'glance::api' do
       :scrub_time               => '<SERVICE DEFAULT>',
       :default_store            => false,
       :image_cache_dir          => '/var/lib/glance/image-cache',
+      :image_import_plugins     => '<SERVICE DEFAULT>',
+      :image_conversion_output_format => '<SERVICE DEFAULT>',
       :enabled_import_methods   => '<SERVICE DEFAULT>',
       :node_staging_uri         => '<SERVICE DEFAULT>',
       :image_member_quota       => '<SERVICE DEFAULT>',
@@ -75,6 +77,8 @@ describe 'glance::api' do
         :delayed_delete           => 'true',
         :scrub_time               => '10',
         :image_cache_dir          => '/tmp/glance',
+        :image_import_plugins     => 'image_conversion',
+        :image_conversion_output_format => 'raw',
         :enabled_import_methods   => 'glance-direct,web-download',
         :node_staging_uri         => '/tmp/staging',
         :image_member_quota       => '128',
@@ -150,6 +154,20 @@ describe 'glance::api' do
           # Verify brackets "[]" are added to satisfy the ListOpt syntax.
           is_expected.to contain_glance_api_config("DEFAULT/enabled_import_methods").with_value(
                            "[%s]" % param_hash[:enabled_import_methods])
+        end
+
+        it 'is_expected.to lay down default image_import_plugins config' do
+          # Verify brackets "[]" are added to satisfy the ListOpt syntax.
+          is_expected.to contain_glance_image_import_config("image_import_opts/image_import_plugins").with_value(
+                           "[%s]" % param_hash[:image_import_plugins])
+        end
+
+        it 'is_expected.to lay down default image_conversion image_import config' do
+          [
+            'image_conversion_output_format'
+          ].each do |config|
+            is_expected.to contain_glance_image_import_config("image_conversion/output_format").with_value(param_hash[config.intern])
+          end
         end
 
         it 'is_expected.to lay down default cache config' do
