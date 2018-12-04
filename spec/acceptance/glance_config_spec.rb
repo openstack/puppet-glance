@@ -11,6 +11,7 @@ describe 'basic glance config resource' do
       File <||> -> Glance_api_config <||>
       File <||> -> Glance_registry_config <||>
       File <||> -> Glance_cache_config <||>
+      File <||> -> Glance_image_import_config <||>
 
       file { '/etc/glance' :
         ensure => directory,
@@ -22,6 +23,9 @@ describe 'basic glance config resource' do
         ensure => file,
       }
       file { '/etc/glance/glance-cache.conf' :
+        ensure => file,
+      }
+      file { '/etc/glance/glance-image-import.conf' :
         ensure => file,
       }
 
@@ -79,6 +83,24 @@ describe 'basic glance config resource' do
         ensure_absent_val => 'toto',
       }
 
+      glance_image_import_config { 'DEFAULT/thisshouldexist' :
+        value => 'foo',
+      }
+
+      glance_image_import_config { 'DEFAULT/thisshouldnotexist' :
+        value => '<SERVICE DEFAULT>',
+      }
+
+      glance_image_import_config { 'DEFAULT/thisshouldexist2' :
+        value             => '<SERVICE DEFAULT>',
+        ensure_absent_val => 'toto',
+      }
+
+      glance_image_import_config { 'DEFAULT/thisshouldnotexist2' :
+        value             => 'toto',
+        ensure_absent_val => 'toto',
+      }
+
       EOS
 
 
@@ -110,6 +132,17 @@ describe 'basic glance config resource' do
     end
 
     describe file('/etc/glance/glance-cache.conf') do
+      it { is_expected.to exist }
+      it { is_expected.to contain('thisshouldexist=foo') }
+      it { is_expected.to contain('thisshouldexist2=<SERVICE DEFAULT>') }
+
+      describe '#content' do
+        subject { super().content }
+        it { is_expected.not_to match /thisshouldnotexist/ }
+      end
+    end
+
+    describe file('/etc/glance/glance-image-import.conf') do
       it { is_expected.to exist }
       it { is_expected.to contain('thisshouldexist=foo') }
       it { is_expected.to contain('thisshouldexist2=<SERVICE DEFAULT>') }

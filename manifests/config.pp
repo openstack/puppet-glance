@@ -32,6 +32,9 @@
 # [*cache_config*]
 #   (optional) Allow configuration of glance-cache.conf configurations.
 #
+# [*image_import_config*]
+#   (optional) Allow configuration of glance-image-import.conf configurations.
+#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -51,6 +54,7 @@ class glance::config (
   $registry_config            = {},
   $registry_paste_ini_config  = {},
   $cache_config               = {},
+  $image_import_config        = {},
   # deprecated
   $glare_config               = undef,
   $glare_paste_ini_config     = undef,
@@ -68,10 +72,12 @@ you should use puppet-glare module for configuring Glare service.")
   validate_hash($registry_config)
   validate_hash($registry_paste_ini_config)
   validate_hash($cache_config)
+  validate_hash($image_import_config)
 
   create_resources('glance_api_config', $api_config)
   create_resources('glance_api_paste_ini', $api_paste_ini_config)
   create_resources('glance_registry_config', $registry_config)
   create_resources('glance_registry_paste_ini', $registry_paste_ini_config)
   create_resources('glance_cache_config', $cache_config)
+  create_resources('glance_image_import_config', $image_import_config)
 }
