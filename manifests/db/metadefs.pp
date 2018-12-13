@@ -4,7 +4,7 @@
 # == Parameters
 #
 # [*extra_params*]
-#   (optional) String of extra command line parameters to append to the
+#   (Optional) String of extra command line parameters to append to the
 #   glance-manage db_load_metadefs command. These will be inserted in the
 #   command line between 'glance-manage' and 'db_load_metadefs'.
 #   Defaults to ''

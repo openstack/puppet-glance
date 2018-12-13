@@ -5,51 +5,62 @@
 # == Parameters:
 #
 # [*password*]
-#   Password for glance user. Required.
+#   (Required) Password for glance user.
 #
 # [*email*]
-#   Email for glance user. Optional. Defaults to 'glance@localhost'.
+#   (Optional) Email for glance user.
+#   Defaults to 'glance@localhost'.
 #
 # [*auth_name*]
-#   Username for glance service. Optional. Defaults to 'glance'.
+#   (Optional) Username for glance service.
+#   Defaults to 'glance'.
 #
 # [*configure_endpoint*]
-#   Should glance endpoint be configured? Optional. Defaults to 'true'.
+#   (Optional) Should glance endpoint be configured?
+#   Defaults to true
 #
 # [*configure_user*]
-#   Should the service user be configured? Optional. Defaults to 'true'.
+#   (Optional) Should the service user be configured?
+#   Defaults to true
 #
 # [*configure_user_role*]
-#   Should the admin role be configured for the service user?
-#   Optional. Defaults to 'true'.
+#   (Optional) Should the admin role be configured for the service user?
+#   Defaults to true
 #
 # [*service_name*]
-#    Name of the service. Optional.
-#    Defaults to 'glance'.
+#   (Optional) Name of the service.
+#   Defaults to 'glance'
 #
 # [*service_type*]
-#    Type of service. Optional. Defaults to 'image'.
+#   (Optional) Type of service.
+#   Defaults to 'image'.
 #
 # [*service_description*]
-#    Description for keystone service. Optional. Defaults to 'OpenStack Image Service'.
+#   (Optional) Description for keystone service.
+#   Defaults to 'OpenStack Image Service'.
 #
 # [*region*]
-#    Region for endpoint. Optional. Defaults to 'RegionOne'.
+#   (Optional) Region for endpoint.
+#   Defaults to 'RegionOne'.
 #
 # [*tenant*]
-#    Tenant for glance user. Optional. Defaults to 'services'.
+#   (Optional) Tenant for glance user.
+#   Defaults to 'services'.
 #
 # [*public_url*]
-#   (optional) The endpoint's public url. (Defaults to 'http://127.0.0.1:9292')
+#   (0ptional) The endpoint's public url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:9292'
 #
 # [*admin_url*]
-#   (optional) The endpoint's admin url. (Defaults to 'http://127.0.0.1:9292')
+#   (Optional) The endpoint's admin url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:9292'
 #
 # [*internal_url*]
-#   (optional) The endpoint's internal url. (Defaults to 'http://127.0.0.1:9292')
+#   (Optional) The endpoint's internal url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:9292'
 #
 # === Examples
 #
