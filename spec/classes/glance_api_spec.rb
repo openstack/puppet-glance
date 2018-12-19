@@ -33,6 +33,8 @@ describe 'glance::api' do
       :image_cache_dir          => '/var/lib/glance/image-cache',
       :image_import_plugins     => '<SERVICE DEFAULT>',
       :image_conversion_output_format => '<SERVICE DEFAULT>',
+      :inject_metadata_properties => '<SERVICE DEFAULT>',
+      :ignore_user_roles        => '<SERVICE DEFAULT>',
       :enabled_import_methods   => '<SERVICE DEFAULT>',
       :node_staging_uri         => '<SERVICE DEFAULT>',
       :image_member_quota       => '<SERVICE DEFAULT>',
@@ -75,6 +77,8 @@ describe 'glance::api' do
         :image_cache_dir          => '/tmp/glance',
         :image_import_plugins     => 'image_conversion',
         :image_conversion_output_format => 'raw',
+        :inject_metadata_properties => 'key:val',
+        :ignore_user_roles        => 'admin',
         :enabled_import_methods   => 'glance-direct,web-download',
         :node_staging_uri         => '/tmp/staging',
         :image_member_quota       => '128',
@@ -158,12 +162,11 @@ describe 'glance::api' do
                            "[%s]" % param_hash[:image_import_plugins])
         end
 
-        it 'is_expected.to lay down default image_conversion image_import config' do
-          [
-            'image_conversion_output_format'
-          ].each do |config|
-            is_expected.to contain_glance_image_import_config("image_conversion/output_format").with_value(param_hash[config.intern])
-          end
+
+        it 'is_expected.to lay down default image_conversion & inject_metadata image_import config' do
+          is_expected.to contain_glance_image_import_config("image_conversion/output_format").with_value(param_hash[:image_conversion_output_format])
+          is_expected.to contain_glance_image_import_config("inject_metadata_properties/inject").with_value(param_hash[:inject_metadata_properties])
+          is_expected.to contain_glance_image_import_config("inject_metadata_properties/ignore_user_roles").with_value(param_hash[:ignore_user_roles])
         end
 
         it 'is_expected.to lay down default cache config' do

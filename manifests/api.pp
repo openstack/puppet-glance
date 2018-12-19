@@ -115,11 +115,19 @@
 #   Defaults to $::os_service_default.
 #
 # [*image_import_plugins*]
-#  (optional) (Array) List of enabled Image Import Plugins.
+#   (optional) (Array) List of enabled Image Import Plugins.
 #   Defaults to $::os_service_default.
 #
 # [*image_conversion_output_format*]
-#  (optional) Desired output format for image conversion plugin.
+#   (optional) Desired output format for image conversion plugin.
+#   Defaults to $::os_service_default.
+#
+# [*inject_metadata_properties*]
+#   (optional) Dictionary contains metadata properties to be injected in image.
+#   Defaults to $::os_service_default.
+#
+# [*ignore_user_roles*]
+#   (optional) List containing user roles. For example: [admin,member]
 #   Defaults to $::os_service_default.
 #
 # [*use_syslog*]
@@ -352,6 +360,8 @@ class glance::api(
   $image_cache_stall_time               = $::os_service_default,
   $image_cache_dir                      = '/var/lib/glance/image-cache',
   $image_import_plugins                 = $::os_service_default,
+  $inject_metadata_properties           = $::os_service_default,
+  $ignore_user_roles                    = $::os_service_default,
   $image_conversion_output_format       = $::os_service_default,
   $enabled_import_methods               = $::os_service_default,
   $node_staging_uri                     = $::os_service_default,
@@ -493,9 +503,24 @@ class glance::api(
     $image_import_plugins_real = $image_import_plugins
   }
 
+  if $inject_metadata_properties != $::os_service_default {
+    $inject_metadata_properties_real = join(any2array($inject_metadata_properties), ',')
+  } else {
+    $inject_metadata_properties_real = $inject_metadata_properties
+  }
+
+
+  if $ignore_user_roles != $::os_service_default {
+    $ignore_user_roles_real = join(any2array($ignore_user_roles), ',')
+  } else {
+    $ignore_user_roles_real = $ignore_user_roles
+  }
+
   glance_image_import_config {
-    'image_import_opts/image_import_plugins':           value => $image_import_plugins_real;
-    'image_conversion/output_format':                   value => $image_conversion_output_format;
+    'image_import_opts/image_import_plugins':       value => $image_import_plugins_real;
+    'image_conversion/output_format':               value => $image_conversion_output_format;
+    'inject_metadata_properties/inject':            value => $inject_metadata_properties_real;
+    'inject_metadata_properties/ignore_user_roles': value => $ignore_user_roles_real;
   }
 
 
