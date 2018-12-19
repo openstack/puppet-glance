@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Add new parameter 'inject_metadata_properties', to add metadata
+    properties to be injected in image.
+    Add new parameter 'ignore_user_roles', to specify name of user
+    roles to be ignored for injecting metadata properties in the image.
