@@ -1,0 +1,11 @@
+---
+features:
+  - |
+    Add new parameter 'cinder_store_project_name', for project
+    name where the image volume is stored in cinder.
+
+    Add new parameter 'cinder_store_user_name', for user name
+    to authenticate against cinder.
+
+    Add new parameter 'cinder_store_password', for valid password
+    for the user specified by 'cinder_store_user_name'

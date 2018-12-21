@@ -38,6 +38,9 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_api_config('glance_store/cinder_http_retries').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/cinder_ca_certificates_file').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/cinder_endpoint_template').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/cinder_store_project_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/cinder_store_user_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/cinder_store_password').with_value('<SERVICE DEFAULT>')
       end
       it 'configures glance-cache.conf' do
         is_expected.to contain_glance_cache_config('glance_store/cinder_api_insecure').with_value('<SERVICE DEFAULT>')
@@ -45,6 +48,9 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_cache_config('glance_store/cinder_http_retries').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('glance_store/cinder_ca_certificates_file').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('glance_store/cinder_endpoint_template').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('glance_store/cinder_store_project_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('glance_store/cinder_store_user_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('glance_store/cinder_store_password').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -56,6 +62,9 @@ describe 'glance::backend::cinder' do
           :cinder_catalog_info         => 'volume:cinder:internalURL',
           :cinder_endpoint_template    => 'http://srv-foo:8776/v1/%(project_id)s',
           :cinder_http_retries         => '10',
+          :cinder_store_project_name   => 'services',
+          :cinder_store_user_name      => 'glance',
+          :cinder_store_password       => 'glance',
         }
       end
       it 'configures glance-api.conf' do
@@ -64,6 +73,9 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_api_config('glance_store/cinder_catalog_info').with_value('volume:cinder:internalURL')
         is_expected.to contain_glance_api_config('glance_store/cinder_endpoint_template').with_value('http://srv-foo:8776/v1/%(project_id)s')
         is_expected.to contain_glance_api_config('glance_store/cinder_http_retries').with_value('10')
+        is_expected.to contain_glance_api_config('glance_store/cinder_store_project_name').with_value('services')
+        is_expected.to contain_glance_api_config('glance_store/cinder_store_user_name').with_value('glance')
+        is_expected.to contain_glance_api_config('glance_store/cinder_store_password').with_value('glance')
       end
       it 'configures glance-cache.conf' do
         is_expected.to contain_glance_cache_config('glance_store/cinder_api_insecure').with_value(true)
@@ -71,6 +83,9 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_cache_config('glance_store/cinder_catalog_info').with_value('volume:cinder:internalURL')
         is_expected.to contain_glance_cache_config('glance_store/cinder_endpoint_template').with_value('http://srv-foo:8776/v1/%(project_id)s')
         is_expected.to contain_glance_cache_config('glance_store/cinder_http_retries').with_value('10')
+        is_expected.to contain_glance_cache_config('glance_store/cinder_store_project_name').with_value('services')
+        is_expected.to contain_glance_cache_config('glance_store/cinder_store_user_name').with_value('glance')
+        is_expected.to contain_glance_cache_config('glance_store/cinder_store_password').with_value('glance')
       end
     end
   end
