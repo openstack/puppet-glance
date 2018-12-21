@@ -52,6 +52,18 @@
 #   Should be a valid boolean value
 #   Defaults to $::os_service_default.
 #
+# [*cinder_store_project_name*]
+#   (optional) Project name where the image volume is stored in cinder.
+#   Defaults to $::os_service_default.
+#
+# [*cinder_store_user_name*]
+#   (optional) User name to authenticate against cinder.
+#   Defaults to $::os_service_default.
+#
+# [*cinder_store_password*]
+#   (optional) A valid password for the user specified by `cinder_store_user_name'
+#   Defaults to $::os_service_default.
+#
 # [*multi_store*]
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
@@ -69,6 +81,9 @@ class glance::backend::cinder(
   $cinder_catalog_info         = $::os_service_default,
   $cinder_endpoint_template    = $::os_service_default,
   $cinder_http_retries         = $::os_service_default,
+  $cinder_store_project_name   = $::os_service_default,
+  $cinder_store_user_name      = $::os_service_default,
+  $cinder_store_password       = $::os_service_default,
   $multi_store                 = false,
   # deprecated
   $glare_enabled               = undef,
@@ -86,6 +101,9 @@ class glance::backend::cinder(
     'glance_store/cinder_http_retries':           value => $cinder_http_retries;
     'glance_store/cinder_endpoint_template':      value => $cinder_endpoint_template;
     'glance_store/cinder_ca_certificates_file':   value => $cinder_ca_certificates_file;
+    'glance_store/cinder_store_project_name':     value => $cinder_store_project_name;
+    'glance_store/cinder_store_user_name':        value => $cinder_store_user_name;
+    'glance_store/cinder_store_password':         value => $cinder_store_password;
   }
 
   if !$multi_store {
@@ -98,6 +116,9 @@ class glance::backend::cinder(
     'glance_store/cinder_http_retries':           value => $cinder_http_retries;
     'glance_store/cinder_endpoint_template':      value => $cinder_endpoint_template;
     'glance_store/cinder_ca_certificates_file':   value => $cinder_ca_certificates_file;
+    'glance_store/cinder_store_project_name':     value => $cinder_store_project_name;
+    'glance_store/cinder_store_user_name':        value => $cinder_store_user_name;
+    'glance_store/cinder_store_password':         value => $cinder_store_password;
   }
 
   if $glare_enabled != undef {
