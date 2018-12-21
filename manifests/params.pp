@@ -6,8 +6,10 @@ class glance::params {
   if ($::os_package_type == 'debian') or ($::operatingsystem == 'Fedora') or
     ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
     $pyvers = '3'
+    $_pyceph_package_name = 'python3-rbd'
   } else {
     $pyvers = ''
+    $_pyceph_package_name = 'python-rbd'
   }
   $client_package_name = "python${pyvers}-glanceclient"
 
@@ -24,7 +26,7 @@ class glance::params {
       if ($::operatingsystem != 'fedora' and versioncmp($::operatingsystemrelease, '7') < 0) {
         $pyceph_package_name = 'python-ceph'
       } else {
-        $pyceph_package_name = 'python-rbd'
+        $pyceph_package_name = $_pyceph_package_name
       }
     }
     'Debian': {
