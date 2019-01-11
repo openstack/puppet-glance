@@ -23,11 +23,7 @@ describe 'glance::client' do
       let(:platform_params) do
         case facts[:osfamily]
         when 'Debian'
-          if facts[:os_package_type] == 'debian'
-            { :client_package_name => 'python3-glanceclient' }
-          else
-            { :client_package_name => 'python-glanceclient' }
-          end
+          { :client_package_name => 'python3-glanceclient' }
         when 'RedHat'
           if facts[:operatingsystem] == 'Fedora'
             { :client_package_name => 'python3-glanceclient' }
