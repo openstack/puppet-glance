@@ -9,3 +9,6 @@ features:
 
     Add new parameter 'cinder_store_password', for valid password
     for the user specified by 'cinder_store_user_name'
+
+    Add new parameter 'cinder_store_auth_address', for valid
+    authentication service address.
