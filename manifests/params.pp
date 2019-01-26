@@ -2,15 +2,8 @@
 # should be considered to be constant
 class glance::params {
   include ::openstacklib::defaults
+  $pyvers = $::openstacklib::defaults::pyvers
 
-  if ($::os_package_type == 'debian') or ($::operatingsystem == 'Fedora') or
-    ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
-    $pyvers = '3'
-    $_pyceph_package_name = 'python3-rbd'
-  } else {
-    $pyvers = ''
-    $_pyceph_package_name = 'python-rbd'
-  }
   $client_package_name = "python${pyvers}-glanceclient"
 
   $cache_cleaner_command = 'glance-cache-cleaner'
@@ -26,7 +19,7 @@ class glance::params {
       if ($::operatingsystem != 'fedora' and versioncmp($::operatingsystemrelease, '7') < 0) {
         $pyceph_package_name = 'python-ceph'
       } else {
-        $pyceph_package_name = $_pyceph_package_name
+        $pyceph_package_name = "python${pyvers}-rbd"
       }
     }
     'Debian': {
