@@ -10,10 +10,7 @@ describe 'glance' do
     describe "when using default class parameters" do
       let(:params) { default_params }
 
-      it { is_expected.to contain_package('python-openstackclient').with(
-        :tag => 'openstack'
-      )}
-
+      it { should contain_class('openstacklib::openstackclient') }
     end
   end
 
