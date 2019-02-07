@@ -27,7 +27,11 @@ class glance::params {
       $registry_package_name = 'glance-registry'
       $api_service_name      = 'glance-api'
       $registry_service_name = 'glance-registry'
-      $pyceph_package_name   = "python${pyvers}-ceph"
+      if $::os_package_type == 'debian' {
+        $pyceph_package_name = "python${pyvers}-ceph"
+      } else {
+        $pyceph_package_name = "python${pyvers}-rbd"
+      }
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \

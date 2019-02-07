@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The glance::backend::rbd class now install python-rbd/python3-rbd package
+    instead of the python-ceph meta package on Ubuntu.

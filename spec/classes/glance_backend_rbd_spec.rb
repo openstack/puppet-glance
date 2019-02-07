@@ -82,13 +82,13 @@ describe 'glance::backend::rbd' do
       let(:platform_params) do
         case facts[:osfamily]
         when 'Debian'
-          {
-            :pyceph_package_name => 'python3-ceph',
-          }
+          if facts[:os_package_type] == 'debian'
+            { :pyceph_package_name => 'python3-ceph' }
+          else
+            { :pyceph_package_name => 'python3-rbd' }
+          end
         when 'RedHat'
-          {
-            :pyceph_package_name => 'python-rbd',
-          }
+          { :pyceph_package_name => 'python-rbd' }
         end
       end
 
