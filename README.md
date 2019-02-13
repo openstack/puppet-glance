@@ -37,7 +37,7 @@ Setup
 
 **What the glance module affects**
 
-* [Glance](https://wiki.openstack.org/wiki/Glance), the image service for OpenStack.
+* [Glance](https://docs.openstack.org/glance/latest/), the image service for OpenStack.
 
 ### Installing glance
 
