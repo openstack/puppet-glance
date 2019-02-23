@@ -49,12 +49,12 @@ class glance::config (
 
   include ::glance::deps
 
-  validate_hash($api_config)
-  validate_hash($api_paste_ini_config)
-  validate_hash($registry_config)
-  validate_hash($registry_paste_ini_config)
-  validate_hash($cache_config)
-  validate_hash($image_import_config)
+  validate_legacy(Hash, 'validate_hash', $api_config)
+  validate_legacy(Hash, 'validate_hash', $api_paste_ini_config)
+  validate_legacy(Hash, 'validate_hash', $registry_config)
+  validate_legacy(Hash, 'validate_hash', $registry_paste_ini_config)
+  validate_legacy(Hash, 'validate_hash', $cache_config)
+  validate_legacy(Hash, 'validate_hash', $image_import_config)
 
   create_resources('glance_api_config', $api_config)
   create_resources('glance_api_paste_ini', $api_paste_ini_config)

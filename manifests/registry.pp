@@ -146,7 +146,8 @@ class glance::registry(
 
   # Set the pipeline, it is allowed to be blank
   if $pipeline != '' {
-    validate_re($pipeline, '^(\w+([+]\w+)*)*$')
+    validate_legacy(Pattern[/^(\w+([+]\w+)*)*$/], 'validate_re', $pipeline, ['^(\w+([+]\w+)*)*$'])
+
     glance_registry_config {
       'paste_deploy/flavor':
         ensure => present,

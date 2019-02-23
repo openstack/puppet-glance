@@ -150,7 +150,7 @@ describe 'glance::registry' do
         end
 
         it { expect { is_expected.to contain_glance_registry_config('filter:paste_deploy/flavor') }.to\
-          raise_error(Puppet::Error, /validate_re\(\): .* does not match/) }
+          raise_error(Puppet::Error) }
       end
     end
 
