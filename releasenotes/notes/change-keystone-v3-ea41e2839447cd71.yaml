@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    Glance providers will now build a Keystone V3 instead of V2.0 URL if
+    the [keystone_authtoken]/auth_url is not set in glance config.
+  - |
+    The default value of glance::backend::swift::swift_store_auth_address
+    is changed from http://127.0.0.1:5000/v2.0/ to http://127.0.0.1:5000/v3/
