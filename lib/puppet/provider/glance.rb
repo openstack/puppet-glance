@@ -82,7 +82,7 @@ class Puppet::Provider::Glance < Puppet::Provider::Openstack
     if g.key?('auth_url')
       "#{g['auth_url']}/"
     else
-      "#{g['auth_protocol']}://#{g['auth_host']}:#{g['auth_port']}#{g['auth_admin_prefix']}/v2.0/"
+      "#{g['auth_protocol']}://#{g['auth_host']}:#{g['auth_port']}#{g['auth_admin_prefix']}/v3/"
     end
   end
 

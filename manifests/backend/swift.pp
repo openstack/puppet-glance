@@ -12,7 +12,7 @@
 #    Required. Swift store key.
 #
 #  [*swift_store_auth_address*]
-#    Optional. Default: 'http://127.0.0.1:5000/v2.0/'
+#    Optional. Default: 'http://127.0.0.1:5000/v3/'
 #
 #  [*swift_store_auth_project_domain_id*]
 #    Optional. Useful when keystone auth is version 3. Default: default
@@ -59,7 +59,7 @@
 class glance::backend::swift(
   $swift_store_user,
   $swift_store_key,
-  $swift_store_auth_address            = 'http://127.0.0.1:5000/v2.0/',
+  $swift_store_auth_address            = 'http://127.0.0.1:5000/v3/',
   $swift_store_container               = $::os_service_default,
   $swift_store_auth_version            = '2',
   $swift_store_auth_project_domain_id  = 'default',
