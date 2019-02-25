@@ -274,7 +274,7 @@ describe 'glance::api' do
         end
 
         it { expect { is_expected.to contain_glance_api_config('filter:paste_deploy/flavor') }.to\
-          raise_error(Puppet::Error, /validate_re\(\): .* does not match/) }
+          raise_error(Puppet::Error) }
       end
     end
 
