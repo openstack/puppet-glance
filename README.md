@@ -263,4 +263,4 @@ Contributors
 Repository
 ----------
 
-* https://git.openstack.org/cgit/openstack/puppet-glance
+* https://opendev.org/openstack/puppet-glance
