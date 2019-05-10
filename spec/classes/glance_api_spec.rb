@@ -136,6 +136,8 @@ describe 'glance::api' do
             'delayed_delete',
             'scrub_time',
             'image_cache_dir',
+            'image_cache_stall_time',
+            'image_cache_max_size',
             'node_staging_uri',
             'image_member_quota',
             'enable_v1_api',
@@ -170,6 +172,7 @@ describe 'glance::api' do
           [
             'registry_host',
             'registry_port',
+            'image_cache_dir',
             'image_cache_stall_time',
             'image_cache_max_size',
           ].each do |config|
