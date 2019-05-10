@@ -403,6 +403,8 @@ class glance::api(
     'DEFAULT/scrub_time':              value => $scrub_time;
     'DEFAULT/delayed_delete':          value => $delayed_delete;
     'DEFAULT/image_cache_dir':         value => $image_cache_dir;
+    'DEFAULT/image_cache_stall_time':  value => $image_cache_stall_time;
+    'DEFAULT/image_cache_max_size':    value => $image_cache_max_size;
     'DEFAULT/enabled_import_methods':  value => $enabled_import_methods_real;
     'DEFAULT/node_staging_uri':        value => $node_staging_uri;
     'DEFAULT/image_member_quota':      value => $image_member_quota;
@@ -475,6 +477,7 @@ class glance::api(
   }
 
   glance_cache_config {
+    'DEFAULT/image_cache_dir':        value => $image_cache_dir;
     'DEFAULT/image_cache_stall_time': value => $image_cache_stall_time;
     'DEFAULT/image_cache_max_size':   value => $image_cache_max_size;
     'glance_store/os_region_name':    value => $os_region_name;
