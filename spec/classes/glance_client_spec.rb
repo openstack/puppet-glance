@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'glance::client' do
 
   shared_examples 'glance client' do
+    it { is_expected.to contain_class('glance::deps') }
     it { is_expected.to contain_class('glance::params') }
     it { is_expected.to contain_package('python-glanceclient').with(
         :name   => platform_params[:client_package_name],
