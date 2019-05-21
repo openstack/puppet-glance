@@ -1,0 +1,6 @@
+---
+fixes:
+  - Enabled image_cache_stall_time & image_cache_max_size in
+    glance-api.conf & image_cache_dir in glance-cache.conf, as
+    these parameters need the same values in both conf files,
+    otherwise the cache will potentially run into problems.
