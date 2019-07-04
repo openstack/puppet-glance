@@ -291,6 +291,16 @@ describe 'glance::api' do
       )}
     end
 
+    describe 'setting max_request_body_size' do
+      let :params do
+        default_params.merge({:max_request_body_size => '102400' })
+      end
+
+      it { is_expected.to contain_oslo__middleware('glance_api_config').with(
+        :max_request_body_size => '102400',
+      )}
+    end
+
     describe 'with ssl options' do
       let :params do
         default_params.merge({

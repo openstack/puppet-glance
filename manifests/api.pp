@@ -240,6 +240,10 @@
 #   HTTPProxyToWSGI middleware.
 #   Defaults to $::os_service_default.
 #
+# [*max_request_body_size*]
+#   (Optional) Set max request body size
+#   Defaults to $::os_service_default.
+#
 # [*enable_v1_api*]
 #   (Optional) Enable or not Glance API v1.
 #   If you enable this option, you'll get a deprecation warning in Glance
@@ -354,6 +358,7 @@ class glance::api(
   $conversion_format                    = $::os_service_default,
   $os_region_name                       = 'RegionOne',
   $enable_proxy_headers_parsing         = $::os_service_default,
+  $max_request_body_size                = $::os_service_default,
   $enable_v1_api                        = false,
   $enable_v2_api                        = $::os_service_default,
   $sync_db                              = true,
@@ -542,6 +547,7 @@ class glance::api(
 
   oslo::middleware { 'glance_api_config':
     enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
+    max_request_body_size        => $max_request_body_size,
   }
 
   # SSL Options
