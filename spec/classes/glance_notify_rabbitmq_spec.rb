@@ -14,6 +14,7 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_api_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
 
@@ -28,6 +29,7 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
     end
@@ -119,13 +121,16 @@ describe 'glance::notify::rabbitmq' do
         {
           :rabbit_heartbeat_timeout_threshold => '60',
           :rabbit_heartbeat_rate              => '10',
+          :rabbit_heartbeat_in_pthread        => true,
         }
       end
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
+      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value(true) }
 
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
       it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
+      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value(true) }
     end
 
     describe 'when passing params transport_url' do
