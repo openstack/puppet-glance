@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Add support to configure service_token_roles in authtoken middleware.
