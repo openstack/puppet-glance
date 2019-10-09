@@ -135,7 +135,7 @@ Puppet::Type.type(:glance_image).provide(
     list = request('image', 'list', '--long')
     list.collect do |image|
       attrs = request('image', 'show', image[:id])
-      properties = Hash[attrs[:properties].scan(/(\S+)='([^']*)'/)] rescue nil
+      properties = parsestring(attrs[:properties]) rescue nil
       new(
         :ensure           => :present,
         :name             => attrs[:name],
@@ -194,5 +194,23 @@ Puppet::Type.type(:glance_image).provide(
     props.flat_map{ |k, v|
       ['--property', "#{k}=#{v}"] unless hidden.include?(k)
     }.compact
+  end
+
+  def self.string2hash(input)
+    return Hash[input.scan(/(\S+)='([^']*)'/)]
+  end
+
+  def self.pythondict2hash(input)
+    return JSON.parse(input.gsub(/u'(\w*)'/, '"\1"').gsub(/'/, '"').gsub(/False/,'false').gsub(/True/,'true'))
+  end
+
+  def self.parsestring(input)
+    if input[0] == '{'
+      # 4.0.0+ output, python dict
+      return self.pythondict2hash(input)
+    else
+      # Pre-4.0.0 output, key=value
+      return self.string2hash(input)
+    end
   end
 end
