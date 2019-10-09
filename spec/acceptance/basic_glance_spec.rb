@@ -38,7 +38,7 @@ describe 'glance class' do
           expect(r.stdout).to match(/visibility="public"/)
           expect(r.stdout).to match(/container_format="bare"/)
           expect(r.stdout).to match(/disk_format="qcow2"/)
-          expect(r.stdout).to include('properties="icanhaz=\'cheezburger\'')
+          expect(r.stdout).to match(/properties=.*icanhaz.*cheezburger/)
           expect(r.stdout).to match(/min_ram="64"/)
           expect(r.stdout).to match(/min_disk="1024"/)
         end
