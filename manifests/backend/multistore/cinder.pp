@@ -1,7 +1,5 @@
 #
-# Copyright (C) 2013 eNovance SAS <licensing@enovance.com>
-#
-# Author: Emilien Macchi <emilien.macchi@enovance.com>
+# Copyright 2019 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -15,9 +13,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: glance::backend::cinder
+# == Define: glance::backend::multistore::cinder
 #
-# Setup Glance to backend images into Cinder
+# Used to configure cinder backends for glance
 #
 # === Parameters
 #
@@ -68,12 +66,12 @@
 #   (optional) A valid password for the user specified by `cinder_store_user_name'
 #   Defaults to $::os_service_default.
 #
-# [*multi_store*]
-#   (optional) Boolean describing if multiple backends will be configured
-#   Defaults to false
+# [*store_description*]
+#   (optional) Provides constructive information about the store backend to
+#   end users.
+#   Defaults to $::os_service_default.
 #
-class glance::backend::cinder(
-  $os_region_name              = undef,
+define glance::backend::multistore::cinder(
   $cinder_ca_certificates_file = $::os_service_default,
   $cinder_api_insecure         = $::os_service_default,
   $cinder_catalog_info         = $::os_service_default,
@@ -83,31 +81,36 @@ class glance::backend::cinder(
   $cinder_store_project_name   = $::os_service_default,
   $cinder_store_user_name      = $::os_service_default,
   $cinder_store_password       = $::os_service_default,
-  $multi_store                 = false,
+  $store_description           = $::os_service_default,
 ) {
 
   include ::glance::deps
 
-  warning('glance::backend::cinder is deprecated. Use glance::backend::multistore::cinder instead.')
-
-  if $os_region_name {
-    notice('The os_region_name parameter is deprecated and has no effect. Use glance::api::os_region_name instead.')
+  glance_api_config {
+    "${name}/cinder_api_insecure":         value => $cinder_api_insecure;
+    "${name}/cinder_catalog_info":         value => $cinder_catalog_info;
+    "${name}/cinder_http_retries":         value => $cinder_http_retries;
+    "${name}/cinder_endpoint_template":    value => $cinder_endpoint_template;
+    "${name}/cinder_ca_certificates_file": value => $cinder_ca_certificates_file;
+    "${name}/cinder_store_auth_address":   value => $cinder_store_auth_address;
+    "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
+    "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
+    "${name}/cinder_store_password":       value => $cinder_store_password;
+    "${name}/store_description":           value => $store_description;
   }
 
-  glance::backend::multistore::cinder { 'glance_store':
-    cinder_api_insecure         => $cinder_api_insecure,
-    cinder_catalog_info         => $cinder_catalog_info,
-    cinder_http_retries         => $cinder_http_retries,
-    cinder_endpoint_template    => $cinder_endpoint_template,
-    cinder_ca_certificates_file => $cinder_ca_certificates_file,
-    cinder_store_auth_address   => $cinder_store_auth_address,
-    cinder_store_project_name   => $cinder_store_project_name,
-    cinder_store_user_name      => $cinder_store_user_name,
-    cinder_store_password       => $cinder_store_password,
-    store_description           => undef,
+  glance_cache_config {
+    "${name}/cinder_api_insecure":         value => $cinder_api_insecure;
+    "${name}/cinder_catalog_info":         value => $cinder_catalog_info;
+    "${name}/cinder_http_retries":         value => $cinder_http_retries;
+    "${name}/cinder_endpoint_template":    value => $cinder_endpoint_template;
+    "${name}/cinder_ca_certificates_file": value => $cinder_ca_certificates_file;
+    "${name}/cinder_store_auth_address":   value => $cinder_store_auth_address;
+    "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
+    "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
+    "${name}/cinder_store_password":       value => $cinder_store_password;
   }
 
-  if !$multi_store {
-    glance_api_config { 'glance_store/default_store': value => 'cinder'; }
-  }
+  create_resources('glance_api_config', {})
+  create_resources('glance_cache_config', {})
 }

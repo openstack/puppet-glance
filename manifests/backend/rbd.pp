@@ -50,24 +50,20 @@ class glance::backend::rbd(
   include ::glance::deps
   include ::glance::params
 
-  glance_api_config {
-    'glance_store/rbd_store_ceph_conf':    value => $rbd_store_ceph_conf;
-    'glance_store/rbd_store_user':         value => $rbd_store_user;
-    'glance_store/rbd_store_pool':         value => $rbd_store_pool;
-    'glance_store/rbd_store_chunk_size':   value => $rbd_store_chunk_size;
-    'glance_store/rados_connect_timeout':  value => $rados_connect_timeout;
+  warning('glance::backend::rbd is deprecated. Use glance::backend::multistore::rbd instead.')
+
+  glance::backend::multistore::rbd { 'glance_store':
+    rbd_store_ceph_conf   => $rbd_store_ceph_conf,
+    rbd_store_user        => $rbd_store_user,
+    rbd_store_pool        => $rbd_store_pool,
+    rbd_store_chunk_size  => $rbd_store_chunk_size,
+    rados_connect_timeout => $rados_connect_timeout,
+    manage_packages       => $manage_packages,
+    package_ensure        => $package_ensure,
+    store_description     => undef,
   }
 
   if !$multi_store {
     glance_api_config { 'glance_store/default_store': value => 'rbd'; }
   }
-
-  if $manage_packages {
-    package { 'python-ceph':
-      ensure => $package_ensure,
-      name   => $::glance::params::pyceph_package_name,
-      tag    => 'glance-support-package',
-    }
-  }
-
 }

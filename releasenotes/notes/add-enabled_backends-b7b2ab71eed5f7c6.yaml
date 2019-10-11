@@ -1,0 +1,28 @@
+---
+features:
+  - |
+    Add glance::api::enabled_backends and glance::api::default_backend
+    parameters for configuring glance backends. The parameters implement
+    glance's Multi Store syntax, which supports configuring multiple backends
+    of the same type (e.g. multiple rbd backends). Multiple backends of the
+    same type may be specified using new glance::backend::multistore::*
+    defined resource types.
+deprecations:
+  - |
+    The following parameters are deprecated due to the corresponding parameters
+    being deprecated in glance. They are replaced by the new
+    glance::api::enabled_backends and glance::api::default_backend parameters.
+    * glance::api::stores
+    * glance::api::default_store
+    * glance::api::multi_store
+
+    The following backend resources are deprecated because they are associated
+    with the deprecated glance::api::stores parameter. They are replaced by
+    corresponding glance::backend::multistore resources, except for the s3
+    backend which was removed from glance in Newton.
+    * glance::backend::cinder
+    * glance::backend::file
+    * glance::backend::rbd
+    * glance::backend::s3
+    * glance::backend::swift
+    * glance::backend::vsphere
