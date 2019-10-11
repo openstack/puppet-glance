@@ -20,15 +20,14 @@ class glance::backend::file(
 
   include ::glance::deps
 
-  glance_api_config {
-    'glance_store/filesystem_store_datadir': value => $filesystem_store_datadir;
+  warning('glance::backend::file is deprecated. Use glance::backend::multistore::file instead.')
+
+  glance::backend::multistore::file { 'glance_store':
+    filesystem_store_datadir => $filesystem_store_datadir,
+    store_description        => undef,
   }
 
   if !$multi_store {
     glance_api_config { 'glance_store/default_store': value => 'file'; }
-  }
-
-  glance_cache_config {
-    'glance_store/filesystem_store_datadir': value => $filesystem_store_datadir;
   }
 }
