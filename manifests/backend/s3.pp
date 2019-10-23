@@ -64,35 +64,5 @@ class glance::backend::s3(
   $multi_store              = false,
 ) {
 
-  include ::glance::deps
-
-  if !is_service_default($large_object_chunk_size){
-    if !is_integer($large_object_chunk_size) or $large_object_chunk_size < 5 {
-      fail('glance::backend::s3::large_object_chunk_size must be an integer >= 5')
-    }
-  }
-
-  if !is_service_default($bucket_url_format){
-    if !($bucket_url_format in ['subdomain', 'path']) {
-      fail('glance::backend::s3::bucket_url_format must be either "subdomain" or "path"')
-    }
-  }
-
-  glance_api_config {
-    'glance_store/s3_store_access_key':              value => $access_key, secret => true;
-    'glance_store/s3_store_secret_key':              value => $secret_key, secret => true;
-    'glance_store/s3_store_host':                    value => $host;
-    'glance_store/s3_store_bucket':                  value => $bucket;
-    'glance_store/s3_store_bucket_url_format':       value => $bucket_url_format;
-    'glance_store/s3_store_create_bucket_on_put':    value => $create_bucket_on_put;
-    'glance_store/s3_store_large_object_size':       value => $large_object_size;
-    'glance_store/s3_store_large_object_chunk_size': value => $large_object_chunk_size;
-    'glance_store/s3_store_thread_pools':            value => $thread_pools;
-    'glance_store/s3_store_object_buffer_dir':       value => $object_buffer_dir;
-  }
-
-  if !$multi_store {
-    glance_api_config { 'glance_store/default_store': value => 's3'; }
-  }
-
+  warning('glance::backend::s3 is deprecated and has no effect. Glance no longer supports the s3 backend.')
 }

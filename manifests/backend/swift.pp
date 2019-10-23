@@ -75,36 +75,28 @@ class glance::backend::swift(
 
   include ::glance::deps
   include ::swift::client
-  Class['swift::client'] -> Anchor['glance::install::end']
-  Service<| tag == 'swift-service' |> -> Service['glance-api']
 
-  glance_api_config {
-    'glance_store/swift_store_region':         value => $swift_store_region;
-    'glance_store/swift_store_container':      value => $swift_store_container;
-    'glance_store/swift_store_create_container_on_put':
-      value => $swift_store_create_container_on_put;
-    'glance_store/swift_store_large_object_size':
-      value => $swift_store_large_object_size;
-    'glance_store/swift_store_large_object_chunk_size':
-      value => $swift_store_large_object_chunk_size;
-    'glance_store/swift_store_endpoint_type':
-      value => $swift_store_endpoint_type;
+  warning('glance::backend::swift is deprecated. Use glance::backend::multistore::swift instead.')
 
-    'glance_store/swift_store_config_file':    value => '/etc/glance/glance-swift.conf';
-    'glance_store/default_swift_reference':    value => $default_swift_reference;
+  glance::backend::multistore::swift { 'glance_store':
+    swift_store_user                    => $swift_store_user,
+    swift_store_key                     => $swift_store_key,
+    swift_store_auth_address            => $swift_store_auth_address,
+    swift_store_container               => $swift_store_container,
+    swift_store_auth_version            => $swift_store_auth_version,
+    swift_store_auth_project_domain_id  => $swift_store_auth_project_domain_id,
+    swift_store_auth_user_domain_id     => $swift_store_auth_user_domain_id,
+    swift_store_large_object_size       => $swift_store_large_object_size,
+    swift_store_large_object_chunk_size => $swift_store_large_object_chunk_size,
+    swift_store_create_container_on_put => $swift_store_create_container_on_put,
+    swift_store_endpoint_type           => $swift_store_endpoint_type,
+    swift_store_region                  => $swift_store_region,
+    swift_store_config_file             => '/etc/glance/glance-swift.conf',
+    default_swift_reference             => $default_swift_reference,
+    store_description                   => undef,
   }
 
   if !$multi_store {
     glance_api_config { 'glance_store/default_store': value => 'swift'; }
   }
-
-  glance_swift_config {
-    "${default_swift_reference}/user":         value => $swift_store_user;
-    "${default_swift_reference}/key":          value => $swift_store_key;
-    "${default_swift_reference}/auth_address": value => $swift_store_auth_address;
-    "${default_swift_reference}/auth_version": value => $swift_store_auth_version;
-    "${default_swift_reference}/user_domain_id": value => $swift_store_auth_user_domain_id;
-    "${default_swift_reference}/project_domain_id": value => $swift_store_auth_project_domain_id;
-  }
-
 }

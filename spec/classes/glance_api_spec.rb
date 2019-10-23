@@ -27,7 +27,6 @@ describe 'glance::api' do
       :purge_config             => false,
       :delayed_delete           => '<SERVICE DEFAULT>',
       :scrub_time               => '<SERVICE DEFAULT>',
-      :default_store            => false,
       :image_cache_dir          => '/var/lib/glance/image-cache',
       :image_import_plugins     => '<SERVICE DEFAULT>',
       :image_conversion_output_format => '<SERVICE DEFAULT>',
@@ -323,12 +322,72 @@ describe 'glance::api' do
       end
     end
 
-    describe 'with stores by default' do
+    describe 'with enabled_backends and stores by default' do
       let :params do
         default_params
       end
 
+      it { is_expected.to_not contain_glance_api_config('DEFAULT/enabled_backends').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to_not contain_glance_api_config('glance_store/stores').with_value('<SERVICE DEFAULT>') }
+    end
+
+    describe 'with enabled_backends' do
+      let :params do
+        default_params.merge({
+          :enabled_backends => ['file1:file','http1:http'],
+          :default_backend  => 'file1',
+          :stores           => ['file','http'],
+          :default_store    => 'file',
+        })
+      end
+
+      it { is_expected.to contain_glance_api_config('DEFAULT/enabled_backends').with_value('file1:file,http1:http') }
+      it { is_expected.to contain_glance_api_config('glance_store/default_backend').with_value('file1') }
+      it { is_expected.to contain_glance_api_config('glance_store/stores').with_ensure('absent') }
+      it { is_expected.to contain_glance_api_config('glance_store/default_store').with_ensure('absent') }
+    end
+
+    describe 'with invalid backend type' do
+      let :params do
+        default_params.merge({
+          :enabled_backends => ['file1:file','bad1:mybad'],
+          :default_backend  => 'file',
+        })
+      end
+
+      it_raises 'a Puppet::Error', / is not a valid backend type./
+    end
+
+    describe 'with enabled_backends but no default_backend' do
+      let :params do
+        default_params.merge({
+          :enabled_backends => ['file1:file','http1:http'],
+        })
+      end
+
+      it_raises 'a Puppet::Error', /A glance default_backend must be specified./
+    end
+
+    describe 'with duplicate backend identifiers' do
+      let :params do
+        default_params.merge({
+          :enabled_backends => ['file1:file','file1:http'],
+          :default_backend  => 'file1',
+        })
+      end
+
+      it_raises 'a Puppet::Error', /All backend identifiers in enabled_backends must be unique./
+    end
+
+    describe 'with invalid default_backend' do
+      let :params do
+        default_params.merge({
+          :enabled_backends => ['file1:file','http1:http'],
+          :default_backend  => 'file2',
+        })
+      end
+
+      it_raises 'a Puppet::Error', / is not a valid backend identifier./
     end
 
     describe 'with stores override' do

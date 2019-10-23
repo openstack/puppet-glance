@@ -157,34 +157,30 @@
 #   Defaults to $::os_service_default
 #
 # [*registry_client_cert_file*]
-#   (optinal) The path to the cert file to use in SSL connections to the
+#   (optional) The path to the cert file to use in SSL connections to the
 #   registry server.
 #   Defaults to $::os_service_default
 #
 # [*registry_client_key_file*]
-#   (optinal) The path to the private key file to use in SSL connections to the
+#   (optional) The path to the private key file to use in SSL connections to the
 #   registry server.
 #   Defaults to $::os_service_default
 #
 # [*registry_client_ca_file*]
-#   (optinal) The path to the CA certificate file to use in SSL connections to the
+#   (optional) The path to the CA certificate file to use in SSL connections to the
 #   registry server.
 #   Defaults to $::os_service_default
 #
-# [*stores*]
-#   (optional) List of which store classes and store class locations are
-#    currently known to glance at startup.
-#    Defaults to false.
-#    Example: ['file','http']
-#
-# [*default_store*]
-#   (optional) The default backend store, should be given as a string. Value
-#   must be provided if more than one store is listed in 'stores'.
+# [*enabled_backends*]
+#   (optional) List of Key:Value pairs of store identifier and store type.
+#   Example: ['swift:swift', 'ceph1:ceph', 'ceph2:ceph']
 #   Defaults to undef
 #
-# [*multi_store*]
-#   (optional) Boolean describing if multiple backends will be configured
-#   Defaults to false
+# [*default_backend*]
+#   (optional) The store identifier for the default backend in which data will
+#   be stored. The value must be defined as one of the keys in the dict
+#   defined by the enabled_backends.
+#   Defaults to undef
 #
 # [*image_cache_dir*]
 #   (optional) Base directory that the Image Cache uses.
@@ -303,6 +299,23 @@
 #   http://auth_url:5000/v3
 #   Defaults to undef
 #
+# DEPRECATED PARAMETERS
+#
+# [*stores*]
+#   (optional) List of which store classes and store class locations are
+#    currently known to glance at startup.
+#    Defaults to undef
+#    Example: ['file','http']
+#
+# [*default_store*]
+#   (optional) The default backend store, should be given as a string. Value
+#   must be provided if more than one store is listed in 'stores'.
+#   Defaults to undef
+#
+# [*multi_store*]
+#   (optional) Boolean describing if multiple backends will be configured
+#   Defaults to false
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -330,9 +343,8 @@ class glance::api(
   $registry_client_cert_file            = $::os_service_default,
   $registry_client_key_file             = $::os_service_default,
   $registry_client_ca_file              = $::os_service_default,
-  $stores                               = false,
-  $default_store                        = undef,
-  $multi_store                          = false,
+  $enabled_backends                     = undef,
+  $default_backend                      = undef,
   $database_connection                  = undef,
   $database_idle_timeout                = undef,
   $database_min_pool_size               = undef,
@@ -369,6 +381,10 @@ class glance::api(
   $keymgr_backend                       = undef,
   $keymgr_encryption_api_url            = undef,
   $keymgr_encryption_auth_url           = undef,
+  # DEPRECATED PARAMETERS
+  $stores                               = undef,
+  $default_store                        = undef,
+  $multi_store                          = false,
 ) inherits glance {
 
   include ::glance::deps
@@ -430,46 +446,85 @@ class glance::api(
     'taskflow_executor/conversion_format': value => $conversion_format,
   }
 
-  if $default_store {
-    $default_store_real = $default_store
-  }
-  if ($stores and !empty($stores)) {
-    # determine value for glance_store/stores
-    if size(any2array($stores)) > 1 {
-      $stores_real = join($stores, ',')
+  if $enabled_backends {
+    $enabled_backends_array = any2array($enabled_backends)
+
+    # Verify the backend types are valid.
+    $enabled_backends_array.each |$backend| {
+      $backend_type = split($backend, /:/)[1]
+
+      unless $backend_type =~ /file|http|swift|rbd|sheepdog|cinder|vsphere/ {
+        fail("\'${backend_type}\' is not a valid backend type.")
+      }
+    }
+
+    # Verify the backend identifiers are unique and the default_backend is valid.
+    $backend_ids = $enabled_backends_array.map |$backend| { split($backend, /:/)[0] }
+
+    unless $backend_ids == unique($backend_ids) {
+      fail('All backend identifiers in enabled_backends must be unique.')
+    }
+    unless $default_backend {
+      fail('A glance default_backend must be specified.')
+    }
+    unless $default_backend in $backend_ids {
+      fail("The default_backend \'${default_backend}\' is not a valid backend identifier.")
+    }
+
+    glance_api_config {
+      'DEFAULT/enabled_backends':     value  => join($enabled_backends_array, ',');
+      'glance_store/default_backend': value  => $default_backend;
+      'glance_store/stores':          ensure => absent;
+      'glance_store/default_store':   ensure => absent;
+    }
+
+  } elsif $stores or $default_store {
+    warning('The stores and default_store parameters are deprecated. Please use \
+enabled_backends instead.')
+
+    if $default_store {
+      $default_store_real = $default_store
+    }
+    if ($stores and !empty($stores)) {
+      # determine value for glance_store/stores
+      if size(any2array($stores)) > 1 {
+        $stores_real = join($stores, ',')
+      } else {
+        $stores_real = $stores[0]
+      }
+      if !$default_store_real {
+        # set default store based on provided stores when it isn't explicitly set
+        warning("default_store not provided, it will be automatically set to ${stores[0]}")
+        $default_store_real = $stores[0]
+      }
+    } elsif $default_store_real {
+      # set stores based on default_store if only default_store is provided
+      $stores_real = $default_store
     } else {
-      $stores_real = $stores[0]
+      warning('Glance-api is being provisioned without any stores configured')
     }
-    if !$default_store_real {
-      # set default store based on provided stores when it isn't explicitly set
-      warning("default_store not provided, it will be automatically set to ${stores[0]}")
-      $default_store_real = $stores[0]
-    }
-  } elsif $default_store_real {
-    # set stores based on default_store if only default_store is provided
-    $stores_real = $default_store
-  } else {
-    warning('Glance-api is being provisioned without any stores configured')
-  }
 
-  if $default_store_real and $multi_store {
-    glance_api_config {
-      'glance_store/default_store': value => $default_store_real;
+    if $default_store_real and $multi_store {
+      glance_api_config {
+        'glance_store/default_store': value => $default_store_real;
+      }
+    } elsif $multi_store {
+      glance_api_config {
+        'glance_store/default_store': ensure => absent;
+      }
     }
-  } elsif $multi_store {
-    glance_api_config {
-      'glance_store/default_store': ensure => absent;
-    }
-  }
 
-  if $stores_real {
-    glance_api_config {
-      'glance_store/stores': value => $stores_real;
+    if $stores_real {
+      glance_api_config {
+        'glance_store/stores': value => $stores_real;
+      }
+    } else {
+      glance_api_config {
+        'glance_store/stores': ensure => absent;
+      }
     }
   } else {
-    glance_api_config {
-      'glance_store/stores': ensure => absent;
-    }
+    warning('Glance-api is being provisioned without any backends')
   }
 
   glance_api_config {
