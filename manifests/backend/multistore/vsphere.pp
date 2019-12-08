@@ -90,7 +90,7 @@ define glance::backend::multistore::vsphere(
   $store_description         = $::os_service_default,
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   glance_api_config {
     "${name}/vmware_insecure":           value => $vmware_insecure;

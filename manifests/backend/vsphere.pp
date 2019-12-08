@@ -91,7 +91,7 @@ class glance::backend::vsphere(
   $multi_store                = false,
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   warning('glance::backend::vsphere is deprecated. Use glance::backend::multistore::vsphere instead.')
 

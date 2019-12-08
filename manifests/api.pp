@@ -387,13 +387,13 @@ class glance::api(
   $multi_store                          = false,
 ) inherits glance {
 
-  include ::glance::deps
-  include ::glance::policy
-  include ::glance::api::db
+  include glance::deps
+  include glance::policy
+  include glance::api::db
 
   if $sync_db {
-    include ::glance::db::sync
-    include ::glance::db::metadefs
+    include glance::db::sync
+    include glance::db::metadefs
   }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
@@ -597,7 +597,7 @@ enabled_backends instead.')
 
   # keystone config
   if $auth_strategy == 'keystone' {
-    include ::glance::api::authtoken
+    include glance::api::authtoken
   }
 
   oslo::middleware { 'glance_api_config':

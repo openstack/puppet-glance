@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'glance::api' do
   let :pre_condition do
-    "class { '::glance::api::authtoken':
+    "class { 'glance::api::authtoken':
       password => 'ChangeMe',
     }"
   end

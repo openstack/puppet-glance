@@ -33,7 +33,7 @@ define glance::backend::multistore::file(
   $store_description        = $::os_service_default,
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   glance_api_config {
     "${name}/filesystem_store_datadir": value => $filesystem_store_datadir;

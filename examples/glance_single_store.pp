@@ -7,12 +7,12 @@
 # or it will attempt to override the default set by the backend class and result
 # in an error.
 
-class { '::glance::backend::swift':
+class { 'glance::backend::swift':
   swift_store_user => 'demo',
   swift_store_key  => 'secrete',
 }
 
-class { '::glance::api':
+class { 'glance::api':
   keystone_password => 'a_big_secret',
   stores            => ['swift'],
 }

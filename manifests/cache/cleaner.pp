@@ -33,8 +33,8 @@ class glance::cache::cleaner(
   $command_options  = '',
 ) {
 
-  include ::glance::deps
-  include ::glance::params
+  include glance::deps
+  include glance::params
 
   cron { 'glance-cache-cleaner':
     command     => "${glance::params::cache_cleaner_command} ${command_options}",

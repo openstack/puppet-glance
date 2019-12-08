@@ -120,8 +120,8 @@ class glance::registry(
   $enable_v1_registry      = false,
 ) inherits glance {
 
-  include ::glance::deps
-  include ::glance::registry::db
+  include glance::deps
+  include glance::registry::db
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages($glance::params::registry_package_name,
@@ -159,7 +159,7 @@ class glance::registry(
 
   # keystone config
   if $auth_strategy == 'keystone' {
-    include ::glance::registry::authtoken
+    include glance::registry::authtoken
   }
 
   # SSL Options

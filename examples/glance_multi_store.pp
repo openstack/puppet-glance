@@ -7,17 +7,17 @@
 # default_store is set at that point, then the first store in the list 'stores'
 # provided will be made the default).
 
-class { '::glance::backend::file':
+class { 'glance::backend::file':
   multi_store => true,
 }
 
-class { '::glance::backend::swift':
+class { 'glance::backend::swift':
   swift_store_user => 'demo',
   swift_store_key  => 'secrete',
   multi_store      => true,
 }
 
-class { '::glance::api':
+class { 'glance::api':
   keystone_password => 'a_big_secret',
   stores            => ['file', 'swift'],
   default_store     => 'swift',

@@ -73,8 +73,8 @@ class glance::backend::swift(
   $multi_store                         = false,
 ) {
 
-  include ::glance::deps
-  include ::swift::client
+  include glance::deps
+  include swift::client
 
   warning('glance::backend::swift is deprecated. Use glance::backend::multistore::swift instead.')
 

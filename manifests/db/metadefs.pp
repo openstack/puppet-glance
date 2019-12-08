@@ -13,8 +13,8 @@ class glance::db::metadefs(
   $extra_params = '',
 ) {
 
-  include ::glance::deps
-  include ::glance::params
+  include glance::deps
+  include glance::params
 
   exec { 'glance-manage db_load_metadefs':
     command     => "glance-manage ${extra_params} db_load_metadefs",

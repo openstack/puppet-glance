@@ -120,7 +120,7 @@ class glance::registry::logging(
   $log_date_format               = $::os_service_default,
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   oslo::log { 'glance_registry_config':
     debug                         => $debug,

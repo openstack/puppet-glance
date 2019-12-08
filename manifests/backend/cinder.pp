@@ -86,7 +86,7 @@ class glance::backend::cinder(
   $multi_store                 = false,
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   warning('glance::backend::cinder is deprecated. Use glance::backend::multistore::cinder instead.')
 

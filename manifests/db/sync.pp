@@ -13,7 +13,7 @@ class glance::db::sync(
   $extra_params = '',
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   exec { 'glance-manage db_sync':
     command     => "glance-manage ${extra_params} db_sync",

@@ -120,7 +120,7 @@ class glance::api::logging(
   $log_date_format               = $::os_service_default,
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   oslo::log { 'glance_api_config':
     debug                         => $debug,

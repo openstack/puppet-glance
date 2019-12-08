@@ -63,8 +63,8 @@ define glance::backend::multistore::rbd(
   $store_description     = $::os_service_default,
 ) {
 
-  include ::glance::deps
-  include ::glance::params
+  include glance::deps
+  include glance::params
 
   glance_api_config {
     "${name}/rbd_store_ceph_conf":    value => $rbd_store_ceph_conf;

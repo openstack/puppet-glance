@@ -11,7 +11,7 @@ describe 'glance::backend::swift' do
 
     let :pre_condition do
       'class { "glance::api::authtoken": password => "pass" }
-       include ::glance::api'
+       include glance::api'
     end
 
     describe 'when default parameters' do

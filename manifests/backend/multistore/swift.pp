@@ -93,8 +93,8 @@ define glance::backend::multistore::swift(
   $store_description                   = $::os_service_default,
 ) {
 
-  include ::glance::deps
-  include ::swift::client
+  include glance::deps
+  include swift::client
 
   Class['swift::client'] -> Anchor['glance::install::end']
   Service<| tag == 'swift-service' |> -> Service['glance-api']

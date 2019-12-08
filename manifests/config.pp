@@ -47,7 +47,7 @@ class glance::config (
   $image_import_config        = {},
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   validate_legacy(Hash, 'validate_hash', $api_config)
   validate_legacy(Hash, 'validate_hash', $api_paste_ini_config)

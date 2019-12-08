@@ -88,7 +88,7 @@ class glance::keystone::auth(
   $internal_url        = 'http://127.0.0.1:9292',
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   if $configure_endpoint {
     Keystone_endpoint["${region}/${service_name}::${service_type}"] ~> Anchor['glance::service::begin']

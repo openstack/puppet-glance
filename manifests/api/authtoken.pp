@@ -214,7 +214,7 @@ class glance::api::authtoken(
   $service_token_roles_required   = $::os_service_default,
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   if is_service_default($password) {
     fail('Please set password for Glance service user')

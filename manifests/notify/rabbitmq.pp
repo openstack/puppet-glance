@@ -130,7 +130,7 @@ class glance::notify::rabbitmq(
   $notification_driver                = $::os_service_default,
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   oslo::messaging::rabbit { ['glance_api_config', 'glance_registry_config']:
     rabbit_ha_queues            => $rabbit_ha_queues,

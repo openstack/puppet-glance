@@ -4,11 +4,11 @@ describe 'glance class' do
 
   context 'default parameters' do
     pp= <<-EOS
-      include ::openstack_integration
-      include ::openstack_integration::repos
-      include ::openstack_integration::mysql
-      include ::openstack_integration::keystone
-      include ::openstack_integration::glance
+      include openstack_integration
+      include openstack_integration::repos
+      include openstack_integration::mysql
+      include openstack_integration::keystone
+      include openstack_integration::glance
 
       glance_image { 'test_image':
         ensure           => present,

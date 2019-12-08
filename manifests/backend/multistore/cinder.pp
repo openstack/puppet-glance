@@ -84,7 +84,7 @@ define glance::backend::multistore::cinder(
   $store_description           = $::os_service_default,
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   glance_api_config {
     "${name}/cinder_api_insecure":         value => $cinder_api_insecure;

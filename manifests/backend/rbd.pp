@@ -47,8 +47,8 @@ class glance::backend::rbd(
   $multi_store            = false,
 ) {
 
-  include ::glance::deps
-  include ::glance::params
+  include glance::deps
+  include glance::params
 
   warning('glance::backend::rbd is deprecated. Use glance::backend::multistore::rbd instead.')
 

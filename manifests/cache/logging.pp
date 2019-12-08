@@ -114,7 +114,7 @@ class glance::cache::logging(
   $log_date_format               = $::os_service_default,
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   oslo::log { 'glance_cache_config':
     debug                         => $debug,

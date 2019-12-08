@@ -28,8 +28,8 @@ class glance::policy (
   $policy_path = '/etc/glance/policy.json',
 ) {
 
-  include ::glance::deps
-  include ::glance::params
+  include glance::deps
+  include glance::params
 
   validate_legacy(Hash, 'validate_hash', $policies)
 

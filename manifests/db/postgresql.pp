@@ -32,7 +32,7 @@ class glance::db::postgresql(
   $privileges = 'ALL',
 ) {
 
-  include ::glance::deps
+  include glance::deps
 
   ::openstacklib::db::postgresql { 'glance':
     password_hash => postgresql_password($user, $password),
