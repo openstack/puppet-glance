@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    glance::api::show_multiple_locations was deprecated because the
+    corresponging parameter ins glance was deprecated.

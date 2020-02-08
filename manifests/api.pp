@@ -108,11 +108,6 @@
 #   (optional) Expose image location to trusted clients.
 #   Defaults to $::os_service_default.
 #
-# [*show_multiple_locations*]
-#   (optional) Whether to include the backend image locations in image
-#    properties.
-#   Defaults to $::os_service_default.
-#
 # [*filesystem_store_metadata_file*]
 #   (optional) The path to a file which contains the metadata to be returned
 #    with any location associated with the filesystem store
@@ -316,6 +311,11 @@
 #   (optional) The protocol of the Glance registry service.
 #   Default: undef
 #
+# [*show_multiple_locations*]
+#   (optional) Whether to include the backend image locations in image
+#    properties.
+#   Defaults to undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -329,7 +329,6 @@ class glance::api(
   $manage_service                       = true,
   $enabled                              = true,
   $show_image_direct_url                = $::os_service_default,
-  $show_multiple_locations              = $::os_service_default,
   $filesystem_store_metadata_file       = $::os_service_default,
   $filesystem_store_file_perm           = $::os_service_default,
   $location_strategy                    = $::os_service_default,
@@ -385,6 +384,7 @@ class glance::api(
   $registry_host                        = undef,
   $registry_port                        = undef,
   $registry_client_protocol             = undef,
+  $show_multiple_locations              = undef,
 ) inherits glance {
 
   include glance::deps
@@ -419,7 +419,6 @@ class glance::api(
     'DEFAULT/backlog':                 value => $backlog;
     'DEFAULT/workers':                 value => $workers;
     'DEFAULT/show_image_direct_url':   value => $show_image_direct_url;
-    'DEFAULT/show_multiple_locations': value => $show_multiple_locations;
     'DEFAULT/location_strategy':       value => $location_strategy;
     'DEFAULT/scrub_time':              value => $scrub_time;
     'DEFAULT/delayed_delete':          value => $delayed_delete;
@@ -434,6 +433,13 @@ class glance::api(
     'DEFAULT/limit_param_default':     value => $limit_param_default;
     'DEFAULT/api_limit_max':           value => $api_limit_max;
     'glance_store/os_region_name':     value => $os_region_name;
+  }
+
+  if $show_multiple_locations {
+    warning('The show_multiple_locations parameter is deprecated, and will be removed in a future release')
+    glance_api_config {
+      'DEFAULT/show_multiple_locations': value => $show_multiple_locations;
+    }
   }
 
   # task/taskflow_executor config.
