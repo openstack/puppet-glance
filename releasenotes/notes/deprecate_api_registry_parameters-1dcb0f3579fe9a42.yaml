@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    glance::api::registry_host, glance::api::registry_port and 
+    glance::api::registry_client_protocol are deprecated, because
+    the corresponding parameters were deprecated in glance.

@@ -11,9 +11,6 @@ describe 'glance::api' do
     {
       :bind_host                => '<SERVICE DEFAULT>',
       :bind_port                => '9292',
-      :registry_host            => '0.0.0.0',
-      :registry_port            => '<SERVICE DEFAULT>',
-      :registry_client_protocol => '<SERVICE DEFAULT>',
       :auth_strategy            => 'keystone',
       :enabled                  => true,
       :manage_service           => true,

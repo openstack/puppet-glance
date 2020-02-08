@@ -25,18 +25,6 @@
 #   (optional) Number of Glance API worker processes to start
 #   Default: $::os_workers.
 #
-# [*registry_host*]
-#   (optional) The address used to connect to the registry service.
-#   Default: 0.0.0.0
-#
-# [*registry_port*]
-#   (optional) The port of the Glance registry service.
-#   Default: $::os_service_default.
-#
-# [*registry_client_protocol*]
-#   (optional) The protocol of the Glance registry service.
-#   Default: $::os_service_default.
-#
 # [*scrub_time*]
 #   (optional) The amount of time in seconds to delay before performing a delete.
 #   Defaults to $::os_service_default.
@@ -316,15 +304,24 @@
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
 #
+# [*registry_host*]
+#   (optional) The address used to connect to the registry service.
+#   Default: undef
+#
+# [*registry_port*]
+#   (optional) The port of the Glance registry service.
+#   Default: undef
+#
+# [*registry_client_protocol*]
+#   (optional) The protocol of the Glance registry service.
+#   Default: undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
   $bind_port                            = '9292',
   $backlog                              = $::os_service_default,
   $workers                              = $::os_workers,
-  $registry_host                        = '0.0.0.0',
-  $registry_port                        = $::os_service_default,
-  $registry_client_protocol             = $::os_service_default,
   $scrub_time                           = $::os_service_default,
   $delayed_delete                       = $::os_service_default,
   $auth_strategy                        = 'keystone',
@@ -385,6 +382,9 @@ class glance::api(
   $stores                               = undef,
   $default_store                        = undef,
   $multi_store                          = false,
+  $registry_host                        = undef,
+  $registry_port                        = undef,
+  $registry_client_protocol             = undef,
 ) inherits glance {
 
   include glance::deps
@@ -569,17 +569,32 @@ enabled_backends instead.')
     'inject_metadata_properties/ignore_user_roles': value => $ignore_user_roles_real;
   }
 
-
   # configure api service to connect registry service
-  glance_api_config {
-    'DEFAULT/registry_host':            value => $registry_host;
-    'DEFAULT/registry_port':            value => $registry_port;
-    'DEFAULT/registry_client_protocol': value => $registry_client_protocol;
+  if $registry_host {
+    warning('The registry_host parameter is deprecated, and will be removed in a future release')
+    glance_api_config {
+      'DEFAULT/registry_host': value => $registry_host;
+    }
+    glance_cache_config {
+      'DEFAULT/registry_host': value => $registry_host;
+    }
   }
 
-  glance_cache_config {
-    'DEFAULT/registry_host': value => $registry_host;
-    'DEFAULT/registry_port': value => $registry_port;
+  if $registry_port {
+    warning('The registry_port parameter is deprecated, and will be removed in a future release')
+    glance_api_config {
+      'DEFAULT/registry_port': value => $registry_port;
+    }
+    glance_cache_config {
+      'DEFAULT/registry_port': value => $registry_port;
+    }
+  }
+
+  if $registry_client_protocol {
+    warning('The registry_client_protocol parameter is deprecated, and will be removed in a future release')
+    glance_api_config {
+      'DEFAULT/registry_client_protocol': value => $registry_client_protocol;
+    }
   }
 
   # Set the pipeline, it is allowed to be blank
