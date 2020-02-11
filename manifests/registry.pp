@@ -120,6 +120,8 @@ class glance::registry(
   $enable_v1_registry      = false,
 ) inherits glance {
 
+  warning('glance::registry is deprecated, and will be removed in a future release')
+
   include glance::deps
   include glance::registry::db
 
