@@ -42,12 +42,6 @@
 #   (Optional) If set, use this value for pool_timeout with SQLAlchemy.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*database_idle_timeout*]
-#   Timeout when db connections should be reaped.
-#   Defaults to undef.
-#
 class glance::api::db (
   $database_db_max_retries          = $::os_service_default,
   $database_connection              = 'sqlite:///var/lib/glance/glance.sqlite',
@@ -58,21 +52,14 @@ class glance::api::db (
   $database_retry_interval          = $::os_service_default,
   $database_max_overflow            = $::os_service_default,
   $database_pool_timeout            = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $database_idle_timeout            = undef,
 ) {
 
   include glance::deps
 
-  if $database_idle_timeout {
-    warning('The database_idle_timeout parameter is deprecated. Please use \
-database_connection_recycle_time instead.')
-  }
-
   # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function
   # to use glance::api::<myparam> if glance::api::db::<myparam> isn't specified.
   $database_connection_real              = pick($::glance::api::database_connection, $database_connection)
-  $database_connection_recycle_time_real = pick($::glance::api::database_idle_timeout, $database_idle_timeout,
+  $database_connection_recycle_time_real = pick($::glance::api::database_idle_timeout,
                                                 $database_connection_recycle_time)
   $database_min_pool_size_real           = pick($::glance::api::database_min_pool_size, $database_min_pool_size)
   $database_max_pool_size_real           = pick($::glance::api::database_max_pool_size, $database_max_pool_size)
