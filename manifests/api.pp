@@ -67,10 +67,6 @@
 #   (optional) Interval between retries of opening a database connection.
 #   Defaults to undef.
 #
-# [*database_min_pool_size*]
-#   (optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
 # [*database_max_pool_size*]
 #   (optional) Maximum number of SQL connections to keep open in a pool.
 #   Defaults to undef.
@@ -316,6 +312,10 @@
 #    properties.
 #   Defaults to undef
 #
+# [*database_min_pool_size*]
+#   (optional) Minimum number of SQL connections to keep open in a pool.
+#   Defaults to undef.
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -343,7 +343,6 @@ class glance::api(
   $default_backend                      = undef,
   $database_connection                  = undef,
   $database_idle_timeout                = undef,
-  $database_min_pool_size               = undef,
   $database_max_pool_size               = undef,
   $database_max_retries                 = undef,
   $database_retry_interval              = undef,
@@ -385,6 +384,7 @@ class glance::api(
   $registry_port                        = undef,
   $registry_client_protocol             = undef,
   $show_multiple_locations              = undef,
+  $database_min_pool_size               = undef,
 ) inherits glance {
 
   include glance::deps

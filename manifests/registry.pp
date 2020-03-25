@@ -38,10 +38,6 @@
 #    (optional) Interval between retries of opening a database connection.
 #    Defaults to undef.
 #
-#  [*database_min_pool_size*]
-#    (optional) Minimum number of SQL connections to keep open in a pool.
-#    Defaults to undef.
-#
 #  [*database_max_pool_size*]
 #    (optional) Maximum number of SQL connections to keep open in a pool.
 #    Defaults to undef.
@@ -96,6 +92,12 @@
 #    should be set to False.
 #    Defaults to false.
 #
+# DEPRECATED PARAMETERS
+#
+#  [*database_min_pool_size*]
+#    (optional) Minimum number of SQL connections to keep open in a pool.
+#    Defaults to undef.
+#
 class glance::registry(
   $package_ensure          = 'present',
   $bind_host               = $::os_service_default,
@@ -103,7 +105,6 @@ class glance::registry(
   $workers                 = $::os_workers,
   $database_connection     = undef,
   $database_idle_timeout   = undef,
-  $database_min_pool_size  = undef,
   $database_max_pool_size  = undef,
   $database_max_retries    = undef,
   $database_retry_interval = undef,
@@ -118,6 +119,8 @@ class glance::registry(
   $ca_file                 = $::os_service_default,
   $os_region_name          = $::os_service_default,
   $enable_v1_registry      = false,
+  # DEPRECATED PARAMETERS
+  $database_min_pool_size  = undef,
 ) inherits glance {
 
   warning('glance::registry is deprecated, and will be removed in a future release')

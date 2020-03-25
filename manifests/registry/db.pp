@@ -17,10 +17,6 @@
 #   Timeout when db connections should be reaped.
 #   (Optional) Defaults to $::os_service_default.
 #
-# [*database_min_pool_size*]
-#   Minimum number of SQL connections to keep open in a pool.
-#   (Optional) Defaults to $::os_service_default.
-#
 # [*database_max_pool_size*]
 #   Maximum number of SQL connections to keep open in a pool.
 #   (Optional) Defaults to $::os_service_default.
@@ -42,26 +38,36 @@
 #   (Optional) If set, use this value for pool_timeout with SQLAlchemy.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*database_min_pool_size*]
+#   Minimum number of SQL connections to keep open in a pool.
+#   (Optional) Defaults to undef.
+#
 class glance::registry::db (
   $database_db_max_retries          = $::os_service_default,
   $database_connection              = 'sqlite:///var/lib/glance/glance.sqlite',
   $database_connection_recycle_time = $::os_service_default,
-  $database_min_pool_size           = $::os_service_default,
   $database_max_pool_size           = $::os_service_default,
   $database_max_retries             = $::os_service_default,
   $database_retry_interval          = $::os_service_default,
   $database_max_overflow            = $::os_service_default,
   $database_pool_timeout            = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $database_min_pool_size           = $::os_service_default,
 ) {
 
   include glance::deps
+
+  if $::glance::registry::database_min_pool_size or $database_min_pool_size {
+    warning('The database_min_pool_size parameter is deprecated, and will be removed in a future release.')
+  }
 
   # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function
   # to use glance::registry::<myparam> if glance::registry::db::<myparam> isn't specified.
   $database_connection_real              = pick($::glance::registry::database_connection, $database_connection)
   $database_connection_recycle_time_real = pick($::glance::registry::database_idle_timeout,
                                                 $database_connection_recycle_time)
-  $database_min_pool_size_real           = pick($::glance::registry::database_min_pool_size, $database_min_pool_size)
   $database_max_pool_size_real           = pick($::glance::registry::database_max_pool_size, $database_max_pool_size)
   $database_max_retries_real             = pick($::glance::registry::database_max_retries, $database_max_retries)
   $database_retry_interval_real          = pick($::glance::registry::database_retry_interval, $database_retry_interval)
@@ -74,7 +80,6 @@ class glance::registry::db (
     db_max_retries          => $database_db_max_retries,
     connection              => $database_connection_real,
     connection_recycle_time => $database_connection_recycle_time_real,
-    min_pool_size           => $database_min_pool_size_real,
     max_retries             => $database_max_retries_real,
     retry_interval          => $database_retry_interval_real,
     max_pool_size           => $database_max_pool_size_real,
