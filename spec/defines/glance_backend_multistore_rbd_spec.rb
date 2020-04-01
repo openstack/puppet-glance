@@ -69,30 +69,6 @@ describe 'glance::backend::multistore::rbd' do
     end
   end
 
-  shared_examples 'glance::backend::multistore::rbd on RedHat' do
-    context 'when el6' do
-      before do
-        facts.merge!( :operatingsystemrelease => '6.5' )
-      end
-
-      it { should contain_package('python-ceph').with(
-        :name   => 'python-ceph',
-        :ensure => 'present'
-      )}
-    end
-
-    context 'when el7' do
-      before do
-        facts.merge!( :operatingsystemrelease => '7.0' )
-      end
-
-      it { should contain_package('python-ceph').with(
-        :name   => 'python-rbd',
-        :ensure => 'present'
-      )}
-    end
-  end
-
   on_supported_os({
     :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
@@ -110,15 +86,19 @@ describe 'glance::backend::multistore::rbd' do
             { :pyceph_package_name => 'python3-rbd' }
           end
         when 'RedHat'
-          { :pyceph_package_name => 'python-rbd' }
+          if facts[:operatingsystem] == 'Fedora'
+            { :pyceph_package_name => 'python3-rbd' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :pyceph_package_name => 'python3-rbd' }
+            else
+              { :pyceph_package_name => 'python-rbd' }
+            end
+          end
         end
       end
 
       it_behaves_like 'glance::backend::multistore::rbd'
-
-      if facts[:osfamily] == 'RedHat'
-        it_behaves_like 'glance::backend::multistore::rbd on RedHat'
-      end
     end
   end
 end
