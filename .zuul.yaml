@@ -22,5 +22,6 @@
       featureset_override:
         run_tempest: false
         tempest_test_whitelist:
-          - 'image'
+          - 'tempest.api.image'
+          - 'tempest.scenario.test_server_basic_ops'
         use_os_tempest: true
