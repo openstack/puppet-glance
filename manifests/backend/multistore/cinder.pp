@@ -30,11 +30,6 @@
 #   Should be a valid URL. Example: 'http://localhost:8776/v1/%(project_id)s'
 #   Defaults to $::os_service_default.
 #
-# [*os_region_name*]
-#   (optional) The os_region_name parameter is deprecated and has no effect.
-#   Use glance::api::os_region_name instead.
-#   Defaults to 'undef'
-#
 # [*cinder_ca_certificates_file*]
 #   (optional) Location of ca certicate file to use for cinder client requests.
 #   Should be a valid ca certicate file
