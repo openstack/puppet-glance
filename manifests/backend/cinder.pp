@@ -32,11 +32,6 @@
 #   Should be a valid URL. Example: 'http://localhost:8776/v1/%(project_id)s'
 #   Defaults to $::os_service_default.
 #
-# [*os_region_name*]
-#   (optional) The os_region_name parameter is deprecated and has no effect.
-#   Use glance::api::os_region_name instead.
-#   Defaults to 'undef'
-#
 # [*cinder_ca_certificates_file*]
 #   (optional) Location of ca certicate file to use for cinder client requests.
 #   Should be a valid ca certicate file
@@ -73,7 +68,6 @@
 #   Defaults to false
 #
 class glance::backend::cinder(
-  $os_region_name              = undef,
   $cinder_ca_certificates_file = $::os_service_default,
   $cinder_api_insecure         = $::os_service_default,
   $cinder_catalog_info         = $::os_service_default,
@@ -89,10 +83,6 @@ class glance::backend::cinder(
   include glance::deps
 
   warning('glance::backend::cinder is deprecated. Use glance::backend::multistore::cinder instead.')
-
-  if $os_region_name {
-    notice('The os_region_name parameter is deprecated and has no effect. Use glance::api::os_region_name instead.')
-  }
 
   glance::backend::multistore::cinder { 'glance_store':
     cinder_api_insecure         => $cinder_api_insecure,
