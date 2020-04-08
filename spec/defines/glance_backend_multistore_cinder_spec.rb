@@ -40,6 +40,8 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_api_config('cinder/cinder_store_project_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_store_user_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_store_password').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('cinder/cinder_enforce_multipath').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('cinder/cinder_use_multipath').with_value('<SERVICE DEFAULT>')
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('cinder/store_description')
@@ -52,6 +54,8 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_cache_config('cinder/cinder_store_project_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_user_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_password').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('cinder/cinder_enforce_multipath').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('cinder/cinder_use_multipath').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -68,6 +72,8 @@ describe 'glance::backend::multistore::cinder' do
           :cinder_store_project_name   => 'services',
           :cinder_store_user_name      => 'glance',
           :cinder_store_password       => 'glance',
+          :cinder_enforce_multipath    => true,
+          :cinder_use_multipath        => true,
         }
       end
       it 'configures glance-api.conf' do
@@ -81,6 +87,8 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_api_config('cinder/cinder_store_project_name').with_value('services')
         is_expected.to contain_glance_api_config('cinder/cinder_store_user_name').with_value('glance')
         is_expected.to contain_glance_api_config('cinder/cinder_store_password').with_value('glance')
+        is_expected.to contain_glance_api_config('cinder/cinder_enforce_multipath').with_value(true)
+        is_expected.to contain_glance_api_config('cinder/cinder_use_multipath').with_value(true)
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('cinder/store_description')
@@ -93,6 +101,8 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_cache_config('cinder/cinder_store_project_name').with_value('services')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_user_name').with_value('glance')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_password').with_value('glance')
+        is_expected.to contain_glance_cache_config('cinder/cinder_enforce_multipath').with_value(true)
+        is_expected.to contain_glance_cache_config('cinder/cinder_use_multipath').with_value(true)
       end
     end
   end

@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The new parameters, cinder_enforce_multipath and cinder_use_multipath, are
+    intoroduced into cinder::backend::multistore::cinder class, so that
+    operators can define multipath usage in volume connection.
