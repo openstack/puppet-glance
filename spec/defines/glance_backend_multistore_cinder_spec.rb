@@ -40,6 +40,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_api_config('cinder/cinder_store_project_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_store_user_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_store_password').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('cinder/cinder_os_region_name').with_value('RegionOne')
         is_expected.to contain_glance_api_config('cinder/cinder_enforce_multipath').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_use_multipath').with_value('<SERVICE DEFAULT>')
       end
@@ -54,6 +55,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_cache_config('cinder/cinder_store_project_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_user_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_password').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('cinder/cinder_os_region_name').with_value('RegionOne')
         is_expected.to contain_glance_cache_config('cinder/cinder_enforce_multipath').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_use_multipath').with_value('<SERVICE DEFAULT>')
       end
@@ -72,6 +74,7 @@ describe 'glance::backend::multistore::cinder' do
           :cinder_store_project_name   => 'services',
           :cinder_store_user_name      => 'glance',
           :cinder_store_password       => 'glance',
+          :cinder_os_region_name       => 'RegionTwo',
           :cinder_enforce_multipath    => true,
           :cinder_use_multipath        => true,
         }
@@ -87,6 +90,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_api_config('cinder/cinder_store_project_name').with_value('services')
         is_expected.to contain_glance_api_config('cinder/cinder_store_user_name').with_value('glance')
         is_expected.to contain_glance_api_config('cinder/cinder_store_password').with_value('glance')
+        is_expected.to contain_glance_api_config('cinder/cinder_os_region_name').with_value('RegionTwo')
         is_expected.to contain_glance_api_config('cinder/cinder_enforce_multipath').with_value(true)
         is_expected.to contain_glance_api_config('cinder/cinder_use_multipath').with_value(true)
       end
@@ -101,6 +105,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_cache_config('cinder/cinder_store_project_name').with_value('services')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_user_name').with_value('glance')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_password').with_value('glance')
+        is_expected.to contain_glance_cache_config('cinder/cinder_os_region_name').with_value('RegionTwo')
         is_expected.to contain_glance_cache_config('cinder/cinder_enforce_multipath').with_value(true)
         is_expected.to contain_glance_cache_config('cinder/cinder_use_multipath').with_value(true)
       end

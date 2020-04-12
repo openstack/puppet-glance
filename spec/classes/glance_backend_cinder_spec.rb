@@ -41,6 +41,7 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_api_config('glance_store/cinder_store_auth_address').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/cinder_store_project_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/cinder_store_user_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('glance_store/cinder_os_region_name').with_value('RegionOne')
         is_expected.to contain_glance_api_config('glance_store/cinder_store_password').with_value('<SERVICE DEFAULT>')
       end
       it 'configures glance-cache.conf' do
@@ -52,6 +53,7 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_cache_config('glance_store/cinder_store_auth_address').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('glance_store/cinder_store_project_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('glance_store/cinder_store_user_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('glance_store/cinder_os_region_name').with_value('RegionOne')
         is_expected.to contain_glance_cache_config('glance_store/cinder_store_password').with_value('<SERVICE DEFAULT>')
       end
     end
@@ -68,6 +70,7 @@ describe 'glance::backend::cinder' do
           :cinder_store_project_name   => 'services',
           :cinder_store_user_name      => 'glance',
           :cinder_store_password       => 'glance',
+          :cinder_os_region_name       => 'RegionTwo',
         }
       end
       it 'configures glance-api.conf' do
@@ -80,6 +83,7 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_api_config('glance_store/cinder_store_project_name').with_value('services')
         is_expected.to contain_glance_api_config('glance_store/cinder_store_user_name').with_value('glance')
         is_expected.to contain_glance_api_config('glance_store/cinder_store_password').with_value('glance')
+        is_expected.to contain_glance_api_config('glance_store/cinder_os_region_name').with_value('RegionTwo')
       end
       it 'configures glance-cache.conf' do
         is_expected.to contain_glance_cache_config('glance_store/cinder_api_insecure').with_value(true)
@@ -91,6 +95,7 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_cache_config('glance_store/cinder_store_project_name').with_value('services')
         is_expected.to contain_glance_cache_config('glance_store/cinder_store_user_name').with_value('glance')
         is_expected.to contain_glance_cache_config('glance_store/cinder_store_password').with_value('glance')
+        is_expected.to contain_glance_cache_config('glance_store/cinder_os_region_name').with_value('RegionTwo')
       end
     end
   end

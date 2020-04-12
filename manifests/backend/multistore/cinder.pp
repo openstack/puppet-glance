@@ -61,6 +61,10 @@
 #   (optional) A valid password for the user specified by `cinder_store_user_name'
 #   Defaults to $::os_service_default.
 #
+# [*cinder_os_region_name*]
+#   (optional) Sets the keystone region to use.
+#   Defaults to 'RegionOne'.
+#
 # [*cinder_enforce_multipath*]
 #   (optional) Enforce multipath usage when attaching a cinder volume
 #   Defaults to $::os_service_default.
@@ -84,12 +88,16 @@ define glance::backend::multistore::cinder(
   $cinder_store_project_name   = $::os_service_default,
   $cinder_store_user_name      = $::os_service_default,
   $cinder_store_password       = $::os_service_default,
+  $cinder_os_region_name       = 'RegionOne',
   $cinder_enforce_multipath    = $::os_service_default,
   $cinder_use_multipath        = $::os_service_default,
   $store_description           = $::os_service_default,
 ) {
 
   include glance::deps
+
+  # to keep backwards compatibility
+  $cinder_os_region_name_real = pick($::glance::api::os_region_name, $cinder_os_region_name)
 
   glance_api_config {
     "${name}/cinder_api_insecure":         value => $cinder_api_insecure;
@@ -101,6 +109,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
     "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
     "${name}/cinder_store_password":       value => $cinder_store_password;
+    "${name}/cinder_os_region_name":       value => $cinder_os_region_name_real;
     "${name}/cinder_enforce_multipath":    value => $cinder_enforce_multipath;
     "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
     "${name}/store_description":           value => $store_description;
@@ -115,6 +124,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_auth_address":   value => $cinder_store_auth_address;
     "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
     "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
+    "${name}/cinder_os_region_name":       value => $cinder_os_region_name_real;
     "${name}/cinder_enforce_multipath":    value => $cinder_enforce_multipath;
     "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
     "${name}/cinder_store_password":       value => $cinder_store_password;

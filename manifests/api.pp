@@ -206,10 +206,6 @@
 #   Allowed values: 'qcow2', 'raw', 'vmdk', false.
 #   Defaults to $::os_service_default (disabled)
 #
-# [*os_region_name*]
-#   (optional) Sets the keystone region to use.
-#   Defaults to 'RegionOne'.
-#
 # [*enable_proxy_headers_parsing*]
 #   (Optional) Enable paste middleware to handle SSL requests through
 #   HTTPProxyToWSGI middleware.
@@ -316,6 +312,10 @@
 #   (optional) Minimum number of SQL connections to keep open in a pool.
 #   Defaults to undef.
 #
+# [*os_region_name*]
+#   (optional) Sets the keystone region to use.
+#   Defaults to undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -363,7 +363,6 @@ class glance::api(
   $taskflow_engine_mode                 = $::os_service_default,
   $taskflow_max_workers                 = $::os_service_default,
   $conversion_format                    = $::os_service_default,
-  $os_region_name                       = 'RegionOne',
   $enable_proxy_headers_parsing         = $::os_service_default,
   $max_request_body_size                = $::os_service_default,
   $enable_v1_api                        = false,
@@ -385,11 +384,17 @@ class glance::api(
   $registry_client_protocol             = undef,
   $show_multiple_locations              = undef,
   $database_min_pool_size               = undef,
+  $os_region_name                       = undef,
 ) inherits glance {
 
   include glance::deps
   include glance::policy
   include glance::api::db
+
+  if $os_region_name != undef {
+    warning('glance::api::os_region_name is deprecated. Use \
+cinder::backend::multistore::cinder::cinder_os_region_name instead.')
+  }
 
   if $sync_db {
     include glance::db::sync
@@ -432,7 +437,6 @@ class glance::api(
     'DEFAULT/enable_v2_api':           value => $enable_v2_api;
     'DEFAULT/limit_param_default':     value => $limit_param_default;
     'DEFAULT/api_limit_max':           value => $api_limit_max;
-    'glance_store/os_region_name':     value => $os_region_name;
   }
 
   if $show_multiple_locations {

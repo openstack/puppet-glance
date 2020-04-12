@@ -15,7 +15,6 @@ describe 'glance::registry' do
       :enabled                => true,
       :manage_service         => true,
       :purge_config           => false,
-      :os_region_name         => '<SERVICE DEFAULT>',
       :ca_file                => '<SERVICE DEFAULT>',
       :cert_file              => '<SERVICE DEFAULT>',
       :key_file               => '<SERVICE DEFAULT>',
@@ -30,7 +29,6 @@ describe 'glance::registry' do
         :bind_port              => '9111',
         :workers                => '5',
         :enabled                => false,
-        :os_region_name         => 'RegionOne2',
       }
     ].each do |param_set|
 
@@ -72,13 +70,6 @@ describe 'glance::registry' do
           end
           if param_hash[:auth_strategy] == 'keystone'
             is_expected.to contain_glance_registry_config("paste_deploy/flavor").with_value('keystone')
-          end
-        end
-        it 'is_expected.to lay down default glance_store registry config' do
-          [
-            'os_region_name',
-          ].each do |config|
-            is_expected.to contain_glance_registry_config("glance_store/#{config}").with_value(param_hash[config.intern])
           end
         end
         it 'is_expected.to lay down default ssl config' do

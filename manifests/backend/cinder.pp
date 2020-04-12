@@ -63,6 +63,10 @@
 #   (optional) A valid password for the user specified by `cinder_store_user_name'
 #   Defaults to $::os_service_default.
 #
+# [*cinder_os_region_name*]
+#   (optional) Sets the keystone region to use.
+#   Defaults to 'RegionOne'.
+#
 # [*multi_store*]
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
@@ -77,12 +81,16 @@ class glance::backend::cinder(
   $cinder_store_project_name   = $::os_service_default,
   $cinder_store_user_name      = $::os_service_default,
   $cinder_store_password       = $::os_service_default,
+  $cinder_os_region_name       = 'RegionOne',
   $multi_store                 = false,
 ) {
 
   include glance::deps
 
   warning('glance::backend::cinder is deprecated. Use glance::backend::multistore::cinder instead.')
+
+  # to keep backwards compatibility
+  $cinder_os_region_name_real = pick($::glance::api::os_region_name, $cinder_os_region_name)
 
   glance::backend::multistore::cinder { 'glance_store':
     cinder_api_insecure         => $cinder_api_insecure,
@@ -94,6 +102,7 @@ class glance::backend::cinder(
     cinder_store_project_name   => $cinder_store_project_name,
     cinder_store_user_name      => $cinder_store_user_name,
     cinder_store_password       => $cinder_store_password,
+    cinder_os_region_name       => $cinder_os_region_name_real,
     store_description           => undef,
   }
 

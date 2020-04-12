@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The new parameter, ``cinder_os_region_name`` was added to
+    ``glance::backend::cinder`` and ``glance::backend::multistore::cinder``,
+    to configure keystone region used for connection to cinder.
+deprecations:
+  - |
+    ``glance::api::os_region_name`` and ``glance::registry::os_region_name``
+    were deperecated. Use new cinder_os_region_name pamraeters instead.

@@ -80,10 +80,6 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to $::os_service_default.
 #
-#  [*os_region_name*]
-#    (optional) Sets the keystone region to use.
-#    Defaults to $::os_service_default.
-#
 #  [*enable_v1_registry*]
 #    (optional) Deploy the v1 API Registry service.
 #    If glance::api::enable_v1_api is set to True, this option also needs to be
@@ -96,6 +92,10 @@
 #
 #  [*database_min_pool_size*]
 #    (optional) Minimum number of SQL connections to keep open in a pool.
+#    Defaults to undef.
+#
+#  [*os_region_name*]
+#    (optional) Sets the keystone region to use.
 #    Defaults to undef.
 #
 class glance::registry(
@@ -117,16 +117,21 @@ class glance::registry(
   $cert_file               = $::os_service_default,
   $key_file                = $::os_service_default,
   $ca_file                 = $::os_service_default,
-  $os_region_name          = $::os_service_default,
   $enable_v1_registry      = false,
   # DEPRECATED PARAMETERS
   $database_min_pool_size  = undef,
+  $os_region_name          = undef,
 ) inherits glance {
 
   warning('glance::registry is deprecated, and will be removed in a future release')
 
   include glance::deps
   include glance::registry::db
+
+  if $os_region_name != undef {
+    warning('glance::registry::os_region_name is deprecated. Use \
+cinder::backend::multistore::cinder::cinder_os_region_name instead.')
+  }
 
   if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
     ensure_packages($glance::params::registry_package_name,

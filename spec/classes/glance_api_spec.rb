@@ -33,7 +33,6 @@ describe 'glance::api' do
       :image_member_quota       => '<SERVICE DEFAULT>',
       :image_cache_stall_time   => '<SERVICE DEFAULT>',
       :image_cache_max_size     => '<SERVICE DEFAULT>',
-      :os_region_name           => 'RegionOne',
       :pipeline                 => 'keystone',
       :task_time_to_live        => '<SERVICE DEFAULT>',
       :task_executor            => '<SERVICE DEFAULT>',
@@ -78,7 +77,6 @@ describe 'glance::api' do
         :image_member_quota       => '128',
         :image_cache_stall_time   => '10',
         :image_cache_max_size     => '10737418240',
-        :os_region_name           => 'RegionOne2',
         :pipeline                 => 'keystone2',
         :sync_db                  => false,
         :limit_param_default      => '10',
@@ -172,15 +170,6 @@ describe 'glance::api' do
             'image_cache_max_size',
           ].each do |config|
             is_expected.to contain_glance_cache_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
-          end
-        end
-
-        it 'is_expected.to lay down default glance_store api and cache config' do
-          [
-            'os_region_name',
-          ].each do |config|
-            is_expected.to contain_glance_cache_config("glance_store/#{config}").with_value(param_hash[config.intern])
-            is_expected.to contain_glance_api_config("glance_store/#{config}").with_value(param_hash[config.intern])
           end
         end
 
