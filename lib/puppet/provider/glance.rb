@@ -1,4 +1,4 @@
-# Since there's only one glance type for now,
+# Since there's only one Glance type for now,
 # this probably could have all gone in the provider file.
 # But maybe this is good long-term.
 require 'puppet/util/inifile'
@@ -18,12 +18,29 @@ class Puppet::Provider::Glance < Puppet::Provider::Openstack
   end
 
   def self.glance_request(service, action, error, properties=nil)
+    properties ||= []
     @credentials.username = glance_credentials['username']
     @credentials.password = glance_credentials['password']
     @credentials.project_name = glance_credentials['project_name']
     @credentials.auth_url = auth_endpoint
+    @credentials.user_domain_name = glance_credentials['user_domain_name']
+    @credentials.project_domain_name = glance_credentials['project_domain_name']
+    if glance_credentials['region_name']
+      @credentials.region_name = glance_credentials['region_name']
+    end
     raise error unless @credentials.set?
     Puppet::Provider::Openstack.request(service, action, properties, @credentials)
+  end
+
+  def self.conf_filename
+    '/etc/glance/glance-api.conf'
+  end
+
+  def self.glance_conf
+    return @glance_conf if @glance_conf
+    @glance_conf = Puppet::Util::IniConfig::File.new
+    @glance_conf.read(conf_filename)
+    @glance_conf
   end
 
   def self.glance_credentials
@@ -31,66 +48,55 @@ class Puppet::Provider::Glance < Puppet::Provider::Openstack
   end
 
   def self.get_glance_credentials
-    if glance_file and glance_file['keystone_authtoken'] and
-      glance_file['keystone_authtoken']['auth_host'] and
-      glance_file['keystone_authtoken']['auth_port'] and
-      glance_file['keystone_authtoken']['auth_protocol'] and
-      glance_file['keystone_authtoken']['project_name'] and
-      glance_file['keystone_authtoken']['username'] and
-      glance_file['keystone_authtoken']['password'] and
-      glance_file['glance_store']['os_region_name']
+    #needed keys for authentication
+    auth_keys = ['auth_url', 'project_name', 'username', 'password']
+    conf = glance_conf
+    if conf and conf['keystone_authtoken'] and
+        auth_keys.all?{|k| !conf['keystone_authtoken'][k].nil?}
+      creds = Hash[ auth_keys.map \
+                   { |k| [k, conf['keystone_authtoken'][k].strip] } ]
 
-        g = {}
-        g['auth_host'] = glance_file['keystone_authtoken']['auth_host'].strip
-        g['auth_port'] = glance_file['keystone_authtoken']['auth_port'].strip
-        g['auth_protocol'] = glance_file['keystone_authtoken']['auth_protocol'].strip
-        g['project_name'] = glance_file['keystone_authtoken']['project_name'].strip
-        g['username'] = glance_file['keystone_authtoken']['username'].strip
-        g['password'] = glance_file['keystone_authtoken']['password'].strip
-        g['os_region_name'] = glance_file['glance_store']['os_region_name'].strip
+      if !conf['keystone_authtoken']['region_name'].nil?
+        creds['region_name'] = conf['keystone_authtoken']['region_name'].strip
+      end
 
-        # auth_admin_prefix not required to be set.
-        g['auth_admin_prefix'] = (glance_file['keystone_authtoken']['auth_admin_prefix'] || '').strip
+      if !conf['keystone_authtoken']['project_domain_name'].nil?
+        creds['project_domain_name'] = conf['keystone_authtoken']['project_domain_name'].strip
+      else
+        creds['project_domain_name'] = 'Default'
+      end
 
-        return g
-    elsif glance_file and glance_file['keystone_authtoken'] and
-      glance_file['keystone_authtoken']['auth_url'] and
-      glance_file['keystone_authtoken']['project_name'] and
-      glance_file['keystone_authtoken']['username'] and
-      glance_file['keystone_authtoken']['password'] and
-      glance_file['glance_store']['os_region_name']
+      if !conf['keystone_authtoken']['user_domain_name'].nil?
+        creds['user_domain_name'] = conf['keystone_authtoken']['user_domain_name'].strip
+      else
+        creds['user_domain_name'] = 'Default'
+      end
 
-        g = {}
-        g['auth_url'] = glance_file['keystone_authtoken']['auth_url'].strip
-        g['project_name'] = glance_file['keystone_authtoken']['project_name'].strip
-        g['username'] = glance_file['keystone_authtoken']['username'].strip
-        g['password'] = glance_file['keystone_authtoken']['password'].strip
-        g['os_region_name'] = glance_file['glance_store']['os_region_name'].strip
-
-        return g
+      return creds
     else
-      raise(Puppet::Error, 'File: /etc/glance/glance-api.conf does not contain all required sections.')
+      raise(Puppet::Error, "File: #{conf_filename} does not contain all " +
+            "required sections.  Glance types will not work if glance is not " +
+            "correctly configured.")
     end
+  end
+
+  def self.get_auth_endpoint
+    g = glance_credentials
+    "#{g['auth_url']}"
   end
 
   def self.auth_endpoint
     @auth_endpoint ||= get_auth_endpoint
   end
 
-  def self.get_auth_endpoint
-    g = glance_credentials
-    if g.key?('auth_url')
-      "#{g['auth_url']}/"
-    else
-      "#{g['auth_protocol']}://#{g['auth_host']}:#{g['auth_port']}#{g['auth_admin_prefix']}/v3/"
-    end
+  def self.reset
+    @glance_conf = nil
+    @glance_credentials = nil
   end
 
+  # To keep backward compatibility
   def self.glance_file
-    return @glance_file if @glance_file
-    @glance_file = Puppet::Util::IniConfig::File.new
-    @glance_file.read('/etc/glance/glance-api.conf')
-    @glance_file
+    self.class.glance_conf
   end
 
   def self.glance_hash
