@@ -45,12 +45,8 @@ Puppet::Type.newtype(:glance_api_paste_ini) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    if Facter.value(:osfamily) == 'Debian'
-      'glance-api'
-    elsif Facter.value(:osfamily) == 'RedHat'
-      'openstack-glance'
-    end
+  autorequire(:anchor) do
+    ['glance::install::end']
   end
 
 end
