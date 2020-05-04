@@ -114,8 +114,8 @@ Puppet::Type.newtype(:glance_image) do
   end
 
   # Require the Glance service to be running
-  autorequire(:service) do
-    ['glance-api', 'glance-registry']
+  autorequire(:anchor) do
+    ['glance::service::end']
   end
 
 end

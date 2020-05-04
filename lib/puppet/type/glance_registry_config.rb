@@ -46,12 +46,8 @@ Puppet::Type.newtype(:glance_registry_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    if Facter.value(:osfamily) == 'Debian'
-      'glance-registry'
-    elsif Facter.value(:osfamily) == 'RedHat'
-      'openstack-glance'
-    end
+  autorequire(:anchor) do
+    ['glance::install::end']
   end
 
 end
