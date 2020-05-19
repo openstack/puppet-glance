@@ -4,7 +4,7 @@ describe 'glance::db::postgresql' do
 
   shared_examples_for 'glance::db::postgresql' do
     let :req_params do
-      { :password => 'pw' }
+      { :password => 'glancepass' }
     end
 
     let :pre_condition do
@@ -16,9 +16,12 @@ describe 'glance::db::postgresql' do
         req_params
       end
 
-      it { is_expected.to contain_postgresql__server__db('glance').with(
-        :user     => 'glance',
-        :password => 'md56c7c03b193c2c1e0667bc5bd891703db'
+      it { is_expected.to contain_openstacklib__db__postgresql('glance').with(
+        :user       => 'glance',
+        :password   => 'glancepass',
+        :dbname     => 'glance',
+        :encoding   => nil,
+        :privileges => 'ALL',
       )}
     end
   end
