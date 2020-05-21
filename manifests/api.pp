@@ -91,6 +91,10 @@
 #   (optional) If set, use this value for max_overflow with sqlalchemy.
 #   Defaults to undef.
 #
+# [*cache_prefetcher_interval*]
+#   (optional) The interval in seconds to run periodic job 'cache_images'
+#   Defaults to $::os_service_default.
+#
 # [*image_cache_max_size*]
 #   (optional) The upper limit (the maximum size of accumulated cache in bytes) beyond which pruner,
 #   if running, starts cleaning the images cache.
@@ -352,6 +356,7 @@ class glance::api(
   $database_max_retries                 = undef,
   $database_retry_interval              = undef,
   $database_max_overflow                = undef,
+  $cache_prefetcher_interval            = $::os_service_default,
   $image_cache_max_size                 = $::os_service_default,
   $image_cache_stall_time               = $::os_service_default,
   $image_cache_dir                      = '/var/lib/glance/image-cache',
@@ -414,26 +419,27 @@ class glance::api(
 
   # basic service config
   glance_api_config {
-    'DEFAULT/bind_host':               value => $bind_host;
-    'DEFAULT/bind_port':               value => $bind_port;
-    'DEFAULT/backlog':                 value => $backlog;
-    'DEFAULT/workers':                 value => $workers;
-    'DEFAULT/show_image_direct_url':   value => $show_image_direct_url;
-    'DEFAULT/show_multiple_locations': value => $show_multiple_locations;
-    'DEFAULT/location_strategy':       value => $location_strategy;
-    'DEFAULT/scrub_time':              value => $scrub_time;
-    'DEFAULT/delayed_delete':          value => $delayed_delete;
-    'DEFAULT/image_cache_dir':         value => $image_cache_dir;
-    'DEFAULT/image_cache_stall_time':  value => $image_cache_stall_time;
-    'DEFAULT/image_cache_max_size':    value => $image_cache_max_size;
-    'DEFAULT/enabled_import_methods':  value => $enabled_import_methods_real;
-    'DEFAULT/node_staging_uri':        value => $node_staging_uri;
-    'DEFAULT/image_member_quota':      value => $image_member_quota;
-    'DEFAULT/enable_v1_api':           value => $enable_v1_api;
-    'DEFAULT/enable_v2_api':           value => $enable_v2_api;
-    'DEFAULT/limit_param_default':     value => $limit_param_default;
-    'DEFAULT/api_limit_max':           value => $api_limit_max;
-    'glance_store/os_region_name':     value => $os_region_name;
+    'DEFAULT/bind_host':                  value => $bind_host;
+    'DEFAULT/bind_port':                  value => $bind_port;
+    'DEFAULT/backlog':                    value => $backlog;
+    'DEFAULT/workers':                    value => $workers;
+    'DEFAULT/show_image_direct_url':      value => $show_image_direct_url;
+    'DEFAULT/show_multiple_locations':    value => $show_multiple_locations;
+    'DEFAULT/location_strategy':          value => $location_strategy;
+    'DEFAULT/scrub_time':                 value => $scrub_time;
+    'DEFAULT/delayed_delete':             value => $delayed_delete;
+    'DEFAULT/cache_prefetcher_interval':  value => $cache_prefetcher_interval;
+    'DEFAULT/image_cache_dir':            value => $image_cache_dir;
+    'DEFAULT/image_cache_stall_time':     value => $image_cache_stall_time;
+    'DEFAULT/image_cache_max_size':       value => $image_cache_max_size;
+    'DEFAULT/enabled_import_methods':     value => $enabled_import_methods_real;
+    'DEFAULT/node_staging_uri':           value => $node_staging_uri;
+    'DEFAULT/image_member_quota':         value => $image_member_quota;
+    'DEFAULT/enable_v1_api':              value => $enable_v1_api;
+    'DEFAULT/enable_v2_api':              value => $enable_v2_api;
+    'DEFAULT/limit_param_default':        value => $limit_param_default;
+    'DEFAULT/api_limit_max':              value => $api_limit_max;
+    'glance_store/os_region_name':        value => $os_region_name;
   }
 
   # task/taskflow_executor config.
