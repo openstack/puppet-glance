@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Added cache_prefetcher_interval in glance-api.conf,
+    using which the periodic job will run as per the set
+    interval and prefetch images into cache.
