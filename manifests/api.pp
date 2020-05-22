@@ -556,7 +556,6 @@ enabled_backends instead.')
     'DEFAULT/image_cache_dir':        value => $image_cache_dir;
     'DEFAULT/image_cache_stall_time': value => $image_cache_stall_time;
     'DEFAULT/image_cache_max_size':   value => $image_cache_max_size;
-    'glance_store/os_region_name':    value => $os_region_name;
   }
 
   if $image_import_plugins != $::os_service_default {
