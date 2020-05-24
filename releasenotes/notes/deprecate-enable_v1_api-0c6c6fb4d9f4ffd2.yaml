@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``glance::api::enable_v1_api`` parameter has been deprecated and has no
+    effect, infavor of deprecation of Image v1 API.

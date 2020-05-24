@@ -219,13 +219,6 @@
 #   (Optional) Set max request body size
 #   Defaults to $::os_service_default.
 #
-# [*enable_v1_api*]
-#   (Optional) Enable or not Glance API v1.
-#   If you enable this option, you'll get a deprecation warning in Glance
-#   logs.  If enable_v2_api is set to True, glance::registry::enable_v1_registry
-#   must be configured to True, since Registry is required in API v1.
-#   Defaults to false.
-#
 # [*enable_v2_api*]
 #   (Optional) Enable or not Glance API v2.
 #   Defaults to $::os_service_default.
@@ -320,6 +313,13 @@
 #   (optional) Sets the keystone region to use.
 #   Defaults to undef
 #
+# [*enable_v1_api*]
+#   (Optional) Enable or not Glance API v1.
+#   If you enable this option, you'll get a deprecation warning in Glance
+#   logs.  If enable_v2_api is set to True, glance::registry::enable_v1_registry
+#   must be configured to True, since Registry is required in API v1.
+#   Defaults to false.
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -370,7 +370,6 @@ class glance::api(
   $conversion_format                    = $::os_service_default,
   $enable_proxy_headers_parsing         = $::os_service_default,
   $max_request_body_size                = $::os_service_default,
-  $enable_v1_api                        = false,
   $enable_v2_api                        = $::os_service_default,
   $sync_db                              = true,
   $validate                             = false,
@@ -390,6 +389,7 @@ class glance::api(
   $show_multiple_locations              = undef,
   $database_min_pool_size               = undef,
   $os_region_name                       = undef,
+  $enable_v1_api                        = undef,
 ) inherits glance {
 
   include glance::deps
@@ -399,6 +399,10 @@ class glance::api(
   if $os_region_name != undef {
     warning('glance::api::os_region_name is deprecated. Use \
 cinder::backend::multistore::cinder::cinder_os_region_name instead.')
+  }
+
+  if $enable_v1_api != undef {
+    warning('The glance::api::enable_v1_api was deprecated and has no effect.')
   }
 
   if $sync_db {
@@ -439,7 +443,6 @@ cinder::backend::multistore::cinder::cinder_os_region_name instead.')
     'DEFAULT/enabled_import_methods':     value => $enabled_import_methods_real;
     'DEFAULT/node_staging_uri':           value => $node_staging_uri;
     'DEFAULT/image_member_quota':         value => $image_member_quota;
-    'DEFAULT/enable_v1_api':              value => $enable_v1_api;
     'DEFAULT/enable_v2_api':              value => $enable_v2_api;
     'DEFAULT/limit_param_default':        value => $limit_param_default;
     'DEFAULT/api_limit_max':              value => $api_limit_max;
