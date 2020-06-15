@@ -70,6 +70,12 @@
 #   new images. String value.
 #   Default to 'ref1'.
 #
+# [*swift_buffer_on_upload*]
+#   Optional. Default: $::os_service_default.
+#
+# [*swift_upload_buffer_dir*]
+#   Optional. Default: $::os_service_default.
+#
 # [*store_description*]
 #   (optional) Provides constructive information about the store backend to
 #   end users.
@@ -90,6 +96,8 @@ define glance::backend::multistore::swift(
   $swift_store_region                  = $::os_service_default,
   $swift_store_config_file             = $::os_service_default,
   $default_swift_reference             = 'ref1',
+  $swift_buffer_on_upload              = $::os_service_default,
+  $swift_upload_buffer_dir             = $::os_service_default,
   $store_description                   = $::os_service_default,
 ) {
 
@@ -108,6 +116,8 @@ define glance::backend::multistore::swift(
     "${name}/swift_store_endpoint_type":           value => $swift_store_endpoint_type;
     "${name}/swift_store_config_file":             value => $swift_store_config_file;
     "${name}/default_swift_reference":             value => $default_swift_reference;
+    "${name}/swift_buffer_on_upload":              value => $swift_buffer_on_upload;
+    "${name}/swift_upload_buffer_dir":             value => $swift_upload_buffer_dir;
     "${name}/store_description":                   value => $store_description;
   }
 
