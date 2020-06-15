@@ -1,0 +1,7 @@
+---
+features:
+  - Add new options
+    glance::backend::multibackend::swift::swift_buffer_on_upload and
+    glance::backend::multibackend::swift::swift_upload_buffer_dir
+    Indicate whether or not Glance should buffer image data to disk while
+    uploading to swift. This enables Glance to resume uploads on error.
