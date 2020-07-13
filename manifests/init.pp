@@ -24,5 +24,5 @@ class glance(
     }
   }
 
-  include '::openstacklib::openstackclient'
+  include openstacklib::openstackclient
 }
