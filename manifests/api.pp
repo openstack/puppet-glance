@@ -204,10 +204,6 @@
 #   (Optional) Set max request body size
 #   Defaults to $::os_service_default.
 #
-# [*enable_v2_api*]
-#   (Optional) Enable or not Glance API v2.
-#   Defaults to $::os_service_default.
-#
 # [*sync_db*]
 #   (Optional) Run db sync on the node.
 #   Defaults to true
@@ -291,7 +287,11 @@
 #   If you enable this option, you'll get a deprecation warning in Glance
 #   logs.  If enable_v2_api is set to True, glance::registry::enable_v1_registry
 #   must be configured to True, since Registry is required in API v1.
-#   Defaults to false.
+#   Defaults to undef
+#
+# [*enable_v2_api*]
+#   (Optional) Enable or not Glance API v2.
+#   Defaults to undef
 #
 # [*registry_client_cert_file*]
 #   (optional) The path to the cert file to use in SSL connections to the
@@ -355,7 +355,6 @@ class glance::api(
   $conversion_format                    = $::os_service_default,
   $enable_proxy_headers_parsing         = $::os_service_default,
   $max_request_body_size                = $::os_service_default,
-  $enable_v2_api                        = $::os_service_default,
   $sync_db                              = true,
   $validate                             = false,
   $validation_options                   = {},
@@ -372,6 +371,7 @@ class glance::api(
   $database_min_pool_size               = undef,
   $os_region_name                       = undef,
   $enable_v1_api                        = undef,
+  $enable_v2_api                        = undef,
   $registry_client_cert_file            = undef,
   $registry_client_key_file             = undef,
   $registry_client_ca_file              = undef,
@@ -399,7 +399,11 @@ cinder::backend::multistore::cinder::cinder_os_region_name instead.')
   }
 
   if $enable_v1_api != undef {
-    warning('The glance::api::enable_v1_api was deprecated and has no effect.')
+    warning('The glance::api::enable_v1_api parameter was deprecated and has no effect.')
+  }
+
+  if $enable_v2_api != undef {
+    warning('The glance::api::enable_v2_api parameter was deprecated and has no effect.')
   }
 
   if $sync_db {
@@ -439,7 +443,6 @@ cinder::backend::multistore::cinder::cinder_os_region_name instead.')
     'DEFAULT/enabled_import_methods':     value => $enabled_import_methods_real;
     'DEFAULT/node_staging_uri':           value => $node_staging_uri;
     'DEFAULT/image_member_quota':         value => $image_member_quota;
-    'DEFAULT/enable_v2_api':              value => $enable_v2_api;
     'DEFAULT/limit_param_default':        value => $limit_param_default;
     'DEFAULT/api_limit_max':              value => $api_limit_max;
   }

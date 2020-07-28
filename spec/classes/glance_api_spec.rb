@@ -41,7 +41,6 @@ describe 'glance::api' do
       :taskflow_engine_mode           => '<SERVICE DEFAULT>',
       :taskflow_max_workers           => '<SERVICE DEFAULT>',
       :conversion_format              => '<SERVICE DEFAULT>',
-      :enable_v2_api                  => '<SERVICE DEFAULT>',
       :sync_db                        => true,
       :limit_param_default            => '<SERVICE DEFAULT>',
       :api_limit_max                  => '<SERVICE DEFAULT>',
@@ -129,7 +128,6 @@ describe 'glance::api' do
             'cache_prefetcher_interval',
             'node_staging_uri',
             'image_member_quota',
-            'enable_v2_api',
             'limit_param_default',
             'api_limit_max',
           ].each do |config|
