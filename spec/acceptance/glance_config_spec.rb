@@ -9,7 +9,6 @@ describe 'basic glance config resource' do
       Exec { logoutput => 'on_failure' }
 
       File <||> -> Glance_api_config <||>
-      File <||> -> Glance_registry_config <||>
       File <||> -> Glance_cache_config <||>
       File <||> -> Glance_image_import_config <||>
 
@@ -17,9 +16,6 @@ describe 'basic glance config resource' do
         ensure => directory,
       }
       file { '/etc/glance/glance-api.conf' :
-        ensure => file,
-      }
-      file { '/etc/glance/glance-registry.conf' :
         ensure => file,
       }
       file { '/etc/glance/glance-cache.conf' :
@@ -43,24 +39,6 @@ describe 'basic glance config resource' do
       }
 
       glance_api_config { 'DEFAULT/thisshouldnotexist2' :
-        value             => 'toto',
-        ensure_absent_val => 'toto',
-      }
-
-      glance_registry_config { 'DEFAULT/thisshouldexist' :
-        value => 'foo',
-      }
-
-      glance_registry_config { 'DEFAULT/thisshouldnotexist' :
-        value => '<SERVICE DEFAULT>',
-      }
-
-      glance_registry_config { 'DEFAULT/thisshouldexist2' :
-        value             => '<SERVICE DEFAULT>',
-        ensure_absent_val => 'toto',
-      }
-
-      glance_registry_config { 'DEFAULT/thisshouldnotexist2' :
         value             => 'toto',
         ensure_absent_val => 'toto',
       }
@@ -110,17 +88,6 @@ describe 'basic glance config resource' do
     end
 
     describe file('/etc/glance/glance-api.conf') do
-      it { is_expected.to exist }
-      it { is_expected.to contain('thisshouldexist=foo') }
-      it { is_expected.to contain('thisshouldexist2=<SERVICE DEFAULT>') }
-
-      describe '#content' do
-        subject { super().content }
-        it { is_expected.not_to match /thisshouldnotexist/ }
-      end
-    end
-
-    describe file('/etc/glance/glance-registry.conf') do
       it { is_expected.to exist }
       it { is_expected.to contain('thisshouldexist=foo') }
       it { is_expected.to contain('thisshouldexist2=<SERVICE DEFAULT>') }

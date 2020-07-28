@@ -1,0 +1,23 @@
+---
+upgrade:
+  - |
+    The ``glance::registry`` class and its subsequent classes have been removed.
+    This means that support for glance-registry service has been removed.
+
+deprecations:
+  - |
+    The following parameters have been deprecated and has no effect now, in
+    favor of removal of support for glance registry service.
+
+    - ``glance::api::registry_client_cert_file``
+    - ``glance::api::registry_client_key_file``
+    - ``glance::api::registry_client_ca_file``
+    - ``glance::config::registry_config``
+    - ``glance::config::registry_paste_ini_config``
+
+  - |
+    The following resource types have been deprecated and will be removed in a
+    future release.
+
+    - ``glance_registry_config``
+    - ``glance_registry_paste_ini``

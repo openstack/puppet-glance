@@ -12,17 +12,15 @@ class glance::params {
 
   case $::osfamily {
     'RedHat': {
-      $api_package_name      = 'openstack-glance'
-      $registry_package_name = 'openstack-glance'
+      $package_name          = 'openstack-glance'
+      $api_package_name      = undef
       $api_service_name      = 'openstack-glance-api'
-      $registry_service_name = 'openstack-glance-registry'
       $pyceph_package_name   = "python${pyvers}-rbd"
     }
     'Debian': {
+      $package_name          = undef
       $api_package_name      = 'glance-api'
-      $registry_package_name = 'glance-registry'
       $api_service_name      = 'glance-api'
-      $registry_service_name = 'glance-registry'
       if $::os_package_type == 'debian' {
         $pyceph_package_name = "python${pyvers}-ceph"
       } else {

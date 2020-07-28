@@ -132,7 +132,7 @@ class glance::notify::rabbitmq(
 
   include glance::deps
 
-  oslo::messaging::rabbit { ['glance_api_config', 'glance_registry_config']:
+  oslo::messaging::rabbit { 'glance_api_config':
     rabbit_ha_queues            => $rabbit_ha_queues,
     heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate              => $rabbit_heartbeat_rate,
@@ -148,23 +148,19 @@ class glance::notify::rabbitmq(
     kombu_compression           => $kombu_compression,
   }
 
-  oslo::messaging::default { ['glance_api_config', 'glance_registry_config']:
+  oslo::messaging::default { 'glance_api_config':
     transport_url        => $default_transport_url,
     rpc_response_timeout => $rpc_response_timeout,
     control_exchange     => $control_exchange,
   }
 
-  oslo::messaging::notifications { ['glance_api_config', 'glance_registry_config']:
+  oslo::messaging::notifications { 'glance_api_config':
     driver        => $notification_driver,
     transport_url => $notification_transport_url,
     topics        => $rabbit_notification_topic,
   }
 
   glance_api_config {
-    'oslo_messaging_rabbit/default_notification_exchange': value => $rabbit_notification_exchange;
-  }
-
-  glance_registry_config {
     'oslo_messaging_rabbit/default_notification_exchange': value => $rabbit_notification_exchange;
   }
 }

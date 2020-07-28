@@ -30,25 +30,6 @@ describe 'glance::config' do
     end
   end
 
-  shared_examples_for 'glance_registry_config' do
-    let :params do
-      { :registry_config => config_hash,
-        :registry_paste_ini_config => config_hash }
-    end
-
-    it 'configures arbitrary glance-registry configurations' do
-      is_expected.to contain_glance_registry_config('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_glance_registry_config('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_glance_registry_config('DEFAULT/baz').with_ensure('absent')
-    end
-
-    it 'configures arbitrary glance-registry-paste configurations' do
-      is_expected.to contain_glance_registry_paste_ini('DEFAULT/foo').with_value('fooValue')
-      is_expected.to contain_glance_registry_paste_ini('DEFAULT/bar').with_value('barValue')
-      is_expected.to contain_glance_registry_paste_ini('DEFAULT/baz').with_ensure('absent')
-    end
-  end
-
   shared_examples_for 'glance_cache_config' do
     let :params do
       { :cache_config => config_hash }
@@ -82,7 +63,6 @@ describe 'glance::config' do
       end
 
       it_configures 'glance_api_config'
-      it_configures 'glance_registry_config'
       it_configures 'glance_cache_config'
       it_configures 'glance_image_import_config'
     end

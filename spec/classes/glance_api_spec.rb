@@ -53,9 +53,6 @@ describe 'glance::api' do
     [{
         :bind_host                      => '127.0.0.1',
         :bind_port                      => '9222',
-        :registry_host                  => '127.0.0.1',
-        :registry_port                  => '9111',
-        :registry_client_protocol       => 'https',
         :auth_strategy                  => 'not_keystone',
         :enabled                        => false,
         :backlog                        => '4095',
@@ -121,9 +118,6 @@ describe 'glance::api' do
           [
             'bind_host',
             'bind_port',
-            'registry_host',
-            'registry_port',
-            'registry_client_protocol',
             'show_image_direct_url',
             'show_multiple_locations',
             'location_strategy',
@@ -164,8 +158,6 @@ describe 'glance::api' do
 
         it 'is_expected.to lay down default cache config' do
           [
-            'registry_host',
-            'registry_port',
             'image_cache_dir',
             'image_cache_stall_time',
             'image_cache_max_size',
@@ -196,9 +188,6 @@ describe 'glance::api' do
           is_expected.to contain_glance_api_config('DEFAULT/ca_file').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_glance_api_config('DEFAULT/cert_file').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_glance_api_config('DEFAULT/key_file').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_glance_api_config('DEFAULT/registry_client_ca_file').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_glance_api_config('DEFAULT/registry_client_cert_file').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_glance_api_config('DEFAULT/registry_client_key_file').with_value('<SERVICE DEFAULT>')
         end
 
         it 'passes purge to resource' do
@@ -292,9 +281,6 @@ describe 'glance::api' do
           :ca_file                   => '/tmp/ca_file',
           :cert_file                 => '/tmp/cert_file',
           :key_file                  => '/tmp/key_file',
-          :registry_client_ca_file   => '/tmp/registry_ca_file',
-          :registry_client_key_file  => '/tmp/registry_key_file',
-          :registry_client_cert_file => '/tmp/registry_cert_file',
         })
       end
 
@@ -302,9 +288,6 @@ describe 'glance::api' do
         it { is_expected.to contain_glance_api_config('DEFAULT/ca_file').with_value('/tmp/ca_file') }
         it { is_expected.to contain_glance_api_config('DEFAULT/cert_file').with_value('/tmp/cert_file') }
         it { is_expected.to contain_glance_api_config('DEFAULT/key_file').with_value('/tmp/key_file') }
-        it { is_expected.to contain_glance_api_config('DEFAULT/registry_client_ca_file').with_value('/tmp/registry_ca_file') }
-        it { is_expected.to contain_glance_api_config('DEFAULT/registry_client_key_file').with_value('/tmp/registry_key_file') }
-        it { is_expected.to contain_glance_api_config('DEFAULT/registry_client_cert_file').with_value('/tmp/registry_cert_file') }
       end
     end
 

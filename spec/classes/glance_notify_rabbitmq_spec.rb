@@ -17,21 +17,6 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
-
-      it { is_expected.to contain_glance_registry_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/default_notification_exchange').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
     end
 
     describe 'when passing params and use ssl' do
@@ -45,13 +30,6 @@ describe 'glance::notify::rabbitmq' do
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_durable_queues').with_value(true) }
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('5.0') }
         it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('shuffle') }
-
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/rabbit_durable_queues').with_value(true) }
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('5.0') }
-        it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('shuffle') }
-        it { is_expected.to contain_oslo__messaging__rabbit('glance_registry_config').with(
-          :rabbit_use_ssl => true,
-        )}
       end
     end
 
@@ -99,11 +77,6 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_oslo__messaging__rabbit('glance_api_config').with(
         :rabbit_use_ssl => true,
       )}
-
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
-      it { is_expected.to contain_oslo__messaging__rabbit('glance_registry_config').with(
-        :rabbit_use_ssl => true,
-      )}
     end
 
     describe 'when setting rabbit_ha_queues' do
@@ -127,10 +100,6 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value(true) }
-
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
-      it { is_expected.to contain_glance_registry_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value(true) }
     end
 
     describe 'when passing params transport_url' do
@@ -144,9 +113,6 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_api_config('DEFAULT/transport_url').with_value('rabbit://user:pass@host:1234/virt') }
       it { is_expected.to contain_glance_api_config('DEFAULT/rpc_response_timeout').with_value('120') }
       it { is_expected.to contain_glance_api_config('DEFAULT/control_exchange').with_value('glance') }
-      it { is_expected.to contain_glance_registry_config('DEFAULT/transport_url').with_value('rabbit://user:pass@host:1234/virt') }
-      it { is_expected.to contain_glance_registry_config('DEFAULT/rpc_response_timeout').with_value('120') }
-      it { is_expected.to contain_glance_registry_config('DEFAULT/control_exchange').with_value('glance') }
     end
 
   end

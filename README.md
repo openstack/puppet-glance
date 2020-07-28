@@ -57,20 +57,10 @@ class { 'glance::api::authtoken':
   auth_uri => 'http://172.17.0.3:5000',
 }
 
-class { 'glance::registry::authtoken':
-  password => '12345',
-  auth_url => 'http://172.17.0.3:5000',
-  auth_uri => 'http://172.17.0.3:5000',
-}
-
 class { 'glance::api':
   database_connection => 'mysql+pymysql://glance:12345@127.0.0.1/glance',
   stores              => ['file', 'http'],
   default_store       => 'file',
-}
-
-class { 'glance::registry':
-  database_connection => 'mysql+pymysql://glance:12345@127.0.0.1/glance',
 }
 
 class { 'glance::backend::file': }
@@ -157,7 +147,7 @@ Whether to hide the value from Puppet logs. Defaults to `false`.
 
 If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
 
-#### glance_registry_config
+#### glance_registry_config (DEPRECATED)
 
 The `glance_registry_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/glance/glance-registry.conf` file.
 

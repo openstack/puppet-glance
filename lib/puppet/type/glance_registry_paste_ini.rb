@@ -1,3 +1,4 @@
+# DEPRECATED!
 Puppet::Type.newtype(:glance_registry_paste_ini) do
 
   ensurable

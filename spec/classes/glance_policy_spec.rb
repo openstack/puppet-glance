@@ -25,9 +25,6 @@ describe 'glance::policy' do
       is_expected.to contain_oslo__policy('glance_api_config').with(
         :policy_file => '/etc/glance/policy.json',
       )
-      is_expected.to contain_oslo__policy('glance_registry_config').with(
-        :policy_file => '/etc/glance/policy.json',
-      )
     end
   end
 

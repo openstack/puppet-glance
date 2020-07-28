@@ -139,21 +139,6 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to $::os_service_default
 #
-# [*registry_client_cert_file*]
-#   (optional) The path to the cert file to use in SSL connections to the
-#   registry server.
-#   Defaults to $::os_service_default
-#
-# [*registry_client_key_file*]
-#   (optional) The path to the private key file to use in SSL connections to the
-#   registry server.
-#   Defaults to $::os_service_default
-#
-# [*registry_client_ca_file*]
-#   (optional) The path to the CA certificate file to use in SSL connections to the
-#   registry server.
-#   Defaults to $::os_service_default
-#
 # [*enabled_backends*]
 #   (optional) List of Key:Value pairs of store identifier and store type.
 #   Example: ['swift:swift', 'ceph1:ceph', 'ceph2:ceph']
@@ -288,18 +273,6 @@
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
 #
-# [*registry_host*]
-#   (optional) The address used to connect to the registry service.
-#   Default: undef
-#
-# [*registry_port*]
-#   (optional) The port of the Glance registry service.
-#   Default: undef
-#
-# [*registry_client_protocol*]
-#   (optional) The protocol of the Glance registry service.
-#   Default: undef
-#
 # [*show_multiple_locations*]
 #   (optional) Whether to include the backend image locations in image
 #    properties.
@@ -319,6 +292,21 @@
 #   logs.  If enable_v2_api is set to True, glance::registry::enable_v1_registry
 #   must be configured to True, since Registry is required in API v1.
 #   Defaults to false.
+#
+# [*registry_client_cert_file*]
+#   (optional) The path to the cert file to use in SSL connections to the
+#   registry server.
+#   Defaults to undef
+#
+# [*registry_client_key_file*]
+#   (optional) The path to the private key file to use in SSL connections to the
+#   registry server.
+#   Defaults to undef
+#
+# [*registry_client_ca_file*]
+#   (optional) The path to the CA certificate file to use in SSL connections to the
+#   registry server.
+#   Defaults to undef
 #
 class glance::api(
   $package_ensure                       = 'present',
@@ -340,9 +328,6 @@ class glance::api(
   $cert_file                            = $::os_service_default,
   $key_file                             = $::os_service_default,
   $ca_file                              = $::os_service_default,
-  $registry_client_cert_file            = $::os_service_default,
-  $registry_client_key_file             = $::os_service_default,
-  $registry_client_ca_file              = $::os_service_default,
   $enabled_backends                     = undef,
   $default_backend                      = undef,
   $database_connection                  = undef,
@@ -383,13 +368,13 @@ class glance::api(
   $stores                               = undef,
   $default_store                        = undef,
   $multi_store                          = false,
-  $registry_host                        = undef,
-  $registry_port                        = undef,
-  $registry_client_protocol             = undef,
   $show_multiple_locations              = undef,
   $database_min_pool_size               = undef,
   $os_region_name                       = undef,
   $enable_v1_api                        = undef,
+  $registry_client_cert_file            = undef,
+  $registry_client_key_file             = undef,
+  $registry_client_ca_file              = undef,
 ) inherits glance {
 
   include glance::deps
@@ -401,6 +386,18 @@ class glance::api(
 cinder::backend::multistore::cinder::cinder_os_region_name instead.')
   }
 
+  if $registry_client_cert_file != undef {
+    warning('glance::api::registry_client_cert_file is deprecated and has no effect')
+  }
+
+  if $registry_client_key_file != undef {
+    warning('glance::api::registry_client_key_file is deprecated and has no effect')
+  }
+
+  if $registry_client_ca_file != undef {
+    warning('glance::api::registry_client_ca_file is deprecated and has no effect')
+  }
+
   if $enable_v1_api != undef {
     warning('The glance::api::enable_v1_api was deprecated and has no effect.')
   }
@@ -410,13 +407,12 @@ cinder::backend::multistore::cinder::cinder_os_region_name instead.')
     include glance::db::metadefs
   }
 
-  if ( $glance::params::api_package_name != $glance::params::registry_package_name ) {
-    ensure_packages($glance::params::api_package_name,
-      {
-        ensure => $package_ensure,
-        tag    => ['openstack', 'glance-package'],
-      }
-    )
+  if ( $glance::params::api_package_name != undef ) {
+    package { $::glance::params::api_package_name :
+      ensure => $package_ensure,
+      name   => $::glance::params::api_package_name,
+      tag    => ['openstack', 'glance-package'],
+    }
   }
 
   if $enabled_import_methods != $::os_service_default {
@@ -587,34 +583,6 @@ enabled_backends instead.')
     'inject_metadata_properties/ignore_user_roles': value => $ignore_user_roles_real;
   }
 
-  # configure api service to connect registry service
-  if $registry_host {
-    warning('The registry_host parameter is deprecated, and will be removed in a future release')
-    glance_api_config {
-      'DEFAULT/registry_host': value => $registry_host;
-    }
-    glance_cache_config {
-      'DEFAULT/registry_host': value => $registry_host;
-    }
-  }
-
-  if $registry_port {
-    warning('The registry_port parameter is deprecated, and will be removed in a future release')
-    glance_api_config {
-      'DEFAULT/registry_port': value => $registry_port;
-    }
-    glance_cache_config {
-      'DEFAULT/registry_port': value => $registry_port;
-    }
-  }
-
-  if $registry_client_protocol {
-    warning('The registry_client_protocol parameter is deprecated, and will be removed in a future release')
-    glance_api_config {
-      'DEFAULT/registry_client_protocol': value => $registry_client_protocol;
-    }
-  }
-
   # Set the pipeline, it is allowed to be blank
   if $pipeline != '' {
     validate_legacy(Pattern[/^(\w+([+]\w+)*)*$/], 'validate_re', $pipeline, ['^(\w+([+]\w+)*)*$'])
@@ -640,12 +608,9 @@ enabled_backends instead.')
 
   # SSL Options
   glance_api_config {
-    'DEFAULT/cert_file':                 value => $cert_file;
-    'DEFAULT/key_file' :                 value => $key_file;
-    'DEFAULT/ca_file'  :                 value => $ca_file;
-    'DEFAULT/registry_client_ca_file':   value => $registry_client_ca_file;
-    'DEFAULT/registry_client_cert_file': value => $registry_client_cert_file;
-    'DEFAULT/registry_client_key_file':  value => $registry_client_key_file;
+    'DEFAULT/cert_file': value => $cert_file;
+    'DEFAULT/key_file' : value => $key_file;
+    'DEFAULT/ca_file'  : value => $ca_file;
   }
 
   if $keymgr_backend {
