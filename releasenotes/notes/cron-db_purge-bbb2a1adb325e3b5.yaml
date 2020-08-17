@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The new ``glance::cron::db_purge`` class has been added. This class manages
+    a cron job to run ``glance db purge`` command periodically.
+
+  - |
+    The new ``glance::cron::db_purge_images_table`` class has been added. This
+    class manages a cron job to run ``glance db purge_images_table`` command
+    periodically.
