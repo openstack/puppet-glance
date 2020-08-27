@@ -145,7 +145,7 @@ Puppet::Type.type(:glance_image).provide(
         :disk_format      => attrs[:disk_format],
         :min_disk         => attrs[:min_disk],
         :min_ram          => attrs[:min_ram],
-        :properties       => exclude_readonly_props(properties),
+        :properties       => exclude_owner_specified_props(exclude_readonly_props(properties)),
         :image_tag        => attrs[:image_tag]
       )
     end
@@ -186,6 +186,14 @@ Puppet::Type.type(:glance_image).provide(
     end
     hidden = ['os_hash_algo', 'os_hash_value', 'os_hidden']
     rv = props.select { |k, v| not hidden.include?(k) }
+    return rv
+  end
+
+  def self.exclude_owner_specified_props(props)
+    if props == nil
+      return nil
+    end
+    rv = props.select { |k, v| not k.start_with?('owner_specified.') }
     return rv
   end
 
