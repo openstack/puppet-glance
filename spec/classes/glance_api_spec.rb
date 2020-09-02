@@ -34,6 +34,7 @@ describe 'glance::api' do
       :image_cache_stall_time         => '<SERVICE DEFAULT>',
       :image_cache_max_size           => '<SERVICE DEFAULT>',
       :cache_prefetcher_interval      => '<SERVICE DEFAULT>',
+      :disk_formats                   => '<SERVICE DEFAULT>',
       :pipeline                       => 'keystone',
       :task_time_to_live              => '<SERVICE DEFAULT>',
       :task_executor                  => '<SERVICE DEFAULT>',
@@ -188,6 +189,10 @@ describe 'glance::api' do
           is_expected.to contain_glance_api_config('DEFAULT/key_file').with_value('<SERVICE DEFAULT>')
         end
 
+        it 'is_expected.to have no disk_formats set' do
+          is_expected.to contain_glance_api_config('image_format/disk_formats').with_value('<SERVICE DEFAULT>')
+        end
+
         it 'passes purge to resource' do
           is_expected.to contain_resources('glance_api_config').with({
             :purge => false
@@ -286,6 +291,18 @@ describe 'glance::api' do
         it { is_expected.to contain_glance_api_config('DEFAULT/ca_file').with_value('/tmp/ca_file') }
         it { is_expected.to contain_glance_api_config('DEFAULT/cert_file').with_value('/tmp/cert_file') }
         it { is_expected.to contain_glance_api_config('DEFAULT/key_file').with_value('/tmp/key_file') }
+      end
+    end
+
+    describe 'with disk_formats option' do
+      let :params do
+        default_params.merge({
+          :disk_formats => 'raw,iso',
+        })
+      end
+
+      context 'with disk_formats option' do
+        it { is_expected.to contain_glance_api_config('image_format/disk_formats').with_value('raw,iso') }
       end
     end
 

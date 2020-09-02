@@ -75,6 +75,10 @@
 #   (optional) If set, use this value for max_overflow with sqlalchemy.
 #   Defaults to undef.
 #
+# [*disk_formats*]
+#   (optional) (Array) List of allowed values for an image disk_format attribute.
+#   Defaults to $::os_service_default.
+#
 # [*cache_prefetcher_interval*]
 #   (optional) The interval in seconds to run periodic job 'cache_images'
 #   Defaults to $::os_service_default.
@@ -336,6 +340,7 @@ class glance::api(
   $database_max_retries                 = undef,
   $database_retry_interval              = undef,
   $database_max_overflow                = undef,
+  $disk_formats                         = $::os_service_default,
   $cache_prefetcher_interval            = $::os_service_default,
   $image_cache_max_size                 = $::os_service_default,
   $image_cache_stall_time               = $::os_service_default,
@@ -548,6 +553,16 @@ enabled_backends instead.')
   glance_api_config {
     'glance_store/filesystem_store_metadata_file': value => $filesystem_store_metadata_file;
     'glance_store/filesystem_store_file_perm':     value => $filesystem_store_file_perm;
+  }
+
+  # disk_formats handling
+  if $disk_formats != $::os_service_default {
+    $disk_formats_real = join(any2array($disk_formats), ',')
+  } else {
+    $disk_formats_real = $disk_formats
+  }
+  glance_api_config {
+    'image_format/disk_formats': value => $disk_formats_real;
   }
 
   resources { 'glance_api_config':
