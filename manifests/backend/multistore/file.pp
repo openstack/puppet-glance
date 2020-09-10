@@ -23,21 +23,27 @@
 #   Location where dist images are stored when the backend type is file.
 #   Defaults to $::os_service_default.
 #
+# [*filesystem_thin_provisioning*]
+#   (optional) Boolean describing if thin provisioning is enabled or not
+#   Defaults to $::os_service_default
+#
 # [*store_description*]
 #   (optional) Provides constructive information about the store backend to
 #   end users.
 #   Defaults to $::os_service_default.
 #
 define glance::backend::multistore::file(
-  $filesystem_store_datadir = $::os_service_default,
-  $store_description        = $::os_service_default,
+  $filesystem_store_datadir     = $::os_service_default,
+  $filesystem_thin_provisioning = $::os_service_default,
+  $store_description            = $::os_service_default,
 ) {
 
   include glance::deps
 
   glance_api_config {
-    "${name}/filesystem_store_datadir": value => $filesystem_store_datadir;
-    "${name}/store_description":        value => $store_description;
+    "${name}/filesystem_store_datadir":     value => $filesystem_store_datadir;
+    "${name}/filesystem_thin_provisioning": value => $filesystem_thin_provisioning;
+    "${name}/store_description":            value => $store_description;
   }
 
   glance_cache_config {

@@ -27,6 +27,7 @@ describe 'glance::backend::multistore::rbd' do
       it { should contain_glance_api_config('rbd/rbd_store_pool').with_value('<SERVICE DEFAULT>') }
       it { should contain_glance_api_config('rbd/rbd_store_ceph_conf').with_value('<SERVICE DEFAULT>') }
       it { should contain_glance_api_config('rbd/rbd_store_chunk_size').with_value('<SERVICE DEFAULT>') }
+      it { should contain_glance_api_config('rbd/rbd_thin_provisioning').with_value('<SERVICE DEFAULT>') }
       it { should contain_glance_api_config('rbd/rados_connect_timeout').with_value('<SERVICE DEFAULT>')}
       it { should contain_glance_api_config('rbd/rbd_store_user').with_value('<SERVICE DEFAULT>')}
 
@@ -42,6 +43,7 @@ describe 'glance::backend::multistore::rbd' do
           :store_description     => 'My rbd store',
           :rbd_store_user        => 'user',
           :rbd_store_chunk_size  => '2',
+          :rbd_thin_provisioning => 'true',
           :package_ensure        => 'latest',
           :rados_connect_timeout => '30',
         }
@@ -50,6 +52,7 @@ describe 'glance::backend::multistore::rbd' do
       it { should contain_glance_api_config('rbd/store_description').with_value('My rbd store') }
       it { should contain_glance_api_config('rbd/rbd_store_user').with_value('user') }
       it { should contain_glance_api_config('rbd/rbd_store_chunk_size').with_value('2') }
+      it { should contain_glance_api_config('rbd/rbd_thin_provisioning').with_value('true') }
       it { should contain_glance_api_config('rbd/rados_connect_timeout').with_value('30')}
 
       it { should contain_package('python-ceph').with(

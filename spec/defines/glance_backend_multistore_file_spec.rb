@@ -24,6 +24,7 @@ describe 'glance::backend::multistore::file' do
   shared_examples_for 'glance::backend::multistore::file' do
     it 'configures glance-api.conf' do
       is_expected.to contain_glance_api_config('file/store_description').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_glance_api_config('file/filesystem_thin_provisioning').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_api_config('file/filesystem_store_datadir').with_value('<SERVICE DEFAULT>')
     end
 
@@ -34,11 +35,15 @@ describe 'glance::backend::multistore::file' do
 
     describe 'when overriding datadir' do
       let :params do
-        {:filesystem_store_datadir => '/tmp/'}
+        {
+          :filesystem_store_datadir     => '/tmp/',
+          :filesystem_thin_provisioning => 'true',
+        }
       end
 
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('file/filesystem_store_datadir').with_value('/tmp/')
+        is_expected.to contain_glance_api_config('file/filesystem_thin_provisioning').with_value('true')
       end
 
       it 'configures glance-cache.conf' do

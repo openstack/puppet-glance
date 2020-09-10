@@ -9,13 +9,18 @@
 #    default_store == file.
 #    Optional. Default: /var/lib/glance/images/
 #
-# [*multi_store*]
-#   (optional) Boolean describing if multiple backends will be configured
-#   Defaults to false
+#  [*filesystem_thin_provisioning*]
+#    (optional) Boolean describing if thin provisioning is enabled or not
+#    Defaults to $::os_service_default
+#
+#  [*multi_store*]
+#    (optional) Boolean describing if multiple backends will be configured
+#    Defaults to false
 #
 class glance::backend::file(
-  $filesystem_store_datadir = '/var/lib/glance/images/',
-  $multi_store              = false,
+  $filesystem_store_datadir     = '/var/lib/glance/images/',
+  $filesystem_thin_provisioning = $::os_service_default,
+  $multi_store                  = false,
 ) {
 
   include glance::deps
@@ -23,8 +28,9 @@ class glance::backend::file(
   warning('glance::backend::file is deprecated. Use glance::backend::multistore::file instead.')
 
   glance::backend::multistore::file { 'glance_store':
-    filesystem_store_datadir => $filesystem_store_datadir,
-    store_description        => undef,
+    filesystem_store_datadir     => $filesystem_store_datadir,
+    filesystem_thin_provisioning => $filesystem_thin_provisioning,
+    store_description            => undef,
   }
 
   if !$multi_store {

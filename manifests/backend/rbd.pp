@@ -17,6 +17,10 @@
 #  [*rbd_store_chunk_size*]
 #    Optional. Default: $::os_service_default.
 #
+#  [*rbd_thin_provisioning*]
+#    Optional. Boolean describing if thin provisioning is enabled or not
+#    Defaults to $::os_service_default
+#
 #  [*manage_packages*]
 #    Optional. Whether we should manage the packages.
 #    Defaults to true,
@@ -41,6 +45,7 @@ class glance::backend::rbd(
   $rbd_store_ceph_conf    = $::os_service_default,
   $rbd_store_pool         = $::os_service_default,
   $rbd_store_chunk_size   = $::os_service_default,
+  $rbd_thin_provisioning  = $::os_service_default,
   $manage_packages        = true,
   $package_ensure         = 'present',
   $rados_connect_timeout  = $::os_service_default,
@@ -57,6 +62,7 @@ class glance::backend::rbd(
     rbd_store_user        => $rbd_store_user,
     rbd_store_pool        => $rbd_store_pool,
     rbd_store_chunk_size  => $rbd_store_chunk_size,
+    rbd_thin_provisioning => $rbd_thin_provisioning,
     rados_connect_timeout => $rados_connect_timeout,
     manage_packages       => $manage_packages,
     package_ensure        => $package_ensure,

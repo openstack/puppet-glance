@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Add new configuration option 'rbd_thin_provisioning' and
+    'filesystem_thin_provisioning' to rbd and filesystem
+    backends to enable or not sparse upload, default are False.
