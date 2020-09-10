@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    Added disk_formats option which allows configuration of
+    the image_format/disk_formats config setting; some backends
+    perform poorly with specific disk formats, for example
+    Ceph with QCOW2 images and in these scenarios it might
+    be useful to filter out of the allowed disk formats those
+    which are unwanted.
