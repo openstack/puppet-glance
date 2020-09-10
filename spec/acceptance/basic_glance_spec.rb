@@ -32,10 +32,10 @@ describe 'glance class' do
     describe 'glance images' do
       it 'should create a glance image with proper attributes' do
         glance_env_opts = '--os-identity-api-version 3 --os-username glance --os-password a_big_secret --os-project-name services --os-user-domain-name Default --os-project-domain-name Default --os-auth-url http://127.0.0.1:5000/v3'
-        shell("openstack #{glance_env_opts} image list") do |r|
+        command("openstack #{glance_env_opts} image list") do |r|
           expect(r.stdout).to match(/test_image/)
         end
-        shell("openstack #{glance_env_opts} image show test_image --format shell") do |r|
+        command("openstack #{glance_env_opts} image show test_image --format shell") do |r|
           expect(r.stdout).to match(/visibility="public"/)
           expect(r.stdout).to match(/container_format="bare"/)
           expect(r.stdout).to match(/disk_format="qcow2"/)
