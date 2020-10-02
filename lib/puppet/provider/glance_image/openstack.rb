@@ -38,18 +38,9 @@ Puppet::Type.type(:glance_image).provide(
         location = "--file=#{@resource[:source]}"
       else
         temp_file = Tempfile.new('puppet-glance-image')
-
-        uri = URI(@resource[:source])
-        Net::HTTP.start(uri.host, uri.port, proxy_host, proxy_port,
-                        :use_ssl => uri.scheme == 'https') do |http|
-          request = Net::HTTP::Get.new uri
-          http.request request do |response|
-            open temp_file.path, 'w' do |io|
-              response.read_body do |segment|
-                io.write(segment)
-              end
-            end
-          end
+        response = fetch(@resource[:source], proxy_host, proxy_port)
+        open temp_file.path, 'w' do |io|
+            io.write(response.read_body)
         end
 
         location = "--file=#{temp_file.path}"
@@ -219,6 +210,27 @@ Puppet::Type.type(:glance_image).provide(
     else
       # Pre-4.0.0 output, key=value
       return self.string2hash(input)
+    end
+  end
+
+  def fetch(uri_str, proxy_host = nil, proxy_port = nil, limit = 10)
+    raise RuntimeError, 'Too many HTTP redirections' if limit == 0
+
+    uri = URI(uri_str)
+    Net::HTTP.start(uri.host, uri.port, proxy_host, proxy_port,
+                    :use_ssl => uri.scheme == 'https') do |http|
+      request = Net::HTTP::Get.new uri
+      http.request request do |response|
+        case response
+        when Net::HTTPSuccess then
+          response
+        when Net::HTTPRedirection then
+          location = response['location']
+          return fetch(location, proxy_host, proxy_port, limit - 1)
+        else
+          response.value
+        end
+      end
     end
   end
 end
