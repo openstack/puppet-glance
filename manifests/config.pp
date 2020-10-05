@@ -2,9 +2,7 @@
 #
 # This class is used to manage arbitrary glance configurations.
 #
-# === Parameters
-#
-# [*xxx_config*]
+# example xxx_config
 #   (optional) Allow configuration of arbitrary glance configurations.
 #   The value is an hash of glance_config resources. Example:
 #   { 'DEFAULT/foo' => { value => 'fooValue'},
@@ -16,6 +14,8 @@
 #       value: fooValue
 #     DEFAULT/bar:
 #       value: barValue
+#
+# === Parameters
 #
 # [*api_config*]
 #   (optional) Allow configuration of glance-api.conf configurations.
