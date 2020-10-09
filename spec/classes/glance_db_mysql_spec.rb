@@ -13,6 +13,8 @@ describe 'glance::db::mysql' do
         }
       end
 
+      it { is_expected.to contain_class('glance::deps') }
+
       it { is_expected.to contain_openstacklib__db__mysql('glance').with(
         :password => 'glancepass1',
         :charset  => 'utf8',
