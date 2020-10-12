@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``glance::api::container_formats`` parameter has been added to
+    configure supported values for the container_format image attribute.
