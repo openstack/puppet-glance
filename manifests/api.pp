@@ -581,24 +581,11 @@ enabled_backends instead.')
     $image_import_plugins_real = $image_import_plugins
   }
 
-  if $inject_metadata_properties != $::os_service_default {
-    $inject_metadata_properties_real = join(any2array($inject_metadata_properties), ',')
-  } else {
-    $inject_metadata_properties_real = $inject_metadata_properties
-  }
-
-
-  if $ignore_user_roles != $::os_service_default {
-    $ignore_user_roles_real = join(any2array($ignore_user_roles), ',')
-  } else {
-    $ignore_user_roles_real = $ignore_user_roles
-  }
-
   glance_image_import_config {
     'image_import_opts/image_import_plugins':       value => $image_import_plugins_real;
     'image_conversion/output_format':               value => $image_conversion_output_format;
-    'inject_metadata_properties/inject':            value => $inject_metadata_properties_real;
-    'inject_metadata_properties/ignore_user_roles': value => $ignore_user_roles_real;
+    'inject_metadata_properties/inject':            value => $inject_metadata_properties;
+    'inject_metadata_properties/ignore_user_roles': value => $ignore_user_roles;
   }
 
   # Set the pipeline, it is allowed to be blank
