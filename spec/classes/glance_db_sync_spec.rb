@@ -4,6 +4,8 @@ describe 'glance::db::sync' do
 
   shared_examples_for 'glance-dbsync' do
 
+    it { is_expected.to contain_class('glance::deps') }
+
     it 'runs glance-manage db_sync' do
       is_expected.to contain_exec('glance-manage db_sync').with(
         :command     => 'glance-manage  db_sync',
