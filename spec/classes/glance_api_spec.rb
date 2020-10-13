@@ -189,7 +189,8 @@ describe 'glance::api' do
           is_expected.to contain_glance_api_config('DEFAULT/key_file').with_value('<SERVICE DEFAULT>')
         end
 
-        it 'is_expected.to have no disk_formats set' do
+        it 'is_expected.to have no formats set' do
+          is_expected.to contain_glance_api_config('image_format/container_formats').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_glance_api_config('image_format/disk_formats').with_value('<SERVICE DEFAULT>')
         end
 
@@ -294,14 +295,30 @@ describe 'glance::api' do
       end
     end
 
-    describe 'with disk_formats option' do
+    describe 'with formats options with strings' do
       let :params do
         default_params.merge({
-          :disk_formats => 'raw,iso',
+          :container_formats => 'ami,ari',
+          :disk_formats      => 'raw,iso',
         })
       end
 
       context 'with disk_formats option' do
+        it { is_expected.to contain_glance_api_config('image_format/container_formats').with_value('ami,ari') }
+        it { is_expected.to contain_glance_api_config('image_format/disk_formats').with_value('raw,iso') }
+      end
+    end
+
+    describe 'with formats options with arrays' do
+      let :params do
+        default_params.merge({
+          :container_formats => ['ami', 'ari'],
+          :disk_formats      => ['raw', 'iso'],
+        })
+      end
+
+      context 'with disk_formats option' do
+        it { is_expected.to contain_glance_api_config('image_format/container_formats').with_value('ami,ari') }
         it { is_expected.to contain_glance_api_config('image_format/disk_formats').with_value('raw,iso') }
       end
     end
