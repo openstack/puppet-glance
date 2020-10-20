@@ -50,31 +50,6 @@
 #   (optional) Whether to enable services.
 #   Defaults to true.
 #
-# [*database_connection*]
-#   (optional) Connection url to connect to glance database.
-#   Defaults to undef
-#
-# [*database_idle_timeout*]
-#   (optional) Timeout before idle db connections are reaped.
-#   Defaults to undef
-#
-# [*database_max_retries*]
-#   (Optional) Maximum number of database connection retries during startup.
-#   Set to -1 to specify an infinite retry count.
-#   Defaults to undef.
-#
-# [*database_retry_interval*]
-#   (optional) Interval between retries of opening a database connection.
-#   Defaults to undef.
-#
-# [*database_max_pool_size*]
-#   (optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
-# [*database_max_overflow*]
-#   (optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to undef.
-#
 # [*container_formats*]
 #   (optional) List of allowed values for an image container_format attributes
 #   Defaults to $::os_service_default.
@@ -316,6 +291,31 @@
 #   registry server.
 #   Defaults to undef
 #
+# [*database_connection*]
+#   (optional) Connection url to connect to glance database.
+#   Defaults to undef
+#
+# [*database_idle_timeout*]
+#   (optional) Timeout before idle db connections are reaped.
+#   Defaults to undef
+#
+# [*database_max_retries*]
+#   (Optional) Maximum number of database connection retries during startup.
+#   Set to -1 to specify an infinite retry count.
+#   Defaults to undef.
+#
+# [*database_retry_interval*]
+#   (optional) Interval between retries of opening a database connection.
+#   Defaults to undef.
+#
+# [*database_max_pool_size*]
+#   (optional) Maximum number of SQL connections to keep open in a pool.
+#   Defaults to undef.
+#
+# [*database_max_overflow*]
+#   (optional) If set, use this value for max_overflow with sqlalchemy.
+#   Defaults to undef.
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -338,12 +338,6 @@ class glance::api(
   $ca_file                              = $::os_service_default,
   $enabled_backends                     = undef,
   $default_backend                      = undef,
-  $database_connection                  = undef,
-  $database_idle_timeout                = undef,
-  $database_max_pool_size               = undef,
-  $database_max_retries                 = undef,
-  $database_retry_interval              = undef,
-  $database_max_overflow                = undef,
   $container_formats                    = $::os_service_default,
   $disk_formats                         = $::os_service_default,
   $cache_prefetcher_interval            = $::os_service_default,
@@ -385,6 +379,12 @@ class glance::api(
   $registry_client_cert_file            = undef,
   $registry_client_key_file             = undef,
   $registry_client_ca_file              = undef,
+  $database_connection                  = undef,
+  $database_idle_timeout                = undef,
+  $database_max_pool_size               = undef,
+  $database_max_retries                 = undef,
+  $database_retry_interval              = undef,
+  $database_max_overflow                = undef,
 ) inherits glance {
 
   include glance::deps
@@ -414,6 +414,37 @@ cinder::backend::multistore::cinder::cinder_os_region_name instead.')
 
   if $enable_v2_api != undef {
     warning('The glance::api::enable_v2_api parameter was deprecated and has no effect.')
+  }
+
+  if $database_connection != undef {
+    warning('The database_connection parameter is deprecated and will be \
+removed in a future realse. Use glance::api::db::database_connection instead')
+  }
+
+  if $database_idle_timeout != undef {
+    warning('The database_idle_timeout parameter is deprecated and will be \
+removed in a future realse. Use glance::api::db::database_connection_recycle_time \
+instead')
+  }
+
+  if $database_max_pool_size != undef {
+    warning('The database_max_pool_size parameter is deprecated and will be \
+removed in a future realse. Use glance::api::db::database_max_pool_size instead')
+  }
+
+  if $database_max_retries!= undef {
+    warning('The database_max_retries parameter is deprecated and will be \
+removed in a future realse. Use glance::api::db::database_max_retries instead')
+  }
+
+  if $database_retry_interval != undef {
+    warning('The database_retry_interval parameter is deprecated and will be \
+removed in a future realse. Use glance::api::db::database_retry_interval instead')
+  }
+
+  if $database_max_overflow != undef {
+    warning('The database_max_overflow parameter is deprecated and will be \
+removed in a future realse. Use glance::api::db::database_max_overflow instead')
   }
 
   if $sync_db {

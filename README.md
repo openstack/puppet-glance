@@ -56,8 +56,11 @@ class { 'glance::api::authtoken':
   auth_uri => 'http://172.17.0.3:5000',
 }
 
-class { 'glance::api':
+class { 'glance::api::db':
   database_connection => 'mysql+pymysql://glance:12345@127.0.0.1/glance',
+}
+
+class { 'glance::api':
   stores              => ['file', 'http'],
   default_store       => 'file',
 }

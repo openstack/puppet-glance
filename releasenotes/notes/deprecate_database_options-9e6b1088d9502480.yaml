@@ -1,0 +1,12 @@
+---
+deprecations:
+  - |
+    The following options have been deprecated, as those options have been
+    moved to glance::api::db class.
+
+    - ``glance::api::database_connection``
+    - ``glance::api::database_idle_timeout``
+    - ``glance::api::database_max_overflow``
+    - ``glance::api::database_max_pool_size``
+    - ``glance::api::database_max_retries``
+    - ``glance::api::database_retry_interval``
