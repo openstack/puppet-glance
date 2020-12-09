@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Add 'cinder_volume_type' configuration parameter to allow cinder
+    stores to specify a volume type for each cinder store.

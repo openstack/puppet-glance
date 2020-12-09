@@ -65,6 +65,10 @@
 #   (optional) Sets the keystone region to use.
 #   Defaults to 'RegionOne'.
 #
+# [*cinder_volume_type*]
+#   (Optional) The volume type to be used to create image volumes in cinder.
+#   Defaults to $::os_service_default.
+#
 # [*cinder_enforce_multipath*]
 #   (optional) Enforce multipath usage when attaching a cinder volume
 #   Defaults to $::os_service_default.
@@ -89,6 +93,7 @@ define glance::backend::multistore::cinder(
   $cinder_store_user_name      = $::os_service_default,
   $cinder_store_password       = $::os_service_default,
   $cinder_os_region_name       = 'RegionOne',
+  $cinder_volume_type          = $::os_service_default,
   $cinder_enforce_multipath    = $::os_service_default,
   $cinder_use_multipath        = $::os_service_default,
   $store_description           = $::os_service_default,
@@ -110,6 +115,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
     "${name}/cinder_store_password":       value => $cinder_store_password;
     "${name}/cinder_os_region_name":       value => $cinder_os_region_name_real;
+    "${name}/cinder_volume_type":          value => $cinder_volume_type;
     "${name}/cinder_enforce_multipath":    value => $cinder_enforce_multipath;
     "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
     "${name}/store_description":           value => $store_description;
@@ -125,6 +131,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
     "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
     "${name}/cinder_os_region_name":       value => $cinder_os_region_name_real;
+    "${name}/cinder_volume_type":          value => $cinder_volume_type;
     "${name}/cinder_enforce_multipath":    value => $cinder_enforce_multipath;
     "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
     "${name}/cinder_store_password":       value => $cinder_store_password;
