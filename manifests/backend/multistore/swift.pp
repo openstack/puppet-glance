@@ -62,7 +62,7 @@
 #   Optional. Default: $::os_service_default.
 #
 # [*swift_store_config_file*]
-#   Optional. Default: $::os_service_default.
+#   Optional. Default: '/etc/glance/glance-swift.conf'
 #
 # [*default_swift_reference*]
 #   Optional. The reference to the default swift
@@ -88,7 +88,7 @@ define glance::backend::multistore::swift(
   $swift_store_create_container_on_put = $::os_service_default,
   $swift_store_endpoint_type           = 'internalURL',
   $swift_store_region                  = $::os_service_default,
-  $swift_store_config_file             = $::os_service_default,
+  $swift_store_config_file             = '/etc/glance/glance-swift.conf',
   $default_swift_reference             = 'ref1',
   $store_description                   = $::os_service_default,
 ) {
