@@ -108,7 +108,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_auth_address":   value => $cinder_store_auth_address;
     "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
     "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
-    "${name}/cinder_store_password":       value => $cinder_store_password;
+    "${name}/cinder_store_password":       value => $cinder_store_password, secret => true;
     "${name}/cinder_os_region_name":       value => $cinder_os_region_name_real;
     "${name}/cinder_enforce_multipath":    value => $cinder_enforce_multipath;
     "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
@@ -124,10 +124,10 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_auth_address":   value => $cinder_store_auth_address;
     "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
     "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
+    "${name}/cinder_store_password":       value => $cinder_store_password, secret => true;
     "${name}/cinder_os_region_name":       value => $cinder_os_region_name_real;
     "${name}/cinder_enforce_multipath":    value => $cinder_enforce_multipath;
     "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
-    "${name}/cinder_store_password":       value => $cinder_store_password;
   }
 
   create_resources('glance_api_config', {})
