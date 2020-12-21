@@ -91,7 +91,6 @@ class glance::backend::swift(
     swift_store_create_container_on_put => $swift_store_create_container_on_put,
     swift_store_endpoint_type           => $swift_store_endpoint_type,
     swift_store_region                  => $swift_store_region,
-    swift_store_config_file             => '/etc/glance/glance-swift.conf',
     default_swift_reference             => $default_swift_reference,
     store_description                   => undef,
   }
