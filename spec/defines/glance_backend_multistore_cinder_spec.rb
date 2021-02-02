@@ -44,6 +44,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_api_config('cinder/cinder_volume_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_enforce_multipath').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_use_multipath').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('cinder/cinder_mount_point_base').with_value('<SERVICE DEFAULT>')
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('cinder/store_description')
@@ -60,6 +61,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_cache_config('cinder/cinder_volume_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_enforce_multipath').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_use_multipath').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('cinder/cinder_mount_point_base').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -80,6 +82,7 @@ describe 'glance::backend::multistore::cinder' do
           :cinder_volume_type          => 'glance-fast',
           :cinder_enforce_multipath    => true,
           :cinder_use_multipath        => true,
+          :cinder_mount_point_base     => '/var/lib/glance/mnt',
         }
       end
       it 'configures glance-api.conf' do
@@ -97,6 +100,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_api_config('cinder/cinder_volume_type').with_value('glance-fast')
         is_expected.to contain_glance_api_config('cinder/cinder_enforce_multipath').with_value(true)
         is_expected.to contain_glance_api_config('cinder/cinder_use_multipath').with_value(true)
+        is_expected.to contain_glance_api_config('cinder/cinder_mount_point_base').with_value('/var/lib/glance/mnt')
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('cinder/store_description')
@@ -113,6 +117,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_cache_config('cinder/cinder_volume_type').with_value('glance-fast')
         is_expected.to contain_glance_cache_config('cinder/cinder_enforce_multipath').with_value(true)
         is_expected.to contain_glance_cache_config('cinder/cinder_use_multipath').with_value(true)
+        is_expected.to contain_glance_cache_config('cinder/cinder_mount_point_base').with_value('/var/lib/glance/mnt')
       end
     end
   end
