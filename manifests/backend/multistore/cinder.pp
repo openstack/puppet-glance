@@ -73,6 +73,11 @@
 #   (optional) Flag to identify multipath is supported or not in the deployment
 #   Defaults to $::os_service_default.
 #
+# [*cinder_mount_point_base*]
+#   (Optional) When glance uses cinder as store and cinder backend is NFS, the mount point
+#    would be required to be set with this parameter.
+#   Defaults to $::os_service_default.
+#
 # [*store_description*]
 #   (optional) Provides constructive information about the store backend to
 #   end users.
@@ -91,6 +96,7 @@ define glance::backend::multistore::cinder(
   $cinder_os_region_name       = 'RegionOne',
   $cinder_enforce_multipath    = $::os_service_default,
   $cinder_use_multipath        = $::os_service_default,
+  $cinder_mount_point_base     = $::os_service_default,
   $store_description           = $::os_service_default,
 ) {
 
@@ -112,6 +118,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_os_region_name":       value => $cinder_os_region_name_real;
     "${name}/cinder_enforce_multipath":    value => $cinder_enforce_multipath;
     "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
+    "${name}/cinder_mount_point_base":     value => $cinder_mount_point_base;
     "${name}/store_description":           value => $store_description;
   }
 
@@ -127,6 +134,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_password":       value => $cinder_store_password, secret => true;
     "${name}/cinder_os_region_name":       value => $cinder_os_region_name_real;
     "${name}/cinder_enforce_multipath":    value => $cinder_enforce_multipath;
+    "${name}/cinder_mount_point_base":     value => $cinder_mount_point_base;
     "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
   }
 
