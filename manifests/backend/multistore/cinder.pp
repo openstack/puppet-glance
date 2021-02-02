@@ -66,6 +66,11 @@
 #   (optional) A valid password for the user specified by `cinder_store_user_name'
 #   Defaults to $::os_service_default.
 #
+# [*cinder_mount_point_base*]
+#   (Optional) When glance uses cinder as store and cinder backend is NFS, the mount point
+#    would be required to be set with this parameter.
+#   Defaults to $::os_service_default.
+#
 # [*store_description*]
 #   (optional) Provides constructive information about the store backend to
 #   end users.
@@ -81,6 +86,7 @@ define glance::backend::multistore::cinder(
   $cinder_store_project_name   = $::os_service_default,
   $cinder_store_user_name      = $::os_service_default,
   $cinder_store_password       = $::os_service_default,
+  $cinder_mount_point_base     = $::os_service_default,
   $store_description           = $::os_service_default,
 ) {
 
@@ -96,6 +102,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
     "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
     "${name}/cinder_store_password":       value => $cinder_store_password;
+    "${name}/cinder_mount_point_base":     value => $cinder_mount_point_base;
     "${name}/store_description":           value => $store_description;
   }
 
@@ -108,6 +115,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_auth_address":   value => $cinder_store_auth_address;
     "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
     "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
+    "${name}/cinder_mount_point_base":     value => $cinder_mount_point_base;
     "${name}/cinder_store_password":       value => $cinder_store_password;
   }
 

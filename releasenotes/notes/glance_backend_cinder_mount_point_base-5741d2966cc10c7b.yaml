@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    A new parameter ``cinder_mount_point_base`` is introduced into
+    ``glance::backend::multistore::cinder`` class, so that operators
+    can provide the cinder mount point for NFS volumes.
