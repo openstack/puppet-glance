@@ -41,8 +41,6 @@ class glance::deps {
   Anchor['glance::config::begin'] -> Glance_api_paste_ini<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_cache_config<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_image_import_config<||> ~> Anchor['glance::config::end']
-  Anchor['glance::config::begin'] -> Glance_registry_config<||> ~> Anchor['glance::config::end']
-  Anchor['glance::config::begin'] -> Glance_registry_paste_ini<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_swift_config<||> ~> Anchor['glance::config::end']
 
   # Support packages need to be installed in the install phase, but we don't

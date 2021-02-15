@@ -265,32 +265,6 @@
 #   (optional) Sets the keystone region to use.
 #   Defaults to undef
 #
-# [*enable_v1_api*]
-#   (Optional) Enable or not Glance API v1.
-#   If you enable this option, you'll get a deprecation warning in Glance
-#   logs.  If enable_v2_api is set to True, glance::registry::enable_v1_registry
-#   must be configured to True, since Registry is required in API v1.
-#   Defaults to undef
-#
-# [*enable_v2_api*]
-#   (Optional) Enable or not Glance API v2.
-#   Defaults to undef
-#
-# [*registry_client_cert_file*]
-#   (optional) The path to the cert file to use in SSL connections to the
-#   registry server.
-#   Defaults to undef
-#
-# [*registry_client_key_file*]
-#   (optional) The path to the private key file to use in SSL connections to the
-#   registry server.
-#   Defaults to undef
-#
-# [*registry_client_ca_file*]
-#   (optional) The path to the CA certificate file to use in SSL connections to the
-#   registry server.
-#   Defaults to undef
-#
 # [*database_connection*]
 #   (optional) Connection url to connect to glance database.
 #   Defaults to undef
@@ -374,11 +348,6 @@ class glance::api(
   $show_multiple_locations              = undef,
   $database_min_pool_size               = undef,
   $os_region_name                       = undef,
-  $enable_v1_api                        = undef,
-  $enable_v2_api                        = undef,
-  $registry_client_cert_file            = undef,
-  $registry_client_key_file             = undef,
-  $registry_client_ca_file              = undef,
   $database_connection                  = undef,
   $database_idle_timeout                = undef,
   $database_max_pool_size               = undef,
@@ -394,26 +363,6 @@ class glance::api(
   if $os_region_name != undef {
     warning('glance::api::os_region_name is deprecated. Use \
 cinder::backend::multistore::cinder::cinder_os_region_name instead.')
-  }
-
-  if $registry_client_cert_file != undef {
-    warning('glance::api::registry_client_cert_file is deprecated and has no effect')
-  }
-
-  if $registry_client_key_file != undef {
-    warning('glance::api::registry_client_key_file is deprecated and has no effect')
-  }
-
-  if $registry_client_ca_file != undef {
-    warning('glance::api::registry_client_ca_file is deprecated and has no effect')
-  }
-
-  if $enable_v1_api != undef {
-    warning('The glance::api::enable_v1_api parameter was deprecated and has no effect.')
-  }
-
-  if $enable_v2_api != undef {
-    warning('The glance::api::enable_v2_api parameter was deprecated and has no effect.')
   }
 
   if $database_connection != undef {

@@ -1,0 +1,23 @@
+---
+upgrade:
+  - |
+    The following parameters have been removed from the ``glance::api`` class.
+
+    - ``enable_v1_api``
+    - ``enable_v2_api``
+    - ``registry_client_cert_file``
+    - ``registry_client_key_file``
+    - ``registry_client_ca_file``
+
+  - |
+    The following parameters have been removed from the ``glance::config``
+    class.
+
+    - ``registry_config``
+    - ``registry_paste_ini_config``
+
+  - |
+    The following resource types have been removed.
+
+    - ``glance_registry_config``
+    - ``glance_registry_paste_ini``
