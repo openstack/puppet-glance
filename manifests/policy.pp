@@ -4,6 +4,10 @@
 #
 # === Parameters
 #
+# [*enforce_scope*]
+#  (Optional) Whether or not to enforce scope when evaluating policies.
+#  Defaults to $::os_service_default.
+#
 # [*policies*]
 #   (Optional) Set of policies to configure for glance
 #   Example :
@@ -24,8 +28,9 @@
 #   Defaults to /etc/glance/policy.yaml
 #
 class glance::policy (
-  $policies    = {},
-  $policy_path = '/etc/glance/policy.yaml',
+  $enforce_scope = $::os_service_default,
+  $policies      = {},
+  $policy_path   = '/etc/glance/policy.yaml',
 ) {
 
   include glance::deps
@@ -38,12 +43,13 @@ class glance::policy (
     file_user   => 'root',
     file_group  => $::glance::params::group,
     file_format => 'yaml',
-    require     => Anchor['glance::config::begin'],
-    notify      => Anchor['glance::config::end'],
   }
 
   create_resources('openstacklib::policy::base', $policies)
 
-  oslo::policy { 'glance_api_config': policy_file => $policy_path }
+  oslo::policy { 'glance_api_config':
+    enforce_scope => $enforce_scope,
+    policy_file   => $policy_path
+  }
 
 }

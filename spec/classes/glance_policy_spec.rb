@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe 'glance::policy' do
-
-  shared_examples_for 'glance policies' do
+  shared_examples 'glance::policy' do
     let :params do
       {
-        :policy_path => '/etc/glance/policy.yaml',
-        :policies    => {
+        :enforce_scope => false,
+        :policy_path   => '/etc/glance/policy.yaml',
+        :policies      => {
           'context_is_admin' => {
             'key'   => 'context_is_admin',
             'value' => 'foo:bar'
@@ -24,20 +24,21 @@ describe 'glance::policy' do
         :file_format => 'yaml',
       })
       is_expected.to contain_oslo__policy('glance_api_config').with(
-        :policy_file => '/etc/glance/policy.yaml',
+        :enforce_scope => false,
+        :policy_file   => '/etc/glance/policy.yaml',
       )
     end
   end
 
   on_supported_os({
-    :supported_os   => OSDefaults.get_supported_os
+    :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'glance policies'
+      it_behaves_like 'glance::policy'
     end
   end
 end
