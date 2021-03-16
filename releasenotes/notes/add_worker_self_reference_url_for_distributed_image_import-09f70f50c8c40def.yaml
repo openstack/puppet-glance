@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Add 'worker_self_reference_url' parameter to allow other glance workers
+    to contact the worker which has staged the image.

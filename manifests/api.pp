@@ -146,6 +146,11 @@
 #  stored when image import method is set to 'glance-direct'
 #  Defaults to $::os_service_default.
 #
+# [*worker_self_reference_url*]
+#   (optional) The self-reference URL by which other workers will get to know
+#   how to contact the worker which has staged the image.
+#   Defaults to $::os_service_default.
+#
 # [*image_member_quota*]
 #   (optional) The maximum number of image members allowed per image.
 #    Defaults to $::os_service_default
@@ -350,6 +355,7 @@ class glance::api(
   $image_conversion_output_format       = $::os_service_default,
   $enabled_import_methods               = $::os_service_default,
   $node_staging_uri                     = $::os_service_default,
+  $worker_self_reference_url            = $::os_service_default,
   $image_member_quota                   = $::os_service_default,
   $task_time_to_live                    = $::os_service_default,
   $task_executor                        = $::os_service_default,
@@ -483,6 +489,7 @@ removed in a future realse. Use glance::api::db::database_max_overflow instead')
     'DEFAULT/image_cache_max_size':       value => $image_cache_max_size;
     'DEFAULT/enabled_import_methods':     value => $enabled_import_methods_real;
     'DEFAULT/node_staging_uri':           value => $node_staging_uri;
+    'DEFAULT/worker_self_reference_url':  value => $worker_self_reference_url;
     'DEFAULT/image_member_quota':         value => $image_member_quota;
     'DEFAULT/limit_param_default':        value => $limit_param_default;
     'DEFAULT/api_limit_max':              value => $api_limit_max;
