@@ -4,9 +4,10 @@ describe 'glance::policy' do
   shared_examples 'glance::policy' do
     let :params do
       {
-        :enforce_scope => false,
-        :policy_path   => '/etc/glance/policy.yaml',
-        :policies      => {
+        :enforce_scope        => false,
+        :enforce_new_defaults => false,
+        :policy_path          => '/etc/glance/policy.yaml',
+        :policies             => {
           'context_is_admin' => {
             'key'   => 'context_is_admin',
             'value' => 'foo:bar'
@@ -24,8 +25,9 @@ describe 'glance::policy' do
         :file_format => 'yaml',
       })
       is_expected.to contain_oslo__policy('glance_api_config').with(
-        :enforce_scope => false,
-        :policy_file   => '/etc/glance/policy.yaml',
+        :enforce_scope        => false,
+        :enforce_new_defaults => false,
+        :policy_file          => '/etc/glance/policy.yaml',
       )
     end
   end
