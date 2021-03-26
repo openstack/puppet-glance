@@ -29,14 +29,6 @@
 # [*image_import_config*]
 #   (optional) Allow configuration of glance-image-import.conf configurations.
 #
-# DEPRECATED PARAMETERS
-#
-# [*registry_config*]
-#   (optional) Allow configuration of glance-registry.conf configurations.
-#
-# [*registry_paste_ini_config*]
-#   (optional) Allow configuration of glance-registry-paste.ini configurations.
-#
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
@@ -45,20 +37,9 @@ class glance::config (
   $api_paste_ini_config       = {},
   $cache_config               = {},
   $image_import_config        = {},
-  # DEPRECATED PARAMETERS
-  $registry_config            = undef,
-  $registry_paste_ini_config  = undef,
 ) {
 
   include glance::deps
-
-  if $registry_config != undef {
-    warning('glance::config::registry_config is deprecated and has no effect')
-  }
-
-  if $registry_paste_ini_config != undef {
-    warning('glance::config::registry_paste_ini_config is deprecated and has no effect')
-  }
 
   validate_legacy(Hash, 'validate_hash', $api_config)
   validate_legacy(Hash, 'validate_hash', $api_paste_ini_config)

@@ -149,34 +149,6 @@ Whether to hide the value from Puppet logs. Defaults to `false`.
 
 If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
 
-#### glance_registry_config (DEPRECATED)
-
-The `glance_registry_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/glance/glance-registry.conf` file.
-
-```puppet
-glance_registry_config { 'DEFAULT/workers' :
-  value => 1,
-}
-```
-
-This will write `workers=1` in the `[DEFAULT]` section.
-
-##### name
-
-Section/setting name to manage from `glance-registry.conf`
-
-##### value
-
-The value of the setting to be defined.
-
-##### secret
-
-Whether to hide the value from Puppet logs. Defaults to `false`.
-
-##### ensure_absent_val
-
-If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
-
 #### glance_cache_config
 
 The `glance_cache_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/glance/glance-cache.conf` file.
