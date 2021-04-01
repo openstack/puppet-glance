@@ -32,11 +32,16 @@
 #   (Optional) Path to the glance policy.yaml file
 #   Defaults to /etc/glance/policy.yaml
 #
+# [*policy_dirs*]
+#   (Optional) Path to the glance policy folder
+#   Defaults to $::os_service_default
+#
 class glance::policy (
   $enforce_scope        = $::os_service_default,
   $enforce_new_defaults = $::os_service_default,
   $policies             = {},
   $policy_path          = '/etc/glance/policy.yaml',
+  $policy_dirs          = $::os_service_default,
 ) {
 
   include glance::deps
@@ -56,7 +61,8 @@ class glance::policy (
   oslo::policy { 'glance_api_config':
     enforce_scope        => $enforce_scope,
     enforce_new_defaults => $enforce_new_defaults,
-    policy_file          => $policy_path
+    policy_file          => $policy_path,
+    policy_dirs          => $policy_dirs,
   }
 
 }
