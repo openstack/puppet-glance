@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``glance::backend::multistore::http`` class has been added to support
+    http backend with glance multistore.
