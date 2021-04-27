@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Add ``enforce_secure_rbac`` parameter to enable enforcing authorization
+    based on common RBAC personas.
