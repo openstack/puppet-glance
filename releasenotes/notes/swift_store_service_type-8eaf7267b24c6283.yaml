@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``swift_store_service_type`` parameter has been added to
+    the ``glance::backend::multistore::swift`` resource type.
