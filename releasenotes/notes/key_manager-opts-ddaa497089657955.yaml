@@ -1,0 +1,21 @@
+---
+features:
+  - |
+    The new ``glance::key_manager`` class has been added. This class manages
+    basic options of key managers.
+
+  - |
+    The new ``glance::key_manager::barbican`` class has been added. This class
+    manages options of BarbicanKeyManager.
+
+deprecations:
+  - |
+    The ``glance::api::keymgr_backend`` parameter has been deprecated. Use
+    the ``glance::key_manager`` class.
+
+  - |
+    The following parameters of the ``glance::api`` class have been deprecated
+    in favor of the new ``glance::key_manager::barbican`` class.
+
+    - ``keymgr_encryption_api_url``
+    - ``keymgr_encryption_auth_url``

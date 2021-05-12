@@ -229,21 +229,6 @@
 #   (optional) Maximum number of results that could be returned by a request
 #   Default: $::os_service_default.
 #
-# [*keymgr_backend*]
-#   (optional) Key Manager service class.
-#   Example of valid value: castellan.key_manager.barbican_key_manager.BarbicanKeyManager
-#   Defaults to undef.
-#
-# [*keymgr_encryption_api_url*]
-#   (optional) Key Manager service URL
-#   Example of valid value: https://localhost:9311/v1
-#   Defaults to undef
-#
-# [*keymgr_encryption_auth_url*]
-#   (optional) Auth URL for keymgr authentication. Should be in format
-#   http://auth_url:5000/v3
-#   Defaults to undef
-#
 # DEPRECATED PARAMETERS
 #
 # [*stores*]
@@ -299,6 +284,21 @@
 #   (optional) If set, use this value for max_overflow with sqlalchemy.
 #   Defaults to undef.
 #
+# [*keymgr_backend*]
+#   (optional) Key Manager service class.
+#   Example of valid value: castellan.key_manager.barbican_key_manager.BarbicanKeyManager
+#   Defaults to undef
+#
+# [*keymgr_encryption_api_url*]
+#   (optional) Key Manager service URL
+#   Example of valid value: https://localhost:9311/v1
+#   Defaults to undef
+#
+# [*keymgr_encryption_auth_url*]
+#   (optional) Auth URL for keymgr authentication. Should be in format
+#   http://auth_url:5000/v3
+#   Defaults to undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -349,9 +349,6 @@ class glance::api(
   $validation_options                   = {},
   $limit_param_default                  = $::os_service_default,
   $api_limit_max                        = $::os_service_default,
-  $keymgr_backend                       = undef,
-  $keymgr_encryption_api_url            = undef,
-  $keymgr_encryption_auth_url           = undef,
   # DEPRECATED PARAMETERS
   $stores                               = undef,
   $default_store                        = undef,
@@ -365,6 +362,9 @@ class glance::api(
   $database_max_retries                 = undef,
   $database_retry_interval              = undef,
   $database_max_overflow                = undef,
+  $keymgr_backend                       = undef,
+  $keymgr_encryption_api_url            = undef,
+  $keymgr_encryption_auth_url           = undef,
 ) inherits glance {
 
   include glance::deps
@@ -611,12 +611,16 @@ enabled_backends instead.')
     'DEFAULT/ca_file'  : value => $ca_file;
   }
 
-  if $keymgr_backend {
-    glance_api_config {
-      'key_manager/backend':        value => $keymgr_backend;
-      'barbican/barbican_endpoint': value => $keymgr_encryption_api_url;
-      'barbican/auth_endpoint':     value => $keymgr_encryption_auth_url;
+  if $keymgr_backend != undef {
+    warning('The keymgr_backend parameter is deprecated. Use the glance::key_manager class')
+    include glance::key_manager
+  }
+
+  ['keymgr_encryption_api_url', 'keymgr_encryption_auth_url'].each |String $barbican_opt| {
+    if getvar("${barbican_opt}") != undef {
+      warning("The ${barbican_opt} parameter is deprecated. Use the glance::key_manager::barbican class")
     }
+    include glance::key_manager::barbican
   }
 
   if $manage_service {
