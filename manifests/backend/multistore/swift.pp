@@ -56,16 +56,22 @@
 #   Optional. Default: $::os_service_default.
 #
 # [*swift_store_endpoint_type*]
-#   Optional. Default: 'internalURL'
+#   Optional. Endpoint type of Swift service.
+#   Default: 'internalURL'
+#
+# [*swift_store_service_type*]
+#   Optional. Type of the swift service to use.
+#   Default: $::os_service_default.
 #
 # [*swift_store_region*]
-#   Optional. Default: $::os_service_default.
+#   Optional. The region of Swift endpoint to use by Glance.
+#   Default: $::os_service_default.
 #
 # [*default_swift_reference*]
 #   Optional. The reference to the default swift
 #   account/backing store parameters to use for adding
 #   new images. String value.
-#   Default to 'ref1'.
+#   Default: 'ref1'.
 #
 # [*swift_buffer_on_upload*]
 #   Optional. Default: $::os_service_default.
@@ -95,6 +101,7 @@ define glance::backend::multistore::swift(
   $swift_store_large_object_chunk_size = $::os_service_default,
   $swift_store_create_container_on_put = $::os_service_default,
   $swift_store_endpoint_type           = 'internalURL',
+  $swift_store_service_type            = $::os_service_default,
   $swift_store_region                  = $::os_service_default,
   $default_swift_reference             = 'ref1',
   $swift_buffer_on_upload              = $::os_service_default,
@@ -124,6 +131,7 @@ define glance::backend::multistore::swift(
     "${name}/swift_store_large_object_size":       value => $swift_store_large_object_size;
     "${name}/swift_store_large_object_chunk_size": value => $swift_store_large_object_chunk_size;
     "${name}/swift_store_endpoint_type":           value => $swift_store_endpoint_type;
+    "${name}/swift_store_service_type":            value => $swift_store_service_type;
     "${name}/swift_store_config_file":             value => $swift_store_config_file_real;
     "${name}/default_swift_reference":             value => $default_swift_reference;
     "${name}/swift_buffer_on_upload":              value => $swift_buffer_on_upload;
