@@ -89,15 +89,7 @@ describe 'glance::backend::multistore::rbd' do
             { :pyceph_package_name => 'python3-rbd' }
           end
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :pyceph_package_name => 'python3-rbd' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :pyceph_package_name => 'python3-rbd' }
-            else
-              { :pyceph_package_name => 'python-rbd' }
-            end
-          end
+          { :pyceph_package_name => 'python3-rbd' }
         end
       end
 

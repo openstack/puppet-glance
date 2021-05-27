@@ -26,15 +26,7 @@ describe 'glance::client' do
         when 'Debian'
           { :client_package_name => 'python3-glanceclient' }
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :client_package_name => 'python3-glanceclient' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :client_package_name => 'python3-glanceclient' }
-            else
-              { :client_package_name => 'python-glanceclient' }
-            end
-          end
+          { :client_package_name => 'python3-glanceclient' }
         end
       end
 
