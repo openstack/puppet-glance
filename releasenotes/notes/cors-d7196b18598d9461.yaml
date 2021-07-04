@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``glance::cors`` class has been added.
