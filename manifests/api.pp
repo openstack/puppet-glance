@@ -398,7 +398,7 @@ class glance::api(
 
   if $os_region_name != undef {
     warning('glance::api::os_region_name is deprecated. Use \
-cinder::backend::multistore::cinder::cinder_os_region_name instead.')
+glance::backend::multistore::cinder::cinder_os_region_name instead.')
   }
 
   if $sync_db {
