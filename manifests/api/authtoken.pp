@@ -187,6 +187,10 @@
 #  "public", "internal" or "admin".
 #  Defaults to $::os_service_default.
 #
+# [*params*]
+#  (Optional) Hash of additional parameters to pass through to the keystone
+#  authtoken class. Values set here override the individual parameters above.
+#
 class glance::api::authtoken(
   $username                       = 'glance',
   $password                       = $::os_service_default,
@@ -224,6 +228,7 @@ class glance::api::authtoken(
   $service_token_roles_required   = $::os_service_default,
   $service_type                   = $::os_service_default,
   $interface                      = $::os_service_default,
+  $params                         = {}
 ) {
 
   include glance::deps
@@ -232,7 +237,10 @@ class glance::api::authtoken(
     fail('Please set password for Glance service user')
   }
 
-  keystone::resource::authtoken { 'glance_api_config':
+  keystone::resource::authtoken {
+    'glance_api_config':
+      *                              => $params;
+    default:
       username                       => $username,
       password                       => $password,
       project_name                   => $project_name,
@@ -268,6 +276,6 @@ class glance::api::authtoken(
       service_token_roles            => $service_token_roles,
       service_token_roles_required   => $service_token_roles_required,
       service_type                   => $service_type,
-      interface                      => $interface,
+      interface                      => $interface;
     }
 }
