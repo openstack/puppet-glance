@@ -15,7 +15,7 @@
 
 - job:
     name: puppet-glance-tripleo-standalone
-    parent: tripleo-puppet-ci-centos-7-standalone
+    parent: tripleo-puppet-ci-centos-8-standalone
     description: |
       TripleO standalone Job running Glance specific Tempest tests.
     vars:
