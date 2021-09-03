@@ -147,7 +147,4 @@ define glance::backend::multistore::swift(
     "${default_swift_reference}/user_domain_id":    value => $swift_store_auth_user_domain_id;
     "${default_swift_reference}/project_domain_id": value => $swift_store_auth_project_domain_id;
   }
-
-  create_resources('glance_api_config', {})
-  create_resources('glance_swift_config', {})
 }

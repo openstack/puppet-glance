@@ -88,6 +88,4 @@ define glance::backend::multistore::rbd(
       tag    => 'glance-support-package',
     })
   }
-
-  create_resources('glance_api_config', {})
 }

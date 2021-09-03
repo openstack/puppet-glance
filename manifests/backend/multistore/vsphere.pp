@@ -104,6 +104,4 @@ define glance::backend::multistore::vsphere(
     "${name}/vmware_datastores":         value => $vmware_datastores;
     "${name}/store_description":         value => $store_description;
   }
-
-  create_resources('glance_api_config', {})
 }

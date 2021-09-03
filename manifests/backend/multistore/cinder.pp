@@ -144,7 +144,4 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_mount_point_base":     value => $cinder_mount_point_base;
     "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
   }
-
-  create_resources('glance_api_config', {})
-  create_resources('glance_cache_config', {})
 }
