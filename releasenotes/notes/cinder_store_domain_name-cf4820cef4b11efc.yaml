@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following two parameters have been added to
+    the ``cinder::backend::multistore::cinder`` resource type.
+
+    - ``cinder_store_user_domain_name``
+    - ``cinder_store_project_domain_name``

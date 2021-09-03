@@ -61,6 +61,14 @@
 #   (optional) A valid password for the user specified by `cinder_store_user_name'
 #   Defaults to $::os_service_default.
 #
+# [*cinder_store_user_domain_name*]
+#   (optional) Domain of the user to authenticate against cinder.
+#   Defaults to $::os_service_default.
+#
+# [*cinder_store_project_domain_name*]
+#   (optional) Domain of the project to authenticate against cinder.
+#   Defaults to $::os_service_default.
+#
 # [*cinder_os_region_name*]
 #   (optional) Sets the keystone region to use.
 #   Defaults to 'RegionOne'.
@@ -88,21 +96,23 @@
 #   Defaults to $::os_service_default.
 #
 define glance::backend::multistore::cinder(
-  $cinder_ca_certificates_file = $::os_service_default,
-  $cinder_api_insecure         = $::os_service_default,
-  $cinder_catalog_info         = $::os_service_default,
-  $cinder_endpoint_template    = $::os_service_default,
-  $cinder_http_retries         = $::os_service_default,
-  $cinder_store_auth_address   = $::os_service_default,
-  $cinder_store_project_name   = $::os_service_default,
-  $cinder_store_user_name      = $::os_service_default,
-  $cinder_store_password       = $::os_service_default,
-  $cinder_os_region_name       = 'RegionOne',
-  $cinder_volume_type          = $::os_service_default,
-  $cinder_enforce_multipath    = $::os_service_default,
-  $cinder_use_multipath        = $::os_service_default,
-  $cinder_mount_point_base     = $::os_service_default,
-  $store_description           = $::os_service_default,
+  $cinder_ca_certificates_file      = $::os_service_default,
+  $cinder_api_insecure              = $::os_service_default,
+  $cinder_catalog_info              = $::os_service_default,
+  $cinder_endpoint_template         = $::os_service_default,
+  $cinder_http_retries              = $::os_service_default,
+  $cinder_store_auth_address        = $::os_service_default,
+  $cinder_store_project_name        = $::os_service_default,
+  $cinder_store_user_name           = $::os_service_default,
+  $cinder_store_password            = $::os_service_default,
+  $cinder_store_user_domain_name    = $::os_service_default,
+  $cinder_store_project_domain_name = $::os_service_default,
+  $cinder_os_region_name            = 'RegionOne',
+  $cinder_volume_type               = $::os_service_default,
+  $cinder_enforce_multipath         = $::os_service_default,
+  $cinder_use_multipath             = $::os_service_default,
+  $cinder_mount_point_base          = $::os_service_default,
+  $store_description                = $::os_service_default,
 ) {
 
   include glance::deps
@@ -111,38 +121,42 @@ define glance::backend::multistore::cinder(
   $cinder_os_region_name_real = pick($::glance::api::os_region_name, $cinder_os_region_name)
 
   glance_api_config {
-    "${name}/cinder_api_insecure":         value => $cinder_api_insecure;
-    "${name}/cinder_catalog_info":         value => $cinder_catalog_info;
-    "${name}/cinder_http_retries":         value => $cinder_http_retries;
-    "${name}/cinder_endpoint_template":    value => $cinder_endpoint_template;
-    "${name}/cinder_ca_certificates_file": value => $cinder_ca_certificates_file;
-    "${name}/cinder_store_auth_address":   value => $cinder_store_auth_address;
-    "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
-    "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
-    "${name}/cinder_store_password":       value => $cinder_store_password, secret => true;
-    "${name}/cinder_os_region_name":       value => $cinder_os_region_name_real;
-    "${name}/cinder_volume_type":          value => $cinder_volume_type;
-    "${name}/cinder_enforce_multipath":    value => $cinder_enforce_multipath;
-    "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
-    "${name}/cinder_mount_point_base":     value => $cinder_mount_point_base;
-    "${name}/store_description":           value => $store_description;
+    "${name}/cinder_api_insecure":              value => $cinder_api_insecure;
+    "${name}/cinder_catalog_info":              value => $cinder_catalog_info;
+    "${name}/cinder_http_retries":              value => $cinder_http_retries;
+    "${name}/cinder_endpoint_template":         value => $cinder_endpoint_template;
+    "${name}/cinder_ca_certificates_file":      value => $cinder_ca_certificates_file;
+    "${name}/cinder_store_auth_address":        value => $cinder_store_auth_address;
+    "${name}/cinder_store_project_name":        value => $cinder_store_project_name;
+    "${name}/cinder_store_user_name":           value => $cinder_store_user_name;
+    "${name}/cinder_store_password":            value => $cinder_store_password, secret => true;
+    "${name}/cinder_store_user_domain_name":    value => $cinder_store_user_domain_name;
+    "${name}/cinder_store_project_domain_name": value => $cinder_store_project_domain_name;
+    "${name}/cinder_os_region_name":            value => $cinder_os_region_name_real;
+    "${name}/cinder_volume_type":               value => $cinder_volume_type;
+    "${name}/cinder_enforce_multipath":         value => $cinder_enforce_multipath;
+    "${name}/cinder_use_multipath":             value => $cinder_use_multipath;
+    "${name}/cinder_mount_point_base":          value => $cinder_mount_point_base;
+    "${name}/store_description":                value => $store_description;
   }
 
   glance_cache_config {
-    "${name}/cinder_api_insecure":         value => $cinder_api_insecure;
-    "${name}/cinder_catalog_info":         value => $cinder_catalog_info;
-    "${name}/cinder_http_retries":         value => $cinder_http_retries;
-    "${name}/cinder_endpoint_template":    value => $cinder_endpoint_template;
-    "${name}/cinder_ca_certificates_file": value => $cinder_ca_certificates_file;
-    "${name}/cinder_store_auth_address":   value => $cinder_store_auth_address;
-    "${name}/cinder_store_project_name":   value => $cinder_store_project_name;
-    "${name}/cinder_store_user_name":      value => $cinder_store_user_name;
-    "${name}/cinder_store_password":       value => $cinder_store_password, secret => true;
-    "${name}/cinder_os_region_name":       value => $cinder_os_region_name_real;
-    "${name}/cinder_volume_type":          value => $cinder_volume_type;
-    "${name}/cinder_enforce_multipath":    value => $cinder_enforce_multipath;
-    "${name}/cinder_mount_point_base":     value => $cinder_mount_point_base;
-    "${name}/cinder_use_multipath":        value => $cinder_use_multipath;
+    "${name}/cinder_api_insecure":              value => $cinder_api_insecure;
+    "${name}/cinder_catalog_info":              value => $cinder_catalog_info;
+    "${name}/cinder_http_retries":              value => $cinder_http_retries;
+    "${name}/cinder_endpoint_template":         value => $cinder_endpoint_template;
+    "${name}/cinder_ca_certificates_file":      value => $cinder_ca_certificates_file;
+    "${name}/cinder_store_auth_address":        value => $cinder_store_auth_address;
+    "${name}/cinder_store_project_name":        value => $cinder_store_project_name;
+    "${name}/cinder_store_user_name":           value => $cinder_store_user_name;
+    "${name}/cinder_store_password":            value => $cinder_store_password, secret => true;
+    "${name}/cinder_store_project_domain_name": value => $cinder_store_project_domain_name;
+    "${name}/cinder_store_user_domain_name":    value => $cinder_store_user_domain_name;
+    "${name}/cinder_os_region_name":            value => $cinder_os_region_name_real;
+    "${name}/cinder_volume_type":               value => $cinder_volume_type;
+    "${name}/cinder_enforce_multipath":         value => $cinder_enforce_multipath;
+    "${name}/cinder_mount_point_base":          value => $cinder_mount_point_base;
+    "${name}/cinder_use_multipath":             value => $cinder_use_multipath;
   }
 
   create_resources('glance_api_config', {})

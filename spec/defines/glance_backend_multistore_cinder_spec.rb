@@ -40,6 +40,8 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_api_config('cinder/cinder_store_project_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_store_user_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_store_password').with_value('<SERVICE DEFAULT>').with_secret(true)
+        is_expected.to contain_glance_api_config('cinder/cinder_store_user_domain_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('cinder/cinder_store_project_domain_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_os_region_name').with_value('RegionOne')
         is_expected.to contain_glance_api_config('cinder/cinder_volume_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_enforce_multipath').with_value('<SERVICE DEFAULT>')
@@ -57,6 +59,8 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_cache_config('cinder/cinder_store_project_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_user_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_password').with_value('<SERVICE DEFAULT>').with_secret(true)
+        is_expected.to contain_glance_cache_config('cinder/cinder_store_user_domain_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('cinder/cinder_store_project_domain_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_os_region_name').with_value('RegionOne')
         is_expected.to contain_glance_cache_config('cinder/cinder_volume_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_enforce_multipath').with_value('<SERVICE DEFAULT>')
@@ -68,21 +72,23 @@ describe 'glance::backend::multistore::cinder' do
     context 'when overriding parameters' do
       let :params do
         {
-          :store_description           => 'My cinder store',
-          :cinder_api_insecure         => true,
-          :cinder_ca_certificates_file => '/etc/ssh/ca.crt',
-          :cinder_catalog_info         => 'volume:cinder:internalURL',
-          :cinder_endpoint_template    => 'http://srv-foo:8776/v1/%(project_id)s',
-          :cinder_http_retries         => '10',
-          :cinder_store_auth_address   => '127.0.0.2:8080/v3/',
-          :cinder_store_project_name   => 'services',
-          :cinder_store_user_name      => 'glance',
-          :cinder_store_password       => 'glance',
-          :cinder_os_region_name       => 'RegionTwo',
-          :cinder_volume_type          => 'glance-fast',
-          :cinder_enforce_multipath    => true,
-          :cinder_use_multipath        => true,
-          :cinder_mount_point_base     => '/var/lib/glance/mnt',
+          :store_description                => 'My cinder store',
+          :cinder_api_insecure              => true,
+          :cinder_ca_certificates_file      => '/etc/ssh/ca.crt',
+          :cinder_catalog_info              => 'volume:cinder:internalURL',
+          :cinder_endpoint_template         => 'http://srv-foo:8776/v1/%(project_id)s',
+          :cinder_http_retries              => '10',
+          :cinder_store_auth_address        => '127.0.0.2:8080/v3/',
+          :cinder_store_project_name        => 'services',
+          :cinder_store_user_name           => 'glance',
+          :cinder_store_password            => 'glance',
+          :cinder_store_user_domain_name    => 'Default',
+          :cinder_store_project_domain_name => 'Default',
+          :cinder_os_region_name            => 'RegionTwo',
+          :cinder_volume_type               => 'glance-fast',
+          :cinder_enforce_multipath         => true,
+          :cinder_use_multipath             => true,
+          :cinder_mount_point_base          => '/var/lib/glance/mnt',
         }
       end
       it 'configures glance-api.conf' do
@@ -96,6 +102,8 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_api_config('cinder/cinder_store_project_name').with_value('services')
         is_expected.to contain_glance_api_config('cinder/cinder_store_user_name').with_value('glance')
         is_expected.to contain_glance_api_config('cinder/cinder_store_password').with_value('glance').with_secret(true)
+        is_expected.to contain_glance_api_config('cinder/cinder_store_user_domain_name').with_value('Default')
+        is_expected.to contain_glance_api_config('cinder/cinder_store_project_domain_name').with_value('Default')
         is_expected.to contain_glance_api_config('cinder/cinder_os_region_name').with_value('RegionTwo')
         is_expected.to contain_glance_api_config('cinder/cinder_volume_type').with_value('glance-fast')
         is_expected.to contain_glance_api_config('cinder/cinder_enforce_multipath').with_value(true)
@@ -113,6 +121,8 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_cache_config('cinder/cinder_store_project_name').with_value('services')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_user_name').with_value('glance')
         is_expected.to contain_glance_cache_config('cinder/cinder_store_password').with_value('glance').with_secret(true)
+        is_expected.to contain_glance_cache_config('cinder/cinder_store_user_domain_name').with_value('Default')
+        is_expected.to contain_glance_cache_config('cinder/cinder_store_project_domain_name').with_value('Default')
         is_expected.to contain_glance_cache_config('cinder/cinder_os_region_name').with_value('RegionTwo')
         is_expected.to contain_glance_cache_config('cinder/cinder_volume_type').with_value('glance-fast')
         is_expected.to contain_glance_cache_config('cinder/cinder_enforce_multipath').with_value(true)
