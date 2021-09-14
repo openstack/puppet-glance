@@ -49,7 +49,4 @@ define glance::backend::multistore::file(
   glance_cache_config {
     "${name}/filesystem_store_datadir": value => $filesystem_store_datadir;
   }
-
-  create_resources('glance_api_config', {})
-  create_resources('glance_cache_config', {})
 }
