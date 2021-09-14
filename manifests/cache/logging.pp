@@ -33,6 +33,10 @@
 #    (optional) File where logs should be stored.
 #    Defaults to '/var/log/glance/cache.log'
 #
+# [*watch_log_file*]
+#   (Optional) Uses logging handler designed to watch file system (boolean value).
+#   Defaults to $::os_service_default
+#
 #  [*logging_context_format_string*]
 #    (optional) Format string to use for log messages with context.
 #    Defaults to $::os_service_default.
@@ -100,6 +104,7 @@ class glance::cache::logging(
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/glance',
   $log_file                      = '/var/log/glance/cache.log',
+  $watch_log_file                = $::os_service_default,
   $debug                         = $::os_service_default,
   $logging_context_format_string = $::os_service_default,
   $logging_default_format_string = $::os_service_default,
@@ -123,6 +128,7 @@ class glance::cache::logging(
     use_json                      => $use_json,
     log_dir                       => $log_dir,
     log_file                      => $log_file,
+    watch_log_file                => $watch_log_file,
     syslog_log_facility           => $log_facility,
     logging_context_format_string => $logging_context_format_string,
     logging_default_format_string => $logging_default_format_string,

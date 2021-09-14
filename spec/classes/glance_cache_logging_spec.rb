@@ -29,6 +29,7 @@ describe 'glance::cache::logging' do
      :log_facility                   => 'LOG_FOO',
      :log_dir                        => '/var/log',
      :log_file                       => '/var/tmp/glance_cache_random.log',
+     :watch_log_file                 => true,
      :debug                          => true,
     }
   end
@@ -58,12 +59,13 @@ describe 'glance::cache::logging' do
   shared_examples 'basic default logging settings' do
     it 'configures glance logging settings with default values' do
       is_expected.to contain_oslo__log('glance_cache_config').with(
-        :use_syslog => '<SERVICE DEFAULT>',
-        :use_json   => '<SERVICE DEFAULT>',
-        :use_stderr => '<SERVICE DEFAULT>',
-        :log_dir    => '/var/log/glance',
-        :log_file   => '/var/log/glance/cache.log',
-        :debug      => '<SERVICE DEFAULT>',
+        :use_syslog     => '<SERVICE DEFAULT>',
+        :use_json       => '<SERVICE DEFAULT>',
+        :use_stderr     => '<SERVICE DEFAULT>',
+        :log_dir        => '/var/log/glance',
+        :log_file       => '/var/log/glance/cache.log',
+        :watch_log_file => '<SERVICE DEFAULT>',
+        :debug          => '<SERVICE DEFAULT>',
       )
     end
   end
@@ -77,6 +79,7 @@ describe 'glance::cache::logging' do
         :syslog_log_facility => 'LOG_FOO',
         :log_dir             => '/var/log',
         :log_file            => '/var/tmp/glance_cache_random.log',
+        :watch_log_file      => true,
         :debug               => true,
       )
     end

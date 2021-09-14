@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``glance::api::logging::watch_log_file`` parameter has been added.
+    The new ``glance::cache::logging::watch_log_file`` parameter has been added.
