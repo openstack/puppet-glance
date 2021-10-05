@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    Add ``use_keystone_limits`` parameter to allow Glance to retrieve
+    limits set in keystone for resource consumption and enforce them
+    against API users.
+
+  - |
+    The new ``glance::limit`` class has been added to manage oslo_limit
+    parameters.
