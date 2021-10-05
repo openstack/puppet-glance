@@ -159,6 +159,26 @@
 #   (optional) The maximum number of image members allowed per image.
 #    Defaults to $::os_service_default
 #
+# [*image_property_quota*]
+#   (optional) The maximum number of image properties allowed on an image.
+#    Defaults to $::os_service_default
+#
+# [*image_tag_quota*]
+#   (optional) The maximum number of tags allowed on an image.
+#    Defaults to $::os_service_default
+#
+# [*image_location_quota*]
+#   (optional) The maximum number of locations allowed on an image.
+#    Defaults to $::os_service_default
+#
+# [*image_size_cap*]
+#   (optional) The maximum size of image a user can upload in bytes
+#   Defaults to $::os_service_default
+#
+# [*user_storage_quota*]
+#   (optional) The maximum amount of image storage per tenant.
+#   Defaults to $::os_service_default
+#
 # [*task_time_to_live*]
 #   (optional) Time in hours for which a task lives after.
 #   Defaults to $::os_service_default
@@ -336,6 +356,11 @@ class glance::api(
   $node_staging_uri                     = $::os_service_default,
   $worker_self_reference_url            = $::os_service_default,
   $image_member_quota                   = $::os_service_default,
+  $image_property_quota                 = $::os_service_default,
+  $image_tag_quota                      = $::os_service_default,
+  $image_location_quota                 = $::os_service_default,
+  $image_size_cap                       = $::os_service_default,
+  $user_storage_quota                   = $::os_service_default,
   $task_time_to_live                    = $::os_service_default,
   $task_executor                        = $::os_service_default,
   $task_work_dir                        = $::os_service_default,
@@ -446,6 +471,11 @@ removed in a future realse. Use glance::api::db::database_max_overflow instead')
     'DEFAULT/node_staging_uri':           value => $node_staging_uri;
     'DEFAULT/worker_self_reference_url':  value => $worker_self_reference_url;
     'DEFAULT/image_member_quota':         value => $image_member_quota;
+    'DEFAULT/image_property_quota':       value => $image_property_quota;
+    'DEFAULT/image_tag_quota':            value => $image_tag_quota;
+    'DEFAULT/image_location_quota':       value => $image_location_quota;
+    'DEFAULT/image_size_cap':             value => $image_size_cap;
+    'DEFAULT/user_storage_quota':         value => $user_storage_quota;
     'DEFAULT/limit_param_default':        value => $limit_param_default;
     'DEFAULT/api_limit_max':              value => $api_limit_max;
   }
