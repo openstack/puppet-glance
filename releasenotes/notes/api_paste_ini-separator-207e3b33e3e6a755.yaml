@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``key_val_separator`` attribute has been added to
+    the ``glance_api_paste_ini`` resource type.
