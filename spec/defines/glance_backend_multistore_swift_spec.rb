@@ -52,7 +52,7 @@ describe 'glance::backend::multistore::swift' do
         is_expected.to contain_glance_api_config('swift/swift_upload_buffer_dir').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_swift_config('ref1/key').with_value('key').with_secret(true)
         is_expected.to contain_glance_swift_config('ref1/user').with_value('user')
-        is_expected.to contain_glance_swift_config('ref1/auth_version').with_value('2')
+        is_expected.to contain_glance_swift_config('ref1/auth_version').with_value('3')
         is_expected.to contain_glance_swift_config('ref1/auth_address').with_value('http://127.0.0.1:5000/v3/')
         is_expected.to contain_glance_swift_config('ref1/user_domain_id').with_value('default')
         is_expected.to contain_glance_swift_config('ref1/project_domain_id').with_value('default')
