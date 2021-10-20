@@ -39,7 +39,7 @@
 #   Optional. Default: $::os_service_default.
 #
 # [*swift_store_auth_version*]
-#   Optional. Default: '2'
+#   Optional. Default: '3'
 #
 # [*swift_store_large_object_size*]
 #   Optional. What size, in MB, should Glance start chunking image files
@@ -94,7 +94,7 @@ define glance::backend::multistore::swift(
   $swift_store_key,
   $swift_store_auth_address            = 'http://127.0.0.1:5000/v3/',
   $swift_store_container               = $::os_service_default,
-  $swift_store_auth_version            = '2',
+  $swift_store_auth_version            = '3',
   $swift_store_auth_project_domain_id  = 'default',
   $swift_store_auth_user_domain_id     = 'default',
   $swift_store_large_object_size       = $::os_service_default,
