@@ -141,7 +141,7 @@ define glance::backend::multistore::swift(
 
   glance_swift_config {
     "${default_swift_reference}/user":              value => $swift_store_user;
-    "${default_swift_reference}/key":               value => $swift_store_key;
+    "${default_swift_reference}/key":               value => $swift_store_key, secret => true;
     "${default_swift_reference}/auth_address":      value => $swift_store_auth_address;
     "${default_swift_reference}/auth_version":      value => $swift_store_auth_version;
     "${default_swift_reference}/user_domain_id":    value => $swift_store_auth_user_domain_id;
