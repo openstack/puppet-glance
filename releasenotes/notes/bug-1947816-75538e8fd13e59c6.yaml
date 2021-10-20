@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    `Bug #1947816 <https://bugs.launchpad.net/puppet-glance/+bug/1947816>`_:
+    Fix the default auth_version for swift backend so that Keystone v3 API is
+    used by default instead of v2 API.
