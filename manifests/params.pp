@@ -20,7 +20,7 @@ class glance::params {
       $package_name          = undef
       $api_package_name      = 'glance-api'
       $api_service_name      = 'glance-api'
-      if $::os_package_type == 'debian' {
+      if $::operatingsystem == 'Debian' {
         $pyceph_package_name = 'python3-ceph'
       } else {
         $pyceph_package_name = 'python3-rbd'
