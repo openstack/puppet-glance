@@ -659,15 +659,15 @@ enabled_backends instead.')
     } else {
       $service_ensure = 'stopped'
     }
-  }
 
-  service { 'glance-api':
-    ensure     => $service_ensure,
-    name       => $::glance::params::api_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    tag        => 'glance-service',
+    service { 'glance-api':
+      ensure     => $service_ensure,
+      name       => $::glance::params::api_service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => 'glance-service',
+    }
   }
 
   if $validate {

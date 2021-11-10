@@ -232,13 +232,7 @@ describe 'glance::api' do
         }
       end
 
-      it { is_expected.to contain_service('glance-api').with(
-          'ensure'     => nil,
-          'enable'     => false,
-          'hasstatus'  => true,
-          'hasrestart' => true,
-          'tag'        => 'glance-service',
-        ) }
+      it { is_expected.to_not contain_service('glance-api') }
     end
 
     describe 'with overridden pipeline' do
