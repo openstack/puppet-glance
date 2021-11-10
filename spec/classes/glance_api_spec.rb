@@ -252,6 +252,49 @@ describe 'glance::api' do
       it { is_expected.to contain_glance_api_config('paste_deploy/flavor').with_value('something') }
     end
 
+    context 'when running glance-api in wsgi' do
+      let :params do
+        {
+          :service_name => 'httpd'
+        }
+      end
+
+      let :pre_condition do
+        "include apache
+         class { 'glance': }
+         class { 'glance::api::authtoken':
+           password => 'foo',
+         }"
+      end
+
+      it 'configures glance-api service with Apache' do
+        is_expected.to contain_class('apache::params')
+        is_expected.to contain_service('glance-api').with(
+          :ensure => 'stopped',
+          :enable => false,
+          :tag    => ['glance-service'],
+        )
+      end
+    end
+
+    context 'when service_name is not valid' do
+      let :params do
+        {
+          :service_name => 'foobar'
+        }
+      end
+
+      let :pre_condition do
+        "include apache
+         class { 'glance': }
+         class { 'glance::api::authtoken':
+           password => 'foo',
+         }"
+      end
+
+      it_raises 'a Puppet::Error', /Invalid service_name/
+    end
+
     describe 'with blank flavor' do
       let :params do
         {
