@@ -126,6 +126,11 @@
 #  (optional) Enabled enforcing authorization based on common RBAC personas.
 #  Defaults to $::os_service_default
 #
+# [*use_keystone_limits*]
+#  (optional) Allow Glance to retrieve limits set in keystone for resource
+#  consumption and enforce them against API users
+#  Defaults to $::os_service_default
+#
 # [*enabled_backends*]
 #   (optional) List of Key:Value pairs of store identifier and store type.
 #   Example: ['swift:swift', 'ceph1:ceph', 'ceph2:ceph']
@@ -340,6 +345,7 @@ class glance::api(
   $key_file                             = $::os_service_default,
   $ca_file                              = $::os_service_default,
   $enforce_secure_rbac                  = $::os_service_default,
+  $use_keystone_limits                  = $::os_service_default,
   $enabled_backends                     = undef,
   $default_backend                      = undef,
   $container_formats                    = $::os_service_default,
@@ -463,6 +469,7 @@ removed in a future realse. Use glance::api::db::database_max_overflow instead')
     'DEFAULT/scrub_time':                 value => $scrub_time;
     'DEFAULT/delayed_delete':             value => $delayed_delete;
     'DEFAULT/enforce_secure_rbac':        value => $enforce_secure_rbac;
+    'DEFAULT/use_keystone_limits':        value => $use_keystone_limits;
     'DEFAULT/cache_prefetcher_interval':  value => $cache_prefetcher_interval;
     'DEFAULT/image_cache_dir':            value => $image_cache_dir;
     'DEFAULT/image_cache_stall_time':     value => $image_cache_stall_time;
