@@ -74,10 +74,12 @@
 #   Default: 'ref1'.
 #
 # [*swift_buffer_on_upload*]
-#   Optional. Default: $::os_service_default.
+#   Optional. Buffer image segments before upload to Swift.
+#   Default: $::os_service_default.
 #
 # [*swift_upload_buffer_dir*]
-#   Optional. Default: $::os_service_default.
+#   Optional. Directory to buffer image segments before upload to Swift.
+#   Default: $::os_service_default.
 #
 # [*store_description*]
 #   (optional) Provides constructive information about the store backend to
