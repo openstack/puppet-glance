@@ -14,7 +14,7 @@ class glance::deps {
   -> Package<| tag == 'glance-package'|>
   ~> anchor { 'glance::install::end': }
   -> anchor { 'glance::config::begin': }
-  -> File<| tag == 'glance-config-file' |>
+  -> Glance_api_config<||>
   ~> anchor { 'glance::config::end': }
   -> anchor { 'glance::db::begin': }
   -> anchor { 'glance::db::end': }
@@ -28,21 +28,12 @@ class glance::deps {
   # before dbsync starts
   Oslo::Db<||> -> Anchor['glance::dbsync::begin']
 
-  # Ensure files are modified in the config block
-  Anchor['glance::config::begin']
-  -> File_line<| tag == 'glance-file-line' |>
-  ~> Anchor['glance::config::end']
-
-  # Ensure all files are in place before modifying them
-  File<| tag == 'glance-config-file' |> -> File_line<| tag == 'glance-file-line' |>
-
   # On any uwsgi config change, we must restart Glance API.
   Anchor['glance::config::begin']
   -> Glance_api_uwsgi_config<||>
   ~> Anchor['glance::config::end']
 
   # All other inifile providers need to be processed in the config block
-  Anchor['glance::config::begin'] -> Glance_api_config<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_api_paste_ini<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_cache_config<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_image_import_config<||> ~> Anchor['glance::config::end']
