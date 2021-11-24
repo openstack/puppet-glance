@@ -15,7 +15,7 @@ describe provider_class do
 
   describe 'when managing an image' do
 
-    let(:tenant_attrs) do
+    let(:image_attrs) do
       {
         :ensure           => 'present',
         :name             => 'image1',
@@ -29,7 +29,7 @@ describe provider_class do
     end
 
     let(:resource) do
-      Puppet::Type::Glance_image.new(tenant_attrs)
+      Puppet::Type::Glance_image.new(image_attrs)
     end
 
     let(:provider) do
@@ -130,6 +130,7 @@ properties="os_hash_algo=\'abc123\', os_hash_value=\'test123\', os_hidden=\'true
 protected="False"
 size="1270"
 status="active"
+tags=""
 updated_at="2015-04-10T18:18:18"
 virtual_size="None"
 ')
@@ -142,7 +143,7 @@ virtual_size="None"
 
   describe 'when managing an image with properties' do
 
-    let(:tenant_attrs) do
+    let(:image_attrs) do
       {
         :ensure           => 'present',
         :name             => 'image1',
@@ -157,7 +158,7 @@ virtual_size="None"
     end
 
     let(:resource) do
-      Puppet::Type::Glance_image.new(tenant_attrs)
+      Puppet::Type::Glance_image.new(image_attrs)
     end
 
     let(:provider) do
@@ -220,6 +221,7 @@ properties="something=\'what\', vmware_disktype=\'sparse\', os_hash_algo=\'abc12
 protected="False"
 size="1270"
 status="active"
+tags=""
 updated_at="2015-04-10T18:18:18"
 virtual_size="None"
 ')
@@ -233,7 +235,7 @@ virtual_size="None"
 
   describe 'when creating an image with id' do
 
-    let(:tenant_attrs) do
+    let(:image_attrs) do
       {
         :ensure           => 'present',
         :name             => 'image1',
@@ -246,7 +248,7 @@ virtual_size="None"
     end
 
     let(:resource) do
-      Puppet::Type::Glance_image.new(tenant_attrs)
+      Puppet::Type::Glance_image.new(image_attrs)
     end
 
     let(:provider) do
@@ -309,6 +311,7 @@ properties="os_hash_algo=\'abc123\', os_hash_value=\'test123\', os_hidden=\'true
 protected="False"
 size="1270"
 status="active"
+tags=""
 updated_at="2015-04-10T18:18:18"
 virtual_size="None"
 ')
@@ -321,7 +324,7 @@ virtual_size="None"
 
   describe 'when creating image with tag' do
 
-    let(:tenant_attrs) do
+    let(:image_attrs) do
       {
         :ensure           => 'present',
         :name             => 'image1',
@@ -334,7 +337,7 @@ virtual_size="None"
     end
 
     let(:resource) do
-      Puppet::Type::Glance_image.new(tenant_attrs)
+      Puppet::Type::Glance_image.new(image_attrs)
     end
 
     let(:provider) do
@@ -354,18 +357,18 @@ file="/v2/images/8801c5b0-c505-4a15-8ca3-1d2383f8c015/file"
 id="8801c5b0-c505-4a15-8ca3-1d2383f8c015"
 name="image1"
 owner="5a9e521e17014804ab8b4e8b3de488a4"
-tag="testtag"
 protected="False"
 schema="/v2/schemas/image"
 size="13287936"
 status="active"
-tags=""
+tags="testtag"
 updated_at="2016-03-29T20:52:40Z"
 virtual_size="None"
 visibility="public"
 ')
           provider.create
           expect(provider.exists?).to be_truthy
+          expect(provider.image_tag).to eq('testtag')
         end
       end
     end
@@ -389,8 +392,7 @@ id="5345b502-efe4-4852-a45d-edaba3a3acc6"
 visibility="public"
 name="image1"
 owner="None"
-tag="testtag"
-tags=""
+tags="testtag"
 protected="False"
 size="1270"
 status="active"
@@ -399,7 +401,7 @@ virtual_size="None"
 ')
         instances = provider_class.instances
         expect(instances.count).to eq(1)
-#        expect(instances[0].image_tag).to eq('testtag')
+        expect(instances[0].image_tag).to eq('testtag')
       end
     end
 

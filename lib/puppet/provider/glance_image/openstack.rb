@@ -66,8 +66,20 @@ Puppet::Type.type(:glance_image).provide(
     opts << location
 
     begin
-      @property_hash = self.class.request('image', 'create', opts)
-      @property_hash[:ensure] = :present
+      attrs = self.class.request('image', 'create', opts)
+      properties = self.class.parsestring(attrs[:properties]) rescue nil
+      @property_hash = {
+        :ensure           => :present,
+        :name             => attrs[:name],
+        :is_public        => attrs[:visibility].downcase.chomp == 'public'? true : false,
+        :container_format => attrs[:container_format],
+        :id               => attrs[:id],
+        :disk_format      => attrs[:disk_format],
+        :min_disk         => attrs[:min_disk],
+        :min_ram          => attrs[:min_ram],
+        :properties       => self.class.exclude_owner_specified_props(self.class.exclude_readonly_props(properties)),
+        :image_tag        => attrs[:tags]
+      }
     ensure
       if temp_file
         temp_file.close(true)
@@ -137,7 +149,7 @@ Puppet::Type.type(:glance_image).provide(
         :min_disk         => attrs[:min_disk],
         :min_ram          => attrs[:min_ram],
         :properties       => exclude_owner_specified_props(exclude_readonly_props(properties)),
-        :image_tag        => attrs[:image_tag]
+        :image_tag        => attrs[:tags]
       )
     end
   end
