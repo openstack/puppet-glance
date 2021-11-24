@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The ``glance_image`` resource type now supports the following two new
+    parameters, to define owner of the image. Note these parameters are
+    mutually exclusive, and only one can be used.
+
+    - ``project_id``
+    - ``project_name``

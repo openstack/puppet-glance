@@ -65,6 +65,12 @@ Puppet::Type.type(:glance_image).provide(
     opts << "--tag=#{@resource[:image_tag]}" if @resource[:image_tag]
     opts << location
 
+    if @resource[:project_name]
+      opts << "--project=#{@resource[:project_name]}"
+    elsif @resource[:project_id]
+      opts << "--project=#{@resource[:project_id]}"
+    end
+
     begin
       attrs = self.class.request('image', 'create', opts)
       properties = self.class.parsestring(attrs[:properties]) rescue nil
@@ -78,7 +84,8 @@ Puppet::Type.type(:glance_image).provide(
         :min_disk         => attrs[:min_disk],
         :min_ram          => attrs[:min_ram],
         :properties       => self.class.exclude_owner_specified_props(self.class.exclude_readonly_props(properties)),
-        :image_tag        => attrs[:tags]
+        :image_tag        => attrs[:tags],
+        :project_id       => attrs[:owner]
       }
     ensure
       if temp_file
@@ -134,6 +141,14 @@ Puppet::Type.type(:glance_image).provide(
     fail('id for existing images can not be modified')
   end
 
+  def project_id=(value)
+    @property_flush[:project_id] = value
+  end
+
+  def project_name=(value)
+    @property_flush[:project_name] = value
+  end
+
   def self.instances
     list = request('image', 'list', '--long')
     list.collect do |image|
@@ -149,7 +164,8 @@ Puppet::Type.type(:glance_image).provide(
         :min_disk         => attrs[:min_disk],
         :min_ram          => attrs[:min_ram],
         :properties       => exclude_owner_specified_props(exclude_readonly_props(properties)),
-        :image_tag        => attrs[:tags]
+        :image_tag        => attrs[:tags],
+        :project_id       => attrs[:owner]
       )
     end
   end
@@ -175,6 +191,12 @@ Puppet::Type.type(:glance_image).provide(
       (opts << "--min-disk=#{@property_flush[:min_disk]}") if @property_flush[:min_disk]
       (opts << props_to_s(@property_flush[:properties])) if @property_flush[:properties]
       (opts << "--tag=#{@property_flush[:image_tag]}") if @property_flush[:image_tag]
+
+      if @property_flush[:project_name]
+        opts << "--project=#{@property_flush[:project_name]}"
+      elsif @property_flush[:project_id]
+        opts << "--project=#{@property_flush[:project_id]}"
+      end
 
       self.class.request('image', 'set', opts)
       @property_flush.clear
