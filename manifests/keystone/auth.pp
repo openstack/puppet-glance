@@ -47,6 +47,18 @@
 #   (Optional) Tenant for glance user.
 #   Defaults to 'services'.
 #
+# [*roles*]
+#   (Optional) List of roles assigned to glance user.
+#   Defaults to ['admin']
+#
+# [*system_scope*]
+#   (Optional) Scope for system operations.
+#   Defaults to 'all'
+#
+# [*system_roles*]
+#   (Optional) List of system roles assigned to glance user.
+#   Defaults to []
+#
 # [*public_url*]
 #   (0ptional) The endpoint's public url.
 #   This url should *not* contain any trailing '/'.
@@ -82,6 +94,9 @@ class glance::keystone::auth(
   $service_type        = 'image',
   $region              = 'RegionOne',
   $tenant              = 'services',
+  $roles               = ['admin'],
+  $system_scope        = 'all',
+  $system_roles        = [],
   $service_description = 'OpenStack Image Service',
   $public_url          = 'http://127.0.0.1:9292',
   $admin_url           = 'http://127.0.0.1:9292',
@@ -90,8 +105,11 @@ class glance::keystone::auth(
 
   include glance::deps
 
+  Keystone_user_role<| name == "${auth_name}@${tenant}" |> -> Anchor['glance::service::end']
+  Keystone_user_role<| name == "${auth_name}@::::${system_scope}" |> -> Anchor['glance::service::end']
+
   if $configure_endpoint {
-    Keystone_endpoint["${region}/${service_name}::${service_type}"] ~> Anchor['glance::service::begin']
+    Keystone_endpoint["${region}/${service_name}::${service_type}"] -> Anchor['glance::service::end']
   }
 
   keystone::resource::service_identity { 'glance':
@@ -106,13 +124,12 @@ class glance::keystone::auth(
     password            => $password,
     email               => $email,
     tenant              => $tenant,
+    roles               => $roles,
+    system_scope        => $system_scope,
+    system_roles        => $system_roles,
     public_url          => $public_url,
     admin_url           => $admin_url,
     internal_url        => $internal_url,
-  }
-
-  if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] ~> Anchor['glance::service::begin']
   }
 
 }

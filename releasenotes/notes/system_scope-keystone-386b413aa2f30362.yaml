@@ -1,0 +1,17 @@
+---
+features:
+  - |
+    The ``system_scope`` parameter has been added to
+    the ``glance::keystone::authtoken`` class.
+
+  - |
+    The ``system_scope`` parameter has been added to the ``glance::limit``
+    class.
+
+  - |
+    The ``glance::keystone::auth`` class now supports customizing roles
+    assigned to the glance service user.
+
+  - |
+    The ``glance::keystone::auth`` class now supports defining assignmet of
+    system-scoped roles to the glance service user.

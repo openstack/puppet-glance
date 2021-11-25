@@ -30,6 +30,10 @@
 #   (Optional) Name of domain for $project_name
 #   Defaults to 'Default'.
 #
+# [*system_scope*]
+#   (Optional) Scope for system operations.
+#   Defaults to $::os_service_default
+#
 # [*auth_type*]
 #  (Optional) Authentication type to load
 #  Defaults to 'password'.
@@ -59,6 +63,7 @@ class glance::limit(
   $project_name        = 'services',
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
+  $system_scope        = $::os_service_default,
   $auth_type           = 'password',
   $service_type        = $::os_service_default,
   $valid_interfaces    = $::os_service_default,
@@ -76,6 +81,7 @@ class glance::limit(
     project_name        => $project_name,
     user_domain_name    => $user_domain_name,
     project_domain_name => $project_domain_name,
+    system_scope        => $system_scope,
     auth_type           => $auth_type,
     service_type        => $service_type,
     valid_interfaces    => join(any2array($valid_interfaces), ','),
