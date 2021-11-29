@@ -28,6 +28,11 @@ class glance::deps {
   # before dbsync starts
   Oslo::Db<||> -> Anchor['glance::dbsync::begin']
 
+  # policy config should occur in the config block also.
+  Anchor['glance::config::begin']
+  -> Openstacklib::Policy<||>
+  ~> Anchor['glance::config::end']
+
   # On any uwsgi config change, we must restart Glance API.
   Anchor['glance::config::begin']
   -> Glance_api_uwsgi_config<||>
