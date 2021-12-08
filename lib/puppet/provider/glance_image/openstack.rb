@@ -105,48 +105,28 @@ Puppet::Type.type(:glance_image).provide(
 
   mk_resource_methods
 
-  def is_public=(value)
-    @property_flush[:is_public] = value
-  end
-
   def is_public
     bool_to_sym(@property_hash[:is_public])
   end
 
-  def disk_format=(value)
-    @property_flush[:disk_format] = value
-  end
-
-  def container_format=(value)
-    @property_flush[:container_format] = value
-  end
-
-  def min_ram=(value)
-    @property_flush[:min_ram] = value
-  end
-
-  def min_disk=(value)
-    @property_flush[:min_disk] = value
-  end
-
-  def properties=(value)
-    @property_flush[:properties] = value
-  end
-
-  def image_tag=(value)
-    @property_flush[:image_tag] = value
+  [
+    :is_public,
+    :disk_format,
+    :container_format,
+    :min_ram,
+    :min_disk,
+    :properties,
+    :image_tag,
+    :project_id,
+    :project_name
+  ].each do |attr|
+    define_method(attr.to_s + "=") do |value|
+      @property_flush[attr] = value
+    end
   end
 
   def id=(id)
     fail('id for existing images can not be modified')
-  end
-
-  def project_id=(value)
-    @property_flush[:project_id] = value
-  end
-
-  def project_name=(value)
-    @property_flush[:project_name] = value
   end
 
   def self.instances
