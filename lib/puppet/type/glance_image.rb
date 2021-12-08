@@ -90,6 +90,14 @@ Puppet::Type.newtype(:glance_image) do
     newvalues(/\d+/)
   end
 
+  newparam(:project_name) do
+    desc 'The name of the project which will own the image.'
+  end
+
+  newproperty(:project_id) do
+    desc 'A uuid identifying the project which will own the image.'
+  end
+
   newproperty(:properties) do
     desc "The set of image properties"
 
@@ -116,6 +124,18 @@ Puppet::Type.newtype(:glance_image) do
   # Require the Glance service to be running
   autorequire(:anchor) do
     ['glance::service::end']
+  end
+
+  validate do
+    if self[:ensure] != :present
+      return
+    end
+    if self[:project_id] && self[:project_name]
+      raise(Puppet::Error, <<-EOT
+Please provide a value for only one of project_name and project_id
+EOT
+            )
+    end
   end
 
 end
