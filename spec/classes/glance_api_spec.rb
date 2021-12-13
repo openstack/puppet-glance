@@ -127,7 +127,6 @@ describe 'glance::api' do
           'tag'        => 'glance-service',
         ) }
 
-        it { is_expected.to_not contain_openstacklib__service_validation('glance-api') }
         it { is_expected.to contain_glance_api_config("paste_deploy/flavor").with_value(param_hash[:pipeline]) }
 
         it 'is_expected.to lay down default api config' do
@@ -478,33 +477,6 @@ describe 'glance::api' do
         is_expected.to contain_glance_api_config('taskflow_executor/max_workers').with_value(1)
         is_expected.to contain_glance_api_config('taskflow_executor/conversion_format').with_value('raw')
       end
-    end
-
-    describe 'while validating the service with default command' do
-      let :params do
-        default_params.merge({
-          :validate => true,
-        })
-      end
-      it { is_expected.to contain_openstacklib__service_validation('glance-api').with(
-        :command   => 'glance --os-auth-url http://127.0.0.1:5000 --os-project-name services --os-username glance --os-password ChangeMe image-list',
-        :subscribe => 'Service[glance-api]',
-      )}
-
-    end
-
-    describe 'while validating the service with custom command' do
-      let :params do
-        default_params.merge({
-          :validate            => true,
-          :validation_options  => { 'glance-api' => { 'command' => 'my-script' } }
-        })
-      end
-      it { is_expected.to contain_openstacklib__service_validation('glance-api').with(
-        :command   => 'my-script',
-        :subscribe => 'Service[glance-api]',
-      )}
-
     end
 
     describe 'with barbican parameters' do

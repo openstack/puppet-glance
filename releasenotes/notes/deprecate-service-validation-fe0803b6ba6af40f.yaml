@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The service validation feature of the ``glance::api`` class is deprecated,
+    and the ``glance::api::validate`` parameter and
+    the ``glance::api::validate_options`` parameter have no effect now.

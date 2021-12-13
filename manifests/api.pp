@@ -225,26 +225,6 @@
 #   (Optional) Run db sync on the node.
 #   Defaults to true
 #
-# [*validate*]
-#   (optional) Whether to validate the service is working after any service refreshes
-#   Defaults to false
-#
-# [*validation_options*]
-#   (optional) Service validation options
-#   Should be a hash of options defined in openstacklib::service_validation
-#   If empty, defaults values are taken from openstacklib function.
-#   Default command list images.
-#   Require validate set at True.
-#   Example:
-#   glance::api::validation_options:
-#     glance-api:
-#       command: check_glance-api.py
-#       path: /usr/bin:/bin:/usr/sbin:/sbin
-#       provider: shell
-#       tries: 5
-#       try_sleep: 10
-#   Defaults to {}
-#
 # [*limit_param_default*]
 #   (optional) Default value for the number of items returned by a request if not
 #   specified explicitly in the request (integer value)
@@ -324,6 +304,19 @@
 #   http://auth_url:5000/v3
 #   Defaults to undef
 #
+# [*validate*]
+#   (optional) Whether to validate the service is working after any service refreshes
+#   Defaults to undef
+#
+# [*validation_options*]
+#   (optional) Service validation options
+#   Should be a hash of options defined in openstacklib::service_validation
+#   If empty, defaults values are taken from openstacklib function.
+#   Default command list images.
+#   Require validate set at True.
+#   Example:
+#   Defaults to undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -376,8 +369,6 @@ class glance::api(
   $enable_proxy_headers_parsing         = $::os_service_default,
   $max_request_body_size                = $::os_service_default,
   $sync_db                              = true,
-  $validate                             = false,
-  $validation_options                   = {},
   $limit_param_default                  = $::os_service_default,
   $api_limit_max                        = $::os_service_default,
   # DEPRECATED PARAMETERS
@@ -396,6 +387,8 @@ class glance::api(
   $keymgr_backend                       = undef,
   $keymgr_encryption_api_url            = undef,
   $keymgr_encryption_auth_url           = undef,
+  $validate                             = undef,
+  $validation_options                   = undef,
 ) inherits glance {
 
   include glance::deps
@@ -436,6 +429,14 @@ removed in a future realse. Use glance::api::db::database_retry_interval instead
   if $database_max_overflow != undef {
     warning('The database_max_overflow parameter is deprecated and will be \
 removed in a future realse. Use glance::api::db::database_max_overflow instead')
+  }
+
+  if $validate != undef {
+    warning('The glance::api::validate parameter has been deprecated and has no effect')
+  }
+
+  if $validation_options != undef {
+    warning('The glance::api::validation_options parameter has been deprecated and has no effect')
   }
 
   if $sync_db {
@@ -676,21 +677,4 @@ enabled_backends instead.')
       tag        => 'glance-service',
     }
   }
-
-  if $validate {
-    $keystone_project_name = $::glance::api::authtoken::project_name
-    $keystone_username     = $::glance::api::authtoken::username
-    $keystone_password     = $::glance::api::authtoken::password
-    $auth_url              = $::glance::api::authtoken::www_authenticate_uri
-    $defaults = {
-      'glance-api' => {
-        # lint:ignore:140chars
-        'command'  => "glance --os-auth-url ${auth_url} --os-project-name ${keystone_project_name} --os-username ${keystone_username} --os-password ${keystone_password} image-list",
-        # lint:endignore
-      }
-    }
-    $validation_options_hash = merge ($defaults, $validation_options)
-    create_resources('openstacklib::service_validation', $validation_options_hash, {'subscribe' => 'Service[glance-api]'})
-  }
-
 }
