@@ -115,7 +115,7 @@ describe 'glance::api' do
           'tag'        => 'glance-service',
         ) }
 
-        it { is_expected.to_not contain_exec('validate_nova_api') }
+        it { is_expected.to_not contain_openstacklib__service_validation('glance-api') }
         it { is_expected.to contain_glance_api_config("paste_deploy/flavor").with_value(param_hash[:pipeline]) }
 
         it 'is_expected.to lay down default api config' do
