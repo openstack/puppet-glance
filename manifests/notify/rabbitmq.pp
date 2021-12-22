@@ -84,10 +84,6 @@
 #   more than one RabbitMQ node is provided in config. (string value)
 #   Defaults to $::os_service_default
 #
-#  [*rabbit_notification_exchange*]
-#    Exchange name for sending notifications (string value)
-#    Defaults to $::os_service_default
-#
 #  [*rabbit_notification_topic*]
 #    AMQP topic used for OpenStack notifications. (list value)
 #    Defaults to $::os_service_default
@@ -107,6 +103,12 @@
 #    messaging, messagingv2, routing, log, test, noop (multi valued)
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+#  [*rabbit_notification_exchange*]
+#    Exchange name for sending notifications (string value)
+#    Defaults to undef
+#
 class glance::notify::rabbitmq(
   $default_transport_url              = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
@@ -123,11 +125,12 @@ class glance::notify::rabbitmq(
   $kombu_ssl_version                  = $::os_service_default,
   $kombu_reconnect_delay              = $::os_service_default,
   $kombu_failover_strategy            = $::os_service_default,
-  $rabbit_notification_exchange       = $::os_service_default,
   $rabbit_notification_topic          = $::os_service_default,
   $amqp_durable_queues                = $::os_service_default,
   $kombu_compression                  = $::os_service_default,
   $notification_driver                = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $rabbit_notification_exchange       = undef,
 ) {
 
   include glance::deps
@@ -160,7 +163,11 @@ class glance::notify::rabbitmq(
     topics        => $rabbit_notification_topic,
   }
 
+  if $rabbit_notification_exchange != undef {
+    warning('The rabbit_notification_exchange parameter is deprecated and has no effect')
+  }
+
   glance_api_config {
-    'oslo_messaging_rabbit/default_notification_exchange': value => $rabbit_notification_exchange;
+    'oslo_messaging_rabbit/default_notification_exchange': ensure => absent;
   }
 }

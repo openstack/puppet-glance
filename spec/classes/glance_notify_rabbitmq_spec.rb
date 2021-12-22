@@ -10,7 +10,6 @@ describe 'glance::notify::rabbitmq' do
       it { is_expected.to contain_glance_api_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/default_notification_exchange').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_glance_api_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>') }
