@@ -1,15 +1,3 @@
-$LOAD_PATH.push(
-  File.join(
-    File.dirname(__FILE__),
-    '..',
-    '..',
-    '..',
-    'fixtures',
-    'modules',
-    'openstacklib',
-    'lib')
-)
-
 require 'spec_helper'
 
 provider_class = Puppet::Type.type(:glance_swift_config).provider(:ini_setting)
