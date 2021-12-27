@@ -27,7 +27,7 @@ describe 'glance::cron::db_purge' do
         :monthday    => params[:monthday],
         :month       => params[:month],
         :weekday     => params[:weekday],
-        :require     => 'Anchor[glance::install::end]'
+        :require     => 'Anchor[glance::dbsync::end]'
       )}
     end
 
@@ -47,7 +47,7 @@ describe 'glance::cron::db_purge' do
         :monthday    => params[:monthday],
         :month       => params[:month],
         :weekday     => params[:weekday],
-        :require     => 'Anchor[glance::install::end]'
+        :require     => 'Anchor[glance::dbsync::end]'
       )}
     end
   end

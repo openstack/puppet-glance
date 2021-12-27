@@ -90,6 +90,6 @@ class glance::cron::db_purge (
     monthday    => $monthday,
     month       => $month,
     weekday     => $weekday,
-    require     => Anchor['glance::install::end'],
+    require     => Anchor['glance::dbsync::end'],
   }
 }
