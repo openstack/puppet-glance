@@ -1,25 +1,3 @@
-$LOAD_PATH.push(
-  File.join(
-    File.dirname(__FILE__),
-    '..',
-    '..',
-    '..',
-    'fixtures',
-    'modules',
-    'inifile',
-    'lib')
-)
-$LOAD_PATH.push(
-  File.join(
-    File.dirname(__FILE__),
-    '..',
-    '..',
-    '..',
-    'fixtures',
-    'modules',
-    'openstacklib',
-    'lib')
-)
 require 'spec_helper'
 provider_class = Puppet::Type.type(:glance_api_paste_ini).provider(:ini_setting)
 describe provider_class do
