@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    Support for S3 backend has been reintroduced, because s3 backend support
+    was restored in glance_store.
+
+upgrade:
+  - |
+    The deprecated ``glance::backend::s3`` class has been removed. Use the new
+    ``glance::backend::multistore::s3`` resource type to set up S3 backend.
