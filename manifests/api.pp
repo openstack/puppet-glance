@@ -25,10 +25,6 @@
 #   (optional) Number of Glance API worker processes to start
 #   Default: $::os_workers.
 #
-# [*scrub_time*]
-#   (optional) The amount of time in seconds to delay before performing a delete.
-#   Defaults to $::os_service_default.
-#
 # [*delayed_delete*]
 #   (optional) Turn on/off delayed delete.
 #   Defaults to $::os_service_default.
@@ -317,13 +313,16 @@
 #   Example:
 #   Defaults to undef
 #
+# [*scrub_time*]
+#   (optional) The amount of time in seconds to delay before performing a delete.
+#   Defaults to undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
   $bind_port                            = '9292',
   $backlog                              = $::os_service_default,
   $workers                              = $::os_workers,
-  $scrub_time                           = $::os_service_default,
   $delayed_delete                       = $::os_service_default,
   $auth_strategy                        = 'keystone',
   $pipeline                             = 'keystone',
@@ -389,6 +388,7 @@ class glance::api(
   $keymgr_encryption_auth_url           = undef,
   $validate                             = undef,
   $validation_options                   = undef,
+  $scrub_time                           = undef,
 ) inherits glance {
 
   include glance::deps
@@ -439,6 +439,13 @@ removed in a future realse. Use glance::api::db::database_max_overflow instead')
     warning('The glance::api::validation_options parameter has been deprecated and has no effect')
   }
 
+  if $scrub_time != undef {
+    warning('The glance::scrub_time parameter is deprerecated and has no effect')
+  }
+  glance_api_config {
+    'DEFAULT/scrub_time': ensure => absent;
+  }
+
   if $sync_db {
     include glance::db::sync
     include glance::db::metadefs
@@ -467,7 +474,6 @@ removed in a future realse. Use glance::api::db::database_max_overflow instead')
     'DEFAULT/workers':                    value => $workers;
     'DEFAULT/show_image_direct_url':      value => $show_image_direct_url;
     'DEFAULT/location_strategy':          value => $location_strategy;
-    'DEFAULT/scrub_time':                 value => $scrub_time;
     'DEFAULT/delayed_delete':             value => $delayed_delete;
     'DEFAULT/enforce_secure_rbac':        value => $enforce_secure_rbac;
     'DEFAULT/use_keystone_limits':        value => $use_keystone_limits;
