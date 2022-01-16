@@ -33,7 +33,8 @@ describe 'glance::backend::multistore::rbd' do
 
       it { should contain_package('python-ceph').with(
         :name   => platform_params[:pyceph_package_name],
-        :ensure => 'present'
+        :ensure => 'installed',
+        :tag    => ['openstack', 'glance-support-package']
       )}
     end
 
@@ -57,7 +58,8 @@ describe 'glance::backend::multistore::rbd' do
 
       it { should contain_package('python-ceph').with(
         :name   => platform_params[:pyceph_package_name],
-        :ensure => 'latest'
+        :ensure => 'latest',
+        :tag    => ['openstack', 'glance-support-package']
      )}
     end
 

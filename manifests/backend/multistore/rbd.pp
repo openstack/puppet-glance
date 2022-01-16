@@ -81,11 +81,11 @@ define glance::backend::multistore::rbd(
     "${name}/store_description":      value => $store_description;
   }
 
-  if $manage_packages and !defined(Package["${::glance::params::pyceph_package_name}"]) {
-    ensure_resource('package', 'python-ceph', {
+  if $manage_packages and !defined(Package[$::glance::params::pyceph_package_name]) {
+    ensure_packages('python-ceph', {
       ensure => $package_ensure,
       name   => $::glance::params::pyceph_package_name,
-      tag    => 'glance-support-package',
+      tag    => ['openstack', 'glance-support-package'],
     })
   }
 }

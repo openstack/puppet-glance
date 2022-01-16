@@ -13,7 +13,7 @@ describe 'glance::backend::rbd' do
 
       it { should contain_package('python-ceph').with(
         :name   => platform_params[:pyceph_package_name],
-        :ensure => 'present'
+        :ensure => 'installed'
       )}
     end
 
