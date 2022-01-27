@@ -51,6 +51,7 @@ describe 'glance::backend::multistore::swift' do
         is_expected.to contain_glance_api_config('swift/default_swift_reference').with_value('ref1')
         is_expected.to contain_glance_api_config('swift/swift_buffer_on_upload').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('swift/swift_upload_buffer_dir').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('swift/swift_store_retry_get_count').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_swift_config('ref1/key').with_value('key').with_secret(true)
         is_expected.to contain_glance_swift_config('ref1/user').with_value('user')
         is_expected.to contain_glance_swift_config('ref1/auth_version').with_value('3')
@@ -81,6 +82,7 @@ describe 'glance::backend::multistore::swift' do
           :default_swift_reference             => 'swift_creds',
           :swift_buffer_on_upload              => true,
           :swift_upload_buffer_dir             => '/var/glance/swift',
+          :swift_store_retry_get_count         => 3,
         }
       end
 
@@ -97,6 +99,7 @@ describe 'glance::backend::multistore::swift' do
         is_expected.to contain_glance_api_config('swift/default_swift_reference').with_value('swift_creds')
         is_expected.to contain_glance_api_config('swift/swift_buffer_on_upload').with_value(true)
         is_expected.to contain_glance_api_config('swift/swift_upload_buffer_dir').with_value('/var/glance/swift')
+        is_expected.to contain_glance_api_config('swift/swift_store_retry_get_count').with_value(3)
         is_expected.to contain_glance_swift_config('swift_creds/key').with_value('key2').with_secret(true)
         is_expected.to contain_glance_swift_config('swift_creds/user').with_value('user2')
         is_expected.to contain_glance_swift_config('swift_creds/auth_version').with_value('1')

@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The ``glance::backend::multistore::glance`` now supports the new
+    ``swift_store_retry_get_count`` parameter, to manage the same parameter
+    of swift store.

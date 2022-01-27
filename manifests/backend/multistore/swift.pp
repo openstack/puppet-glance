@@ -81,6 +81,11 @@
 #   Optional. Directory to buffer image segments before upload to Swift.
 #   Default: $::os_service_default.
 #
+# [*swift_store_retry_get_count*]
+#   Optional. The number of times a Swift download will be retried before
+#   the request fails.
+#   Defaults to $::os_service_default
+#
 # [*store_description*]
 #   (optional) Provides constructive information about the store backend to
 #   end users.
@@ -108,6 +113,7 @@ define glance::backend::multistore::swift(
   $default_swift_reference             = 'ref1',
   $swift_buffer_on_upload              = $::os_service_default,
   $swift_upload_buffer_dir             = $::os_service_default,
+  $swift_store_retry_get_count         = $::os_service_default,
   $store_description                   = $::os_service_default,
   # DEPRECATED PARAMETERS
   $swift_store_config_file             = undef,
@@ -138,6 +144,7 @@ define glance::backend::multistore::swift(
     "${name}/default_swift_reference":             value => $default_swift_reference;
     "${name}/swift_buffer_on_upload":              value => $swift_buffer_on_upload;
     "${name}/swift_upload_buffer_dir":             value => $swift_upload_buffer_dir;
+    "${name}/swift_store_retry_get_count":         value => $swift_store_retry_get_count;
     "${name}/store_description":                   value => $store_description;
   }
 
