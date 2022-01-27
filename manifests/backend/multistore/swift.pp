@@ -117,7 +117,7 @@ define glance::backend::multistore::swift(
   include swift::client
 
   Class['swift::client'] -> Anchor['glance::install::end']
-  Anchor['swift::service::end'] -> Service['glance-api']
+  Anchor['swift::service::end'] -> Anchor['glance::service::end']
 
   if $swift_store_config_file != undef {
     warning('The swift_store_config_file parameter is deprecated')
