@@ -252,38 +252,9 @@
 #    properties.
 #   Defaults to undef
 #
-# [*database_min_pool_size*]
-#   (optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
 # [*os_region_name*]
 #   (optional) Sets the keystone region to use.
 #   Defaults to undef
-#
-# [*database_connection*]
-#   (optional) Connection url to connect to glance database.
-#   Defaults to undef
-#
-# [*database_idle_timeout*]
-#   (optional) Timeout before idle db connections are reaped.
-#   Defaults to undef
-#
-# [*database_max_retries*]
-#   (Optional) Maximum number of database connection retries during startup.
-#   Set to -1 to specify an infinite retry count.
-#   Defaults to undef.
-#
-# [*database_retry_interval*]
-#   (optional) Interval between retries of opening a database connection.
-#   Defaults to undef.
-#
-# [*database_max_pool_size*]
-#   (optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
-# [*database_max_overflow*]
-#   (optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to undef.
 #
 # [*keymgr_backend*]
 #   (optional) Key Manager service class.
@@ -375,14 +346,7 @@ class glance::api(
   $default_store                        = undef,
   $multi_store                          = false,
   $show_multiple_locations              = undef,
-  $database_min_pool_size               = undef,
   $os_region_name                       = undef,
-  $database_connection                  = undef,
-  $database_idle_timeout                = undef,
-  $database_max_pool_size               = undef,
-  $database_max_retries                 = undef,
-  $database_retry_interval              = undef,
-  $database_max_overflow                = undef,
   $keymgr_backend                       = undef,
   $keymgr_encryption_api_url            = undef,
   $keymgr_encryption_auth_url           = undef,
@@ -398,37 +362,6 @@ class glance::api(
   if $os_region_name != undef {
     warning('glance::api::os_region_name is deprecated. Use \
 glance::backend::multistore::cinder::cinder_os_region_name instead.')
-  }
-
-  if $database_connection != undef {
-    warning('The database_connection parameter is deprecated and will be \
-removed in a future realse. Use glance::api::db::database_connection instead')
-  }
-
-  if $database_idle_timeout != undef {
-    warning('The database_idle_timeout parameter is deprecated and will be \
-removed in a future realse. Use glance::api::db::database_connection_recycle_time \
-instead')
-  }
-
-  if $database_max_pool_size != undef {
-    warning('The database_max_pool_size parameter is deprecated and will be \
-removed in a future realse. Use glance::api::db::database_max_pool_size instead')
-  }
-
-  if $database_max_retries!= undef {
-    warning('The database_max_retries parameter is deprecated and will be \
-removed in a future realse. Use glance::api::db::database_max_retries instead')
-  }
-
-  if $database_retry_interval != undef {
-    warning('The database_retry_interval parameter is deprecated and will be \
-removed in a future realse. Use glance::api::db::database_retry_interval instead')
-  }
-
-  if $database_max_overflow != undef {
-    warning('The database_max_overflow parameter is deprecated and will be \
-removed in a future realse. Use glance::api::db::database_max_overflow instead')
   }
 
   if $validate != undef {
