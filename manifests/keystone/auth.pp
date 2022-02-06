@@ -105,12 +105,7 @@ class glance::keystone::auth(
 
   include glance::deps
 
-  Keystone_user_role<| name == "${auth_name}@${tenant}" |> -> Anchor['glance::service::end']
-  Keystone_user_role<| name == "${auth_name}@::::${system_scope}" |> -> Anchor['glance::service::end']
-
-  if $configure_endpoint {
-    Keystone_endpoint["${region}/${service_name}::${service_type}"] -> Anchor['glance::service::end']
-  }
+  Keystone::Resource::Service_identity['glance'] -> Anchor['glance::service::end']
 
   keystone::resource::service_identity { 'glance':
     configure_user      => $configure_user,
