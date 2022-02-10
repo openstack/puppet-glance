@@ -451,7 +451,7 @@ glance::backend::multistore::cinder::cinder_os_region_name instead.')
     $enabled_backends_array.each |$backend| {
       $backend_type = split($backend, /:/)[1]
 
-      unless $backend_type =~ /file|http|swift|rbd|sheepdog|cinder|vsphere/ {
+      unless $backend_type =~ /file|http|swift|rbd|cinder|vsphere/ {
         fail("\'${backend_type}\' is not a valid backend type.")
       }
     }
