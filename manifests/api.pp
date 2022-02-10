@@ -474,7 +474,7 @@ removed in a future realse. Use glance::api::db::database_max_overflow instead')
     $enabled_backends_array.each |$backend| {
       $backend_type = split($backend, /:/)[1]
 
-      unless $backend_type =~ /file|http|swift|rbd|sheepdog|cinder|vsphere/ {
+      unless $backend_type =~ /file|http|swift|rbd|cinder|vsphere/ {
         fail("\'${backend_type}\' is not a valid backend type.")
       }
     }
