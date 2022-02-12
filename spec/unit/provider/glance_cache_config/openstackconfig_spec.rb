@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:glance_cache_config).provider(:ini_setting)
+provider_class = Puppet::Type.type(:glance_cache_config).provider(:openstackconfig)
 
 describe provider_class do
 
