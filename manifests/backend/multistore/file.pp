@@ -20,7 +20,26 @@
 # === Parameters:
 #
 # [*filesystem_store_datadir*]
-#   Location where dist images are stored when the backend type is file.
+#   (optional) Directory where dist images are stored.
+#   Defaults to $::os_service_default.
+#
+# [*filesystem_store_datadirs*]
+#   (optional) List of directories where dist images are stored. When using
+#   multiple directoris, each directory can be given an optional priority,
+#   which is an integer that is concatenated to the directory path with
+#   a colon.
+#   Defaults to $::os_service_default.
+#
+# [*filesystem_store_metadata_file*]
+#   (optional) Filesystem store metadata file.
+#   Defaults to $::os_service_default.
+#
+# [*filesystem_store_file_perm*]
+#   (optional) File access permissions for the image files.
+#   Defaults to $::os_service_default.
+#
+# [*filesystem_store_chunk_size*]
+#   (optional) Chunk size, in bytes.
 #   Defaults to $::os_service_default.
 #
 # [*filesystem_thin_provisioning*]
@@ -33,20 +52,33 @@
 #   Defaults to $::os_service_default.
 #
 define glance::backend::multistore::file(
-  $filesystem_store_datadir     = $::os_service_default,
-  $filesystem_thin_provisioning = $::os_service_default,
-  $store_description            = $::os_service_default,
+  $filesystem_store_datadir       = $::os_service_default,
+  $filesystem_store_datadirs      = $::os_service_default,
+  $filesystem_store_metadata_file = $::os_service_default,
+  $filesystem_store_file_perm     = $::os_service_default,
+  $filesystem_store_chunk_size    = $::os_service_default,
+  $filesystem_thin_provisioning   = $::os_service_default,
+  $store_description              = $::os_service_default,
 ) {
 
   include glance::deps
 
+  if !is_service_default($filesystem_store_datadir) and !is_service_default($filesystem_store_datadirs) {
+    fail('filesystem_store_datadir and filesystem_store_datadirs are mutually exclusive.')
+  }
+
   glance_api_config {
-    "${name}/filesystem_store_datadir":     value => $filesystem_store_datadir;
-    "${name}/filesystem_thin_provisioning": value => $filesystem_thin_provisioning;
-    "${name}/store_description":            value => $store_description;
+    "${name}/filesystem_store_datadir":       value => $filesystem_store_datadir;
+    "${name}/filesystem_store_datadirs":      value => $filesystem_store_datadirs;
+    "${name}/filesystem_store_metadata_file": value => $filesystem_store_metadata_file;
+    "${name}/filesystem_store_file_perm":     value => $filesystem_store_file_perm;
+    "${name}/filesystem_store_chunk_size":    value => $filesystem_store_chunk_size;
+    "${name}/filesystem_thin_provisioning":   value => $filesystem_thin_provisioning;
+    "${name}/store_description":              value => $store_description;
   }
 
   glance_cache_config {
-    "${name}/filesystem_store_datadir": value => $filesystem_store_datadir;
+    "${name}/filesystem_store_datadir":  value => $filesystem_store_datadir;
+    "${name}/filesystem_store_datadirs": value => $filesystem_store_datadirs;
   }
 }

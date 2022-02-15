@@ -24,30 +24,72 @@ describe 'glance::backend::multistore::file' do
   shared_examples_for 'glance::backend::multistore::file' do
     it 'configures glance-api.conf' do
       is_expected.to contain_glance_api_config('file/store_description').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_glance_api_config('file/filesystem_thin_provisioning').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_api_config('file/filesystem_store_datadir').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_glance_api_config('file/filesystem_store_datadirs').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_glance_api_config('file/filesystem_store_metadata_file').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_glance_api_config('file/filesystem_store_file_perm').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_glance_api_config('file/filesystem_store_chunk_size').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_glance_api_config('file/filesystem_thin_provisioning').with_value('<SERVICE DEFAULT>')
     end
 
     it 'configures glance-cache.conf' do
       is_expected.to_not contain_glance_cache_config('file/store_description')
       is_expected.to contain_glance_cache_config('file/filesystem_store_datadir').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_glance_cache_config('file/filesystem_store_datadirs').with_value('<SERVICE DEFAULT>')
     end
 
     describe 'when overriding datadir' do
       let :params do
         {
-          :filesystem_store_datadir     => '/tmp/',
-          :filesystem_thin_provisioning => 'true',
+          :filesystem_store_datadir       => '/var/lib/glance/images',
+          :filesystem_store_metadata_file => '/var/lib/glance/metadata.json',
+          :filesystem_store_file_perm     => 0,
+          :filesystem_store_chunk_size    => 65536,
+          :filesystem_thin_provisioning   => true,
         }
       end
 
       it 'configures glance-api.conf' do
-        is_expected.to contain_glance_api_config('file/filesystem_store_datadir').with_value('/tmp/')
-        is_expected.to contain_glance_api_config('file/filesystem_thin_provisioning').with_value('true')
+        is_expected.to contain_glance_api_config('file/filesystem_store_datadir')\
+          .with_value('/var/lib/glance/images')
+        is_expected.to contain_glance_api_config('file/filesystem_store_datadirs')\
+          .with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('file/filesystem_store_metadata_file')\
+          .with_value('/var/lib/glance/metadata.json')
+        is_expected.to contain_glance_api_config('file/filesystem_store_file_perm')\
+          .with_value(0)
+        is_expected.to contain_glance_api_config('file/filesystem_store_chunk_size')\
+          .with_value(65536)
+        is_expected.to contain_glance_api_config('file/filesystem_thin_provisioning')\
+          .with_value(true)
       end
 
       it 'configures glance-cache.conf' do
-        is_expected.to contain_glance_cache_config('file/filesystem_store_datadir').with_value('/tmp/')
+        is_expected.to contain_glance_cache_config('file/filesystem_store_datadir')\
+          .with_value('/var/lib/glance/images')
+        is_expected.to contain_glance_cache_config('file/filesystem_store_datadirs')\
+          .with_value('<SERVICE DEFAULT>')
+      end
+    end
+
+    describe 'when filesystem_store_datadirs is set' do
+      let :params do
+        {
+          :filesystem_store_datadirs => ['/var/lib/glance/images', '/var/lib/gnance/images_alt']
+        }
+      end
+      it 'configures glance-api.conf' do
+        is_expected.to contain_glance_api_config('file/filesystem_store_datadir')\
+          .with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('file/filesystem_store_datadirs')\
+          .with_value(['/var/lib/glance/images', '/var/lib/gnance/images_alt'])
+      end
+
+      it 'configures glance-cache.conf' do
+        is_expected.to contain_glance_cache_config('file/filesystem_store_datadir')\
+          .with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('file/filesystem_store_datadirs')\
+          .with_value(['/var/lib/glance/images', '/var/lib/gnance/images_alt'])
       end
     end
   end
