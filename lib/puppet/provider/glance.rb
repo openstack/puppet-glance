@@ -92,6 +92,7 @@ class Puppet::Provider::Glance < Puppet::Provider::Openstack
   def self.reset
     @glance_conf = nil
     @glance_credentials = nil
+    @auth_endpoint = nil
   end
 
   # To keep backward compatibility
