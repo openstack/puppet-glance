@@ -7,6 +7,7 @@ class glance::params {
 
   $cache_cleaner_command = 'glance-cache-cleaner'
   $cache_pruner_command  = 'glance-cache-pruner'
+  $user                  = 'glance'
   $group                 = 'glance'
   $boto3_package_name    = 'python3-boto3'
 

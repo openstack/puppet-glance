@@ -19,11 +19,12 @@ class glance::db::sync(
 ) {
 
   include glance::deps
+  include glance::params
 
   exec { 'glance-manage db_sync':
     command     => "glance-manage ${extra_params} db_sync",
     path        => '/usr/bin',
-    user        => 'glance',
+    user        => $::glance::params::user,
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,

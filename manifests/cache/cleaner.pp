@@ -39,7 +39,7 @@ class glance::cache::cleaner(
   cron { 'glance-cache-cleaner':
     command     => "${glance::params::cache_cleaner_command} ${command_options}",
     environment => 'PATH=/bin:/usr/bin:/usr/sbin',
-    user        => 'glance',
+    user        => $::glance::params::user,
     minute      => $minute,
     hour        => $hour,
     monthday    => $monthday,
