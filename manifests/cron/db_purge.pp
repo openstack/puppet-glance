@@ -36,7 +36,7 @@
 #
 #  [*user*]
 #    (optional) User with access to glance files.
-#    Defaults to 'glance'.
+#    Defaults to $::glance::params::user.
 #
 #  [*age*]
 #    (optional) Number of days prior to today for deletion,
@@ -64,12 +64,12 @@ class glance::cron::db_purge (
   $monthday    = '*',
   $month       = '*',
   $weekday     = '*',
-  $user        = 'glance',
+  $user        = $::glance::params::user,
   $age         = 30,
   $max_rows    = 100,
   $destination = '/var/log/glance/glance-rowsflush.log',
   $maxdelay    = 0
-) {
+) inherits glance::params {
 
   include glance::deps
 
