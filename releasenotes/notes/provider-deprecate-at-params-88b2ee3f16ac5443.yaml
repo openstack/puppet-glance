@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The ``glance_image`` resource type has been using the credential written in
+    the ``[keystone_authtoken]`` section of ``glance-api.conf``. However this
+    behavior has been deprecated and now the resource type first looks for
+    the yaml files in ``/etc/openstack/puppet``. Make sure one of
+    ``clouds.yaml`` or ``admin-clouds.yaml`` (which is created by
+    puppet-keystone) is created in that directory.
