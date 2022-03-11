@@ -492,7 +492,7 @@ describe 'glance::api' do
     end
   end
 
-  shared_examples_for 'glance::api Debian' do
+  shared_examples_for 'glance::api on Debian' do
     let(:params) { default_params }
 
     # We only test this on Debian platforms, since on RedHat there isn't a
@@ -501,19 +501,11 @@ describe 'glance::api' do
       context "with package_ensure '#{package_ensure}'" do
         let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
         it { is_expected.to contain_package('glance-api').with(
-            :ensure => package_ensure,
-            :tag    => ['openstack', 'glance-package']
+          :ensure => package_ensure,
+          :tag    => ['openstack', 'glance-package']
         )}
       end
     end
-  end
-
-  shared_examples_for 'glance::api RedHat' do
-    let(:params) { default_params }
-
-    it { is_expected.to contain_package('openstack-glance').with(
-        :tag => ['openstack', 'glance-package'],
-    )}
   end
 
   on_supported_os({
@@ -525,17 +517,9 @@ describe 'glance::api' do
       end
 
       it_configures 'glance::api'
-      it_configures "glance::api #{facts[:osfamily]}"
+      if facts[:osfamily] == 'Debian'
+        it_configures "glance::api on #{facts[:osfamily]}"
+      end
     end
   end
-
-  describe 'on unknown platforms' do
-    let :facts do
-      OSDefaults.get_facts({ :osfamily => 'unknown', :os => { :family => 'unknown', :release => { :major => '1'}}})
-    end
-    let(:params) { default_params }
-
-    it_raises 'a Puppet::Error', /module glance only support osfamily RedHat and Debian/
-  end
-
 end
