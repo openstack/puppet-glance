@@ -18,6 +18,7 @@ class Puppet::Provider::Glance < Puppet::Provider::Openstack
   end
 
   def self.glance_request(service, action, error, properties=nil)
+    warning('Usage of keystone_authtoken parameters is deprecated.')
     properties ||= []
     @credentials.username = glance_credentials['username']
     @credentials.password = glance_credentials['password']
