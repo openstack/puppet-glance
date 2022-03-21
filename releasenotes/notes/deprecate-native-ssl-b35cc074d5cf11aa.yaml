@@ -1,0 +1,10 @@
+---
+deprecations:
+  - |
+    The following parameters of the ``glance::api`` class have been deprecated
+    and now have no effect. Thse parameters have been unused by Glance since
+    Glance removed native ssl support.
+
+    - ``cert_file``
+    - ``key_file``
+    - ``ca_file``

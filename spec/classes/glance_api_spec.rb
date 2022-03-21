@@ -203,12 +203,6 @@ describe 'glance::api' do
           is_expected.to contain_glance_api_config('taskflow_executor/conversion_format').with_value(param_hash[:conversion_format])
         end
 
-        it 'is_expected.to have no ssl options' do
-          is_expected.to contain_glance_api_config('DEFAULT/ca_file').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_glance_api_config('DEFAULT/cert_file').with_value('<SERVICE DEFAULT>')
-          is_expected.to contain_glance_api_config('DEFAULT/key_file').with_value('<SERVICE DEFAULT>')
-        end
-
         it 'is_expected.to have no formats set' do
           is_expected.to contain_glance_api_config('image_format/container_formats').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_glance_api_config('image_format/disk_formats').with_value('<SERVICE DEFAULT>')
@@ -291,22 +285,6 @@ describe 'glance::api' do
       it { is_expected.to contain_oslo__middleware('glance_api_config').with(
         :max_request_body_size => '102400',
       )}
-    end
-
-    describe 'with ssl options' do
-      let :params do
-        default_params.merge({
-          :ca_file                   => '/tmp/ca_file',
-          :cert_file                 => '/tmp/cert_file',
-          :key_file                  => '/tmp/key_file',
-        })
-      end
-
-      context 'with ssl options' do
-        it { is_expected.to contain_glance_api_config('DEFAULT/ca_file').with_value('/tmp/ca_file') }
-        it { is_expected.to contain_glance_api_config('DEFAULT/cert_file').with_value('/tmp/cert_file') }
-        it { is_expected.to contain_glance_api_config('DEFAULT/key_file').with_value('/tmp/key_file') }
-      end
     end
 
     describe 'with formats options with strings' do

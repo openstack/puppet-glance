@@ -106,18 +106,6 @@
 #   in the api config.
 #   Defaults to false.
 #
-# [*cert_file*]
-#   (optinal) Certificate file to use when starting API server securely
-#   Defaults to $::os_service_default
-#
-# [*key_file*]
-#   (optional) Private key file to use when starting API server securely
-#   Defaults to $::os_service_default
-#
-# [*ca_file*]
-#   (optional) CA certificate file to use to verify connecting clients
-#   Defaults to $::os_service_default
-#
 # [*enforce_secure_rbac*]
 #  (optional) Enabled enforcing authorization based on common RBAC personas.
 #  Defaults to $::os_service_default
@@ -288,6 +276,18 @@
 #   (optional) The amount of time in seconds to delay before performing a delete.
 #   Defaults to undef
 #
+# [*cert_file*]
+#   (optinal) Certificate file to use when starting API server securely
+#   Defaults to undef
+#
+# [*key_file*]
+#   (optional) Private key file to use when starting API server securely
+#   Defaults to undef
+#
+# [*ca_file*]
+#   (optional) CA certificate file to use to verify connecting clients
+#   Defaults to undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -304,9 +304,6 @@ class glance::api(
   $filesystem_store_file_perm           = $::os_service_default,
   $location_strategy                    = $::os_service_default,
   $purge_config                         = false,
-  $cert_file                            = $::os_service_default,
-  $key_file                             = $::os_service_default,
-  $ca_file                              = $::os_service_default,
   $enforce_secure_rbac                  = $::os_service_default,
   $use_keystone_limits                  = $::os_service_default,
   $enabled_backends                     = undef,
@@ -353,6 +350,9 @@ class glance::api(
   $validate                             = undef,
   $validation_options                   = undef,
   $scrub_time                           = undef,
+  $cert_file                            = undef,
+  $key_file                             = undef,
+  $ca_file                              = undef,
 ) inherits glance {
 
   include glance::deps
@@ -377,6 +377,12 @@ glance::backend::multistore::cinder::cinder_os_region_name instead.')
   }
   glance_api_config {
     'DEFAULT/scrub_time': ensure => absent;
+  }
+
+  ['cert_file', 'key_file', 'ca_file'].each |String $ssl_opt| {
+    if getvar($ssl_opt) != undef {
+      warning("The ${ssl_opt} parameter has been deprecated and has no effect.")
+    }
   }
 
   if $sync_db {
@@ -579,13 +585,6 @@ enabled_backends instead.')
   oslo::middleware { 'glance_api_config':
     enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
     max_request_body_size        => $max_request_body_size,
-  }
-
-  # SSL Options
-  glance_api_config {
-    'DEFAULT/cert_file': value => $cert_file;
-    'DEFAULT/key_file' : value => $key_file;
-    'DEFAULT/ca_file'  : value => $ca_file;
   }
 
   if $keymgr_backend != undef {
