@@ -435,9 +435,9 @@ glance::backend::multistore::cinder::cinder_os_region_name instead.')
 
   if $show_multiple_locations {
     warning('The show_multiple_locations parameter is deprecated, and will be removed in a future release')
-    glance_api_config {
-      'DEFAULT/show_multiple_locations': value => $show_multiple_locations;
-    }
+  }
+  glance_api_config {
+    'DEFAULT/show_multiple_locations': value => pick($show_multiple_locations, $::os_service_default)
   }
 
   # task/taskflow_executor config.

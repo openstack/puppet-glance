@@ -17,6 +17,7 @@ describe 'glance::api' do
       :backlog                        => '<SERVICE DEFAULT>',
       :workers                        => '7',
       :show_image_direct_url          => '<SERVICE DEFAULT>',
+      :show_multiple_locations        => '<SERVICE DEFAULT>',
       :filesystem_store_metadata_file => '<SERVICE DEFAULT>',
       :filesystem_store_file_perm     => '<SERVICE DEFAULT>',
       :location_strategy              => '<SERVICE DEFAULT>',
