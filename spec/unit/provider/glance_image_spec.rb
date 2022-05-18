@@ -81,7 +81,7 @@ visibility="public"
 
     describe '#pythondict2hash' do
       it 'should return a hash with key-value when provided with a unicode python dict' do
-        s = "{u'key': 'value', u'key2': 'value2'}"
+        s = "{'key': 'value', 'key2': 'value2'}"
         expect(provider_class.pythondict2hash(s)).to eq({"key"=>"value", "key2"=>"value2"})
       end
 
@@ -103,7 +103,7 @@ visibility="public"
       end
 
       it 'should call pythondict2hash when provided with a hash' do
-        s = "{u'key': 'value', u'key2': 'value2'}"
+        s = "{'key': 'value', 'key2': 'value2'}"
         expect(provider_class.parsestring(s)).to eq({"key"=>"value", "key2"=>"value2"})
       end
     end

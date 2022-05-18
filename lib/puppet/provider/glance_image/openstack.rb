@@ -214,7 +214,7 @@ Puppet::Type.type(:glance_image).provide(
   end
 
   def self.pythondict2hash(input)
-    return JSON.parse(input.gsub(/u'(\w*)'/, '"\1"').gsub(/'/, '"').gsub(/False/,'false').gsub(/True/,'true'))
+    return JSON.parse(input.gsub(/'/, '"').gsub(/False/,'false').gsub(/True/,'true'))
   end
 
   def self.parsestring(input)
