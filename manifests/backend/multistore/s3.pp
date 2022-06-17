@@ -54,7 +54,7 @@
 #   Defaults to $::os_service_default.
 #
 # [*s3_store_thread_pools*]
-#   (optional) The number of thead pools to perform a multipart upload in S3.
+#   (optional) The number of thread pools to perform a multipart upload in S3.
 #   Defaults to $::os_service_default.
 #
 # [*store_description*]

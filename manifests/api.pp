@@ -173,7 +173,7 @@
 #   Defaults to $::os_service_default
 #
 # [*task_executor*]
-#   (optional) Task executor to be used t orun task scripts.
+#   (optional) Task executor to be used to run task scripts.
 #   Defaults to $::os_service_default
 #
 # [*task_work_dir*]
@@ -277,7 +277,7 @@
 #   Defaults to undef
 #
 # [*cert_file*]
-#   (optinal) Certificate file to use when starting API server securely
+#   (optional) Certificate file to use when starting API server securely
 #   Defaults to undef
 #
 # [*key_file*]
@@ -373,7 +373,7 @@ glance::backend::multistore::cinder::cinder_os_region_name instead.')
   }
 
   if $scrub_time != undef {
-    warning('The glance::scrub_time parameter is deprerecated and has no effect')
+    warning('The glance::scrub_time parameter is deprecated and has no effect')
   }
   glance_api_config {
     'DEFAULT/scrub_time': ensure => absent;

@@ -31,8 +31,8 @@
 #   Defaults to $::os_service_default.
 #
 # [*cinder_ca_certificates_file*]
-#   (optional) Location of ca certicate file to use for cinder client requests.
-#   Should be a valid ca certicate file
+#   (optional) Location of ca certificate file to use for cinder client requests.
+#   Should be a valid ca certificate file
 #   Defaults to $::os_service_default.
 #
 # [*cinder_http_retries*]
