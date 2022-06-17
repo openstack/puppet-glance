@@ -25,7 +25,7 @@
 #
 # [*filesystem_store_datadirs*]
 #   (optional) List of directories where dist images are stored. When using
-#   multiple directoris, each directory can be given an optional priority,
+#   multiple directories, each directory can be given an optional priority,
 #   which is an integer that is concatenated to the directory path with
 #   a colon.
 #   Defaults to $::os_service_default.

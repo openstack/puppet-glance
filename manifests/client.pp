@@ -3,7 +3,7 @@
 #
 # == parameters
 #  [*ensure*]
-#    (Optional) Ensure state for pachage.
+#    (Optional) Ensure state for package.
 #    Defaults to 'present'
 #
 class glance::client(
