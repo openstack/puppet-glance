@@ -75,21 +75,21 @@ describe 'glance::backend::multistore::file' do
     describe 'when filesystem_store_datadirs is set' do
       let :params do
         {
-          :filesystem_store_datadirs => ['/var/lib/glance/images', '/var/lib/gnance/images_alt']
+          :filesystem_store_datadirs => ['/var/lib/glance/images', '/var/lib/glance/images_alt']
         }
       end
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('file/filesystem_store_datadir')\
           .with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('file/filesystem_store_datadirs')\
-          .with_value(['/var/lib/glance/images', '/var/lib/gnance/images_alt'])
+          .with_value(['/var/lib/glance/images', '/var/lib/glance/images_alt'])
       end
 
       it 'configures glance-cache.conf' do
         is_expected.to contain_glance_cache_config('file/filesystem_store_datadir')\
           .with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('file/filesystem_store_datadirs')\
-          .with_value(['/var/lib/glance/images', '/var/lib/gnance/images_alt'])
+          .with_value(['/var/lib/glance/images', '/var/lib/glance/images_alt'])
       end
     end
   end
