@@ -20,9 +20,15 @@
 #    (optional) Defaults to '*'.
 #
 #  [*command_options*]
-#    command options to add to the cronjob
+#    (optional) command options to add to the cronjob
 #    (eg. point to config file, or redirect output)
-#    (optional) Defaults to ''.
+#    Defaults to ''.
+#
+#  [*maxdelay*]
+#    (optional) In Seconds. Should be a positive integer.
+#    Induces a random delay before running the cronjob to avoid running
+#    all cron jobs at the same time on all hosts this job is configured.
+#    Defaults to 0.
 #
 class glance::cache::pruner(
   $minute           = '*/30',
@@ -31,13 +37,20 @@ class glance::cache::pruner(
   $month            = '*',
   $weekday          = '*',
   $command_options  = '',
+  $maxdelay         = 0
 ) {
 
   include glance::deps
   include glance::params
 
+  if $maxdelay == 0 {
+    $sleep = ''
+  } else {
+    $sleep = "sleep `expr \${RANDOM} \\% ${maxdelay}`; "
+  }
+
   cron { 'glance-cache-pruner':
-    command     => "${glance::params::cache_pruner_command} ${command_options}",
+    command     => "${sleep}${glance::params::cache_pruner_command} ${command_options}",
     environment => 'PATH=/bin:/usr/bin:/usr/sbin',
     user        => $::glance::params::user,
     minute      => $minute,
@@ -46,6 +59,5 @@ class glance::cache::pruner(
     month       => $month,
     weekday     => $weekday,
     require     => Anchor['glance::config::end'],
-
   }
 }
