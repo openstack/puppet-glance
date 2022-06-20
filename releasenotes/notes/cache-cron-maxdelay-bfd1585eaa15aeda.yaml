@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The ``glance::cache::cleaner`` class and the ``glance::cache::pruner``
+    class now support the ``maxdelay`` parameter. This parameter would be
+    useful in a multi-node deployment, to avoid launching the same cron command
+    at the same time in multiple nodes.
