@@ -33,11 +33,12 @@ describe 'glance::cache::cleaner' do
           :month            => '2',
           :weekday          => '3',
           :command_options  => '--config-dir /etc/glance/',
+          :maxdelay         => 3600,
         }
       end
       it 'configures a cron' do
         is_expected.to contain_cron('glance-cache-cleaner').with(
-          :command     => 'glance-cache-cleaner --config-dir /etc/glance/',
+          :command     => 'sleep `expr ${RANDOM} \\% 3600`; glance-cache-cleaner --config-dir /etc/glance/',
           :environment => 'PATH=/bin:/usr/bin:/usr/sbin',
           :user        => 'glance',
           :minute      => 59,
