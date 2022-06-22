@@ -70,11 +70,17 @@ define glance::backend::multistore::file(
   glance_api_config {
     "${name}/filesystem_store_datadir":       value => $filesystem_store_datadir;
     "${name}/filesystem_store_datadirs":      value => $filesystem_store_datadirs;
-    "${name}/filesystem_store_metadata_file": value => $filesystem_store_metadata_file;
-    "${name}/filesystem_store_file_perm":     value => $filesystem_store_file_perm;
     "${name}/filesystem_store_chunk_size":    value => $filesystem_store_chunk_size;
     "${name}/filesystem_thin_provisioning":   value => $filesystem_thin_provisioning;
     "${name}/store_description":              value => $store_description;
+  }
+
+  if $name != 'glance_store' {
+    # NOTE(tkajinam): This logic is required to avoid conflict with glance::api
+    glance_api_config {
+      "${name}/filesystem_store_metadata_file": value => $filesystem_store_metadata_file;
+      "${name}/filesystem_store_file_perm":     value => $filesystem_store_file_perm;
+    }
   }
 
   glance_cache_config {
