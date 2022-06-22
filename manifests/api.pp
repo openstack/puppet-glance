@@ -87,16 +87,6 @@
 #   (optional) Expose image location to trusted clients.
 #   Defaults to $::os_service_default.
 #
-# [*filesystem_store_metadata_file*]
-#   (optional) The path to a file which contains the metadata to be returned
-#    with any location associated with the filesystem store
-#    properties.
-#   Defaults to $::os_service_default.
-#
-# [*filesystem_store_file_perm*]
-#   (optional) File access permissions for the image files.
-#   Defaults to $::os_service_default.
-#
 # [*location_strategy*]
 #   (optional) Strategy used to determine the image location order.
 #   Defaults to $::os_service_default.
@@ -288,6 +278,16 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to undef
 #
+# [*filesystem_store_metadata_file*]
+#   (optional) The path to a file which contains the metadata to be returned
+#    with any location associated with the filesystem store
+#    properties.
+#   Defaults to undef
+#
+# [*filesystem_store_file_perm*]
+#   (optional) File access permissions for the image files.
+#   Defaults to undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -300,8 +300,6 @@ class glance::api(
   $manage_service                       = true,
   $enabled                              = true,
   $show_image_direct_url                = $::os_service_default,
-  $filesystem_store_metadata_file       = $::os_service_default,
-  $filesystem_store_file_perm           = $::os_service_default,
   $location_strategy                    = $::os_service_default,
   $purge_config                         = false,
   $enforce_secure_rbac                  = $::os_service_default,
@@ -353,6 +351,8 @@ class glance::api(
   $cert_file                            = undef,
   $key_file                             = undef,
   $ca_file                              = undef,
+  $filesystem_store_metadata_file       = undef,
+  $filesystem_store_file_perm           = undef,
 ) inherits glance {
 
   include glance::deps
@@ -382,6 +382,12 @@ glance::backend::multistore::cinder::cinder_os_region_name instead.')
   ['cert_file', 'key_file', 'ca_file'].each |String $ssl_opt| {
     if getvar($ssl_opt) != undef {
       warning("The ${ssl_opt} parameter has been deprecated and has no effect.")
+    }
+  }
+
+  ['filesystem_store_metadata_file', 'filesystem_store_file_perm'].each |String $fs_opt| {
+    if getvar($fs_opt) != undef {
+      warning("The ${fs_opt} parameter has been deprecated and will be removed.")
     }
   }
 
@@ -532,8 +538,10 @@ enabled_backends instead.')
   }
 
   glance_api_config {
-    'glance_store/filesystem_store_metadata_file': value => $filesystem_store_metadata_file;
-    'glance_store/filesystem_store_file_perm':     value => $filesystem_store_file_perm;
+    'glance_store/filesystem_store_metadata_file':
+      value => pick($filesystem_store_metadata_file, $::os_service_default);
+    'glance_store/filesystem_store_file_perm':
+      value => pick($filesystem_store_file_perm, $::os_service_default);
   }
 
   glance_api_config {
