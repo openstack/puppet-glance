@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following two new classes have been added.
+
+    - The ``glance::backend::reserved::tasks`` class, to manage
+      the ``os_glance_tasks_store`` options.
+    - The ``glance::backend::reserved::staging`` class, to manage
+      the ``os_glance_staging_store`` options.
