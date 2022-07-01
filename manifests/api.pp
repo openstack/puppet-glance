@@ -256,6 +256,11 @@
 #   http://auth_url:5000/v3
 #   Defaults to undef
 #
+# [*lock_path*]
+#   (optional) Where to store lock files. This directory must be writeable
+#   by the user executing the agent
+#   Defaults to: $::glance::params::lock_path
+#
 # DEPRECATED PARAMETERS
 #
 # [*stores*]
@@ -368,6 +373,7 @@ class glance::api(
   $keymgr_backend                       = undef,
   $keymgr_encryption_api_url            = undef,
   $keymgr_encryption_auth_url           = undef,
+  $lock_path                            = $::glance::params::lock_path,
   # DEPRECATED PARAMETERS
   $stores                               = undef,
   $default_store                        = undef,
@@ -617,6 +623,10 @@ enabled_backends instead.')
   # keystone config
   if $auth_strategy == 'keystone' {
     include glance::api::authtoken
+  }
+
+  oslo::concurrency { 'glance_api_config':
+    lock_path => $lock_path,
   }
 
   oslo::middleware { 'glance_api_config':

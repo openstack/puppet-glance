@@ -1,0 +1,13 @@
+---
+upgrade:
+  - |
+    The ``glance::api`` class now supports a ``lock_path`` parameter that
+    configures the oslo.concurrency lock_path with a platform specific
+    default value. Distributions that are used to defining the lock_path
+    with a distribution specific config file may need to override the
+    default ``glance::api::lock_path`` value.
+fixes:
+  - |
+    `Bug #1980539 <https://bugs.launchpad.net/puppet-glance/+bug/1980539>`_:
+    Configure the oslo.concurrency lock_path, which is now required by cinder
+    backends.

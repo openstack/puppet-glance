@@ -258,6 +258,22 @@ describe 'glance::api' do
       end
     end
 
+    describe 'with platform default oslo concurrency lock_path' do
+      it { is_expected.to contain_oslo__concurrency('glance_api_config').with(
+        :lock_path => platform_params[:lock_path]
+      )}
+    end
+
+    describe 'with overridden oslo concurrency lock_path' do
+      let :params do
+        {:lock_path => '/glance/lock/path' }
+      end
+
+      it { is_expected.to contain_oslo__concurrency('glance_api_config').with(
+        :lock_path => '/glance/lock/path',
+      )}
+    end
+
     describe 'setting enable_proxy_headers_parsing' do
       let :params do
         default_params.merge({:enable_proxy_headers_parsing => true })
@@ -518,6 +534,15 @@ describe 'glance::api' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
+      end
+
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          { :lock_path => '/var/lock/glance' }
+        when 'RedHat'
+          { :lock_path => '/var/lib/glance/tmp' }
+        end
       end
 
       it_configures 'glance::api'
