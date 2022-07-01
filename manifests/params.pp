@@ -17,6 +17,7 @@ class glance::params {
       $api_service_name      = 'openstack-glance-api'
       $registry_service_name = 'openstack-glance-registry'
       $pyceph_package_name   = "python${pyvers}-rbd"
+      $lock_path             = '/var/lib/glance/tmp'
     }
     'Debian': {
       $api_package_name      = 'glance-api'
@@ -28,6 +29,7 @@ class glance::params {
       } else {
         $pyceph_package_name = "python${pyvers}-rbd"
       }
+      $lock_path             = '/var/lock/glance'
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
