@@ -208,6 +208,11 @@
 #   (optional) Maximum number of results that could be returned by a request
 #   Default: $::os_service_default.
 #
+# [*lock_path*]
+#   (optional) Where to store lock files. This directory must be writeable
+#   by the user executing the agent
+#   Defaults to: $::glance::params::lock_path
+#
 # DEPRECATED PARAMETERS
 #
 # [*stores*]
@@ -336,6 +341,7 @@ class glance::api(
   $sync_db                              = true,
   $limit_param_default                  = $::os_service_default,
   $api_limit_max                        = $::os_service_default,
+  $lock_path                            = $::glance::params::lock_path,
   # DEPRECATED PARAMETERS
   $stores                               = undef,
   $default_store                        = undef,
@@ -588,6 +594,10 @@ enabled_backends instead.')
   # keystone config
   if $auth_strategy == 'keystone' {
     include glance::api::authtoken
+  }
+
+  oslo::concurrency { 'glance_api_config':
+    lock_path => $lock_path,
   }
 
   oslo::middleware { 'glance_api_config':
