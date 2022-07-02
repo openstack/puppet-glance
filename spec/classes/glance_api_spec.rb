@@ -286,7 +286,7 @@ describe 'glance::api' do
 
     describe 'setting enable_proxy_headers_parsing' do
       let :params do
-        default_params.merge({:enable_proxy_headers_parsing => true })
+        {:enable_proxy_headers_parsing => true }
       end
 
       it { is_expected.to contain_oslo__middleware('glance_api_config').with(
@@ -296,7 +296,7 @@ describe 'glance::api' do
 
     describe 'setting max_request_body_size' do
       let :params do
-        default_params.merge({:max_request_body_size => '102400' })
+        {:max_request_body_size => '102400' }
       end
 
       it { is_expected.to contain_oslo__middleware('glance_api_config').with(
@@ -306,10 +306,10 @@ describe 'glance::api' do
 
     describe 'with formats options with strings' do
       let :params do
-        default_params.merge({
+        {
           :container_formats => 'ami,ari',
           :disk_formats      => 'raw,iso',
-        })
+        }
       end
 
       context 'with disk_formats option' do
@@ -320,10 +320,10 @@ describe 'glance::api' do
 
     describe 'with formats options with arrays' do
       let :params do
-        default_params.merge({
+        {
           :container_formats => ['ami', 'ari'],
           :disk_formats      => ['raw', 'iso'],
-        })
+        }
       end
 
       context 'with disk_formats option' do
@@ -333,22 +333,18 @@ describe 'glance::api' do
     end
 
     describe 'with enabled_backends and stores by default' do
-      let :params do
-        default_params
-      end
-
       it { is_expected.to_not contain_glance_api_config('DEFAULT/enabled_backends').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to_not contain_glance_api_config('glance_store/stores').with_value('<SERVICE DEFAULT>') }
     end
 
     describe 'with enabled_backends' do
       let :params do
-        default_params.merge({
+        {
           :enabled_backends => ['file1:file','http1:http'],
           :default_backend  => 'file1',
           :stores           => ['file','http'],
           :default_store    => 'file',
-        })
+        }
       end
 
       it { is_expected.to contain_glance_api_config('DEFAULT/enabled_backends').with_value('file1:file,http1:http') }
@@ -359,10 +355,10 @@ describe 'glance::api' do
 
     describe 'with invalid backend type' do
       let :params do
-        default_params.merge({
+        {
           :enabled_backends => ['file1:file','bad1:mybad'],
           :default_backend  => 'file',
-        })
+        }
       end
 
       it_raises 'a Puppet::Error', / is not a valid backend type./
@@ -370,9 +366,9 @@ describe 'glance::api' do
 
     describe 'with enabled_backends but no default_backend' do
       let :params do
-        default_params.merge({
+        {
           :enabled_backends => ['file1:file','http1:http'],
-        })
+        }
       end
 
       it_raises 'a Puppet::Error', /A glance default_backend must be specified./
@@ -380,10 +376,10 @@ describe 'glance::api' do
 
     describe 'with duplicate backend identifiers' do
       let :params do
-        default_params.merge({
+        {
           :enabled_backends => ['file1:file','file1:http'],
           :default_backend  => 'file1',
-        })
+        }
       end
 
       it_raises 'a Puppet::Error', /All backend identifiers in enabled_backends must be unique./
@@ -391,10 +387,10 @@ describe 'glance::api' do
 
     describe 'with invalid default_backend' do
       let :params do
-        default_params.merge({
+        {
           :enabled_backends => ['file1:file','http1:http'],
           :default_backend  => 'file2',
-        })
+        }
       end
 
       it_raises 'a Puppet::Error', / is not a valid backend identifier./
@@ -402,11 +398,11 @@ describe 'glance::api' do
 
     describe 'with stores override' do
       let :params do
-        default_params.merge({
+        {
           :default_store => 'file',
           :stores        => ['file','http'],
           :multi_store   => true,
-        })
+        }
       end
 
       it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
@@ -415,10 +411,10 @@ describe 'glance::api' do
 
     describe 'with single store override and no default store' do
       let :params do
-        default_params.merge({
+        {
           :stores      => ['file'],
           :multi_store => true,
-        })
+        }
       end
 
       it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
@@ -427,10 +423,10 @@ describe 'glance::api' do
 
     describe 'with multiple stores override and no default store' do
       let :params do
-        default_params.merge({
+        {
           :stores      => ['file', 'http'],
           :multi_store => true,
-        })
+        }
       end
 
       it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
@@ -439,10 +435,10 @@ describe 'glance::api' do
 
     describe 'with default_store' do
       let :params do
-        default_params.merge({
+        {
           :default_store => 'file',
           :multi_store   => true,
-        })
+        }
       end
 
       it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
@@ -451,14 +447,14 @@ describe 'glance::api' do
 
     describe 'with task & taskflow configuration' do
       let :params do
-        default_params.merge({
+        {
           :task_time_to_live    => 72,
           :task_executor        => 'taskflow-next-gen',
           :task_work_dir        => '/tmp/large',
           :taskflow_engine_mode => 'serial',
           :taskflow_max_workers => 1,
           :conversion_format    => 'raw',
-        })
+        }
       end
 
       it 'is_expected.to lay down default task & taskflow_executor config' do
@@ -473,11 +469,11 @@ describe 'glance::api' do
 
     describe 'with barbican parameters' do
       let :params do
-        default_params.merge!({
+        {
           :keymgr_backend             => 'castellan.key_manager.barbican_key_manager.BarbicanKeyManager',
           :keymgr_encryption_api_url  => 'https://localhost:9311/v1',
           :keymgr_encryption_auth_url => 'https://localhost:5000/v3',
-        })
+        }
       end
       it 'should set keymgr parameters' do
         is_expected.to contain_glance_api_config('key_manager/backend').with_value('castellan.key_manager.barbican_key_manager.BarbicanKeyManager')
@@ -488,13 +484,13 @@ describe 'glance::api' do
   end
 
   shared_examples_for 'glance::api on Debian' do
-    let(:params) { default_params }
-
     # We only test this on Debian platforms, since on RedHat there isn't a
     # separate package for glance API.
     ['present', 'latest'].each do |package_ensure|
       context "with package_ensure '#{package_ensure}'" do
-        let(:params) { default_params.merge({ :package_ensure => package_ensure }) }
+        let(:params) do
+          { :package_ensure => package_ensure }
+        end
         it { is_expected.to contain_package('glance-api').with(
           :ensure => package_ensure,
           :tag    => ['openstack', 'glance-package']
