@@ -1,0 +1,11 @@
+---
+features:
+  - |
+    The ``paste_deploy_flavor`` parameter and the ``paste_deploy_config_file``
+    parameter have been added to the ``glance::api`` class. These two
+    parameters allow customizing options in the ``[paste_deploy]`` section.
+
+deprecations:
+  - |
+    The ``glance::api::pipeline`` parameter has been deprecated in favor of
+    the new ``paste_deploy_flavor`` parameter.
