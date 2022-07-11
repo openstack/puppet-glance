@@ -54,6 +54,18 @@ describe 'glance::config' do
     end
   end
 
+  shared_examples_for 'glance_rootwrap_config' do
+    let :params do
+      { :rootwrap_config => config_hash }
+    end
+
+    it 'configures arbitrary glance-rootwrap configurations' do
+      is_expected.to contain_glance_rootwrap_config('DEFAULT/foo').with_value('fooValue')
+      is_expected.to contain_glance_rootwrap_config('DEFAULT/bar').with_value('barValue')
+      is_expected.to contain_glance_rootwrap_config('DEFAULT/baz').with_ensure('absent')
+    end
+  end
+
   on_supported_os({
     :supported_os   => OSDefaults.get_supported_os
   }).each do |os,facts|
@@ -65,6 +77,7 @@ describe 'glance::config' do
       it_configures 'glance_api_config'
       it_configures 'glance_cache_config'
       it_configures 'glance_image_import_config'
+      it_configures 'glance_rootwrap_config'
     end
   end
 end

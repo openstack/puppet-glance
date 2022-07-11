@@ -13,6 +13,7 @@ describe 'basic glance config resource' do
       File <||> -> Glance_image_import_config <||>
       File <||> -> Glance_swift_config <||>
       File <||> -> Glance_api_paste_ini <||>
+      File <||> -> Glance_rootwrap_config <||>
 
       file { '/etc/glance' :
         ensure => directory,
@@ -27,6 +28,9 @@ describe 'basic glance config resource' do
         ensure => file,
       }
       file { '/etc/glance/glance-api-paste.ini' :
+        ensure => file,
+      }
+      file { '/etc/glance/rootwrap.conf' :
         ensure => file,
       }
 
@@ -132,6 +136,24 @@ describe 'basic glance config resource' do
         value             => 'foo',
         key_val_separator => ':'
       }
+
+      glance_rootwrap_config { 'DEFAULT/thisshouldexist' :
+        value => 'foo',
+      }
+
+      glance_rootwrap_config { 'DEFAULT/thisshouldnotexist' :
+        value => '<SERVICE DEFAULT>',
+      }
+
+      glance_rootwrap_config { 'DEFAULT/thisshouldexist2' :
+        value             => '<SERVICE DEFAULT>',
+        ensure_absent_val => 'toto',
+      }
+
+      glance_rootwrap_config { 'DEFAULT/thisshouldnotexist2' :
+        value             => 'toto',
+        ensure_absent_val => 'toto',
+      }
       EOS
 
 
@@ -193,6 +215,17 @@ describe 'basic glance config resource' do
       it { is_expected.to contain('thisshouldexist=foo') }
       it { is_expected.to contain('thisshouldexist2=<SERVICE DEFAULT>') }
       it { is_expected.to contain('thisshouldexist3:foo') }
+
+      describe '#content' do
+        subject { super().content }
+        it { is_expected.not_to match /thisshouldnotexist/ }
+      end
+    end
+
+    describe file('/etc/glance/rootwrap.conf') do
+      it { is_expected.to exist }
+      it { is_expected.to contain('thisshouldexist=foo') }
+      it { is_expected.to contain('thisshouldexist2=<SERVICE DEFAULT>') }
 
       describe '#content' do
         subject { super().content }
