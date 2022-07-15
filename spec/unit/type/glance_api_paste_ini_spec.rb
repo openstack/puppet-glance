@@ -33,7 +33,7 @@ describe 'Puppet::Type.type(:glance_api_paste_ini)' do
     expect(@glance_api_paste_ini[:value]).to eq('bar')
   end
 
-  it 'should not accept a value with whitespace' do
+  it 'should accept a value with whitespace' do
     @glance_api_paste_ini[:value] = 'b ar'
     expect(@glance_api_paste_ini[:value]).to eq('b ar')
   end

@@ -33,7 +33,7 @@ describe 'Puppet::Type.type(:glance_api_uwsgi_config)' do
     expect(@glance_api_uwsgi_config[:value]).to eq('bar')
   end
 
-  it 'should not accept a value with whitespace' do
+  it 'should accept a value with whitespace' do
     @glance_api_uwsgi_config[:value] = 'b ar'
     expect(@glance_api_uwsgi_config[:value]).to eq('b ar')
   end
