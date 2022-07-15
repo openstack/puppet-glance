@@ -33,10 +33,13 @@
 #   (optional) Type is authorization being used.
 #   Defaults to 'keystone'
 #
-# [*pipeline*]
-#   (optional) Partial name of a pipeline in your paste configuration file with the
-#   service name removed.
+# [*paste_deploy_flavor*]
+#   (optional) Deployment flavor to use in the server application pipeline.
 #   Defaults to 'keystone'.
+#
+# [*paste_deploy_config_file*]
+#   (optional) Name of the paste configuration file.
+#   Defaults to $::os_service_default.
 #
 # [*manage_service*]
 #   (optional) If Puppet should manage service startup / shutdown.
@@ -293,6 +296,11 @@
 #   (optional) File access permissions for the image files.
 #   Defaults to undef
 #
+# [*pipeline*]
+#   (optional) Partial name of a pipeline in your paste configuration file with the
+#   service name removed.
+#   Defaults to undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -301,7 +309,8 @@ class glance::api(
   $workers                              = $::os_workers,
   $delayed_delete                       = $::os_service_default,
   $auth_strategy                        = 'keystone',
-  $pipeline                             = 'keystone',
+  $paste_deploy_flavor                  = 'keystone',
+  $paste_deploy_config_file             = $::os_service_default,
   $manage_service                       = true,
   $enabled                              = true,
   $show_image_direct_url                = $::os_service_default,
@@ -359,6 +368,7 @@ class glance::api(
   $ca_file                              = undef,
   $filesystem_store_metadata_file       = undef,
   $filesystem_store_file_perm           = undef,
+  $pipeline                             = undef,
 ) inherits glance {
 
   include glance::deps
@@ -578,17 +588,27 @@ enabled_backends instead.')
     'inject_metadata_properties/ignore_user_roles': value => $ignore_user_roles;
   }
 
-  # Set the pipeline, it is allowed to be blank
-  if $pipeline != '' {
-    validate_legacy(Pattern[/^(\w+([+]\w+)*)*$/], 'validate_re', $pipeline, ['^(\w+([+]\w+)*)*$'])
+  if $pipeline != undef {
+    warning('The pipeline parameter has been deprecated. Use the paste_deploy_flavor parmaeter instead.')
+    $paste_deploy_flavor_real = $pipeline
+  } else {
+    $paste_deploy_flavor_real = $paste_deploy_flavor
+  }
+
+  # Set the flavor, it is allowed to be blank
+  if $paste_deploy_flavor_real != '' {
+    validate_legacy(Pattern[/^(\w+([+]\w+)*)*$/], 'validate_re', $paste_deploy_flavor_real, ['^(\w+([+]\w+)*)*$'])
 
     glance_api_config {
-      'paste_deploy/flavor':
-        ensure => present,
-        value  => $pipeline,
+      'paste_deploy/flavor': value => $paste_deploy_flavor_real
     }
   } else {
-    glance_api_config { 'paste_deploy/flavor': ensure => absent }
+    glance_api_config {
+      'paste_deploy/flavor': ensure => absent
+    }
+  }
+  glance_api_config {
+    'paste_deploy/config_file': value => $paste_deploy_config_file
   }
 
   # keystone config

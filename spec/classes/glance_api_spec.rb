@@ -43,7 +43,8 @@ describe 'glance::api' do
       :image_cache_max_size           => '<SERVICE DEFAULT>',
       :cache_prefetcher_interval      => '<SERVICE DEFAULT>',
       :disk_formats                   => '<SERVICE DEFAULT>',
-      :pipeline                       => 'keystone',
+      :paste_deploy_flavor            => 'keystone',
+      :paste_deploy_config_file       => '<SERVICE DEFAULT>',
       :task_time_to_live              => '<SERVICE DEFAULT>',
       :task_executor                  => '<SERVICE DEFAULT>',
       :task_work_dir                  => '<SERVICE DEFAULT>',
@@ -90,7 +91,8 @@ describe 'glance::api' do
         :image_cache_stall_time         => '10',
         :image_cache_max_size           => '10737418240',
         :cache_prefetcher_interval      => '300',
-        :pipeline                       => 'keystone2',
+        :paste_deploy_flavor            => 'keystone+caching',
+        :paste_deploy_config_file       => 'glance-api-paste.ini',
         :sync_db                        => false,
         :limit_param_default            => '10',
         :api_limit_max                  => '10',
@@ -126,7 +128,8 @@ describe 'glance::api' do
           'tag'        => 'glance-service',
         ) }
 
-        it { is_expected.to contain_glance_api_config("paste_deploy/flavor").with_value(param_hash[:pipeline]) }
+        it { is_expected.to contain_glance_api_config('paste_deploy/flavor').with_value(param_hash[:paste_deploy_flavor]) }
+        it { is_expected.to contain_glance_api_config('paste_deploy/config_file').with_value(param_hash[:paste_deploy_config_file]) }
 
         it 'is_expected.to lay down default api config' do
           [
@@ -229,7 +232,17 @@ describe 'glance::api' do
       it { is_expected.to_not contain_service('glance-api') }
     end
 
-    describe 'with overridden pipeline' do
+    describe 'with overridden flavor' do
+      let :params do
+        {
+          :paste_deploy_flavor => 'something',
+        }
+      end
+
+      it { is_expected.to contain_glance_api_config('paste_deploy/flavor').with_value('something') }
+    end
+
+    describe 'with flavor overridden by the deprecated pipeline parameter' do
       let :params do
         {
           :pipeline => 'something',
@@ -239,10 +252,10 @@ describe 'glance::api' do
       it { is_expected.to contain_glance_api_config('paste_deploy/flavor').with_value('something') }
     end
 
-    describe 'with blank pipeline' do
+    describe 'with blank flavor' do
       let :params do
         {
-          :pipeline => '',
+          :paste_deploy_flavor => '',
         }
       end
 
@@ -255,11 +268,11 @@ describe 'glance::api' do
       '+keystone',
       'keystone+cachemanagement+',
       '+'
-    ].each do |pipeline|
-      describe "with pipeline incorrect value #{pipeline}" do
+    ].each do |flavor|
+      describe "with flavor set by incorrect value #{flavor}" do
         let :params do
           {
-            :pipeline          => pipeline
+            :flavor => flavor
           }
         end
 
