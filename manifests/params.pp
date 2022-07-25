@@ -11,24 +11,28 @@ class glance::params {
   $group                 = 'glance'
   $boto3_package_name    = 'python3-boto3'
 
+  $glance_wsgi_script_source = '/usr/bin/glance-wsgi-api'
+
   case $::osfamily {
     'RedHat': {
-      $package_name          = 'openstack-glance'
-      $api_package_name      = undef
-      $api_service_name      = 'openstack-glance-api'
-      $pyceph_package_name   = 'python3-rbd'
-      $lock_path             = '/var/lib/glance/tmp'
+      $package_name            = 'openstack-glance'
+      $api_package_name        = undef
+      $api_service_name        = 'openstack-glance-api'
+      $pyceph_package_name     = 'python3-rbd'
+      $lock_path               = '/var/lib/glance/tmp'
+      $glance_wsgi_script_path = '/var/www/cgi-bin/glance'
     }
     'Debian': {
-      $package_name          = undef
-      $api_package_name      = 'glance-api'
-      $api_service_name      = 'glance-api'
+      $package_name            = undef
+      $api_package_name        = 'glance-api'
+      $api_service_name        = 'glance-api'
       if $::operatingsystem == 'Debian' {
-        $pyceph_package_name = 'python3-ceph'
+        $pyceph_package_name   = 'python3-ceph'
       } else {
-        $pyceph_package_name = 'python3-rbd'
+        $pyceph_package_name   = 'python3-rbd'
       }
-      $lock_path             = '/var/lock/glance'
+      $lock_path               = '/var/lock/glance'
+      $glance_wsgi_script_path = '/usr/lib/cgi-bin/glance'
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \

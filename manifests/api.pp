@@ -49,6 +49,15 @@
 #   (optional) Whether to enable services.
 #   Defaults to true.
 #
+# [*service_name*]
+#   (optional) Name of the service that will be providing the
+#   server functionality of glance-api.
+#   If the value is 'httpd', this means glance-api will be a web
+#   service, and you must use another class to configure that
+#   web service. For example, use class { 'glance::wsgi::apache'...}
+#   to make glance-api be a web app using apache mod_wsgi.
+#   Defaults to '$::glance::params::api_service_name'
+#
 # [*container_formats*]
 #   (optional) List of allowed values for an image container_format attributes
 #   Defaults to $::os_service_default.
@@ -313,6 +322,7 @@ class glance::api(
   $paste_deploy_config_file             = $::os_service_default,
   $manage_service                       = true,
   $enabled                              = true,
+  $service_name                         = $::glance::params::api_service_name,
   $show_image_direct_url                = $::os_service_default,
   $location_strategy                    = $::os_service_default,
   $purge_config                         = false,
@@ -644,13 +654,29 @@ enabled_backends instead.')
       $service_ensure = 'stopped'
     }
 
-    service { 'glance-api':
-      ensure     => $service_ensure,
-      name       => $::glance::params::api_service_name,
-      enable     => $enabled,
-      hasstatus  => true,
-      hasrestart => true,
-      tag        => 'glance-service',
+    if $service_name == $::glance::params::api_service_name {
+      service { 'glance-api':
+        ensure     => $service_ensure,
+        name       => $::glance::params::api_service_name,
+        enable     => $enabled,
+        hasstatus  => true,
+        hasrestart => true,
+        tag        => 'glance-service',
+      }
+    } elsif $service_name == 'httpd' {
+      service { 'glance-api':
+        ensure => 'stopped',
+        name   => $::glance::params::api_service_name,
+        enable => false,
+        tag    => 'glance-service',
+      }
+      Service <| title == 'httpd' |> { tag +> 'glance-service' }
+
+      # we need to make sure glance-api/eventlet is stopped before trying to start apache
+      Service['glance-api'] -> Service[$service_name]
+    } else {
+    fail("Invalid service_name. ${::glance::params::api_service_name} for \
+running as a standalone service, or httpd for being run by a httpd server")
     }
   }
 }
