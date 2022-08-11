@@ -164,15 +164,11 @@ describe 'glance::wsgi::apache' do
         case facts[:osfamily]
         when 'Debian'
           {
-            :httpd_service_name => 'apache2',
-            :httpd_ports_file   => '/etc/apache2/ports.conf',
             :wsgi_script_path   => '/usr/lib/cgi-bin/glance',
             :wsgi_script_source => '/usr/bin/glance-wsgi-api'
           }
         when 'RedHat'
           {
-            :httpd_service_name => 'httpd',
-            :httpd_ports_file   => '/etc/httpd/conf/ports.conf',
             :wsgi_script_path   => '/var/www/cgi-bin/glance',
             :wsgi_script_source => '/usr/bin/glance-wsgi-api'
           }
