@@ -50,13 +50,10 @@ class glance::key_manager::barbican (
 
   include glance::deps
 
-  $barbican_endpoint_real = pick($glance::api::keymgr_encryption_api_url, $barbican_endpoint)
-  $auth_endpoint_real = pick($glance::api::keymgr_encryption_auth_url, $auth_endpoint)
-
   oslo::key_manager::barbican { 'glance_api_config':
-    barbican_endpoint       => $barbican_endpoint_real,
+    barbican_endpoint       => $barbican_endpoint,
     barbican_api_version    => $barbican_api_version,
-    auth_endpoint           => $auth_endpoint_real,
+    auth_endpoint           => $auth_endpoint,
     retry_delay             => $retry_delay,
     number_of_retries       => $number_of_retries,
     barbican_endpoint_type  => $barbican_endpoint_type,

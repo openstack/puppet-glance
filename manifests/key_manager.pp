@@ -14,9 +14,7 @@ class glance::key_manager (
 
   include glance::deps
 
-  $backend_real = pick($glance::api::keymgr_backend, $backend)
-
   oslo::key_manager { 'glance_api_config':
-    backend => $backend_real,
+    backend => $backend,
   }
 }
