@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``glance::notify::rabbitmq::rabbit_notification_exchange`` parameter
+    has been removed.

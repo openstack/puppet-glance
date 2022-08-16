@@ -103,12 +103,6 @@
 #    messaging, messagingv2, routing, log, test, noop (multi valued)
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-#  [*rabbit_notification_exchange*]
-#    Exchange name for sending notifications (string value)
-#    Defaults to undef
-#
 class glance::notify::rabbitmq(
   $default_transport_url              = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
@@ -129,8 +123,6 @@ class glance::notify::rabbitmq(
   $amqp_durable_queues                = $::os_service_default,
   $kombu_compression                  = $::os_service_default,
   $notification_driver                = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $rabbit_notification_exchange       = undef,
 ) {
 
   include glance::deps
@@ -161,13 +153,5 @@ class glance::notify::rabbitmq(
     driver        => $notification_driver,
     transport_url => $notification_transport_url,
     topics        => $rabbit_notification_topic,
-  }
-
-  if $rabbit_notification_exchange != undef {
-    warning('The rabbit_notification_exchange parameter is deprecated and has no effect')
-  }
-
-  glance_api_config {
-    'oslo_messaging_rabbit/default_notification_exchange': ensure => absent;
   }
 }
