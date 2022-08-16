@@ -89,9 +89,6 @@ class glance::backend::cinder(
 
   warning('glance::backend::cinder is deprecated. Use glance::backend::multistore::cinder instead.')
 
-  # to keep backwards compatibility
-  $cinder_os_region_name_real = pick($::glance::api::os_region_name, $cinder_os_region_name)
-
   glance::backend::multistore::cinder { 'glance_store':
     cinder_api_insecure         => $cinder_api_insecure,
     cinder_catalog_info         => $cinder_catalog_info,
@@ -102,7 +99,7 @@ class glance::backend::cinder(
     cinder_store_project_name   => $cinder_store_project_name,
     cinder_store_user_name      => $cinder_store_user_name,
     cinder_store_password       => $cinder_store_password,
-    cinder_os_region_name       => $cinder_os_region_name_real,
+    cinder_os_region_name       => $cinder_os_region_name,
     store_description           => undef,
   }
 

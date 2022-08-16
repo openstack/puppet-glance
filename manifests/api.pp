@@ -247,10 +247,6 @@
 #    properties.
 #   Defaults to undef
 #
-# [*os_region_name*]
-#   (optional) Sets the keystone region to use.
-#   Defaults to undef
-#
 # [*keymgr_backend*]
 #   (optional) Key Manager service class.
 #   Example of valid value: castellan.key_manager.barbican_key_manager.BarbicanKeyManager
@@ -366,7 +362,6 @@ class glance::api(
   $default_store                        = undef,
   $multi_store                          = false,
   $show_multiple_locations              = undef,
-  $os_region_name                       = undef,
   $keymgr_backend                       = undef,
   $keymgr_encryption_api_url            = undef,
   $keymgr_encryption_auth_url           = undef,
@@ -384,11 +379,6 @@ class glance::api(
   include glance::deps
   include glance::policy
   include glance::api::db
-
-  if $os_region_name != undef {
-    warning('glance::api::os_region_name is deprecated. Use \
-glance::backend::multistore::cinder::cinder_os_region_name instead.')
-  }
 
   if $validate != undef {
     warning('The glance::api::validate parameter has been deprecated and has no effect')
