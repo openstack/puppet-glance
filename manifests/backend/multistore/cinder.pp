@@ -117,9 +117,6 @@ define glance::backend::multistore::cinder(
 
   include glance::deps
 
-  # to keep backwards compatibility
-  $cinder_os_region_name_real = pick($::glance::api::os_region_name, $cinder_os_region_name)
-
   glance_api_config {
     "${name}/cinder_api_insecure":              value => $cinder_api_insecure;
     "${name}/cinder_catalog_info":              value => $cinder_catalog_info;
@@ -132,7 +129,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_password":            value => $cinder_store_password, secret => true;
     "${name}/cinder_store_user_domain_name":    value => $cinder_store_user_domain_name;
     "${name}/cinder_store_project_domain_name": value => $cinder_store_project_domain_name;
-    "${name}/cinder_os_region_name":            value => $cinder_os_region_name_real;
+    "${name}/cinder_os_region_name":            value => $cinder_os_region_name;
     "${name}/cinder_volume_type":               value => $cinder_volume_type;
     "${name}/cinder_enforce_multipath":         value => $cinder_enforce_multipath;
     "${name}/cinder_use_multipath":             value => $cinder_use_multipath;
@@ -152,7 +149,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_store_password":            value => $cinder_store_password, secret => true;
     "${name}/cinder_store_project_domain_name": value => $cinder_store_project_domain_name;
     "${name}/cinder_store_user_domain_name":    value => $cinder_store_user_domain_name;
-    "${name}/cinder_os_region_name":            value => $cinder_os_region_name_real;
+    "${name}/cinder_os_region_name":            value => $cinder_os_region_name;
     "${name}/cinder_volume_type":               value => $cinder_volume_type;
     "${name}/cinder_enforce_multipath":         value => $cinder_enforce_multipath;
     "${name}/cinder_mount_point_base":          value => $cinder_mount_point_base;
