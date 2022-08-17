@@ -247,21 +247,6 @@
 #    properties.
 #   Defaults to undef
 #
-# [*keymgr_backend*]
-#   (optional) Key Manager service class.
-#   Example of valid value: castellan.key_manager.barbican_key_manager.BarbicanKeyManager
-#   Defaults to undef
-#
-# [*keymgr_encryption_api_url*]
-#   (optional) Key Manager service URL
-#   Example of valid value: https://localhost:9311/v1
-#   Defaults to undef
-#
-# [*keymgr_encryption_auth_url*]
-#   (optional) Auth URL for keymgr authentication. Should be in format
-#   http://auth_url:5000/v3
-#   Defaults to undef
-#
 # [*validate*]
 #   (optional) Whether to validate the service is working after any service refreshes
 #   Defaults to undef
@@ -362,9 +347,6 @@ class glance::api(
   $default_store                        = undef,
   $multi_store                          = false,
   $show_multiple_locations              = undef,
-  $keymgr_backend                       = undef,
-  $keymgr_encryption_api_url            = undef,
-  $keymgr_encryption_auth_url           = undef,
   $validate                             = undef,
   $validation_options                   = undef,
   $scrub_time                           = undef,
@@ -623,18 +605,6 @@ enabled_backends instead.')
   oslo::middleware { 'glance_api_config':
     enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
     max_request_body_size        => $max_request_body_size,
-  }
-
-  if $keymgr_backend != undef {
-    warning('The keymgr_backend parameter is deprecated. Use the glance::key_manager class')
-    include glance::key_manager
-  }
-
-  ['keymgr_encryption_api_url', 'keymgr_encryption_auth_url'].each |String $barbican_opt| {
-    if getvar("${barbican_opt}") != undef {
-      warning("The ${barbican_opt} parameter is deprecated. Use the glance::key_manager::barbican class")
-    }
-    include glance::key_manager::barbican
   }
 
   if $manage_service {
