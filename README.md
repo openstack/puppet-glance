@@ -51,9 +51,9 @@ To utilize the glance module's functionality you will need to declare multiple r
 
 ```puppet
 class { 'glance::api::authtoken':
-  password => '12345',
-  auth_url => 'http://172.17.0.3:5000',
-  auth_uri => 'http://172.17.0.3:5000',
+  password             => '12345',
+  auth_url             => 'http://172.17.0.3:5000',
+  www_authenticate_uri => 'http://172.17.0.3:5000',
 }
 
 class { 'glance::api::db':
@@ -61,11 +61,13 @@ class { 'glance::api::db':
 }
 
 class { 'glance::api':
-  stores              => ['file', 'http'],
-  default_store       => 'file',
+  enabled_backends    => ['my_store:file'],
+  default_backend     => 'my_store:file',
 }
 
-class { 'glance::backend::file': }
+glance::backend::multistore::file {
+  'my_store': ;
+}
 ```
 
 **Setup postgres node glance**
