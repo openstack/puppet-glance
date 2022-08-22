@@ -225,6 +225,14 @@
 #   by the user executing the agent
 #   Defaults to: $::glance::params::lock_path
 #
+# [*public_endpoint*]
+#   (optional) Public url endpoint to use for Glance versions response.
+#   Change the endpoint to represent the proxy URL if the API service is
+#   running behind a proxy.  This is especially useful if the public endpoint
+#   is advertised with a base URL not pointing to the server root in Keystone.
+#   ie. https://cloud.acme.org/api/image
+#   Default: $::os_service_default.
+#
 # DEPRECATED PARAMETERS
 #
 # [*stores*]
@@ -342,6 +350,7 @@ class glance::api(
   $limit_param_default                  = $::os_service_default,
   $api_limit_max                        = $::os_service_default,
   $lock_path                            = $::glance::params::lock_path,
+  $public_endpoint                      = $::os_service_default,
   # DEPRECATED PARAMETERS
   $stores                               = undef,
   $default_store                        = undef,
@@ -435,6 +444,7 @@ class glance::api(
     'DEFAULT/user_storage_quota':         value => $user_storage_quota;
     'DEFAULT/limit_param_default':        value => $limit_param_default;
     'DEFAULT/api_limit_max':              value => $api_limit_max;
+    'DEFAULT/public_endpoint':            value => $public_endpoint;
   }
 
   if $show_multiple_locations {

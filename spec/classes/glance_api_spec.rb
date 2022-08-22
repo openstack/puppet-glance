@@ -54,6 +54,7 @@ describe 'glance::api' do
       :sync_db                        => true,
       :limit_param_default            => '<SERVICE DEFAULT>',
       :api_limit_max                  => '<SERVICE DEFAULT>',
+      :public_endpoint                => '<SERVICE DEFAULT>',
     }
   end
 
@@ -96,6 +97,7 @@ describe 'glance::api' do
         :sync_db                        => false,
         :limit_param_default            => '10',
         :api_limit_max                  => '10',
+        :public_endpoint                => 'https://cloud.acme.org/api/image',
       }
     ].each do |param_set|
 
@@ -155,6 +157,7 @@ describe 'glance::api' do
             'user_storage_quota',
             'limit_param_default',
             'api_limit_max',
+            'public_endpoint',
           ].each do |config|
             is_expected.to contain_glance_api_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end
