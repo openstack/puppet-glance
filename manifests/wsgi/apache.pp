@@ -155,6 +155,8 @@ class glance::wsgi::apache (
   include glance::deps
   include glance::params
 
+  Anchor['glance::install::end'] -> Class['apache']
+
   ::openstacklib::wsgi::apache { 'glance_wsgi':
     bind_host                   => $bind_host,
     bind_port                   => $port,
@@ -191,6 +193,5 @@ class glance::wsgi::apache (
     error_log_file              => $error_log_file,
     error_log_pipe              => $error_log_pipe,
     error_log_syslog            => $error_log_syslog,
-    require                     => Anchor['glance::install::end'],
   }
 }
