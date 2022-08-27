@@ -43,7 +43,7 @@
 #
 #   [*priority*]
 #     (optional) The priority for the vhost.
-#     Defaults to '10'
+#     Defaults to 10
 #
 #   [*threads*]
 #     (optional) The number of threads for the vhost.
@@ -138,7 +138,7 @@ class glance::wsgi::apache (
   $ssl_certs_dir               = undef,
   $wsgi_process_display_name   = undef,
   $threads                     = 1,
-  $priority                    = '10',
+  $priority                    = 10,
   $access_log_file             = undef,
   $access_log_pipe             = undef,
   $access_log_syslog           = undef,
