@@ -4,9 +4,6 @@ describe 'glance::wsgi::apache' do
   shared_examples 'apache serving glance with mod_wsgi' do
     context 'with default parameters' do
       it { is_expected.to contain_class('glance::params') }
-      it { is_expected.to contain_class('apache') }
-      it { is_expected.to contain_class('apache::mod::wsgi') }
-      it { is_expected.to_not contain_class('apache::mod::ssl') }
       it { is_expected.to contain_openstacklib__wsgi__apache('glance_wsgi').with(
         :bind_port                   => 9292,
         :group                       => 'glance',
@@ -54,9 +51,6 @@ describe 'glance::wsgi::apache' do
         }
       end
       it { is_expected.to contain_class('glance::params') }
-      it { is_expected.to contain_class('apache') }
-      it { is_expected.to contain_class('apache::mod::wsgi') }
-      it { is_expected.to contain_class('apache::mod::ssl') }
       it { is_expected.to contain_openstacklib__wsgi__apache('glance_wsgi').with(
         :bind_host                 => '10.42.51.1',
         :bind_port                 => 12345,

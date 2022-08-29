@@ -156,11 +156,6 @@ class glance::wsgi::apache (
 
   include glance::deps
   include glance::params
-  include apache
-  include apache::mod::wsgi
-  if $ssl {
-    include apache::mod::ssl
-  }
 
   ::openstacklib::wsgi::apache { 'glance_wsgi':
     bind_host                   => $bind_host,
