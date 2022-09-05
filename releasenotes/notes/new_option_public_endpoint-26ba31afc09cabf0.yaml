@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The ``glance::api`` class accepts a new parameter ``public_endpoint``.
+    This is especially useful if you have a proxy or load balancer that
+    rewrites the base URL of the image API.  If the image API is advertised as
+    ``https://cloud.acme.org/api/image`` in Keystone, you will need to set
+    this option to the full value of the endpoint to have glance API
+    advertise the correct URLs to clients.
