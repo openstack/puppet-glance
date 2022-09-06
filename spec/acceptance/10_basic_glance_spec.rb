@@ -30,6 +30,10 @@ describe 'glance class' do
       apply_manifest(pp, :catch_changes => true)
     end
 
+    describe port(9292) do
+      it { is_expected.to be_listening }
+    end
+
     describe 'glance images' do
       it 'should create a glance image with proper attributes' do
         glance_env_opts = '--os-identity-api-version 3 --os-username glance --os-password a_big_secret --os-project-name services --os-user-domain-name Default --os-project-domain-name Default --os-auth-url http://127.0.0.1:5000/v3'
