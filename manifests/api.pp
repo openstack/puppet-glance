@@ -66,10 +66,6 @@
 #   (optional) List of allowed values for an image disk_format attribute.
 #   Defaults to $::os_service_default.
 #
-# [*cache_prefetcher_interval*]
-#   (optional) The interval in seconds to run periodic job 'cache_images'
-#   Defaults to $::os_service_default.
-#
 # [*image_cache_max_size*]
 #   (optional) The upper limit (the maximum size of accumulated cache in bytes) beyond which pruner,
 #   if running, starts cleaning the images cache.
@@ -291,6 +287,10 @@
 #   service name removed.
 #   Defaults to undef
 #
+# [*cache_prefetcher_interval*]
+#   (optional) The interval in seconds to run periodic job 'cache_images'
+#   Defaults to undef.
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
@@ -313,7 +313,6 @@ class glance::api(
   $default_backend                      = undef,
   $container_formats                    = $::os_service_default,
   $disk_formats                         = $::os_service_default,
-  $cache_prefetcher_interval            = $::os_service_default,
   $image_cache_max_size                 = $::os_service_default,
   $image_cache_stall_time               = $::os_service_default,
   $image_cache_dir                      = '/var/lib/glance/image-cache',
@@ -356,6 +355,7 @@ class glance::api(
   $filesystem_store_metadata_file       = undef,
   $filesystem_store_file_perm           = undef,
   $pipeline                             = undef,
+  $cache_prefetcher_interval            = undef,
 ) inherits glance {
 
   include glance::deps
@@ -389,6 +389,13 @@ class glance::api(
     }
   }
 
+  if $cache_prefetcher_interval {
+    warning('The cache_prefetcher_interval parameter has been deprecate and has no effect.')
+  }
+  glance_api_config {
+    'DEFAULT/cache_prefetcher_interval': ensure => absent;
+  }
+
   if $sync_db {
     include glance::db::sync
     include glance::db::metadefs
@@ -420,7 +427,6 @@ class glance::api(
     'DEFAULT/delayed_delete':             value => $delayed_delete;
     'DEFAULT/enforce_secure_rbac':        value => $enforce_secure_rbac;
     'DEFAULT/use_keystone_limits':        value => $use_keystone_limits;
-    'DEFAULT/cache_prefetcher_interval':  value => $cache_prefetcher_interval;
     'DEFAULT/image_cache_dir':            value => $image_cache_dir;
     'DEFAULT/image_cache_stall_time':     value => $image_cache_stall_time;
     'DEFAULT/image_cache_max_size':       value => $image_cache_max_size;
