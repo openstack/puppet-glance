@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``glance::api::cache_prefetcher_interval`` parameter has been
+    deprecaed and has no effect now. It will be removed completely in a future
+    release.
