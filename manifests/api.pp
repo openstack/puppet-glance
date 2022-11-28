@@ -268,18 +268,6 @@
 #   (optional) The amount of time in seconds to delay before performing a delete.
 #   Defaults to undef
 #
-# [*cert_file*]
-#   (optional) Certificate file to use when starting API server securely
-#   Defaults to undef
-#
-# [*key_file*]
-#   (optional) Private key file to use when starting API server securely
-#   Defaults to undef
-#
-# [*ca_file*]
-#   (optional) CA certificate file to use to verify connecting clients
-#   Defaults to undef
-#
 # [*filesystem_store_metadata_file*]
 #   (optional) The path to a file which contains the metadata to be returned
 #    with any location associated with the filesystem store
@@ -358,9 +346,6 @@ class glance::api(
   $validate                             = undef,
   $validation_options                   = undef,
   $scrub_time                           = undef,
-  $cert_file                            = undef,
-  $key_file                             = undef,
-  $ca_file                              = undef,
   $filesystem_store_metadata_file       = undef,
   $filesystem_store_file_perm           = undef,
   $pipeline                             = undef,
@@ -384,12 +369,6 @@ class glance::api(
   }
   glance_api_config {
     'DEFAULT/scrub_time': ensure => absent;
-  }
-
-  ['cert_file', 'key_file', 'ca_file'].each |String $ssl_opt| {
-    if getvar($ssl_opt) != undef {
-      warning("The ${ssl_opt} parameter has been deprecated and has no effect.")
-    }
   }
 
   ['filesystem_store_metadata_file', 'filesystem_store_file_perm'].each |String $fs_opt| {

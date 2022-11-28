@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``glance::api`` class have been removed.
+
+    - ``cert_file``
+    - ``key_file``
+    - ``ca_file``
