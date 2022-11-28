@@ -33,5 +33,9 @@ describe 'glance class' do
     describe port(9292) do
       it { is_expected.to be_listening }
     end
+
+    describe cron do
+      it { is_expected.to have_entry('1 0 * * * glance-manage db purge --age_in_days 30 --max_rows 100 >>/var/log/glance/glance-rowsflush.log 2>&1').with_user('glance') }
+    end
   end
 end
