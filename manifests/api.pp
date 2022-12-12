@@ -251,19 +251,6 @@
 #    properties.
 #   Defaults to undef
 #
-# [*validate*]
-#   (optional) Whether to validate the service is working after any service refreshes
-#   Defaults to undef
-#
-# [*validation_options*]
-#   (optional) Service validation options
-#   Should be a hash of options defined in openstacklib::service_validation
-#   If empty, defaults values are taken from openstacklib function.
-#   Default command list images.
-#   Require validate set at True.
-#   Example:
-#   Defaults to undef
-#
 # [*scrub_time*]
 #   (optional) The amount of time in seconds to delay before performing a delete.
 #   Defaults to undef
@@ -343,8 +330,6 @@ class glance::api(
   $default_store                        = undef,
   $multi_store                          = false,
   $show_multiple_locations              = undef,
-  $validate                             = undef,
-  $validation_options                   = undef,
   $scrub_time                           = undef,
   $filesystem_store_metadata_file       = undef,
   $filesystem_store_file_perm           = undef,
@@ -355,14 +340,6 @@ class glance::api(
   include glance::deps
   include glance::policy
   include glance::api::db
-
-  if $validate != undef {
-    warning('The glance::api::validate parameter has been deprecated and has no effect')
-  }
-
-  if $validation_options != undef {
-    warning('The glance::api::validation_options parameter has been deprecated and has no effect')
-  }
 
   if $scrub_time != undef {
     warning('The glance::scrub_time parameter is deprecated and has no effect')
