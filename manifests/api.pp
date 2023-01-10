@@ -251,10 +251,6 @@
 #    properties.
 #   Defaults to undef
 #
-# [*scrub_time*]
-#   (optional) The amount of time in seconds to delay before performing a delete.
-#   Defaults to undef
-#
 # [*filesystem_store_metadata_file*]
 #   (optional) The path to a file which contains the metadata to be returned
 #    with any location associated with the filesystem store
@@ -330,7 +326,6 @@ class glance::api(
   $default_store                        = undef,
   $multi_store                          = false,
   $show_multiple_locations              = undef,
-  $scrub_time                           = undef,
   $filesystem_store_metadata_file       = undef,
   $filesystem_store_file_perm           = undef,
   $pipeline                             = undef,
@@ -340,13 +335,6 @@ class glance::api(
   include glance::deps
   include glance::policy
   include glance::api::db
-
-  if $scrub_time != undef {
-    warning('The glance::scrub_time parameter is deprecated and has no effect')
-  }
-  glance_api_config {
-    'DEFAULT/scrub_time': ensure => absent;
-  }
 
   ['filesystem_store_metadata_file', 'filesystem_store_file_perm'].each |String $fs_opt| {
     if getvar($fs_opt) != undef {

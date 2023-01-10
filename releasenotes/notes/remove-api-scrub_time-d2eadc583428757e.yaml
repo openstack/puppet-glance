@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``glance::api::scrub_time`` parameter has been removed.
