@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    Now ``python3-ceph`` package, instead of ``python3-rbd`` package, is
+    installed when rbd backend is used. This fixes the missing
+    ``python3-rados`` package.
