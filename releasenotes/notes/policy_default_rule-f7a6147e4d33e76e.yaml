@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``glance::policy::policy_default_rule`` parameter has been added.
