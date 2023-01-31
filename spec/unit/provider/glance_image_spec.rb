@@ -39,12 +39,12 @@ describe provider_class do
     it_behaves_like 'authenticated with environment variables' do
       describe '#create' do
         it 'creates an image' do
-          provider.class.stubs(:openstack)
+          allow(provider.class).to receive(:openstack)
             .with('image', 'create', '--format', 'shell',
                   ['image1', '--public', '--container-format=bare',
                    '--disk-format=qcow2', '--min-disk=1024', '--min-ram=1024',
                    '--file=/var/tmp/image1.img'])
-            .returns('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
+            .and_return('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
 container_format="bare"
 created_at="2016-03-29T20:52:24Z"
 disk_format="qcow2"
@@ -71,7 +71,7 @@ visibility="public"
 
     describe '#destroy' do
       it 'destroys an image' do
-        provider.class.stubs(:openstack)
+        allow(provider.class).to receive(:openstack)
                       .with('image', 'delete', 'image1')
         provider.destroy
         expect(provider.exists?).to be_falsey
@@ -110,15 +110,15 @@ visibility="public"
 
     describe '.instances' do
       it 'finds every image' do
-        provider.class.stubs(:openstack)
+        allow(provider.class).to receive(:openstack)
           .with('image', 'list', '--quiet', '--format', 'csv', '--long')
-          .returns('"ID","Name","Disk Format","Container Format","Size","Status"
+          .and_return('"ID","Name","Disk Format","Container Format","Size","Status"
 "5345b502-efe4-4852-a45d-edaba3a3acc6","image1","raw","bare",1270,"active"
 ')
-        provider.class.stubs(:openstack)
+        allow(provider.class).to receive(:openstack)
           .with('image', 'show', '--format', 'shell',
                 '5345b502-efe4-4852-a45d-edaba3a3acc6')
-          .returns('checksum="09b9c392dc1f6e914cea287cb6be34b0"
+          .and_return('checksum="09b9c392dc1f6e914cea287cb6be34b0"
 container_format="bare"
 created_at="2015-04-08T18:28:01"
 deleted="False"
@@ -172,14 +172,14 @@ virtual_size="None"
     it_behaves_like 'authenticated with environment variables' do
       describe '#create' do
         it 'creates an image' do
-          provider.class.stubs(:openstack)
+          allow(provider.class).to receive(:openstack)
             .with('image', 'create', '--format', 'shell',
                   ['image1', '--public', '--container-format=bare',
                    '--disk-format=qcow2', '--min-disk=1024', '--min-ram=1024',
                    ['--property', 'something=what', '--property',
                     'vmware_disktype=sparse'],
                    '--file=/var/tmp/image1.img'])
-            .returns('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
+            .and_return('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
 container_format="bare"
 created_at="2016-03-29T20:52:24Z"
 disk_format="qcow2"
@@ -207,14 +207,14 @@ visibility="public"
 
     describe '.instances' do
       it 'finds every image' do
-        provider.class.stubs(:openstack)
+        allow(provider.class).to receive(:openstack)
           .with('image', 'list', '--quiet', '--format', 'csv', '--long')
-          .returns('"ID","Name","Disk Format","Container Format","Size","Status"
+          .and_return('"ID","Name","Disk Format","Container Format","Size","Status"
 "5345b502-efe4-4852-a45d-edaba3a3acc6","image1","raw","bare",1270,"active"
 ')
-        provider.class.stubs(:openstack)
+        allow(provider.class).to receive(:openstack)
           .with('image', 'show', '--format', 'shell', '5345b502-efe4-4852-a45d-edaba3a3acc6')
-          .returns('checksum="09b9c392dc1f6e914cea287cb6be34b0"
+          .and_return('checksum="09b9c392dc1f6e914cea287cb6be34b0"
 container_format="bare"
 created_at="2015-04-08T18:28:01"
 deleted="False"
@@ -267,13 +267,13 @@ virtual_size="None"
     it_behaves_like 'authenticated with environment variables' do
       describe '#create' do
         it 'creates an image' do
-          provider.class.stubs(:openstack)
+          allow(provider.class).to receive(:openstack)
             .with('image', 'create', '--format', 'shell',
                   ['image1', '--public', '--container-format=bare',
                    '--disk-format=qcow2',
                    '--id=2b4be0b8-aec0-43af-a404-33c3335a0b3f',
                    '--file=/var/tmp/image1.img' ])
-            .returns('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
+            .and_return('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
 container_format="bare"
 created_at="2016-03-29T20:52:24Z"
 disk_format="qcow2"
@@ -301,15 +301,15 @@ visibility="public"
 
     describe '.instances' do
       it 'finds every image' do
-        provider.class.stubs(:openstack)
+        allow(provider.class).to receive(:openstack)
           .with('image', 'list', '--quiet', '--format', 'csv', '--long')
-          .returns('"ID","Name","Disk Format","Container Format","Size","Status"
+          .and_return('"ID","Name","Disk Format","Container Format","Size","Status"
 "2b4be0b8-aec0-43af-a404-33c3335a0b3f","image1","raw","bare",1270,"active"
 ')
-        provider.class.stubs(:openstack)
+        allow(provider.class).to receive(:openstack)
           .with('image', 'show', '--format', 'shell',
                 '2b4be0b8-aec0-43af-a404-33c3335a0b3f')
-          .returns('checksum="09b9c392dc1f6e914cea287cb6be34b0"
+          .and_return('checksum="09b9c392dc1f6e914cea287cb6be34b0"
 container_format="bare"
 created_at="2015-04-08T18:28:01"
 deleted="False"
@@ -361,13 +361,13 @@ virtual_size="None"
     it_behaves_like 'authenticated with environment variables' do
       describe '#create' do
         it 'creates an image' do
-          provider.class.stubs(:openstack)
+          allow(provider.class).to receive(:openstack)
             .with('image', 'create', '--format', 'shell',
                   ['image1', '--public', '--container-format=bare',
                    '--disk-format=qcow2',
                    '--file=/var/tmp/image1.img',
                    '--project=5a9e521e17014804ab8b4e8b3de488a4'])
-            .returns('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
+            .and_return('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
 container_format="bare"
 created_at="2016-03-29T20:52:24Z"
 disk_format="qcow2"
@@ -419,12 +419,12 @@ visibility="public"
     it_behaves_like 'authenticated with environment variables' do
       describe '#create' do
         it 'creates an image' do
-          provider.class.stubs(:openstack)
+          allow(provider.class).to receive(:openstack)
             .with('image', 'create', '--format', 'shell',
                   ['image1', '--public', '--container-format=bare',
                    '--disk-format=qcow2', '--tag=testtag',
                    '--file=/var/tmp/image1.img' ])
-            .returns('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
+            .and_return('checksum="ee1eca47dc88f4879d8a229cc70a07c6"
 container_format="bare"
 created_at="2016-03-29T20:52:24Z"
 disk_format="qcow2"
@@ -450,14 +450,14 @@ visibility="public"
 
     describe '.instances' do
       it 'finds every image' do
-        provider.class.stubs(:openstack)
+        allow(provider.class).to receive(:openstack)
           .with('image', 'list', '--quiet', '--format', 'csv', '--long')
-          .returns('"ID","Name","Disk Format","Container Format","Size","Status","Tags"
+          .and_return('"ID","Name","Disk Format","Container Format","Size","Status","Tags"
 "5345b502-efe4-4852-a45d-edaba3a3acc6","image1","raw","bare",1270,"active","testtag"
 ')
-        provider.class.stubs(:openstack)
+        allow(provider.class).to receive(:openstack)
           .with('image', 'show', '--format', 'shell', '5345b502-efe4-4852-a45d-edaba3a3acc6')
-          .returns('checksum="09b9c392dc1f6e914cea287cb6be34b0"
+          .and_return('checksum="09b9c392dc1f6e914cea287cb6be34b0"
 container_format="bare"
 created_at="2015-04-08T18:28:01"
 deleted="False"
