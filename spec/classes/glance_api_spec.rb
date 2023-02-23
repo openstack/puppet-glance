@@ -10,7 +10,7 @@ describe 'glance::api' do
   let :default_params do
     {
       :bind_host                      => '<SERVICE DEFAULT>',
-      :bind_port                      => '9292',
+      :bind_port                      => '<SERVICE DEFAULT>',
       :auth_strategy                  => 'keystone',
       :enabled                        => true,
       :manage_service                 => true,

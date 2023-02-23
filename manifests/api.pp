@@ -15,7 +15,7 @@
 #
 # [*bind_port*]
 #   (optional) The port the server should bind to.
-#   Default: 9292
+#   Default: $::os_service_default.
 #
 # [*backlog*]
 #   (optional) Backlog requests when creating socket
@@ -273,7 +273,7 @@
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $::os_service_default,
-  $bind_port                            = '9292',
+  $bind_port                            = $::os_service_default,
   $backlog                              = $::os_service_default,
   $workers                              = $::os_workers,
   $delayed_delete                       = $::os_service_default,
