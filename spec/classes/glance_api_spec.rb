@@ -549,7 +549,7 @@ describe 'glance::api' do
       end
 
       let(:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :lock_path => '/var/lock/glance' }
         when 'RedHat'
@@ -558,8 +558,8 @@ describe 'glance::api' do
       end
 
       it_configures 'glance::api'
-      if facts[:osfamily] == 'Debian'
-        it_configures "glance::api on #{facts[:osfamily]}"
+      if facts[:os]['family'] == 'Debian'
+        it_configures "glance::api on #{facts[:os]['family']}"
       end
     end
   end

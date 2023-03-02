@@ -37,7 +37,7 @@ describe 'glance' do
       end
 
       it_configures 'glance'
-      it_configures "glance #{facts[:osfamily]}"
+      it_configures "glance #{facts[:os]['family']}"
     end
   end
 end

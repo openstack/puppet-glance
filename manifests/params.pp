@@ -13,7 +13,7 @@ class glance::params {
 
   $glance_wsgi_script_source = '/usr/bin/glance-wsgi-api'
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       $package_name            = 'openstack-glance'
       $api_package_name        = undef
@@ -31,8 +31,7 @@ class glance::params {
       $glance_wsgi_script_path = '/usr/lib/cgi-bin/glance'
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
-module ${module_name} only support osfamily RedHat and Debian")
+      fail("Unsupported osfamily: ${facts['os']['family']}")
     }
   }
 

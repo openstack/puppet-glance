@@ -25,43 +25,43 @@
 #   (optional) Info to match when looking for cinder in the service catalog.
 #   Format is : separated values of the form:
 #   <service_type>:<service_name>:<endpoint_type> (string value)
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*cinder_endpoint_template*]
 #   (optional) Override service catalog lookup with template for cinder endpoint.
 #   Should be a valid URL. Example: 'http://localhost:8776/v1/%(project_id)s'
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*cinder_ca_certificates_file*]
 #   (optional) Location of ca certificate file to use for cinder client requests.
 #   Should be a valid ca certificate file
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*cinder_http_retries*]
 #   (optional) Number of cinderclient retries on failed http calls.
 #   Should be a valid integer
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*cinder_api_insecure*]
 #   (optional) Allow to perform insecure SSL requests to cinder.
 #   Should be a valid boolean value
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*cinder_store_auth_address*]
 #   (optional) A valid authentication service address.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*cinder_store_project_name*]
 #   (optional) Project name where the image volume is stored in cinder.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*cinder_store_user_name*]
 #   (optional) User name to authenticate against cinder.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*cinder_store_password*]
 #   (optional) A valid password for the user specified by `cinder_store_user_name'
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*cinder_os_region_name*]
 #   (optional) Sets the keystone region to use.
@@ -72,15 +72,15 @@
 #   Defaults to false
 #
 class glance::backend::cinder(
-  $cinder_ca_certificates_file = $::os_service_default,
-  $cinder_api_insecure         = $::os_service_default,
-  $cinder_catalog_info         = $::os_service_default,
-  $cinder_endpoint_template    = $::os_service_default,
-  $cinder_http_retries         = $::os_service_default,
-  $cinder_store_auth_address   = $::os_service_default,
-  $cinder_store_project_name   = $::os_service_default,
-  $cinder_store_user_name      = $::os_service_default,
-  $cinder_store_password       = $::os_service_default,
+  $cinder_ca_certificates_file = $facts['os_service_default'],
+  $cinder_api_insecure         = $facts['os_service_default'],
+  $cinder_catalog_info         = $facts['os_service_default'],
+  $cinder_endpoint_template    = $facts['os_service_default'],
+  $cinder_http_retries         = $facts['os_service_default'],
+  $cinder_store_auth_address   = $facts['os_service_default'],
+  $cinder_store_project_name   = $facts['os_service_default'],
+  $cinder_store_user_name      = $facts['os_service_default'],
+  $cinder_store_password       = $facts['os_service_default'],
   $cinder_os_region_name       = 'RegionOne',
   $multi_store                 = false,
 ) {

@@ -21,20 +21,20 @@
 # === Parameters:
 #
 # [*rbd_store_user*]
-#   Optional. Default: $::os_service_default.
+#   Optional. Default: $facts['os_service_default'].
 #
 # [*rbd_store_pool*]
-#   Optional. Default: $::os_service_default.
+#   Optional. Default: $facts['os_service_default'].
 #
 # [*rbd_store_ceph_conf*]
-#   Optional. Default: $::os_service_default.
+#   Optional. Default: $facts['os_service_default'].
 #
 # [*rbd_store_chunk_size*]
-#   Optional. Default: $::os_service_default.
+#   Optional. Default: $facts['os_service_default'].
 #
 # [*rbd_thin_provisioning*]
 #   Optional. Boolean describing if thin provisioning is enabled or not
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*manage_packages*]
 #   Optional. Whether we should manage the packages.
@@ -49,23 +49,23 @@
 #   Optional. Timeout value (in seconds) used when connecting
 #   to ceph cluster. If value <= 0, no timeout is set and
 #   default librados value is used.
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*store_description*]
 #   (optional) Provides constructive information about the store backend to
 #   end users.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 define glance::backend::multistore::rbd(
-  $rbd_store_user        = $::os_service_default,
-  $rbd_store_ceph_conf   = $::os_service_default,
-  $rbd_store_pool        = $::os_service_default,
-  $rbd_store_chunk_size  = $::os_service_default,
-  $rbd_thin_provisioning = $::os_service_default,
+  $rbd_store_user        = $facts['os_service_default'],
+  $rbd_store_ceph_conf   = $facts['os_service_default'],
+  $rbd_store_pool        = $facts['os_service_default'],
+  $rbd_store_chunk_size  = $facts['os_service_default'],
+  $rbd_thin_provisioning = $facts['os_service_default'],
   $manage_packages       = true,
   $package_ensure        = 'present',
-  $rados_connect_timeout = $::os_service_default,
-  $store_description     = $::os_service_default,
+  $rados_connect_timeout = $facts['os_service_default'],
+  $store_description     = $facts['os_service_default'],
 ) {
 
   include glance::deps

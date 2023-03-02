@@ -30,7 +30,7 @@
 #   verifying vCenter server certificate. If parameter is not set
 #   then system truststore is used. If parameter is set,
 #   vcenter_insecure value is ignored.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*vmware_datastores*]
 #   (Multi-valued) A list of datastores where the image
@@ -46,7 +46,7 @@
 #   zero and the directory will be considered for selection last.
 #   If multiple datastores have the same weight, then the one with the most
 #   free space available is selected.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*vmware_server_host*]
 #   (required) vCenter/ESXi Server target system.
@@ -65,29 +65,29 @@
 # [*vmware_task_poll_interval*]
 #   (optional) The interval used for polling remote tasks invoked on
 #   vCenter/ESXi server.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*vmware_api_retry_count*]
 #   (optional) Number of times VMware ESX/VC server API must be retried upon
 #   connection related issues.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*store_description*]
 #   (optional) Provides constructive information about the store backend to
 #   end users.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 define glance::backend::multistore::vsphere(
   $vmware_server_host,
   $vmware_server_username,
   $vmware_server_password,
   $vmware_store_image_dir,
-  $vmware_ca_file            = $::os_service_default,
-  $vmware_datastores         = $::os_service_default,
+  $vmware_ca_file            = $facts['os_service_default'],
+  $vmware_datastores         = $facts['os_service_default'],
   $vmware_insecure           = 'True',
-  $vmware_task_poll_interval = $::os_service_default,
-  $vmware_api_retry_count    = $::os_service_default,
-  $store_description         = $::os_service_default,
+  $vmware_task_poll_interval = $facts['os_service_default'],
+  $vmware_api_retry_count    = $facts['os_service_default'],
+  $store_description         = $facts['os_service_default'],
 ) {
 
   include glance::deps

@@ -36,7 +36,7 @@
 #   Optional. Useful when keystone auth is version 3. Default: default
 #
 # [*swift_store_container*]
-#   Optional. Default: $::os_service_default.
+#   Optional. Default: $facts['os_service_default'].
 #
 # [*swift_store_auth_version*]
 #   Optional. Default: '3'
@@ -44,16 +44,16 @@
 # [*swift_store_large_object_size*]
 #   Optional. What size, in MB, should Glance start chunking image files
 #   and do a large object manifest in Swift?
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*swift_store_large_object_chunk_size*]
 #   Optional. When doing a large object manifest, what size, in MB, should
 #   Glance write chunks to Swift? This amount of data is written
 #   to a temporary disk buffer during the process of chunking.
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*swift_store_create_container_on_put*]
-#   Optional. Default: $::os_service_default.
+#   Optional. Default: $facts['os_service_default'].
 #
 # [*swift_store_endpoint_type*]
 #   Optional. Endpoint type of Swift service.
@@ -61,11 +61,11 @@
 #
 # [*swift_store_service_type*]
 #   Optional. Type of the swift service to use.
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*swift_store_region*]
 #   Optional. The region of Swift endpoint to use by Glance.
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*default_swift_reference*]
 #   Optional. The reference to the default swift
@@ -75,21 +75,21 @@
 #
 # [*swift_buffer_on_upload*]
 #   Optional. Buffer image segments before upload to Swift.
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*swift_upload_buffer_dir*]
 #   Optional. Directory to buffer image segments before upload to Swift.
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*swift_store_retry_get_count*]
 #   Optional. The number of times a Swift download will be retried before
 #   the request fails.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*store_description*]
 #   (optional) Provides constructive information about the store backend to
 #   end users.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # DEPRECATED PARAMETERS
 #
@@ -100,21 +100,21 @@ define glance::backend::multistore::swift(
   $swift_store_user,
   $swift_store_key,
   $swift_store_auth_address            = 'http://127.0.0.1:5000/v3/',
-  $swift_store_container               = $::os_service_default,
+  $swift_store_container               = $facts['os_service_default'],
   $swift_store_auth_version            = '3',
   $swift_store_auth_project_domain_id  = 'default',
   $swift_store_auth_user_domain_id     = 'default',
-  $swift_store_large_object_size       = $::os_service_default,
-  $swift_store_large_object_chunk_size = $::os_service_default,
-  $swift_store_create_container_on_put = $::os_service_default,
+  $swift_store_large_object_size       = $facts['os_service_default'],
+  $swift_store_large_object_chunk_size = $facts['os_service_default'],
+  $swift_store_create_container_on_put = $facts['os_service_default'],
   $swift_store_endpoint_type           = 'internalURL',
-  $swift_store_service_type            = $::os_service_default,
-  $swift_store_region                  = $::os_service_default,
+  $swift_store_service_type            = $facts['os_service_default'],
+  $swift_store_region                  = $facts['os_service_default'],
   $default_swift_reference             = 'ref1',
-  $swift_buffer_on_upload              = $::os_service_default,
-  $swift_upload_buffer_dir             = $::os_service_default,
-  $swift_store_retry_get_count         = $::os_service_default,
-  $store_description                   = $::os_service_default,
+  $swift_buffer_on_upload              = $facts['os_service_default'],
+  $swift_upload_buffer_dir             = $facts['os_service_default'],
+  $swift_store_retry_get_count         = $facts['os_service_default'],
+  $store_description                   = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $swift_store_config_file             = undef,
 ) {

@@ -11,23 +11,23 @@
 #
 # [*bind_host*]
 #   (optional) The address of the host to bind to.
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*bind_port*]
 #   (optional) The port the server should bind to.
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*backlog*]
 #   (optional) Backlog requests when creating socket
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*workers*]
 #   (optional) Number of Glance API worker processes to start
-#   Default: $::os_workers.
+#   Default: $facts['os_workers'].
 #
 # [*delayed_delete*]
 #   (optional) Turn on/off delayed delete.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*auth_strategy*]
 #   (optional) Type is authorization being used.
@@ -39,7 +39,7 @@
 #
 # [*paste_deploy_config_file*]
 #   (optional) Name of the paste configuration file.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*manage_service*]
 #   (optional) If Puppet should manage service startup / shutdown.
@@ -60,44 +60,44 @@
 #
 # [*container_formats*]
 #   (optional) List of allowed values for an image container_format attributes
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*disk_formats*]
 #   (optional) List of allowed values for an image disk_format attribute.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*image_cache_max_size*]
 #   (optional) The upper limit (the maximum size of accumulated cache in bytes) beyond which pruner,
 #   if running, starts cleaning the images cache.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*image_cache_stall_time*]
 #   (optional) The amount of time to let an image remain in the cache without being accessed.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*image_import_plugins*]
 #   (optional) (Array) List of enabled Image Import Plugins.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*image_conversion_output_format*]
 #   (optional) Desired output format for image conversion plugin.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*inject_metadata_properties*]
 #   (optional) Dictionary contains metadata properties to be injected in image.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*ignore_user_roles*]
 #   (optional) List containing user roles. For example: [admin,member]
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*show_image_direct_url*]
 #   (optional) Expose image location to trusted clients.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*location_strategy*]
 #   (optional) Strategy used to determine the image location order.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -106,12 +106,12 @@
 #
 # [*enforce_secure_rbac*]
 #  (optional) Enabled enforcing authorization based on common RBAC personas.
-#  Defaults to $::os_service_default
+#  Defaults to $facts['os_service_default']
 #
 # [*use_keystone_limits*]
 #  (optional) Allow Glance to retrieve limits set in keystone for resource
 #  consumption and enforce them against API users
-#  Defaults to $::os_service_default
+#  Defaults to $facts['os_service_default']
 #
 # [*enabled_backends*]
 #   (optional) List of Key:Value pairs of store identifier and store type.
@@ -130,78 +130,78 @@
 #
 # [*enabled_import_methods*]
 #   (optional) The list of enabled Image Import Methods.
-#    Defaults to $::os_service_default.
+#    Defaults to $facts['os_service_default'].
 #
 # [*node_staging_uri*]
 # (optional) The URL provides location where the temporary data will be
 #  stored when image import method is set to 'glance-direct'
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 # [*worker_self_reference_url*]
 #   (optional) The self-reference URL by which other workers will get to know
 #   how to contact the worker which has staged the image.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*image_member_quota*]
 #   (optional) The maximum number of image members allowed per image.
-#    Defaults to $::os_service_default
+#    Defaults to $facts['os_service_default']
 #
 # [*image_property_quota*]
 #   (optional) The maximum number of image properties allowed on an image.
-#    Defaults to $::os_service_default
+#    Defaults to $facts['os_service_default']
 #
 # [*image_tag_quota*]
 #   (optional) The maximum number of tags allowed on an image.
-#    Defaults to $::os_service_default
+#    Defaults to $facts['os_service_default']
 #
 # [*image_location_quota*]
 #   (optional) The maximum number of locations allowed on an image.
-#    Defaults to $::os_service_default
+#    Defaults to $facts['os_service_default']
 #
 # [*image_size_cap*]
 #   (optional) The maximum size of image a user can upload in bytes
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*user_storage_quota*]
 #   (optional) The maximum amount of image storage per tenant.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*task_time_to_live*]
 #   (optional) Time in hours for which a task lives after.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*task_executor*]
 #   (optional) Task executor to be used to run task scripts.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*task_work_dir*]
 #   (optional) Absolute path to the work directory to use for asynchronous
 #   task operations.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*taskflow_engine_mode*]
 #   (optional) Set the taskflow engine mode.
 #   Allowed values: 'parallel', 'serial'.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*taskflow_max_workers*]
 #   (optional) Integer value to limit the number of taskflow workers. Only
 #   relevant if taskflow_engine_mode is 'parallel'.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*conversion_format*]
 #   (optional) Allow automatic image conversion.
 #   Allowed values: 'qcow2', 'raw', 'vmdk', false.
-#   Defaults to $::os_service_default (disabled)
+#   Defaults to $facts['os_service_default'] (disabled)
 #
 # [*enable_proxy_headers_parsing*]
 #   (Optional) Enable paste middleware to handle SSL requests through
 #   HTTPProxyToWSGI middleware.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*max_request_body_size*]
 #   (Optional) Set max request body size
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*sync_db*]
 #   (Optional) Run db sync on the node.
@@ -210,11 +210,11 @@
 # [*limit_param_default*]
 #   (optional) Default value for the number of items returned by a request if not
 #   specified explicitly in the request (integer value)
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*api_limit_max*]
 #   (optional) Maximum number of results that could be returned by a request
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # [*lock_path*]
 #   (optional) Where to store lock files. This directory must be writeable
@@ -227,7 +227,7 @@
 #   running behind a proxy.  This is especially useful if the public endpoint
 #   is advertised with a base URL not pointing to the server root in Keystone.
 #   ie. https://cloud.acme.org/api/image
-#   Default: $::os_service_default.
+#   Default: $facts['os_service_default'].
 #
 # DEPRECATED PARAMETERS
 #
@@ -272,55 +272,55 @@
 #
 class glance::api(
   $package_ensure                       = 'present',
-  $bind_host                            = $::os_service_default,
-  $bind_port                            = $::os_service_default,
-  $backlog                              = $::os_service_default,
-  $workers                              = $::os_workers,
-  $delayed_delete                       = $::os_service_default,
+  $bind_host                            = $facts['os_service_default'],
+  $bind_port                            = $facts['os_service_default'],
+  $backlog                              = $facts['os_service_default'],
+  $workers                              = $facts['os_workers'],
+  $delayed_delete                       = $facts['os_service_default'],
   $auth_strategy                        = 'keystone',
   $paste_deploy_flavor                  = 'keystone',
-  $paste_deploy_config_file             = $::os_service_default,
+  $paste_deploy_config_file             = $facts['os_service_default'],
   $manage_service                       = true,
   $enabled                              = true,
   $service_name                         = $::glance::params::api_service_name,
-  $show_image_direct_url                = $::os_service_default,
-  $location_strategy                    = $::os_service_default,
+  $show_image_direct_url                = $facts['os_service_default'],
+  $location_strategy                    = $facts['os_service_default'],
   $purge_config                         = false,
-  $enforce_secure_rbac                  = $::os_service_default,
-  $use_keystone_limits                  = $::os_service_default,
+  $enforce_secure_rbac                  = $facts['os_service_default'],
+  $use_keystone_limits                  = $facts['os_service_default'],
   $enabled_backends                     = undef,
   $default_backend                      = undef,
-  $container_formats                    = $::os_service_default,
-  $disk_formats                         = $::os_service_default,
-  $image_cache_max_size                 = $::os_service_default,
-  $image_cache_stall_time               = $::os_service_default,
+  $container_formats                    = $facts['os_service_default'],
+  $disk_formats                         = $facts['os_service_default'],
+  $image_cache_max_size                 = $facts['os_service_default'],
+  $image_cache_stall_time               = $facts['os_service_default'],
   $image_cache_dir                      = '/var/lib/glance/image-cache',
-  $image_import_plugins                 = $::os_service_default,
-  $inject_metadata_properties           = $::os_service_default,
-  $ignore_user_roles                    = $::os_service_default,
-  $image_conversion_output_format       = $::os_service_default,
-  $enabled_import_methods               = $::os_service_default,
-  $node_staging_uri                     = $::os_service_default,
-  $worker_self_reference_url            = $::os_service_default,
-  $image_member_quota                   = $::os_service_default,
-  $image_property_quota                 = $::os_service_default,
-  $image_tag_quota                      = $::os_service_default,
-  $image_location_quota                 = $::os_service_default,
-  $image_size_cap                       = $::os_service_default,
-  $user_storage_quota                   = $::os_service_default,
-  $task_time_to_live                    = $::os_service_default,
-  $task_executor                        = $::os_service_default,
-  $task_work_dir                        = $::os_service_default,
-  $taskflow_engine_mode                 = $::os_service_default,
-  $taskflow_max_workers                 = $::os_service_default,
-  $conversion_format                    = $::os_service_default,
-  $enable_proxy_headers_parsing         = $::os_service_default,
-  $max_request_body_size                = $::os_service_default,
+  $image_import_plugins                 = $facts['os_service_default'],
+  $inject_metadata_properties           = $facts['os_service_default'],
+  $ignore_user_roles                    = $facts['os_service_default'],
+  $image_conversion_output_format       = $facts['os_service_default'],
+  $enabled_import_methods               = $facts['os_service_default'],
+  $node_staging_uri                     = $facts['os_service_default'],
+  $worker_self_reference_url            = $facts['os_service_default'],
+  $image_member_quota                   = $facts['os_service_default'],
+  $image_property_quota                 = $facts['os_service_default'],
+  $image_tag_quota                      = $facts['os_service_default'],
+  $image_location_quota                 = $facts['os_service_default'],
+  $image_size_cap                       = $facts['os_service_default'],
+  $user_storage_quota                   = $facts['os_service_default'],
+  $task_time_to_live                    = $facts['os_service_default'],
+  $task_executor                        = $facts['os_service_default'],
+  $task_work_dir                        = $facts['os_service_default'],
+  $taskflow_engine_mode                 = $facts['os_service_default'],
+  $taskflow_max_workers                 = $facts['os_service_default'],
+  $conversion_format                    = $facts['os_service_default'],
+  $enable_proxy_headers_parsing         = $facts['os_service_default'],
+  $max_request_body_size                = $facts['os_service_default'],
   $sync_db                              = true,
-  $limit_param_default                  = $::os_service_default,
-  $api_limit_max                        = $::os_service_default,
+  $limit_param_default                  = $facts['os_service_default'],
+  $api_limit_max                        = $facts['os_service_default'],
   $lock_path                            = $::glance::params::lock_path,
-  $public_endpoint                      = $::os_service_default,
+  $public_endpoint                      = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $stores                               = undef,
   $default_store                        = undef,
@@ -362,7 +362,7 @@ class glance::api(
     }
   }
 
-  if $enabled_import_methods != $::os_service_default {
+  if $enabled_import_methods != $facts['os_service_default'] {
     # This option is a ListOpt that requires explicit brackets.
     $enabled_import_methods_real = sprintf('[%s]', join(any2array($enabled_import_methods), ','))
   } else {
@@ -401,7 +401,7 @@ class glance::api(
     warning('The show_multiple_locations parameter is deprecated, and will be removed in a future release')
   }
   glance_api_config {
-    'DEFAULT/show_multiple_locations': value => pick($show_multiple_locations, $::os_service_default)
+    'DEFAULT/show_multiple_locations': value => pick($show_multiple_locations, $facts['os_service_default'])
   }
 
   # task/taskflow_executor config.
@@ -497,9 +497,9 @@ enabled_backends instead.')
 
   glance_api_config {
     'glance_store/filesystem_store_metadata_file':
-      value => pick($filesystem_store_metadata_file, $::os_service_default);
+      value => pick($filesystem_store_metadata_file, $facts['os_service_default']);
     'glance_store/filesystem_store_file_perm':
-      value => pick($filesystem_store_file_perm, $::os_service_default);
+      value => pick($filesystem_store_file_perm, $facts['os_service_default']);
   }
 
   glance_api_config {
@@ -517,7 +517,7 @@ enabled_backends instead.')
     'DEFAULT/image_cache_max_size':   value => $image_cache_max_size;
   }
 
-  if $image_import_plugins != $::os_service_default {
+  if $image_import_plugins != $facts['os_service_default'] {
     $image_import_plugins_real = sprintf('[%s]', join(any2array($image_import_plugins), ','))
   } else {
     $image_import_plugins_real = $image_import_plugins

@@ -33,8 +33,8 @@ describe 'glance' do
       end
 
       it_behaves_like 'glance'
-      if facts[:osfamily] == 'RedHat'
-        it_configures "glance on #{facts[:osfamily]}"
+      if facts[:os]['family'] == 'RedHat'
+        it_configures "glance on #{facts[:os]['family']}"
       end
     end
   end

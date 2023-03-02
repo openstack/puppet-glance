@@ -32,7 +32,7 @@
 #   verifying vCenter server certificate. If parameter is not set
 #   then system truststore is used. If parameter is set,
 #   vcenter_insecure value is ignored.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*vcenter_datastores*]
 #   (Multi-valued) A list of datastores where the image
@@ -48,7 +48,7 @@
 #   zero and the directory will be considered for selection last.
 #   If multiple datastores have the same weight, then the one with the most
 #   free space available is selected.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*vcenter_host*]
 #   (required) vCenter/ESXi Server target system.
@@ -67,12 +67,12 @@
 # [*vcenter_task_poll_interval*]
 #   (optional) The interval used for polling remote tasks invoked on
 #   vCenter/ESXi server.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*vcenter_api_retry_count*]
 #   (optional) Number of times VMware ESX/VC server API must be retried upon
 #   connection related issues.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*multi_store*]
 #   (optional) Boolean describing if multiple backends will be configured
@@ -83,11 +83,11 @@ class glance::backend::vsphere(
   $vcenter_user,
   $vcenter_password,
   $vcenter_image_dir,
-  $vcenter_ca_file            = $::os_service_default,
-  $vcenter_datastores         = $::os_service_default,
+  $vcenter_ca_file            = $facts['os_service_default'],
+  $vcenter_datastores         = $facts['os_service_default'],
   $vcenter_insecure           = 'True',
-  $vcenter_task_poll_interval = $::os_service_default,
-  $vcenter_api_retry_count    = $::os_service_default,
+  $vcenter_task_poll_interval = $facts['os_service_default'],
+  $vcenter_api_retry_count    = $facts['os_service_default'],
   $multi_store                = false,
 ) {
 

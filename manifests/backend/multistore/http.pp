@@ -21,21 +21,21 @@
 #
 # [*https_ca_certificates_file*]
 #   Optional. Path to the CA bundle file.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*https_insecure*]
 #   Optional. Set verification of the remote server certificate.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*http_proxy_information*]
 #   Optional. The http/https proxy information to be used to connect to the
 #   remote server.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 define glance::backend::multistore::http(
-  $https_ca_certificates_file = $::os_service_default,
-  $https_insecure             = $::os_service_default,
-  $http_proxy_information     = $::os_service_default,
+  $https_ca_certificates_file = $facts['os_service_default'],
+  $https_insecure             = $facts['os_service_default'],
+  $http_proxy_information     = $facts['os_service_default'],
 ) {
 
   include glance::deps

@@ -21,25 +21,25 @@
 #
 # [*filesystem_store_datadir*]
 #   (optional) Directory where dist images are stored.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*filesystem_store_file_perm*]
 #   (optional) File access permissions for the image files.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*filesystem_store_chunk_size*]
 #   (optional) Chunk size, in bytes.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*filesystem_thin_provisioning*]
 #   (optional) Boolean describing if thin provisioning is enabled or not
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class glance::backend::reserved::staging(
-  $filesystem_store_datadir     = $::os_service_default,
-  $filesystem_store_file_perm   = $::os_service_default,
-  $filesystem_store_chunk_size  = $::os_service_default,
-  $filesystem_thin_provisioning = $::os_service_default,
+  $filesystem_store_datadir     = $facts['os_service_default'],
+  $filesystem_store_file_perm   = $facts['os_service_default'],
+  $filesystem_store_chunk_size  = $facts['os_service_default'],
+  $filesystem_thin_provisioning = $facts['os_service_default'],
 ) {
 
   glance_api_config {

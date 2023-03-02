@@ -11,7 +11,7 @@
 #
 #  [*filesystem_thin_provisioning*]
 #    (optional) Boolean describing if thin provisioning is enabled or not
-#    Defaults to $::os_service_default
+#    Defaults to $facts['os_service_default']
 #
 #  [*multi_store*]
 #    (optional) Boolean describing if multiple backends will be configured
@@ -19,7 +19,7 @@
 #
 class glance::backend::file(
   $filesystem_store_datadir     = '/var/lib/glance/images/',
-  $filesystem_thin_provisioning = $::os_service_default,
+  $filesystem_thin_provisioning = $facts['os_service_default'],
   $multi_store                  = false,
 ) {
 

@@ -7,16 +7,16 @@
 # [*task_pool_threads*]
 #   (Optional) The number of thredas (per worker process) in the pool for
 #   processing asynchronous tasks.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*python_interpreter*]
 #   (Optional) Path to the python interpreter to use when spawning external
 #   processes.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class glance::wsgi (
-  $task_pool_threads  = $::os_service_default,
-  $python_interpreter = $::os_service_default,
+  $task_pool_threads  = $facts['os_service_default'],
+  $python_interpreter = $facts['os_service_default'],
 ) {
 
   include glance::deps
