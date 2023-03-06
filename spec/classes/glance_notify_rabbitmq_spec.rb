@@ -20,9 +20,10 @@ describe 'glance::notify::rabbitmq' do
       ) }
 
       it { is_expected.to contain_oslo__messaging__default('glance_api_config').with(
-        :transport_url        => '<SERVICE DEFAULT>',
-        :rpc_response_timeout => '<SERVICE DEFAULT>',
-        :control_exchange     => '<SERVICE DEFAULT>',
+        :executor_thread_pool_size => '<SERVICE DEFAULT>',
+        :transport_url             => '<SERVICE DEFAULT>',
+        :rpc_response_timeout      => '<SERVICE DEFAULT>',
+        :control_exchange          => '<SERVICE DEFAULT>',
       ) }
 
       it { is_expected.to contain_oslo__messaging__notifications('glance_api_config').with(
@@ -38,6 +39,7 @@ describe 'glance::notify::rabbitmq' do
           :default_transport_url              => 'rabbit://user:pass@host:1234/virt',
           :rpc_response_timeout               => '120',
           :control_exchange                   => 'glance',
+          :executor_thread_pool_size          => 64,
           :notification_transport_url         => 'rabbit://user:pass@alt_host:1234/virt',
           :rabbit_ha_queues                   => true,
           :rabbit_heartbeat_timeout_threshold => '60',
@@ -74,9 +76,10 @@ describe 'glance::notify::rabbitmq' do
       ) }
 
       it { is_expected.to contain_oslo__messaging__default('glance_api_config').with(
-        :transport_url        => 'rabbit://user:pass@host:1234/virt',
-        :rpc_response_timeout => '120',
-        :control_exchange     => 'glance',
+        :executor_thread_pool_size => 64,
+        :transport_url             => 'rabbit://user:pass@host:1234/virt',
+        :rpc_response_timeout      => '120',
+        :control_exchange          => 'glance',
       ) }
 
       it { is_expected.to contain_oslo__messaging__notifications('glance_api_config').with(

@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``glance::notify::rabbitmq::executor_thread_pool_size`` parameter
+    has been added.

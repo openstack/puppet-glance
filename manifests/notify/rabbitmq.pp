@@ -17,6 +17,10 @@
 #   option.
 #   Defaults to $facts['os_service_default']
 #
+# [*executor_thread_pool_size*]
+#   (Optional) Size of executor thread pool when executor is threading or eventlet.
+#   Defaults to $facts['os_service_default'].
+#
 # [*notification_transport_url*]
 #   (optional) Connection url for oslo messaging notification backend. An
 #   example rabbit url would be, rabbit://user:pass@host:port/virtual_host
@@ -107,6 +111,7 @@ class glance::notify::rabbitmq(
   $default_transport_url              = $facts['os_service_default'],
   $rpc_response_timeout               = $facts['os_service_default'],
   $control_exchange                   = $facts['os_service_default'],
+  $executor_thread_pool_size          = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],
   $rabbit_ha_queues                   = $facts['os_service_default'],
   $rabbit_heartbeat_timeout_threshold = $facts['os_service_default'],
@@ -144,9 +149,10 @@ class glance::notify::rabbitmq(
   }
 
   oslo::messaging::default { 'glance_api_config':
-    transport_url        => $default_transport_url,
-    rpc_response_timeout => $rpc_response_timeout,
-    control_exchange     => $control_exchange,
+    executor_thread_pool_size => $executor_thread_pool_size,
+    transport_url             => $default_transport_url,
+    rpc_response_timeout      => $rpc_response_timeout,
+    control_exchange          => $control_exchange,
   }
 
   oslo::messaging::notifications { 'glance_api_config':
