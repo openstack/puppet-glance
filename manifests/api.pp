@@ -348,7 +348,7 @@ class glance::api(
   }
 
   if ( $glance::params::api_package_name != undef ) {
-    package { $::glance::params::api_package_name :
+    package { 'glance-api':
       ensure => $package_ensure,
       name   => $::glance::params::api_package_name,
       tag    => ['openstack', 'glance-package'],

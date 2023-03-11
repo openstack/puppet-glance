@@ -23,8 +23,10 @@ describe 'glance' do
   shared_examples_for 'glance RedHat' do
     let(:params) { default_params }
 
-    it { is_expected.to contain_package('openstack-glance').with(
-        :tag => ['openstack', 'glance-package'],
+    it { is_expected.to contain_package('glance').with(
+      :ensure => 'present',
+      :name   => 'openstack-glance',
+      :tag    => ['openstack', 'glance-package'],
     )}
   end
 

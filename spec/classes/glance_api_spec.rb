@@ -534,6 +534,7 @@ describe 'glance::api' do
         end
         it { is_expected.to contain_package('glance-api').with(
           :ensure => package_ensure,
+          :name   => 'glance-api',
           :tag    => ['openstack', 'glance-package']
         )}
       end

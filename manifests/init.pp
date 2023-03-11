@@ -17,7 +17,7 @@ class glance(
   include glance::params
 
   if ( $glance::params::package_name != undef ) {
-    package { $::glance::params::package_name :
+    package { 'glance' :
       ensure => $package_ensure,
       name   => $::glance::params::package_name,
       tag    => ['openstack', 'glance-package'],

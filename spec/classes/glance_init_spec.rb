@@ -16,8 +16,9 @@ describe 'glance' do
         let(:params) do
           { :package_ensure => package_ensure }
         end
-        it { is_expected.to contain_package('openstack-glance').with(
+        it { is_expected.to contain_package('glance').with(
           :ensure => package_ensure,
+          :name   => 'openstack-glance',
           :tag    => ['openstack', 'glance-package']
         )}
       end
