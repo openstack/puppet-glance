@@ -7,7 +7,8 @@ describe 'glance::cache::cleaner' do
     context 'when default parameters' do
 
       it 'configures a cron' do
-         is_expected.to contain_cron('glance-cache-cleaner').with(
+        is_expected.to contain_cron('glance-cache-cleaner').with(
+          :ensure      => :present,
           :command     => 'glance-cache-cleaner ',
           :environment => 'PATH=/bin:/usr/bin:/usr/sbin',
           :user        => 'glance',
@@ -38,6 +39,7 @@ describe 'glance::cache::cleaner' do
       end
       it 'configures a cron' do
         is_expected.to contain_cron('glance-cache-cleaner').with(
+          :ensure      => :present,
           :command     => 'sleep `expr ${RANDOM} \\% 3600`; glance-cache-cleaner --config-dir /etc/glance/',
           :environment => 'PATH=/bin:/usr/bin:/usr/sbin',
           :user        => 'glance',
@@ -49,6 +51,15 @@ describe 'glance::cache::cleaner' do
         )
       end
     end
+
+    context 'when ensure is set to absent' do
+      let :params do
+        {
+          :ensure => :absent
+        }
+      end
+      it { should contain_cron('glance-cache-cleaner').with_ensure(:absent) }
+    end
   end
 
   on_supported_os({
@@ -57,15 +68,6 @@ describe 'glance::cache::cleaner' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
-      end
-
-      let(:platform_params) do
-        case facts[:os]['family']
-        when 'Debian'
-          { :api_package_name => 'glance-api' }
-        when 'RedHat'
-          { :api_package_name => 'openstack-glance' }
-        end
       end
 
       it_configures 'glance cache cleaner'
