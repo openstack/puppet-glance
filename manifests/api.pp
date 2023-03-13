@@ -266,10 +266,6 @@
 #   service name removed.
 #   Defaults to undef
 #
-# [*cache_prefetcher_interval*]
-#   (optional) The interval in seconds to run periodic job 'cache_images'
-#   Defaults to undef.
-#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $facts['os_service_default'],
@@ -329,7 +325,6 @@ class glance::api(
   $filesystem_store_metadata_file       = undef,
   $filesystem_store_file_perm           = undef,
   $pipeline                             = undef,
-  $cache_prefetcher_interval            = undef,
 ) inherits glance {
 
   include glance::deps
@@ -340,13 +335,6 @@ class glance::api(
     if getvar($fs_opt) != undef {
       warning("The ${fs_opt} parameter has been deprecated and will be removed.")
     }
-  }
-
-  if $cache_prefetcher_interval {
-    warning('The cache_prefetcher_interval parameter has been deprecate and has no effect.')
-  }
-  glance_api_config {
-    'DEFAULT/cache_prefetcher_interval': ensure => absent;
   }
 
   if $sync_db {
