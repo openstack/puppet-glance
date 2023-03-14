@@ -86,8 +86,13 @@
 #   Defaults to $facts['os_service_default'].
 #
 # [*cinder_mount_point_base*]
-#   (Optional) When glance uses cinder as store and cinder backend is NFS, the mount point
-#    would be required to be set with this parameter.
+#   (Optional) When glance uses cinder as store and cinder backend is NFS,
+#   the mount point would be required to be set with this parameter.
+#   Defaults to $facts['os_service_default'].
+#
+# [*cinder_do_extend_attached*]
+#   (Optional) If this is set to True, glance will perform an extend operation
+#   on the attached volume.
 #   Defaults to $facts['os_service_default'].
 #
 # [*store_description*]
@@ -112,6 +117,7 @@ define glance::backend::multistore::cinder(
   $cinder_enforce_multipath         = $facts['os_service_default'],
   $cinder_use_multipath             = $facts['os_service_default'],
   $cinder_mount_point_base          = $facts['os_service_default'],
+  $cinder_do_extend_attached        = $facts['os_service_default'],
   $store_description                = $facts['os_service_default'],
 ) {
 
@@ -134,6 +140,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_enforce_multipath":         value => $cinder_enforce_multipath;
     "${name}/cinder_use_multipath":             value => $cinder_use_multipath;
     "${name}/cinder_mount_point_base":          value => $cinder_mount_point_base;
+    "${name}/cinder_do_extend_attached":        value => $cinder_do_extend_attached;
     "${name}/store_description":                value => $store_description;
   }
 
@@ -153,6 +160,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_volume_type":               value => $cinder_volume_type;
     "${name}/cinder_enforce_multipath":         value => $cinder_enforce_multipath;
     "${name}/cinder_mount_point_base":          value => $cinder_mount_point_base;
+    "${name}/cinder_do_extend_attached":        value => $cinder_do_extend_attached;
     "${name}/cinder_use_multipath":             value => $cinder_use_multipath;
   }
 }

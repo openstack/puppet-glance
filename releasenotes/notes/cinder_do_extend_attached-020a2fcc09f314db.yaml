@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``glance::backend::multistore::cinder`` defined resource type now
+    supports the ``cinder_do_extend_attached`` option.
