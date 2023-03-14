@@ -19,6 +19,7 @@ describe 'glance::cron::db_purge' do
   shared_examples 'glance::cron::db_purge' do
     context 'with required parameters' do
       it { is_expected.to contain_cron('glance-manage db purge').with(
+        :ensure      => :present,
         :command     => "glance-manage db purge --age_in_days #{params[:age]} --max_rows #{params[:max_rows]} >>#{params[:destination]} 2>&1",
         :environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
         :user        => params[:user],
@@ -31,6 +32,15 @@ describe 'glance::cron::db_purge' do
       )}
     end
 
+    context 'with ensure set to absent' do
+      before :each do
+        params.merge!(
+          :ensure => :absent
+        )
+      end
+      it { should contain_cron('glance-manage db purge').with_ensure(:absent) }
+    end
+
     context 'with required parameters with max delay enabled' do
       before :each do
         params.merge!(
@@ -39,6 +49,7 @@ describe 'glance::cron::db_purge' do
       end
 
       it { should contain_cron('glance-manage db purge').with(
+        :ensure      => :present,
         :command     => "sleep `expr ${RANDOM} \\% #{params[:maxdelay]}`; glance-manage db purge --age_in_days #{params[:age]} --max_rows #{params[:max_rows]} >>#{params[:destination]} 2>&1",
         :environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
         :user        => params[:user],

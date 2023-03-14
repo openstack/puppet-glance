@@ -58,6 +58,10 @@
 #    all cron jobs at the same time on all hosts this job is configured.
 #    Defaults to 0.
 #
+#  [*ensure*]
+#    (optional) Ensure cron jobs present or absent
+#    Defaults to present.
+#
 class glance::cron::db_purge_images_table (
   $minute      = 1,
   $hour        = 0,
@@ -68,7 +72,8 @@ class glance::cron::db_purge_images_table (
   $age         = 30,
   $max_rows    = 100,
   $destination = '/var/log/glance/glance-images-rowsflush.log',
-  $maxdelay    = 0
+  $maxdelay    = 0,
+  Enum['present', 'absent'] $ensure = 'present',
 ) inherits glance::params {
 
   include glance::deps
@@ -82,6 +87,7 @@ class glance::cron::db_purge_images_table (
   $opts = "--age_in_days ${age} --max_rows ${max_rows}"
 
   cron { 'glance-manage db purge_images_table':
+    ensure      => $ensure,
     command     => "${sleep}glance-manage db purge_images_table ${opts} >>${destination} 2>&1",
     environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
     user        => $user,

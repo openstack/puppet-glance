@@ -30,6 +30,10 @@
 #    all cron jobs at the same time on all hosts this job is configured.
 #    Defaults to 0.
 #
+#  [*ensure*]
+#    (optional) Ensure cron jobs present or absent
+#    Defaults to present.
+#
 class glance::cache::cleaner(
   $minute           = 1,
   $hour             = 0,
@@ -37,7 +41,8 @@ class glance::cache::cleaner(
   $month            = '*',
   $weekday          = '*',
   $command_options  = '',
-  $maxdelay         = 0
+  $maxdelay         = 0,
+  Enum['present', 'absent'] $ensure = 'present',
 ) {
 
   include glance::deps
@@ -50,6 +55,7 @@ class glance::cache::cleaner(
   }
 
   cron { 'glance-cache-cleaner':
+    ensure      => $ensure,
     command     => "${sleep}${glance::params::cache_cleaner_command} ${command_options}",
     environment => 'PATH=/bin:/usr/bin:/usr/sbin',
     user        => $::glance::params::user,

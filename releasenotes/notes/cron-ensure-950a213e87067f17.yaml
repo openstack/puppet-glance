@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The following classes now support the ``ensure`` parameter which controls
+    state of the cron jobs.
+
+    - ``glance::cache::cleaner``
+    - ``glance::cache::pruner``
+    - ``glance::cron::db_purge``
+    - ``glance::cron::db_purge_image_table``
