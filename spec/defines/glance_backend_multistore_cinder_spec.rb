@@ -47,6 +47,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_api_config('cinder/cinder_enforce_multipath').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_use_multipath').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_mount_point_base').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('cinder/cinder_do_extend_attached').with_value('<SERVICE DEFAULT>')
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('cinder/store_description')
@@ -66,6 +67,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_cache_config('cinder/cinder_enforce_multipath').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_use_multipath').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_mount_point_base').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('cinder/cinder_do_extend_attached').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -89,6 +91,7 @@ describe 'glance::backend::multistore::cinder' do
           :cinder_enforce_multipath         => true,
           :cinder_use_multipath             => true,
           :cinder_mount_point_base          => '/var/lib/glance/mnt',
+          :cinder_do_extend_attached        => false,
         }
       end
       it 'configures glance-api.conf' do
@@ -109,6 +112,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_api_config('cinder/cinder_enforce_multipath').with_value(true)
         is_expected.to contain_glance_api_config('cinder/cinder_use_multipath').with_value(true)
         is_expected.to contain_glance_api_config('cinder/cinder_mount_point_base').with_value('/var/lib/glance/mnt')
+        is_expected.to contain_glance_api_config('cinder/cinder_do_extend_attached').with_value(false)
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('cinder/store_description')
@@ -128,6 +132,7 @@ describe 'glance::backend::multistore::cinder' do
         is_expected.to contain_glance_cache_config('cinder/cinder_enforce_multipath').with_value(true)
         is_expected.to contain_glance_cache_config('cinder/cinder_use_multipath').with_value(true)
         is_expected.to contain_glance_cache_config('cinder/cinder_mount_point_base').with_value('/var/lib/glance/mnt')
+        is_expected.to contain_glance_cache_config('cinder/cinder_do_extend_attached').with_value(false)
       end
     end
   end
