@@ -1,0 +1,10 @@
+---
+deprecations:
+  - |
+    The following parmeters were deprecated and will be removed in a future
+    release.
+
+    - ``glance::backend::reserved::staging::filesystem_store_file_perm``
+    - ``glance::backend::reserved::staging::filesystem_thin_provisioning``
+    - ``glance::backend::reserved::tasks::filesystem_store_file_perm``
+    - ``glance::backend::reserved::tasks::filesystem_thin_provisioning``
