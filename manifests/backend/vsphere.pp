@@ -95,6 +95,8 @@ class glance::backend::vsphere(
 
   warning('glance::backend::vsphere is deprecated. Use glance::backend::multistore::vsphere instead.')
 
+  validate_legacy(Boolean, 'validate_bool', $multi_store)
+
   glance::backend::multistore::vsphere { 'glance_store':
     vmware_server_host        => $vcenter_host,
     vmware_server_username    => $vcenter_user,

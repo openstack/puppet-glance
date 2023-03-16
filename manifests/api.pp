@@ -331,6 +331,11 @@ class glance::api(
   include glance::policy
   include glance::api::db
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $sync_db)
+  validate_legacy(Boolean, 'validate_bool', $multi_store)
+
   ['filesystem_store_metadata_file', 'filesystem_store_file_perm'].each |String $fs_opt| {
     if getvar($fs_opt) != undef {
       warning("The ${fs_opt} parameter has been deprecated and will be removed.")

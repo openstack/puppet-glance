@@ -27,6 +27,8 @@ class glance::backend::file(
 
   warning('glance::backend::file is deprecated. Use glance::backend::multistore::file instead.')
 
+  validate_legacy(Boolean, 'validate_bool', $multi_store)
+
   glance::backend::multistore::file { 'glance_store':
     filesystem_store_datadir     => $filesystem_store_datadir,
     filesystem_thin_provisioning => $filesystem_thin_provisioning,

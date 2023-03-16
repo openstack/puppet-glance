@@ -89,6 +89,8 @@ class glance::backend::cinder(
 
   warning('glance::backend::cinder is deprecated. Use glance::backend::multistore::cinder instead.')
 
+  validate_legacy(Boolean, 'validate_bool', $multi_store)
+
   glance::backend::multistore::cinder { 'glance_store':
     cinder_api_insecure         => $cinder_api_insecure,
     cinder_catalog_info         => $cinder_catalog_info,

@@ -78,6 +78,8 @@ class glance::backend::swift(
 
   warning('glance::backend::swift is deprecated. Use glance::backend::multistore::swift instead.')
 
+  validate_legacy(Boolean, 'validate_bool', $multi_store)
+
   glance::backend::multistore::swift { 'glance_store':
     swift_store_user                    => $swift_store_user,
     swift_store_key                     => $swift_store_key,

@@ -89,6 +89,8 @@ define glance::backend::multistore::s3(
   include glance::deps
   include glance::params
 
+  validate_legacy(Boolean, 'validate_bool', $manage_packages)
+
   if $manage_packages {
     ensure_packages('python-boto3', {
       'ensure' => $package_ensure,

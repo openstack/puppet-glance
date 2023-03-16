@@ -71,6 +71,8 @@ define glance::backend::multistore::rbd(
   include glance::deps
   include glance::params
 
+  validate_legacy(Boolean, 'validate_bool', $manage_packages)
+
   glance_api_config {
     "${name}/rbd_store_ceph_conf":    value => $rbd_store_ceph_conf;
     "${name}/rbd_store_user":         value => $rbd_store_user;

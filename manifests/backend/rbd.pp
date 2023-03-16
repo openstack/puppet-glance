@@ -57,6 +57,8 @@ class glance::backend::rbd(
 
   warning('glance::backend::rbd is deprecated. Use glance::backend::multistore::rbd instead.')
 
+  validate_legacy(Boolean, 'validate_bool', $multi_store)
+
   glance::backend::multistore::rbd { 'glance_store':
     rbd_store_ceph_conf   => $rbd_store_ceph_conf,
     rbd_store_user        => $rbd_store_user,
