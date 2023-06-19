@@ -526,18 +526,9 @@ enabled_backends instead.')
     $paste_deploy_flavor_real = $paste_deploy_flavor
   }
 
-  # Set the flavor, it is allowed to be blank
-  if $paste_deploy_flavor_real != '' {
-    glance_api_config {
-      'paste_deploy/flavor': value => $paste_deploy_flavor_real
-    }
-  } else {
-    glance_api_config {
-      'paste_deploy/flavor': ensure => absent
-    }
-  }
   glance_api_config {
-    'paste_deploy/config_file': value => $paste_deploy_config_file
+    'paste_deploy/flavor':      value => $paste_deploy_flavor_real;
+    'paste_deploy/config_file': value => $paste_deploy_config_file;
   }
 
   # keystone config

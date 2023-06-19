@@ -295,16 +295,6 @@ describe 'glance::api' do
       it_raises 'a Puppet::Error', /Invalid service_name/
     end
 
-    describe 'with blank flavor' do
-      let :params do
-        {
-          :paste_deploy_flavor => '',
-        }
-      end
-
-      it { is_expected.to contain_glance_api_config('paste_deploy/flavor').with_ensure('absent') }
-    end
-
     describe 'with platform default oslo concurrency lock_path' do
       it { is_expected.to contain_oslo__concurrency('glance_api_config').with(
         :lock_path => platform_params[:lock_path]
