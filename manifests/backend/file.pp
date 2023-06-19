@@ -20,14 +20,12 @@
 class glance::backend::file(
   $filesystem_store_datadir     = '/var/lib/glance/images/',
   $filesystem_thin_provisioning = $facts['os_service_default'],
-  $multi_store                  = false,
+  Boolean $multi_store          = false,
 ) {
 
   include glance::deps
 
   warning('glance::backend::file is deprecated. Use glance::backend::multistore::file instead.')
-
-  validate_legacy(Boolean, 'validate_bool', $multi_store)
 
   glance::backend::multistore::file { 'glance_store':
     filesystem_store_datadir     => $filesystem_store_datadir,

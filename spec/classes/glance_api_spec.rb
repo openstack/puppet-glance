@@ -305,25 +305,6 @@ describe 'glance::api' do
       it { is_expected.to contain_glance_api_config('paste_deploy/flavor').with_ensure('absent') }
     end
 
-    [
-      'keystone/',
-      'keystone+',
-      '+keystone',
-      'keystone+cachemanagement+',
-      '+'
-    ].each do |flavor|
-      describe "with flavor set by incorrect value #{flavor}" do
-        let :params do
-          {
-            :flavor => flavor
-          }
-        end
-
-        it { expect { is_expected.to contain_glance_api_config('filter:paste_deploy/flavor') }.to\
-          raise_error(Puppet::Error) }
-      end
-    end
-
     describe 'with platform default oslo concurrency lock_path' do
       it { is_expected.to contain_oslo__concurrency('glance_api_config').with(
         :lock_path => platform_params[:lock_path]

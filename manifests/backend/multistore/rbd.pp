@@ -57,21 +57,19 @@
 #   Defaults to $facts['os_service_default'].
 #
 define glance::backend::multistore::rbd(
-  $rbd_store_user        = $facts['os_service_default'],
-  $rbd_store_ceph_conf   = $facts['os_service_default'],
-  $rbd_store_pool        = $facts['os_service_default'],
-  $rbd_store_chunk_size  = $facts['os_service_default'],
-  $rbd_thin_provisioning = $facts['os_service_default'],
-  $manage_packages       = true,
-  $package_ensure        = 'present',
-  $rados_connect_timeout = $facts['os_service_default'],
-  $store_description     = $facts['os_service_default'],
+  $rbd_store_user          = $facts['os_service_default'],
+  $rbd_store_ceph_conf     = $facts['os_service_default'],
+  $rbd_store_pool          = $facts['os_service_default'],
+  $rbd_store_chunk_size    = $facts['os_service_default'],
+  $rbd_thin_provisioning   = $facts['os_service_default'],
+  Boolean $manage_packages = true,
+  $package_ensure          = 'present',
+  $rados_connect_timeout   = $facts['os_service_default'],
+  $store_description       = $facts['os_service_default'],
 ) {
 
   include glance::deps
   include glance::params
-
-  validate_legacy(Boolean, 'validate_bool', $manage_packages)
 
   glance_api_config {
     "${name}/rbd_store_ceph_conf":    value => $rbd_store_ceph_conf;

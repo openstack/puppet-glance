@@ -70,15 +70,13 @@ class glance::backend::swift(
   $swift_store_endpoint_type           = 'internalURL',
   $swift_store_region                  = $facts['os_service_default'],
   $default_swift_reference             = 'ref1',
-  $multi_store                         = false,
+  Boolean $multi_store                 = false,
 ) {
 
   include glance::deps
   include swift::client
 
   warning('glance::backend::swift is deprecated. Use glance::backend::multistore::swift instead.')
-
-  validate_legacy(Boolean, 'validate_bool', $multi_store)
 
   glance::backend::multistore::swift { 'glance_store':
     swift_store_user                    => $swift_store_user,

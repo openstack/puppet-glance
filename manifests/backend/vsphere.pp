@@ -88,14 +88,12 @@ class glance::backend::vsphere(
   $vcenter_insecure           = 'True',
   $vcenter_task_poll_interval = $facts['os_service_default'],
   $vcenter_api_retry_count    = $facts['os_service_default'],
-  $multi_store                = false,
+  Boolean $multi_store        = false,
 ) {
 
   include glance::deps
 
   warning('glance::backend::vsphere is deprecated. Use glance::backend::multistore::vsphere instead.')
-
-  validate_legacy(Boolean, 'validate_bool', $multi_store)
 
   glance::backend::multistore::vsphere { 'glance_store':
     vmware_server_host        => $vcenter_host,

@@ -82,14 +82,12 @@ class glance::backend::cinder(
   $cinder_store_user_name      = $facts['os_service_default'],
   $cinder_store_password       = $facts['os_service_default'],
   $cinder_os_region_name       = 'RegionOne',
-  $multi_store                 = false,
+  Boolean $multi_store         = false,
 ) {
 
   include glance::deps
 
   warning('glance::backend::cinder is deprecated. Use glance::backend::multistore::cinder instead.')
-
-  validate_legacy(Boolean, 'validate_bool', $multi_store)
 
   glance::backend::multistore::cinder { 'glance_store':
     cinder_api_insecure         => $cinder_api_insecure,

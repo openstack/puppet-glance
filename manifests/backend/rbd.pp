@@ -41,23 +41,21 @@
 #    Defaults to false
 #
 class glance::backend::rbd(
-  $rbd_store_user         = $facts['os_service_default'],
-  $rbd_store_ceph_conf    = $facts['os_service_default'],
-  $rbd_store_pool         = $facts['os_service_default'],
-  $rbd_store_chunk_size   = $facts['os_service_default'],
-  $rbd_thin_provisioning  = $facts['os_service_default'],
-  $manage_packages        = true,
-  $package_ensure         = 'present',
-  $rados_connect_timeout  = $facts['os_service_default'],
-  $multi_store            = false,
+  $rbd_store_user          = $facts['os_service_default'],
+  $rbd_store_ceph_conf     = $facts['os_service_default'],
+  $rbd_store_pool          = $facts['os_service_default'],
+  $rbd_store_chunk_size    = $facts['os_service_default'],
+  $rbd_thin_provisioning   = $facts['os_service_default'],
+  Boolean $manage_packages = true,
+  $package_ensure          = 'present',
+  $rados_connect_timeout   = $facts['os_service_default'],
+  Boolean $multi_store     = false,
 ) {
 
   include glance::deps
   include glance::params
 
   warning('glance::backend::rbd is deprecated. Use glance::backend::multistore::rbd instead.')
-
-  validate_legacy(Boolean, 'validate_bool', $multi_store)
 
   glance::backend::multistore::rbd { 'glance_store':
     rbd_store_ceph_conf   => $rbd_store_ceph_conf,

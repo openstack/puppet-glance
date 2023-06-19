@@ -31,7 +31,7 @@
 #   Defaults to 'utf8_general_ci'
 #
 class glance::db::mysql(
-  $password,
+  String[1] $password,
   $dbname        = 'glance',
   $user          = 'glance',
   $host          = '127.0.0.1',
@@ -41,8 +41,6 @@ class glance::db::mysql(
 ) {
 
   include glance::deps
-
-  validate_legacy(String, 'validate_string', $password)
 
   ::openstacklib::db::mysql { 'glance':
     user          => $user,

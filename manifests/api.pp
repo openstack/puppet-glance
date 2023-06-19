@@ -274,10 +274,10 @@ class glance::api(
   $workers                              = $facts['os_workers'],
   $delayed_delete                       = $facts['os_service_default'],
   $auth_strategy                        = 'keystone',
-  $paste_deploy_flavor                  = 'keystone',
+  String $paste_deploy_flavor           = 'keystone',
   $paste_deploy_config_file             = $facts['os_service_default'],
-  $manage_service                       = true,
-  $enabled                              = true,
+  Boolean $manage_service               = true,
+  Boolean $enabled                      = true,
   $service_name                         = $::glance::params::api_service_name,
   $show_image_direct_url                = $facts['os_service_default'],
   $location_strategy                    = $facts['os_service_default'],
@@ -312,7 +312,7 @@ class glance::api(
   $conversion_format                    = $facts['os_service_default'],
   $enable_proxy_headers_parsing         = $facts['os_service_default'],
   $max_request_body_size                = $facts['os_service_default'],
-  $sync_db                              = true,
+  Boolean $sync_db                      = true,
   $limit_param_default                  = $facts['os_service_default'],
   $api_limit_max                        = $facts['os_service_default'],
   $lock_path                            = $::glance::params::lock_path,
@@ -320,21 +320,17 @@ class glance::api(
   # DEPRECATED PARAMETERS
   $stores                               = undef,
   $default_store                        = undef,
-  $multi_store                          = false,
+  Boolean $multi_store                  = false,
   $show_multiple_locations              = undef,
   $filesystem_store_metadata_file       = undef,
   $filesystem_store_file_perm           = undef,
-  $pipeline                             = undef,
+  Optional[String] $pipeline            = undef,
 ) inherits glance {
 
   include glance::deps
   include glance::policy
   include glance::api::db
 
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $sync_db)
-  validate_legacy(Boolean, 'validate_bool', $multi_store)
 
   ['filesystem_store_metadata_file', 'filesystem_store_file_perm'].each |String $fs_opt| {
     if getvar($fs_opt) != undef {
@@ -532,8 +528,6 @@ enabled_backends instead.')
 
   # Set the flavor, it is allowed to be blank
   if $paste_deploy_flavor_real != '' {
-    validate_legacy(Pattern[/^(\w+([+]\w+)*)*$/], 'validate_re', $paste_deploy_flavor_real, ['^(\w+([+]\w+)*)*$'])
-
     glance_api_config {
       'paste_deploy/flavor': value => $paste_deploy_flavor_real
     }

@@ -36,20 +36,14 @@
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
 class glance::config (
-  $api_config           = {},
-  $api_paste_ini_config = {},
-  $cache_config         = {},
-  $image_import_config  = {},
-  $rootwrap_config      = {},
+  Hash $api_config           = {},
+  Hash $api_paste_ini_config = {},
+  Hash $cache_config         = {},
+  Hash $image_import_config  = {},
+  Hash $rootwrap_config      = {},
 ) {
 
   include glance::deps
-
-  validate_legacy(Hash, 'validate_hash', $api_config)
-  validate_legacy(Hash, 'validate_hash', $api_paste_ini_config)
-  validate_legacy(Hash, 'validate_hash', $cache_config)
-  validate_legacy(Hash, 'validate_hash', $image_import_config)
-  validate_legacy(Hash, 'validate_hash', $rootwrap_config)
 
   create_resources('glance_api_config', $api_config)
   create_resources('glance_api_paste_ini', $api_paste_ini_config)

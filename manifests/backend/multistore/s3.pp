@@ -82,14 +82,12 @@ define glance::backend::multistore::s3(
   $s3_store_large_object_chunk_size = $facts['os_service_default'],
   $s3_store_thread_pools            = $facts['os_service_default'],
   $store_description                = $facts['os_service_default'],
-  $manage_packages                  = true,
+  Boolean $manage_packages          = true,
   $package_ensure                   = 'present',
 ) {
 
   include glance::deps
   include glance::params
-
-  validate_legacy(Boolean, 'validate_bool', $manage_packages)
 
   if $manage_packages {
     ensure_packages('python-boto3', {
