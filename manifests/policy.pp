@@ -65,6 +65,7 @@ class glance::policy (
     file_group   => $::glance::params::group,
     file_format  => 'yaml',
     purge_config => $purge_config,
+    tag          => 'glance',
   }
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
