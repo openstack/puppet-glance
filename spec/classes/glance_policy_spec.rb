@@ -33,6 +33,7 @@ describe 'glance::policy' do
           :file_group   => 'glance',
           :file_format  => 'yaml',
           :purge_config => false,
+          :tag          => 'glance',
         )
         is_expected.to contain_oslo__policy('glance_api_config').with(
           :enforce_scope        => false,
@@ -63,6 +64,7 @@ describe 'glance::policy' do
           :file_group   => 'glance',
           :file_format  => 'yaml',
           :purge_config => true,
+          :tag          => 'glance',
         )
         is_expected.to contain_oslo__policy('glance_api_config').with(
           :enforce_scope        => false,
