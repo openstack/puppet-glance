@@ -281,7 +281,7 @@ class glance::api(
   $service_name                         = $::glance::params::api_service_name,
   $show_image_direct_url                = $facts['os_service_default'],
   $location_strategy                    = $facts['os_service_default'],
-  $purge_config                         = false,
+  Boolean $purge_config                 = false,
   $enforce_secure_rbac                  = $facts['os_service_default'],
   $use_keystone_limits                  = $facts['os_service_default'],
   $enabled_backends                     = undef,
