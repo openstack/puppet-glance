@@ -38,6 +38,13 @@ class glance::deps {
   -> Glance_api_uwsgi_config<||>
   ~> Anchor['glance::config::end']
 
+  # We need openstackclient before marking service end so that glance
+  # will have clients available to create resources. This tag handles the
+  # openstackclient but indirectly since the client is not available in
+  # all catalogs that don't need the client class (like many spec tests)
+  Package<| tag == 'openstack'|>
+  ~> Anchor['glance::service::end']
+
   # All other inifile providers need to be processed in the config block
   Anchor['glance::config::begin'] -> Glance_api_paste_ini<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_cache_config<||> ~> Anchor['glance::config::end']
