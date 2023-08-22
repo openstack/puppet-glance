@@ -23,14 +23,12 @@
 #   (optional) Directory where dist images are stored.
 #   Defaults to $facts['os_service_default'].
 #
-# [*filesystem_store_chunk_size*]
-#   (optional) Chunk size, in bytes.
-#   Defaults to $facts['os_service_default'].
-#
-# DEPRECATED PARAMETERS
-#
 # [*filesystem_store_file_perm*]
 #   (optional) File access permissions for the image files.
+#   Defaults to $facts['os_service_default'].
+#
+# [*filesystem_store_chunk_size*]
+#   (optional) Chunk size, in bytes.
 #   Defaults to $facts['os_service_default'].
 #
 # [*filesystem_thin_provisioning*]
@@ -39,30 +37,15 @@
 #
 class glance::backend::reserved::staging(
   $filesystem_store_datadir     = $facts['os_service_default'],
+  $filesystem_store_file_perm   = $facts['os_service_default'],
   $filesystem_store_chunk_size  = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  $filesystem_store_file_perm   = undef,
-  $filesystem_thin_provisioning = undef,
+  $filesystem_thin_provisioning = $facts['os_service_default'],
 ) {
 
-  if $filesystem_store_file_perm != undef {
-    warning("The filesystem_store_file_perm parameter has been deprecated and \
-will be removed in a future release")
-  }
-
-  if $filesystem_thin_provisioning != undef {
-    warning("The filesystem_thin_provisioning parameter has been deprecated and \
-will be removed in a future release")
-  }
-
   glance_api_config {
-    'os_glance_staging_store/filesystem_store_datadir':
-      value => $filesystem_store_datadir;
-    'os_glance_staging_store/filesystem_store_file_perm':
-      value => pick($filesystem_store_file_perm, $facts['os_service_default']);
-    'os_glance_staging_store/filesystem_store_chunk_size':
-      value => $filesystem_store_chunk_size;
-    'os_glance_staging_store/filesystem_thin_provisioning':
-      value => pick($filesystem_thin_provisioning, $facts['os_service_default']);
+    'os_glance_staging_store/filesystem_store_datadir':     value => $filesystem_store_datadir;
+    'os_glance_staging_store/filesystem_store_file_perm':   value => $filesystem_store_file_perm;
+    'os_glance_staging_store/filesystem_store_chunk_size':  value => $filesystem_store_chunk_size;
+    'os_glance_staging_store/filesystem_thin_provisioning': value => $filesystem_thin_provisioning;
   }
 }
