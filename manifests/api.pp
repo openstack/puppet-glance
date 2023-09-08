@@ -460,13 +460,15 @@ enabled_backends instead.')
       $default_store_real = undef
     }
 
-    if $default_store_real and $multi_store {
-      glance_api_config {
-        'glance_store/default_store': value => $default_store_real;
-      }
-    } else {
-      glance_api_config {
-        'glance_store/default_store': ensure => absent;
+    if $multi_store {
+      if $default_store_real {
+        glance_api_config {
+          'glance_store/default_store': value => $default_store_real;
+        }
+      } else {
+        glance_api_config {
+          'glance_store/default_store': ensure => absent;
+        }
       }
     }
 
