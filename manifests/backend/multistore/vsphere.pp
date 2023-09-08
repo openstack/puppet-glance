@@ -77,6 +77,11 @@
 #   end users.
 #   Defaults to $facts['os_service_default'].
 #
+# [*weight*]
+#   (optional) Define a relative weight for this store over any others that
+#   are configured.
+#   Defaults to $facts['os_service_default'].
+#
 define glance::backend::multistore::vsphere(
   $vmware_server_host,
   $vmware_server_username,
@@ -88,6 +93,7 @@ define glance::backend::multistore::vsphere(
   $vmware_task_poll_interval = $facts['os_service_default'],
   $vmware_api_retry_count    = $facts['os_service_default'],
   $store_description         = $facts['os_service_default'],
+  $weight                    = $facts['os_service_default'],
 ) {
 
   include glance::deps
@@ -103,6 +109,7 @@ define glance::backend::multistore::vsphere(
     "${name}/vmware_api_retry_count":    value => $vmware_api_retry_count;
     "${name}/vmware_datastores":         value => $vmware_datastores;
     "${name}/store_description":         value => $store_description;
+    "${name}/weight":                    value => $weight;
   }
 
   glance_cache_config {
@@ -115,5 +122,6 @@ define glance::backend::multistore::vsphere(
     "${name}/vmware_task_poll_interval": value => $vmware_task_poll_interval;
     "${name}/vmware_api_retry_count":    value => $vmware_api_retry_count;
     "${name}/vmware_datastores":         value => $vmware_datastores;
+    "${name}/weight":                    value => $weight;
   }
 }

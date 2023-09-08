@@ -40,6 +40,7 @@ describe 'glance::backend::multistore::swift' do
 
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('swift/store_description').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('swift/weight').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('swift/swift_store_large_object_size').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('swift/swift_store_large_object_chunk_size').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('swift/swift_store_container').with_value('<SERVICE DEFAULT>')
@@ -55,6 +56,7 @@ describe 'glance::backend::multistore::swift' do
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('swift/store_description')
+        is_expected.to contain_glance_cache_config('swift/weight').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('swift/swift_store_large_object_size').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('swift/swift_store_large_object_chunk_size').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('swift/swift_store_container').with_value('<SERVICE DEFAULT>')
@@ -82,6 +84,7 @@ describe 'glance::backend::multistore::swift' do
       let :params do
         {
           :store_description                   => 'My swift store',
+          :weight                              => 0,
           :swift_store_user                    => 'user2',
           :swift_store_key                     => 'key2',
           :swift_store_auth_version            => '1',
@@ -105,6 +108,7 @@ describe 'glance::backend::multistore::swift' do
 
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('swift/store_description').with_value('My swift store')
+        is_expected.to contain_glance_api_config('swift/weight').with_value(0)
         is_expected.to contain_glance_api_config('swift/swift_store_container').with_value('swift')
         is_expected.to contain_glance_api_config('swift/swift_store_create_container_on_put').with_value(true)
         is_expected.to contain_glance_api_config('swift/swift_store_large_object_size').with_value('100')
@@ -120,6 +124,7 @@ describe 'glance::backend::multistore::swift' do
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('swift/store_description')
+        is_expected.to contain_glance_cache_config('swift/weight').with_value(0)
         is_expected.to contain_glance_cache_config('swift/swift_store_container').with_value('swift')
         is_expected.to contain_glance_cache_config('swift/swift_store_create_container_on_put').with_value(true)
         is_expected.to contain_glance_cache_config('swift/swift_store_large_object_size').with_value('100')

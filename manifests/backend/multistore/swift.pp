@@ -91,6 +91,11 @@
 #   end users.
 #   Defaults to $facts['os_service_default'].
 #
+# [*weight*]
+#   (optional) Define a relative weight for this store over any others that
+#   are configured.
+#   Defaults to $facts['os_service_default'].
+#
 # DEPRECATED PARAMETERS
 #
 # [*swift_store_config_file*]
@@ -115,6 +120,7 @@ define glance::backend::multistore::swift(
   $swift_upload_buffer_dir             = $facts['os_service_default'],
   $swift_store_retry_get_count         = $facts['os_service_default'],
   $store_description                   = $facts['os_service_default'],
+  $weight                              = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $swift_store_config_file             = undef,
 ) {
@@ -146,6 +152,7 @@ define glance::backend::multistore::swift(
     "${name}/swift_upload_buffer_dir":             value => $swift_upload_buffer_dir;
     "${name}/swift_store_retry_get_count":         value => $swift_store_retry_get_count;
     "${name}/store_description":                   value => $store_description;
+    "${name}/weight":                              value => $weight;
   }
   glance_cache_config {
     "${name}/swift_store_region":                  value => $swift_store_region;
@@ -160,6 +167,7 @@ define glance::backend::multistore::swift(
     "${name}/swift_buffer_on_upload":              value => $swift_buffer_on_upload;
     "${name}/swift_upload_buffer_dir":             value => $swift_upload_buffer_dir;
     "${name}/swift_store_retry_get_count":         value => $swift_store_retry_get_count;
+    "${name}/weight":                              value => $weight;
   }
 
   glance_swift_config {

@@ -56,6 +56,11 @@
 #   end users.
 #   Defaults to $facts['os_service_default'].
 #
+# [*weight*]
+#   (optional) Define a relative weight for this store over any others that
+#   are configured.
+#   Defaults to $facts['os_service_default'].
+#
 define glance::backend::multistore::rbd(
   $rbd_store_user          = $facts['os_service_default'],
   $rbd_store_ceph_conf     = $facts['os_service_default'],
@@ -66,6 +71,7 @@ define glance::backend::multistore::rbd(
   $package_ensure          = 'present',
   $rados_connect_timeout   = $facts['os_service_default'],
   $store_description       = $facts['os_service_default'],
+  $weight                  = $facts['os_service_default'],
 ) {
 
   include glance::deps
@@ -79,6 +85,7 @@ define glance::backend::multistore::rbd(
     "${name}/rbd_thin_provisioning": value => $rbd_thin_provisioning;
     "${name}/rados_connect_timeout": value => $rados_connect_timeout;
     "${name}/store_description":     value => $store_description;
+    "${name}/weight":                value => $weight;
   }
 
   glance_cache_config {
@@ -88,6 +95,7 @@ define glance::backend::multistore::rbd(
     "${name}/rbd_store_chunk_size":  value => $rbd_store_chunk_size;
     "${name}/rbd_thin_provisioning": value => $rbd_thin_provisioning;
     "${name}/rados_connect_timeout": value => $rados_connect_timeout;
+    "${name}/weight":                value => $weight;
   }
 
   if $manage_packages {

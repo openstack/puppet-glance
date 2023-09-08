@@ -51,6 +51,11 @@
 #   end users.
 #   Defaults to $facts['os_service_default'].
 #
+# [*weight*]
+#   (optional) Define a relative weight for this store over any others that
+#   are configured.
+#   Defaults to $facts['os_service_default'].
+#
 define glance::backend::multistore::file(
   $filesystem_store_datadir       = $facts['os_service_default'],
   $filesystem_store_datadirs      = $facts['os_service_default'],
@@ -59,6 +64,7 @@ define glance::backend::multistore::file(
   $filesystem_store_chunk_size    = $facts['os_service_default'],
   $filesystem_thin_provisioning   = $facts['os_service_default'],
   $store_description              = $facts['os_service_default'],
+  $weight                         = $facts['os_service_default'],
 ) {
 
   include glance::deps
@@ -73,6 +79,7 @@ define glance::backend::multistore::file(
     "${name}/filesystem_store_chunk_size":    value => $filesystem_store_chunk_size;
     "${name}/filesystem_thin_provisioning":   value => $filesystem_thin_provisioning;
     "${name}/store_description":              value => $store_description;
+    "${name}/weight":                         value => $weight;
   }
 
   if $name != 'glance_store' {
@@ -92,5 +99,6 @@ define glance::backend::multistore::file(
     "${name}/filesystem_store_datadirs":    value => $filesystem_store_datadirs;
     "${name}/filesystem_store_chunk_size":  value => $filesystem_store_chunk_size;
     "${name}/filesystem_thin_provisioning": value => $filesystem_thin_provisioning;
+    "${name}/weight":                       value => $weight;
   }
 }

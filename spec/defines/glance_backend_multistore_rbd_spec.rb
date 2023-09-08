@@ -25,6 +25,7 @@ describe 'glance::backend::multistore::rbd' do
     context 'with default params' do
       it 'configures glance-api.conf' do
         should contain_glance_api_config('rbd/store_description').with_value('<SERVICE DEFAULT>')
+        should contain_glance_api_config('rbd/weight').with_value('<SERVICE DEFAULT>')
         should contain_glance_api_config('rbd/rbd_store_pool').with_value('<SERVICE DEFAULT>')
         should contain_glance_api_config('rbd/rbd_store_ceph_conf').with_value('<SERVICE DEFAULT>')
         should contain_glance_api_config('rbd/rbd_store_chunk_size').with_value('<SERVICE DEFAULT>')
@@ -34,6 +35,7 @@ describe 'glance::backend::multistore::rbd' do
       end
       it 'configures glance-cache.conf' do
         should_not contain_glance_cache_config('rbd/store_description')
+        should contain_glance_cache_config('rbd/weight').with_value('<SERVICE DEFAULT>')
         should contain_glance_cache_config('rbd/rbd_store_pool').with_value('<SERVICE DEFAULT>')
         should contain_glance_cache_config('rbd/rbd_store_ceph_conf').with_value('<SERVICE DEFAULT>')
         should contain_glance_cache_config('rbd/rbd_store_chunk_size').with_value('<SERVICE DEFAULT>')
@@ -53,6 +55,7 @@ describe 'glance::backend::multistore::rbd' do
       let :params do
         {
           :store_description     => 'My rbd store',
+          :weight                => 0,
           :rbd_store_user        => 'user',
           :rbd_store_chunk_size  => '2',
           :rbd_thin_provisioning => 'true',
@@ -63,6 +66,7 @@ describe 'glance::backend::multistore::rbd' do
 
       it 'configures glance-api.conf' do
         should contain_glance_api_config('rbd/store_description').with_value('My rbd store')
+        should contain_glance_api_config('rbd/weight').with_value(0)
         should contain_glance_api_config('rbd/rbd_store_user').with_value('user')
         should contain_glance_api_config('rbd/rbd_store_chunk_size').with_value('2')
         should contain_glance_api_config('rbd/rbd_thin_provisioning').with_value('true')
@@ -70,6 +74,7 @@ describe 'glance::backend::multistore::rbd' do
       end
       it 'configures glance-cache.conf' do
         should_not contain_glance_cache_config('rbd/store_description')
+        should contain_glance_cache_config('rbd/weight').with_value(0)
         should contain_glance_cache_config('rbd/rbd_store_user').with_value('user')
         should contain_glance_cache_config('rbd/rbd_store_chunk_size').with_value('2')
         should contain_glance_cache_config('rbd/rbd_thin_provisioning').with_value('true')

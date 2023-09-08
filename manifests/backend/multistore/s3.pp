@@ -62,6 +62,11 @@
 #   end users.
 #   Defaults to $facts['os_service_default'].
 #
+# [*weight*]
+#   (optional) Define a relative weight for this store over any others that
+#   are configured.
+#   Defaults to $facts['os_service_default'].
+#
 # [*manage_packages*]
 #   Optional. Whether we should manage the packages.
 #   Defaults to true,
@@ -82,6 +87,7 @@ define glance::backend::multistore::s3(
   $s3_store_large_object_chunk_size = $facts['os_service_default'],
   $s3_store_thread_pools            = $facts['os_service_default'],
   $store_description                = $facts['os_service_default'],
+  $weight                           = $facts['os_service_default'],
   Boolean $manage_packages          = true,
   $package_ensure                   = 'present',
 ) {
@@ -108,6 +114,7 @@ define glance::backend::multistore::s3(
     "${name}/s3_store_large_object_chunk_size": value => $s3_store_large_object_chunk_size;
     "${name}/s3_store_thread_pools":            value => $s3_store_thread_pools;
     "${name}/store_description":                value => $store_description;
+    "${name}/weight":                           value => $weight;
   }
 
   glance_cache_config {
@@ -120,5 +127,6 @@ define glance::backend::multistore::s3(
     "${name}/s3_store_large_object_size":       value => $s3_store_large_object_size;
     "${name}/s3_store_large_object_chunk_size": value => $s3_store_large_object_chunk_size;
     "${name}/s3_store_thread_pools":            value => $s3_store_thread_pools;
+    "${name}/weight":                           value => $weight;
   }
 }

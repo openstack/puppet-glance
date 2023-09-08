@@ -32,10 +32,16 @@
 #   remote server.
 #   Defaults to $facts['os_service_default']
 #
+# [*weight*]
+#   (optional) Define a relative weight for this store over any others that
+#   are configured.
+#   Defaults to $facts['os_service_default'].
+#
 define glance::backend::multistore::http(
   $https_ca_certificates_file = $facts['os_service_default'],
   $https_insecure             = $facts['os_service_default'],
   $http_proxy_information     = $facts['os_service_default'],
+  $weight                     = $facts['os_service_default'],
 ) {
 
   include glance::deps
@@ -55,11 +61,13 @@ define glance::backend::multistore::http(
     "${name}/https_ca_certificates_file": value => $https_ca_certificates_file;
     "${name}/https_insecure":             value => $https_insecure;
     "${name}/http_proxy_information":     value => join(any2array($http_proxy_information), ',');
+    "${name}/weight":                     value => $weight;
   }
 
   glance_cache_config {
     "${name}/https_ca_certificates_file": value => $https_ca_certificates_file;
     "${name}/https_insecure":             value => $https_insecure;
     "${name}/http_proxy_information":     value => join(any2array($http_proxy_information), ',');
+    "${name}/weight":                     value => $weight;
   }
 }

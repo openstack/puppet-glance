@@ -24,6 +24,7 @@ describe 'glance::backend::multistore::file' do
   shared_examples_for 'glance::backend::multistore::file' do
     it 'configures glance-api.conf' do
       is_expected.to contain_glance_api_config('file/store_description').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_glance_api_config('file/weight').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_api_config('file/filesystem_store_datadir').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_api_config('file/filesystem_store_datadirs').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_api_config('file/filesystem_store_metadata_file').with_value('<SERVICE DEFAULT>')
@@ -34,6 +35,7 @@ describe 'glance::backend::multistore::file' do
 
     it 'configures glance-cache.conf' do
       is_expected.to_not contain_glance_cache_config('file/store_description')
+      is_expected.to contain_glance_cache_config('file/weight').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_cache_config('file/filesystem_store_datadir').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_cache_config('file/filesystem_store_datadirs').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_cache_config('file/filesystem_store_metadata_file').with_value('<SERVICE DEFAULT>')
@@ -45,6 +47,7 @@ describe 'glance::backend::multistore::file' do
     describe 'when overriding datadir' do
       let :params do
         {
+          :weight                         => 0,
           :filesystem_store_datadir       => '/var/lib/glance/images',
           :filesystem_store_metadata_file => '/var/lib/glance/metadata.json',
           :filesystem_store_file_perm     => 0,
@@ -54,6 +57,7 @@ describe 'glance::backend::multistore::file' do
       end
 
       it 'configures glance-api.conf' do
+        is_expected.to contain_glance_api_config('file/weight').with_value(0)
         is_expected.to contain_glance_api_config('file/filesystem_store_datadir')\
           .with_value('/var/lib/glance/images')
         is_expected.to contain_glance_api_config('file/filesystem_store_datadirs')\
@@ -69,6 +73,7 @@ describe 'glance::backend::multistore::file' do
       end
 
       it 'configures glance-cache.conf' do
+        is_expected.to contain_glance_cache_config('file/weight').with_value(0)
         is_expected.to contain_glance_cache_config('file/filesystem_store_datadir')\
           .with_value('/var/lib/glance/images')
         is_expected.to contain_glance_cache_config('file/filesystem_store_datadirs')\

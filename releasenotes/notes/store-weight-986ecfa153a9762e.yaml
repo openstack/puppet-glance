@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Support for the ``weight`` option in store backends has been added.

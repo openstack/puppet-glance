@@ -39,6 +39,7 @@ describe 'glance::backend::multistore::vsphere' do
     context 'when default parameters' do
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('vsphere/store_description').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('vsphere/weight').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('vsphere/vmware_insecure').with_value('True')
         is_expected.to contain_glance_api_config('vsphere/vmware_server_host').with_value('10.0.0.1')
         is_expected.to contain_glance_api_config('vsphere/vmware_server_username').with_value('root')
@@ -51,6 +52,7 @@ describe 'glance::backend::multistore::vsphere' do
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('vsphere/store_description')
+        is_expected.to contain_glance_cache_config('vsphere/weight').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('vsphere/vmware_insecure').with_value('True')
         is_expected.to contain_glance_cache_config('vsphere/vmware_server_host').with_value('10.0.0.1')
         is_expected.to contain_glance_cache_config('vsphere/vmware_server_username').with_value('root')
@@ -67,6 +69,7 @@ describe 'glance::backend::multistore::vsphere' do
       before do
         params.merge!({
           :store_description         => 'My vsphere store',
+          :weight                    => 0,
           :vmware_ca_file            => '/etc/glance/vcenter-ca.pem',
           :vmware_task_poll_interval => '6',
           :vmware_api_retry_count    => '11',
@@ -74,12 +77,14 @@ describe 'glance::backend::multistore::vsphere' do
       end
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('vsphere/store_description').with_value('My vsphere store')
+        is_expected.to contain_glance_api_config('vsphere/weight').with_value(0)
         is_expected.to contain_glance_api_config('vsphere/vmware_ca_file').with_value('/etc/glance/vcenter-ca.pem')
         is_expected.to contain_glance_api_config('vsphere/vmware_task_poll_interval').with_value('6')
         is_expected.to contain_glance_api_config('vsphere/vmware_api_retry_count').with_value('11')
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('vsphere/store_description')
+        is_expected.to contain_glance_cache_config('vsphere/weight').with_value(0)
         is_expected.to contain_glance_cache_config('vsphere/vmware_ca_file').with_value('/etc/glance/vcenter-ca.pem')
         is_expected.to contain_glance_cache_config('vsphere/vmware_task_poll_interval').with_value('6')
         is_expected.to contain_glance_cache_config('vsphere/vmware_api_retry_count').with_value('11')

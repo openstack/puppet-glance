@@ -100,6 +100,11 @@
 #   end users.
 #   Defaults to $facts['os_service_default'].
 #
+# [*weight*]
+#   (optional) Define a relative weight for this store over any others that
+#   are configured.
+#   Defaults to $facts['os_service_default'].
+#
 define glance::backend::multistore::cinder(
   $cinder_ca_certificates_file      = $facts['os_service_default'],
   $cinder_api_insecure              = $facts['os_service_default'],
@@ -119,6 +124,7 @@ define glance::backend::multistore::cinder(
   $cinder_mount_point_base          = $facts['os_service_default'],
   $cinder_do_extend_attached        = $facts['os_service_default'],
   $store_description                = $facts['os_service_default'],
+  $weight                           = $facts['os_service_default'],
 ) {
 
   include glance::deps
@@ -142,6 +148,7 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_mount_point_base":          value => $cinder_mount_point_base;
     "${name}/cinder_do_extend_attached":        value => $cinder_do_extend_attached;
     "${name}/store_description":                value => $store_description;
+    "${name}/weight":                           value => $weight;
   }
 
   glance_cache_config {
@@ -159,8 +166,9 @@ define glance::backend::multistore::cinder(
     "${name}/cinder_os_region_name":            value => $cinder_os_region_name;
     "${name}/cinder_volume_type":               value => $cinder_volume_type;
     "${name}/cinder_enforce_multipath":         value => $cinder_enforce_multipath;
+    "${name}/cinder_use_multipath":             value => $cinder_use_multipath;
     "${name}/cinder_mount_point_base":          value => $cinder_mount_point_base;
     "${name}/cinder_do_extend_attached":        value => $cinder_do_extend_attached;
-    "${name}/cinder_use_multipath":             value => $cinder_use_multipath;
+    "${name}/weight":                           value => $weight;
   }
 }

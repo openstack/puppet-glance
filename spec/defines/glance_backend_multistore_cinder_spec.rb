@@ -31,6 +31,7 @@ describe 'glance::backend::multistore::cinder' do
 
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('cinder/store_description').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('cinder/weight').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_api_insecure').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_catalog_info').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('cinder/cinder_http_retries').with_value('<SERVICE DEFAULT>')
@@ -51,6 +52,7 @@ describe 'glance::backend::multistore::cinder' do
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('cinder/store_description')
+        is_expected.to contain_glance_cache_config('cinder/weight').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_api_insecure').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_catalog_info').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('cinder/cinder_http_retries').with_value('<SERVICE DEFAULT>')
@@ -75,6 +77,7 @@ describe 'glance::backend::multistore::cinder' do
       let :params do
         {
           :store_description                => 'My cinder store',
+          :weight                           => 0,
           :cinder_api_insecure              => true,
           :cinder_ca_certificates_file      => '/etc/ssh/ca.crt',
           :cinder_catalog_info              => 'volume:cinder:internalURL',
@@ -96,6 +99,7 @@ describe 'glance::backend::multistore::cinder' do
       end
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('cinder/store_description').with_value('My cinder store')
+        is_expected.to contain_glance_api_config('cinder/weight').with_value(0)
         is_expected.to contain_glance_api_config('cinder/cinder_api_insecure').with_value(true)
         is_expected.to contain_glance_api_config('cinder/cinder_ca_certificates_file').with_value('/etc/ssh/ca.crt')
         is_expected.to contain_glance_api_config('cinder/cinder_catalog_info').with_value('volume:cinder:internalURL')
@@ -116,6 +120,7 @@ describe 'glance::backend::multistore::cinder' do
       end
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('cinder/store_description')
+        is_expected.to contain_glance_cache_config('cinder/weight').with_value(0)
         is_expected.to contain_glance_cache_config('cinder/cinder_api_insecure').with_value(true)
         is_expected.to contain_glance_cache_config('cinder/cinder_ca_certificates_file').with_value('/etc/ssh/ca.crt')
         is_expected.to contain_glance_cache_config('cinder/cinder_catalog_info').with_value('volume:cinder:internalURL')

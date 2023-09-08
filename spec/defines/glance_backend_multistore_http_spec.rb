@@ -24,22 +24,22 @@ describe 'glance::backend::multistore::http' do
   shared_examples 'glance::backend::multistore::http' do
     context 'with default params' do
       it 'sets the default values' do
-        should contain_glance_api_config('http/https_ca_certificates_file')\
-          .with_value('<SERVICE DEFAULT>')
+        should contain_glance_api_config('http/weight').with_value('<SERVICE DEFAULT>')
+        should contain_glance_api_config('http/https_ca_certificates_file').with_value('<SERVICE DEFAULT>')
         should contain_glance_api_config('http/https_insecure').with_value('<SERVICE DEFAULT>')
-        should contain_glance_api_config('http/http_proxy_information')\
-          .with_value('<SERVICE DEFAULT>')
-        should contain_glance_cache_config('http/https_ca_certificates_file')\
-          .with_value('<SERVICE DEFAULT>')
+        should contain_glance_api_config('http/http_proxy_information').with_value('<SERVICE DEFAULT>')
+
+        should contain_glance_cache_config('http/weight').with_value('<SERVICE DEFAULT>')
+        should contain_glance_cache_config('http/https_ca_certificates_file').with_value('<SERVICE DEFAULT>')
         should contain_glance_cache_config('http/https_insecure').with_value('<SERVICE DEFAULT>')
-        should contain_glance_cache_config('http/http_proxy_information')\
-          .with_value('<SERVICE DEFAULT>')
+        should contain_glance_cache_config('http/http_proxy_information').with_value('<SERVICE DEFAULT>')
       end
     end
 
     context 'when passing params' do
       let :params do
         {
+          :weight                     => 0,
           :https_ca_certificates_file => '/etc/glance/https_ca_cert.pem',
           :https_insecure             => true,
           :http_proxy_information     => ['http:10.0.0.1:3128', 'https:10.0.0.1:1080'],
@@ -47,11 +47,14 @@ describe 'glance::backend::multistore::http' do
       end
 
       it 'sets the given values' do
+        should contain_glance_api_config('http/weight').with_value(0)
         should contain_glance_api_config('http/https_ca_certificates_file')\
           .with_value('/etc/glance/https_ca_cert.pem')
         should contain_glance_api_config('http/https_insecure').with_value(true)
         should contain_glance_api_config('http/http_proxy_information')\
           .with_value('http:10.0.0.1:3128,https:10.0.0.1:1080')
+
+        should contain_glance_cache_config('http/weight').with_value(0)
         should contain_glance_cache_config('http/https_ca_certificates_file')\
           .with_value('/etc/glance/https_ca_cert.pem')
         should contain_glance_cache_config('http/https_insecure').with_value(true)

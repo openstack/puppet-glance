@@ -42,6 +42,7 @@ describe 'glance::backend::multistore::s3' do
 
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('s3/store_description').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_api_config('s3/weight').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('s3/s3_store_host').with_value('host')
         is_expected.to contain_glance_api_config('s3/s3_store_access_key').with_value('access').with_secret(true)
         is_expected.to contain_glance_api_config('s3/s3_store_secret_key').with_value('secret').with_secret(true)
@@ -55,6 +56,7 @@ describe 'glance::backend::multistore::s3' do
 
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('s3/store_description')
+        is_expected.to contain_glance_cache_config('s3/weight').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('s3/s3_store_host').with_value('host')
         is_expected.to contain_glance_cache_config('s3/s3_store_access_key').with_value('access').with_secret(true)
         is_expected.to contain_glance_cache_config('s3/s3_store_secret_key').with_value('secret').with_secret(true)
@@ -71,6 +73,7 @@ describe 'glance::backend::multistore::s3' do
       before :each do
         params.merge!({
           :store_description                => 's3store',
+          :weight                           => 0,
           :s3_store_create_bucket_on_put    => false,
           :s3_store_bucket_url_format       => 'auto',
           :s3_store_large_object_size       => 100,
@@ -90,6 +93,7 @@ describe 'glance::backend::multistore::s3' do
 
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('s3/store_description').with_value('s3store')
+        is_expected.to contain_glance_api_config('s3/weight').with_value(0)
         is_expected.to contain_glance_api_config('s3/s3_store_host').with_value('host')
         is_expected.to contain_glance_api_config('s3/s3_store_access_key').with_value('access').with_secret(true)
         is_expected.to contain_glance_api_config('s3/s3_store_secret_key').with_value('secret').with_secret(true)
@@ -103,6 +107,7 @@ describe 'glance::backend::multistore::s3' do
 
       it 'configures glance-cache.conf' do
         is_expected.to_not contain_glance_cache_config('s3/store_description')
+        is_expected.to contain_glance_cache_config('s3/weight').with_value(0)
         is_expected.to contain_glance_cache_config('s3/s3_store_host').with_value('host')
         is_expected.to contain_glance_cache_config('s3/s3_store_access_key').with_value('access').with_secret(true)
         is_expected.to contain_glance_cache_config('s3/s3_store_secret_key').with_value('secret').with_secret(true)
