@@ -104,4 +104,16 @@ define glance::backend::multistore::vsphere(
     "${name}/vmware_datastores":         value => $vmware_datastores;
     "${name}/store_description":         value => $store_description;
   }
+
+  glance_cache_config {
+    "${name}/vmware_insecure":           value => $vmware_insecure;
+    "${name}/vmware_ca_file":            value => $vmware_ca_file;
+    "${name}/vmware_server_host":        value => $vmware_server_host;
+    "${name}/vmware_server_username":    value => $vmware_server_username;
+    "${name}/vmware_server_password":    value => $vmware_server_password, secret => true;
+    "${name}/vmware_store_image_dir":    value => $vmware_store_image_dir;
+    "${name}/vmware_task_poll_interval": value => $vmware_task_poll_interval;
+    "${name}/vmware_api_retry_count":    value => $vmware_api_retry_count;
+    "${name}/vmware_datastores":         value => $vmware_datastores;
+  }
 }

@@ -195,6 +195,7 @@ describe 'glance::api' do
             'filesystem_store_file_perm',
           ].each do |config|
             is_expected.to contain_glance_api_config("glance_store/#{config}").with_value(param_hash[config.intern])
+            is_expected.to contain_glance_cache_config("glance_store/#{config}").with_value(param_hash[config.intern])
           end
         end
 
@@ -362,6 +363,9 @@ describe 'glance::api' do
     describe 'with enabled_backends and stores by default' do
       it { is_expected.to_not contain_glance_api_config('DEFAULT/enabled_backends').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to_not contain_glance_api_config('glance_store/stores').with_value('<SERVICE DEFAULT>') }
+
+      it { is_expected.to_not contain_glance_cache_config('DEFAULT/enabled_backends').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to_not contain_glance_cache_config('glance_store/stores').with_value('<SERVICE DEFAULT>') }
     end
 
     describe 'with enabled_backends' do
@@ -378,6 +382,11 @@ describe 'glance::api' do
       it { is_expected.to contain_glance_api_config('glance_store/default_backend').with_value('file1') }
       it { is_expected.to contain_glance_api_config('glance_store/stores').with_ensure('absent') }
       it { is_expected.to contain_glance_api_config('glance_store/default_store').with_ensure('absent') }
+
+      it { is_expected.to contain_glance_cache_config('DEFAULT/enabled_backends').with_value('file1:file,http1:http') }
+      it { is_expected.to contain_glance_cache_config('glance_store/default_backend').with_value('file1') }
+      it { is_expected.to contain_glance_cache_config('glance_store/stores').with_ensure('absent') }
+      it { is_expected.to contain_glance_cache_config('glance_store/default_store').with_ensure('absent') }
     end
 
     describe 'with invalid backend type' do
@@ -434,6 +443,9 @@ describe 'glance::api' do
 
       it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
       it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('file,http') }
+
+      it { is_expected.to contain_glance_cache_config('glance_store/default_store').with_value('file') }
+      it { is_expected.to contain_glance_cache_config('glance_store/stores').with_value('file,http') }
     end
 
     describe 'with single store override and no default store' do
@@ -446,6 +458,9 @@ describe 'glance::api' do
 
       it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
       it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('file') }
+
+      it { is_expected.to contain_glance_cache_config('glance_store/default_store').with_value('file') }
+      it { is_expected.to contain_glance_cache_config('glance_store/stores').with_value('file') }
     end
 
     describe 'with multiple stores override and no default store' do
@@ -458,6 +473,9 @@ describe 'glance::api' do
 
       it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
       it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('file,http') }
+
+      it { is_expected.to contain_glance_cache_config('glance_store/default_store').with_value('file') }
+      it { is_expected.to contain_glance_cache_config('glance_store/stores').with_value('file,http') }
     end
 
     describe 'with default_store' do
@@ -470,6 +488,9 @@ describe 'glance::api' do
 
       it { is_expected.to contain_glance_api_config('glance_store/default_store').with_value('file') }
       it { is_expected.to contain_glance_api_config('glance_store/stores').with_value('file') }
+
+      it { is_expected.to contain_glance_cache_config('glance_store/default_store').with_value('file') }
+      it { is_expected.to contain_glance_cache_config('glance_store/stores').with_value('file') }
     end
 
     describe 'with task & taskflow configuration' do

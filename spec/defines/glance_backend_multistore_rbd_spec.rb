@@ -23,13 +23,24 @@ describe 'glance::backend::multistore::rbd' do
 
   shared_examples 'glance::backend::multistore::rbd' do
     context 'with default params' do
-      it { should contain_glance_api_config('rbd/store_description').with_value('<SERVICE DEFAULT>') }
-      it { should contain_glance_api_config('rbd/rbd_store_pool').with_value('<SERVICE DEFAULT>') }
-      it { should contain_glance_api_config('rbd/rbd_store_ceph_conf').with_value('<SERVICE DEFAULT>') }
-      it { should contain_glance_api_config('rbd/rbd_store_chunk_size').with_value('<SERVICE DEFAULT>') }
-      it { should contain_glance_api_config('rbd/rbd_thin_provisioning').with_value('<SERVICE DEFAULT>') }
-      it { should contain_glance_api_config('rbd/rados_connect_timeout').with_value('<SERVICE DEFAULT>')}
-      it { should contain_glance_api_config('rbd/rbd_store_user').with_value('<SERVICE DEFAULT>')}
+      it 'configures glance-api.conf' do
+        should contain_glance_api_config('rbd/store_description').with_value('<SERVICE DEFAULT>')
+        should contain_glance_api_config('rbd/rbd_store_pool').with_value('<SERVICE DEFAULT>')
+        should contain_glance_api_config('rbd/rbd_store_ceph_conf').with_value('<SERVICE DEFAULT>')
+        should contain_glance_api_config('rbd/rbd_store_chunk_size').with_value('<SERVICE DEFAULT>')
+        should contain_glance_api_config('rbd/rbd_thin_provisioning').with_value('<SERVICE DEFAULT>')
+        should contain_glance_api_config('rbd/rados_connect_timeout').with_value('<SERVICE DEFAULT>')
+        should contain_glance_api_config('rbd/rbd_store_user').with_value('<SERVICE DEFAULT>')
+      end
+      it 'configures glance-cache.conf' do
+        should_not contain_glance_cache_config('rbd/store_description')
+        should contain_glance_cache_config('rbd/rbd_store_pool').with_value('<SERVICE DEFAULT>')
+        should contain_glance_cache_config('rbd/rbd_store_ceph_conf').with_value('<SERVICE DEFAULT>')
+        should contain_glance_cache_config('rbd/rbd_store_chunk_size').with_value('<SERVICE DEFAULT>')
+        should contain_glance_cache_config('rbd/rbd_thin_provisioning').with_value('<SERVICE DEFAULT>')
+        should contain_glance_cache_config('rbd/rados_connect_timeout').with_value('<SERVICE DEFAULT>')
+        should contain_glance_cache_config('rbd/rbd_store_user').with_value('<SERVICE DEFAULT>')
+      end
 
       it { should contain_package('python-ceph').with(
         :name   => platform_params[:pyceph_package_name],
@@ -50,11 +61,20 @@ describe 'glance::backend::multistore::rbd' do
         }
       end
 
-      it { should contain_glance_api_config('rbd/store_description').with_value('My rbd store') }
-      it { should contain_glance_api_config('rbd/rbd_store_user').with_value('user') }
-      it { should contain_glance_api_config('rbd/rbd_store_chunk_size').with_value('2') }
-      it { should contain_glance_api_config('rbd/rbd_thin_provisioning').with_value('true') }
-      it { should contain_glance_api_config('rbd/rados_connect_timeout').with_value('30')}
+      it 'configures glance-api.conf' do
+        should contain_glance_api_config('rbd/store_description').with_value('My rbd store')
+        should contain_glance_api_config('rbd/rbd_store_user').with_value('user')
+        should contain_glance_api_config('rbd/rbd_store_chunk_size').with_value('2')
+        should contain_glance_api_config('rbd/rbd_thin_provisioning').with_value('true')
+        should contain_glance_api_config('rbd/rados_connect_timeout').with_value('30')
+      end
+      it 'configures glance-cache.conf' do
+        should_not contain_glance_cache_config('rbd/store_description')
+        should contain_glance_cache_config('rbd/rbd_store_user').with_value('user')
+        should contain_glance_cache_config('rbd/rbd_store_chunk_size').with_value('2')
+        should contain_glance_cache_config('rbd/rbd_thin_provisioning').with_value('true')
+        should contain_glance_cache_config('rbd/rados_connect_timeout').with_value('30')
+      end
 
       it { should contain_package('python-ceph').with(
         :name   => platform_params[:pyceph_package_name],

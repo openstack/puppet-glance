@@ -147,6 +147,20 @@ define glance::backend::multistore::swift(
     "${name}/swift_store_retry_get_count":         value => $swift_store_retry_get_count;
     "${name}/store_description":                   value => $store_description;
   }
+  glance_cache_config {
+    "${name}/swift_store_region":                  value => $swift_store_region;
+    "${name}/swift_store_container":               value => $swift_store_container;
+    "${name}/swift_store_create_container_on_put": value => $swift_store_create_container_on_put;
+    "${name}/swift_store_large_object_size":       value => $swift_store_large_object_size;
+    "${name}/swift_store_large_object_chunk_size": value => $swift_store_large_object_chunk_size;
+    "${name}/swift_store_endpoint_type":           value => $swift_store_endpoint_type;
+    "${name}/swift_store_service_type":            value => $swift_store_service_type;
+    "${name}/swift_store_config_file":             value => $swift_store_config_file_real;
+    "${name}/default_swift_reference":             value => $default_swift_reference;
+    "${name}/swift_buffer_on_upload":              value => $swift_buffer_on_upload;
+    "${name}/swift_upload_buffer_dir":             value => $swift_upload_buffer_dir;
+    "${name}/swift_store_retry_get_count":         value => $swift_store_retry_get_count;
+  }
 
   glance_swift_config {
     "${default_swift_reference}/user":              value => $swift_store_user;

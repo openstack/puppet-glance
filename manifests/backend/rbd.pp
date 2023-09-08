@@ -71,5 +71,6 @@ class glance::backend::rbd(
 
   if !$multi_store {
     glance_api_config { 'glance_store/default_store': value => 'rbd'; }
+    glance_cache_config { 'glance_store/default_store': value => 'rbd'; }
   }
 }

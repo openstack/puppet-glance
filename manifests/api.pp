@@ -434,6 +434,12 @@ class glance::api(
       'glance_store/stores':          ensure => absent;
       'glance_store/default_store':   ensure => absent;
     }
+    glance_cache_config {
+      'DEFAULT/enabled_backends':     value  => join($enabled_backends_array, ',');
+      'glance_store/default_backend': value  => $default_backend;
+      'glance_store/stores':          ensure => absent;
+      'glance_store/default_store':   ensure => absent;
+    }
 
   } elsif $stores or $default_store {
     warning('The stores and default_store parameters are deprecated. Please use \
@@ -462,30 +468,42 @@ enabled_backends instead.')
 
     if $multi_store {
       if $default_store_real {
-        glance_api_config {
-          'glance_store/default_store': value => $default_store_real;
+        $default_store_opt = {
+          'glance_store/default_store' => {'value' => $default_store_real}
         }
       } else {
-        glance_api_config {
-          'glance_store/default_store': ensure => absent;
+        $default_store_opt = {
+          'glance_store/default_store' => {'ensure' => absent}
         }
       }
+    } else {
+      $default_store_opt = {}
     }
 
     if $stores_real {
-      glance_api_config {
-        'glance_store/stores': value => join($stores_real, ',');
+      $stores_opt = {
+        'glance_store/stores' => {'value' => join($stores_real, ',')}
       }
     } else {
-      glance_api_config {
-        'glance_store/stores': ensure => absent;
+      $stores_opt = {
+        'glance_store/stores' => {'ensure' => absent}
       }
     }
+
+    create_resources('glance_api_config', merge($default_store_opt, $stores_opt))
+    create_resources('glance_cache_config', merge($default_store_opt, $stores_opt))
+
   } else {
     warning('Glance-api is being provisioned without any backends')
   }
 
   glance_api_config {
+    'glance_store/filesystem_store_metadata_file':
+      value => pick($filesystem_store_metadata_file, $facts['os_service_default']);
+    'glance_store/filesystem_store_file_perm':
+      value => pick($filesystem_store_file_perm, $facts['os_service_default']);
+  }
+  glance_cache_config {
     'glance_store/filesystem_store_metadata_file':
       value => pick($filesystem_store_metadata_file, $facts['os_service_default']);
     'glance_store/filesystem_store_file_perm':

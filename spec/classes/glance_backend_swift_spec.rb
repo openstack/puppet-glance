@@ -28,6 +28,19 @@ describe 'glance::backend::swift' do
         is_expected.to contain_glance_api_config('glance_store/swift_store_region').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/swift_store_config_file').with_value('/etc/glance/glance-swift.conf')
         is_expected.to contain_glance_api_config('glance_store/default_swift_reference').with_value('ref1')
+      end
+      it 'configures glance-cache.conf' do
+        is_expected.to contain_glance_cache_config('glance_store/default_store').with_value('swift')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_large_object_size').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_large_object_chunk_size').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_container').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_create_container_on_put').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_endpoint_type').with_value('internalURL')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_region').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_config_file').with_value('/etc/glance/glance-swift.conf')
+        is_expected.to contain_glance_cache_config('glance_store/default_swift_reference').with_value('ref1')
+      end
+      it 'configures glance-swift.conf' do
         is_expected.to contain_glance_swift_config('ref1/key').with_value('key')
         is_expected.to contain_glance_swift_config('ref1/user').with_value('user')
         is_expected.to contain_glance_swift_config('ref1/auth_version').with_value('3')
@@ -64,6 +77,17 @@ describe 'glance::backend::swift' do
         is_expected.to contain_glance_api_config('glance_store/swift_store_endpoint_type').with_value('publicURL')
         is_expected.to contain_glance_api_config('glance_store/swift_store_region').with_value('RegionTwo')
         is_expected.to contain_glance_api_config('glance_store/default_swift_reference').with_value('swift_creds')
+      end
+      it 'configures glance-cache.conf' do
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_container').with_value('swift')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_create_container_on_put').with_value(true)
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_large_object_size').with_value('100')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_large_object_chunk_size').with_value('50')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_endpoint_type').with_value('publicURL')
+        is_expected.to contain_glance_cache_config('glance_store/swift_store_region').with_value('RegionTwo')
+        is_expected.to contain_glance_cache_config('glance_store/default_swift_reference').with_value('swift_creds')
+      end
+      it 'configures glance-swift.conf' do
         is_expected.to contain_glance_swift_config('swift_creds/key').with_value('key2')
         is_expected.to contain_glance_swift_config('swift_creds/user').with_value('user2')
         is_expected.to contain_glance_swift_config('swift_creds/auth_version').with_value('1')

@@ -56,4 +56,10 @@ define glance::backend::multistore::http(
     "${name}/https_insecure":             value => $https_insecure;
     "${name}/http_proxy_information":     value => join(any2array($http_proxy_information), ',');
   }
+
+  glance_cache_config {
+    "${name}/https_ca_certificates_file": value => $https_ca_certificates_file;
+    "${name}/https_insecure":             value => $https_insecure;
+    "${name}/http_proxy_information":     value => join(any2array($http_proxy_information), ',');
+  }
 }

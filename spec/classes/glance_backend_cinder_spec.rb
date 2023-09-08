@@ -32,7 +32,6 @@ describe 'glance::backend::cinder' do
 
       it 'configures glance-api.conf' do
         is_expected.to contain_glance_api_config('glance_store/default_store').with_value('cinder')
-        is_expected.to contain_glance_api_config('glance_store/default_store').with_value('cinder')
         is_expected.to contain_glance_api_config('glance_store/cinder_api_insecure').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/cinder_catalog_info').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('glance_store/cinder_http_retries').with_value('<SERVICE DEFAULT>')
@@ -45,6 +44,7 @@ describe 'glance::backend::cinder' do
         is_expected.to contain_glance_api_config('glance_store/cinder_store_password').with_value('<SERVICE DEFAULT>')
       end
       it 'configures glance-cache.conf' do
+        is_expected.to contain_glance_cache_config('glance_store/default_store').with_value('cinder')
         is_expected.to contain_glance_cache_config('glance_store/cinder_api_insecure').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('glance_store/cinder_catalog_info').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('glance_store/cinder_http_retries').with_value('<SERVICE DEFAULT>')

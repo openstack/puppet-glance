@@ -81,10 +81,16 @@ define glance::backend::multistore::file(
       "${name}/filesystem_store_metadata_file": value => $filesystem_store_metadata_file;
       "${name}/filesystem_store_file_perm":     value => $filesystem_store_file_perm;
     }
+    glance_cache_config {
+      "${name}/filesystem_store_metadata_file": value => $filesystem_store_metadata_file;
+      "${name}/filesystem_store_file_perm":     value => $filesystem_store_file_perm;
+    }
   }
 
   glance_cache_config {
-    "${name}/filesystem_store_datadir":  value => $filesystem_store_datadir;
-    "${name}/filesystem_store_datadirs": value => $filesystem_store_datadirs;
+    "${name}/filesystem_store_datadir":     value => $filesystem_store_datadir;
+    "${name}/filesystem_store_datadirs":    value => $filesystem_store_datadirs;
+    "${name}/filesystem_store_chunk_size":  value => $filesystem_store_chunk_size;
+    "${name}/filesystem_thin_provisioning": value => $filesystem_thin_provisioning;
   }
 }

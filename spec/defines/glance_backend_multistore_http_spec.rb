@@ -29,6 +29,11 @@ describe 'glance::backend::multistore::http' do
         should contain_glance_api_config('http/https_insecure').with_value('<SERVICE DEFAULT>')
         should contain_glance_api_config('http/http_proxy_information')\
           .with_value('<SERVICE DEFAULT>')
+        should contain_glance_cache_config('http/https_ca_certificates_file')\
+          .with_value('<SERVICE DEFAULT>')
+        should contain_glance_cache_config('http/https_insecure').with_value('<SERVICE DEFAULT>')
+        should contain_glance_cache_config('http/http_proxy_information')\
+          .with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -46,6 +51,11 @@ describe 'glance::backend::multistore::http' do
           .with_value('/etc/glance/https_ca_cert.pem')
         should contain_glance_api_config('http/https_insecure').with_value(true)
         should contain_glance_api_config('http/http_proxy_information')\
+          .with_value('http:10.0.0.1:3128,https:10.0.0.1:1080')
+        should contain_glance_cache_config('http/https_ca_certificates_file')\
+          .with_value('/etc/glance/https_ca_cert.pem')
+        should contain_glance_cache_config('http/https_insecure').with_value(true)
+        should contain_glance_cache_config('http/http_proxy_information')\
           .with_value('http:10.0.0.1:3128,https:10.0.0.1:1080')
       end
     end
