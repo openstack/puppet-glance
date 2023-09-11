@@ -555,7 +555,7 @@ enabled_backends instead.')
     include glance::api::authtoken
   }
 
-  oslo::concurrency { 'glance_api_config':
+  oslo::concurrency { ['glance_api_config', 'glance_cache_config']:
     lock_path => $lock_path,
   }
 
