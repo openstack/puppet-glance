@@ -47,10 +47,12 @@ class glance::deps {
 
   # All other inifile providers need to be processed in the config block
   Anchor['glance::config::begin'] -> Glance_api_paste_ini<||> ~> Anchor['glance::config::end']
-  Anchor['glance::config::begin'] -> Glance_cache_config<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_image_import_config<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_swift_config<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_rootwrap_config<||> ~> Anchor['glance::config::end']
+
+  # glance-cache.conf is used by CLI commands so service restart is not needed
+  Anchor['glance::config::begin'] -> Glance_cache_config<||> -> Anchor['glance::config::end']
 
   # Support packages need to be installed in the install phase, but we don't
   # put them in the chain above because we don't want any false dependencies
