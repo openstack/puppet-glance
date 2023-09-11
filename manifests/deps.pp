@@ -31,7 +31,7 @@ class glance::deps {
   # policy config should occur in the config block also.
   Anchor['glance::config::begin']
   -> Openstacklib::Policy<| tag == 'glance' |>
-  ~> Anchor['glance::config::end']
+  -> Anchor['glance::config::end']
 
   # On any uwsgi config change, we must restart Glance API.
   Anchor['glance::config::begin']
