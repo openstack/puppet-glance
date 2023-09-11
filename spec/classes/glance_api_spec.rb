@@ -300,6 +300,9 @@ describe 'glance::api' do
       it { is_expected.to contain_oslo__concurrency('glance_api_config').with(
         :lock_path => platform_params[:lock_path]
       )}
+      it { is_expected.to contain_oslo__concurrency('glance_cache_config').with(
+        :lock_path => platform_params[:lock_path]
+      )}
     end
 
     describe 'with overridden oslo concurrency lock_path' do
@@ -308,6 +311,9 @@ describe 'glance::api' do
       end
 
       it { is_expected.to contain_oslo__concurrency('glance_api_config').with(
+        :lock_path => '/glance/lock/path',
+      )}
+      it { is_expected.to contain_oslo__concurrency('glance_cache_config').with(
         :lock_path => '/glance/lock/path',
       )}
     end
