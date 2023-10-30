@@ -8,7 +8,7 @@ describe 'glance::client' do
     it { is_expected.to contain_package('python-glanceclient').with(
         :name   => platform_params[:client_package_name],
         :ensure => 'present',
-        :tag    => ['openstack', 'glance-support-package'],
+        :tag    => 'openstack',
       )
     }
   end
