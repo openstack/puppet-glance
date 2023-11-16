@@ -1,0 +1,6 @@
+---
+upgrade:
+  - |
+    The ``glance_image`` resource type no longer attempts to load user
+    credentials from the ``[keystone_authtoken]`` section in
+    ``glance-api.conf``.
