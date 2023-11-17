@@ -1,4 +1,3 @@
-File.expand_path('../../../../openstacklib/lib', File.dirname(__FILE__)).tap { |dir| $LOAD_PATH.unshift(dir) unless $LOAD_PATH.include?(dir) }
 Puppet::Type.newtype(:glance_image) do
   desc <<-EOT
     This allows manifests to declare an image to be
@@ -19,12 +18,11 @@ Puppet::Type.newtype(:glance_image) do
     }
 
     Known problems / limitations:
-      * All images are managed by the glance service.
+      * All images are managed by the admin user unless the credentail input is overridden.
         This means that since users are unable to manage their own images via this type,
         is_public is really of no use. You can probably hide images this way but that's all.
       * As glance image names do not have to be unique, you must ensure that your glance
         repository does not have any duplicate names prior to using this.
-      * Ensure this is run on the same server as the glance-api service.
 
   EOT
 
