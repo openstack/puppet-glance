@@ -106,10 +106,14 @@ Puppet::Type.newtype(:glance_image) do
     end
 
     validate do |value|
-      return true if value.is_a? Hash
-
-      value.split(',').each do |property|
-        raise ArgumentError, "Key/value pairs should be separated by an =" unless property.include?('=')
+      if value.is_a?(Hash)
+        return true
+      elsif value.is_a?(String)
+        value.split(',').each do |property|
+          raise ArgumentError, "Key/value pairs should be separated by an =" unless property.include?('=')
+        end
+      else
+        raise ArgumentError, "Invalid properties #{value}. Requires a String or a Hash, not a #{value.class}"
       end
     end
   end
