@@ -50,6 +50,7 @@ class glance::deps {
   Anchor['glance::config::begin'] -> Glance_image_import_config<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_swift_config<||> ~> Anchor['glance::config::end']
   Anchor['glance::config::begin'] -> Glance_rootwrap_config<||> ~> Anchor['glance::config::end']
+  Anchor['glance::config::begin'] -> Glance_property_protections_config<||> ~> Anchor['glance::config::end']
 
   # glance-cache.conf is used by CLI commands so service restart is not needed
   Anchor['glance::config::begin'] -> Glance_cache_config<||> -> Anchor['glance::config::end']
