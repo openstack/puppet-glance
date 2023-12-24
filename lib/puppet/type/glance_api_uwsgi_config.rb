@@ -3,7 +3,7 @@ Puppet::Type.newtype(:glance_api_uwsgi_config) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from nova.conf'
+    desc 'Section/setting name to manage from /etc/glance/glance-api-uwsgi.ini'
     newvalues(/\S+\/\S+/)
   end
 
