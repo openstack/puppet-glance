@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``glance::property_protections`` class has been added. This class
+    allows configuration of the image property protections feature.
