@@ -31,9 +31,7 @@
 #    Defaults to present.
 #
 #  [*rados_connect_timeout*]
-#    Optional. Timeout value (in seconds) used when connecting
-#    to ceph cluster. If value <= 0, no timeout is set and
-#    default librados value is used.
+#    Optional. Timeout value (in seconds) used when connecting to ceph cluster.
 #    Default: $facts['os_service_default'].
 #
 #  [*multi_store*]
