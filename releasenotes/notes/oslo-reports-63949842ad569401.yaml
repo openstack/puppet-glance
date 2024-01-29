@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``glance::reports`` class has been added.
