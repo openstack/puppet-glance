@@ -1,0 +1,4 @@
+---
+deprecations:
+  - |
+    The ``glance::api::location_strategy`` parameter has been deprecated.

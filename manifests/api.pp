@@ -95,10 +95,6 @@
 #   (optional) Expose image location to trusted clients.
 #   Defaults to $facts['os_service_default'].
 #
-# [*location_strategy*]
-#   (optional) Strategy used to determine the image location order.
-#   Defaults to $facts['os_service_default'].
-#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the api config.
@@ -266,6 +262,10 @@
 #   service name removed.
 #   Defaults to undef
 #
+# [*location_strategy*]
+#   (optional) Strategy used to determine the image location order.
+#   Defaults to undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $facts['os_service_default'],
@@ -280,7 +280,6 @@ class glance::api(
   Boolean $enabled                      = true,
   $service_name                         = $::glance::params::api_service_name,
   $show_image_direct_url                = $facts['os_service_default'],
-  $location_strategy                    = $facts['os_service_default'],
   Boolean $purge_config                 = false,
   $enforce_secure_rbac                  = $facts['os_service_default'],
   $use_keystone_limits                  = $facts['os_service_default'],
@@ -325,6 +324,7 @@ class glance::api(
   $filesystem_store_metadata_file       = undef,
   $filesystem_store_file_perm           = undef,
   Optional[String] $pipeline            = undef,
+  $location_strategy                    = undef,
 ) inherits glance {
 
   include glance::deps
@@ -336,6 +336,10 @@ class glance::api(
     if getvar($fs_opt) != undef {
       warning("The ${fs_opt} parameter has been deprecated and will be removed.")
     }
+  }
+
+  if $location_strategy != undef {
+    warning('The location_strategy parameter was deprecated and will be removed.')
   }
 
   if $sync_db {
@@ -365,7 +369,7 @@ class glance::api(
     'DEFAULT/backlog':                    value => $backlog;
     'DEFAULT/workers':                    value => $workers;
     'DEFAULT/show_image_direct_url':      value => $show_image_direct_url;
-    'DEFAULT/location_strategy':          value => $location_strategy;
+    'DEFAULT/location_strategy':          value => pick($location_strategy, $facts['os_service_default']);
     'DEFAULT/delayed_delete':             value => $delayed_delete;
     'DEFAULT/enforce_secure_rbac':        value => $enforce_secure_rbac;
     'DEFAULT/use_keystone_limits':        value => $use_keystone_limits;
