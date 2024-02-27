@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``glance::api::delayed_delete`` option is now deprecated and will be
+    removed in a future release.

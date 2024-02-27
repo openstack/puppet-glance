@@ -25,10 +25,6 @@
 #   (optional) Number of Glance API worker processes to start
 #   Default: $facts['os_workers'].
 #
-# [*delayed_delete*]
-#   (optional) Turn on/off delayed delete.
-#   Defaults to $facts['os_service_default'].
-#
 # [*auth_strategy*]
 #   (optional) Type is authorization being used.
 #   Defaults to 'keystone'
@@ -266,13 +262,16 @@
 #   (optional) Strategy used to determine the image location order.
 #   Defaults to undef
 #
+# [*delayed_delete*]
+#   (optional) Turn on/off delayed delete.
+#   Defaults to undef
+#
 class glance::api(
   $package_ensure                       = 'present',
   $bind_host                            = $facts['os_service_default'],
   $bind_port                            = $facts['os_service_default'],
   $backlog                              = $facts['os_service_default'],
   $workers                              = $facts['os_workers'],
-  $delayed_delete                       = $facts['os_service_default'],
   $auth_strategy                        = 'keystone',
   String $paste_deploy_flavor           = 'keystone',
   $paste_deploy_config_file             = $facts['os_service_default'],
@@ -325,6 +324,7 @@ class glance::api(
   $filesystem_store_file_perm           = undef,
   Optional[String] $pipeline            = undef,
   $location_strategy                    = undef,
+  $delayed_delete                       = undef,
 ) inherits glance {
 
   include glance::deps
@@ -340,6 +340,10 @@ class glance::api(
 
   if $location_strategy != undef {
     warning('The location_strategy parameter was deprecated and will be removed.')
+  }
+
+  if $delayed_delete != undef {
+    warning('The delayed_delete parameter was deprecated and will be removed.')
   }
 
   if $sync_db {
@@ -370,7 +374,7 @@ class glance::api(
     'DEFAULT/workers':                    value => $workers;
     'DEFAULT/show_image_direct_url':      value => $show_image_direct_url;
     'DEFAULT/location_strategy':          value => pick($location_strategy, $facts['os_service_default']);
-    'DEFAULT/delayed_delete':             value => $delayed_delete;
+    'DEFAULT/delayed_delete':             value => pick($delayed_delete, $facts['os_service_default']);
     'DEFAULT/enforce_secure_rbac':        value => $enforce_secure_rbac;
     'DEFAULT/use_keystone_limits':        value => $use_keystone_limits;
     'DEFAULT/image_cache_dir':            value => $image_cache_dir;
