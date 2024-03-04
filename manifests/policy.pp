@@ -70,6 +70,11 @@ class glance::policy (
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
 
+  # policy config should occur in the config block also.
+  Anchor['glance::config::begin']
+  -> Openstacklib::Policy[$policy_path]
+  -> Anchor['glance::config::end']
+
   oslo::policy { 'glance_api_config':
     enforce_scope        => $enforce_scope,
     enforce_new_defaults => $enforce_new_defaults,
