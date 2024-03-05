@@ -36,6 +36,8 @@ describe 'glance class' do
 
     describe cron do
       it { is_expected.to have_entry('1 0 * * * glance-manage db purge --age_in_days 30 --max_rows 100 >>/var/log/glance/glance-rowsflush.log 2>&1').with_user('glance') }
+      it { is_expected.to have_entry('1 0 * * * glance-cache-cleaner').with_user('glance') }
+      it { is_expected.to have_entry('*/30 * * * * glance-cache-pruner').with_user('glance') }
     end
   end
 end
