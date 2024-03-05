@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``glance::api::image_cache_driver`` parameter has been added.
