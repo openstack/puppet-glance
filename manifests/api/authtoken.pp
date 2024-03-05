@@ -278,5 +278,7 @@ class glance::api::authtoken(
       service_token_roles_required   => $service_token_roles_required,
       service_type                   => $service_type,
       interface                      => $interface;
-    }
+  }
+
+  Keystone::Resource::Authtoken['glance_api_config'] -> Anchor['glance::config::end']
 }
