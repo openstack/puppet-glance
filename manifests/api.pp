@@ -62,13 +62,22 @@
 #   (optional) List of allowed values for an image disk_format attribute.
 #   Defaults to $facts['os_service_default'].
 #
+# [*image_cache_driver*]
+#   (optional) The driver to use for image cache management.
+#   Defaults to $facts['os_service_default'].
+#
+# [*image_cache_dir*]
+#   (optional) Base directory that the Image Cache uses.
+#    Defaults to '/var/lib/glance/image-cache'.
+#
 # [*image_cache_max_size*]
-#   (optional) The upper limit (the maximum size of accumulated cache in bytes) beyond which pruner,
-#   if running, starts cleaning the images cache.
+#   (optional) The upper limit (the maximum size of accumulated cache in bytes)
+#   beyond which pruner, if running, starts cleaning the images cache.
 #   Defaults to $facts['os_service_default'].
 #
 # [*image_cache_stall_time*]
-#   (optional) The amount of time to let an image remain in the cache without being accessed.
+#   (optional) The amount of time to let an image remain in the cache without
+#   being accessed.
 #   Defaults to $facts['os_service_default'].
 #
 # [*image_import_plugins*]
@@ -115,10 +124,6 @@
 #   be stored. The value must be defined as one of the keys in the dict
 #   defined by the enabled_backends.
 #   Defaults to undef
-#
-# [*image_cache_dir*]
-#   (optional) Base directory that the Image Cache uses.
-#    Defaults to '/var/lib/glance/image-cache'.
 #
 # [*enabled_import_methods*]
 #   (optional) The list of enabled Image Import Methods.
@@ -286,9 +291,10 @@ class glance::api(
   $default_backend                      = undef,
   $container_formats                    = $facts['os_service_default'],
   $disk_formats                         = $facts['os_service_default'],
+  $image_cache_driver                   = $facts['os_service_default'],
+  $image_cache_dir                      = '/var/lib/glance/image-cache',
   $image_cache_max_size                 = $facts['os_service_default'],
   $image_cache_stall_time               = $facts['os_service_default'],
-  $image_cache_dir                      = '/var/lib/glance/image-cache',
   $image_import_plugins                 = $facts['os_service_default'],
   $inject_metadata_properties           = $facts['os_service_default'],
   $ignore_user_roles                    = $facts['os_service_default'],
@@ -377,6 +383,7 @@ class glance::api(
     'DEFAULT/delayed_delete':             value => pick($delayed_delete, $facts['os_service_default']);
     'DEFAULT/enforce_secure_rbac':        value => $enforce_secure_rbac;
     'DEFAULT/use_keystone_limits':        value => $use_keystone_limits;
+    'DEFAULT/image_cache_driver':         value => $image_cache_driver;
     'DEFAULT/image_cache_dir':            value => $image_cache_dir;
     'DEFAULT/image_cache_stall_time':     value => $image_cache_stall_time;
     'DEFAULT/image_cache_max_size':       value => $image_cache_max_size;
@@ -528,6 +535,7 @@ enabled_backends instead.')
   }
 
   glance_cache_config {
+    'DEFAULT/image_cache_driver':     value => $image_cache_driver;
     'DEFAULT/image_cache_dir':        value => $image_cache_dir;
     'DEFAULT/image_cache_stall_time': value => $image_cache_stall_time;
     'DEFAULT/image_cache_max_size':   value => $image_cache_max_size;
