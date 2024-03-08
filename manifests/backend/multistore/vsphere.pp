@@ -15,6 +15,7 @@
 #
 # == Define: glance::backend::multistore::vsphere
 #
+# DEPRECATED !!
 # Used to configure vsphere backends for glance
 #
 # === Parameters
@@ -97,6 +98,9 @@ define glance::backend::multistore::vsphere(
 ) {
 
   include glance::deps
+
+  warning("The VMWare Datastore store driver support has been deprecated. \
+It will be removed in a future release.")
 
   glance_api_config {
     "${name}/vmware_insecure":           value => $vmware_insecure;
