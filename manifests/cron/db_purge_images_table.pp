@@ -63,16 +63,16 @@
 #    Defaults to present.
 #
 class glance::cron::db_purge_images_table (
-  $minute      = 1,
-  $hour        = 0,
-  $monthday    = '*',
-  $month       = '*',
-  $weekday     = '*',
-  $user        = $::glance::params::user,
-  $age         = 30,
-  $max_rows    = 100,
-  $destination = '/var/log/glance/glance-images-rowsflush.log',
-  $maxdelay    = 0,
+  $minute                           = 1,
+  $hour                             = 0,
+  $monthday                         = '*',
+  $month                            = '*',
+  $weekday                          = '*',
+  $user                             = $::glance::params::user,
+  $age                              = 30,
+  $max_rows                         = 100,
+  $destination                      = '/var/log/glance/glance-images-rowsflush.log',
+  Integer[0] $maxdelay              = 0,
   Enum['present', 'absent'] $ensure = 'present',
 ) inherits glance::params {
 

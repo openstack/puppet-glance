@@ -35,13 +35,13 @@
 #    Defaults to present.
 #
 class glance::cache::cleaner(
-  $minute           = 1,
-  $hour             = 0,
-  $monthday         = '*',
-  $month            = '*',
-  $weekday          = '*',
-  $command_options  = '',
-  $maxdelay         = 0,
+  $minute                           = 1,
+  $hour                             = 0,
+  $monthday                         = '*',
+  $month                            = '*',
+  $weekday                          = '*',
+  $command_options                  = '',
+  Integer[0] $maxdelay              = 0,
   Enum['present', 'absent'] $ensure = 'present',
 ) {
 
