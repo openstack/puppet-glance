@@ -189,7 +189,14 @@ Puppet::Type.type(:glance_image).provide(
     if props == nil
       return nil
     end
-    hidden = ['os_hash_algo', 'os_hash_value', 'os_hidden', 'direct_url', 'stores']
+    hidden = [
+      'os_hash_algo',
+      'os_hash_value',
+      'os_hidden',
+      'direct_url',
+      'stores',
+      'location'
+    ]
     rv = props.select { |k, v| not hidden.include?(k) }
     return rv
   end
