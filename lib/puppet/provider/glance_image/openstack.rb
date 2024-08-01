@@ -195,7 +195,7 @@ Puppet::Type.type(:glance_image).provide(
       'os_hidden',
       'direct_url',
       'stores',
-      'location'
+      'locations'
     ]
     rv = props.select { |k, v| not hidden.include?(k) }
     return rv
