@@ -38,11 +38,6 @@ Puppet::Type.newtype(:glance_image) do
     newvalues(/[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}/)
   end
 
-  newparam(:location) do
-    desc "The permanent location of the image. Optional"
-    newvalues(/\S+/)
-  end
-
   newproperty(:is_public) do
     desc "Whether the image is public or not. Default true"
     newvalues(/(y|Y)es/, /(n|N)o/, /(t|T)rue/, /(f|F)alse/, true, false)

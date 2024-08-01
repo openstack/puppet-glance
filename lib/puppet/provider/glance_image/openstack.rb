@@ -23,6 +23,7 @@ Puppet::Type.type(:glance_image).provide(
 
   def create
     temp_file = false
+
     if @resource[:source]
       if @resource[:proxy]
         proxy_uri = URI(@resource[:proxy])
@@ -45,14 +46,10 @@ Puppet::Type.type(:glance_image).provide(
 
         location = "--file=#{temp_file.path}"
       end
-
-    # location cannot handle file://
-    # location does not import, so no sense in doing anything more than this
-    elsif @resource[:location]
-      location = "--location=#{@resource[:location]}"
     else
-      raise(Puppet::Error, "Must specify either source or location")
+      raise(Puppet::Error, "The source parameter is required to create an image")
     end
+
     opts = [@resource[:name]]
 
     opts << (@resource[:is_public] == :true ? '--public' : '--private')
