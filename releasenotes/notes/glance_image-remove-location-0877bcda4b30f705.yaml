@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``location`` parameter of the ``glance_image`` resource type has been
+    removed. This parameter has never been functional with Image v2 API.
