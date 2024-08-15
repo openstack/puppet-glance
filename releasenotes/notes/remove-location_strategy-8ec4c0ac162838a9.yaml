@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated ``glance::api::location_strategy`` parameter has been
+    removed.

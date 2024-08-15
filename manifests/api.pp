@@ -263,10 +263,6 @@
 #   service name removed.
 #   Defaults to undef
 #
-# [*location_strategy*]
-#   (optional) Strategy used to determine the image location order.
-#   Defaults to undef
-#
 # [*delayed_delete*]
 #   (optional) Turn on/off delayed delete.
 #   Defaults to undef
@@ -329,7 +325,6 @@ class glance::api(
   $filesystem_store_metadata_file       = undef,
   $filesystem_store_file_perm           = undef,
   Optional[String] $pipeline            = undef,
-  $location_strategy                    = undef,
   $delayed_delete                       = undef,
 ) inherits glance {
 
@@ -342,10 +337,6 @@ class glance::api(
     if getvar($fs_opt) != undef {
       warning("The ${fs_opt} parameter has been deprecated and will be removed.")
     }
-  }
-
-  if $location_strategy != undef {
-    warning('The location_strategy parameter was deprecated and will be removed.')
   }
 
   if $delayed_delete != undef {
@@ -379,7 +370,6 @@ class glance::api(
     'DEFAULT/backlog':                    value => $backlog;
     'DEFAULT/workers':                    value => $workers;
     'DEFAULT/show_image_direct_url':      value => $show_image_direct_url;
-    'DEFAULT/location_strategy':          value => pick($location_strategy, $facts['os_service_default']);
     'DEFAULT/delayed_delete':             value => pick($delayed_delete, $facts['os_service_default']);
     'DEFAULT/enforce_secure_rbac':        value => $enforce_secure_rbac;
     'DEFAULT/use_keystone_limits':        value => $use_keystone_limits;
