@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``glance::import_filtering_opts`` class has been added.
