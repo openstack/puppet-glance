@@ -226,6 +226,11 @@
 #   ie. https://cloud.acme.org/api/image
 #   Default: $facts['os_service_default'].
 #
+# [*hashing_algorithm*]
+#   (optional) Secure hashing altorithm used for computing
+#   the `os_hash_value` property.
+#   Default: $facts['os_service_default'].
+#
 # DEPRECATED PARAMETERS
 #
 # [*stores*]
@@ -317,6 +322,7 @@ class glance::api(
   $api_limit_max                        = $facts['os_service_default'],
   $lock_path                            = $::glance::params::lock_path,
   $public_endpoint                      = $facts['os_service_default'],
+  $hashing_algorithm                    = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $stores                               = undef,
   $default_store                        = undef,
@@ -389,6 +395,7 @@ class glance::api(
     'DEFAULT/limit_param_default':        value => $limit_param_default;
     'DEFAULT/api_limit_max':              value => $api_limit_max;
     'DEFAULT/public_endpoint':            value => $public_endpoint;
+    'DEFAULT/hashing_algorithm':          value => $hashing_algorithm;
   }
 
   if $show_multiple_locations {

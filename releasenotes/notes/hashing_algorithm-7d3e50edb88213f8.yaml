@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``glance::api::hashing_algorithm`` parameter has been added.

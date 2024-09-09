@@ -54,6 +54,7 @@ describe 'glance::api' do
       :limit_param_default            => '<SERVICE DEFAULT>',
       :api_limit_max                  => '<SERVICE DEFAULT>',
       :public_endpoint                => '<SERVICE DEFAULT>',
+      :hashing_algorithm              => '<SERVICE DEFAULT>',
     }
   end
 
@@ -96,6 +97,7 @@ describe 'glance::api' do
         :limit_param_default            => '10',
         :api_limit_max                  => '10',
         :public_endpoint                => 'https://cloud.acme.org/api/image',
+        :hashing_algorithm              => 'sha512',
       }
     ].each do |param_set|
 
@@ -155,6 +157,7 @@ describe 'glance::api' do
             'limit_param_default',
             'api_limit_max',
             'public_endpoint',
+            'hashing_algorithm',
           ].each do |config|
             is_expected.to contain_glance_api_config("DEFAULT/#{config}").with_value(param_hash[config.intern])
           end
