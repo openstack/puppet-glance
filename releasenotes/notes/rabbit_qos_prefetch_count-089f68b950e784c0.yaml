@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``glance::notify::rabbitmq::rabbit_qos_prefetch_count`` parameter
+    has been added.
