@@ -1,0 +1,8 @@
+---
+deprecations:
+  - |
+    The ``glance::api::logging::watch_log_file`` parameter has been deprecated.
+
+  - |
+    The ``glance::cache::logging::watch_log_file`` parameter has been
+    deprecated.
