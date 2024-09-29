@@ -69,7 +69,7 @@ describe 'glance::notify::rabbitmq' do
           :amqp_durable_queues                => true,
           :kombu_compression                  => 'gzip',
           :notification_transport_url         => 'rabbit://user:pass@alt_host:1234/virt',
-          :rabbit_notification_topic          => 'notification',
+          :notification_topics                => 'notification',
           :notification_driver                => 'messagingv2',
           :notification_retry                 => 10,
         }
