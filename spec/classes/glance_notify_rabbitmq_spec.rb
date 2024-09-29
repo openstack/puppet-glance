@@ -37,6 +37,7 @@ describe 'glance::notify::rabbitmq' do
         :driver        => '<SERVICE DEFAULT>',
         :transport_url => '<SERVICE DEFAULT>',
         :topics        => '<SERVICE DEFAULT>',
+        :retry         => '<SERVICE DEFAULT>',
       ) }
     end
 
@@ -47,7 +48,6 @@ describe 'glance::notify::rabbitmq' do
           :rpc_response_timeout               => '120',
           :control_exchange                   => 'glance',
           :executor_thread_pool_size          => 64,
-          :notification_transport_url         => 'rabbit://user:pass@alt_host:1234/virt',
           :rabbit_ha_queues                   => true,
           :rabbit_heartbeat_timeout_threshold => '60',
           :rabbit_heartbeat_rate              => '10',
@@ -66,10 +66,12 @@ describe 'glance::notify::rabbitmq' do
           :kombu_ssl_version                  => 'TLSv1',
           :kombu_reconnect_delay              => '5.0',
           :kombu_failover_strategy            => 'shuffle',
-          :rabbit_notification_topic          => 'notification',
           :amqp_durable_queues                => true,
           :kombu_compression                  => 'gzip',
+          :notification_transport_url         => 'rabbit://user:pass@alt_host:1234/virt',
+          :rabbit_notification_topic          => 'notification',
           :notification_driver                => 'messagingv2',
+          :notification_retry                 => 10,
         }
       end
 
@@ -107,6 +109,7 @@ describe 'glance::notify::rabbitmq' do
         :driver        => 'messagingv2',
         :transport_url => 'rabbit://user:pass@alt_host:1234/virt',
         :topics        => 'notification',
+        :retry         => 10,
       ) }
     end
   end

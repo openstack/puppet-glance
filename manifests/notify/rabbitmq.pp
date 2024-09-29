@@ -2,14 +2,14 @@
 # used to configure rabbitmq notifications for glance
 #
 # [*default_transport_url*]
-#    (optional) A URL representing the messaging driver to use and its full
-#    configuration. Transport URLs take the form:
-#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
-#    Defaults to $facts['os_service_default']
+#   (Optional) A URL representing the messaging driver to use and its full
+#   configuration. Transport URLs take the form:
+#     transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $facts['os_service_default']
 #
 # [*rpc_response_timeout*]
-#  (Optional) Seconds to wait for a response from a call.
-#  Defaults to $facts['os_service_default']
+#   (Optional) Seconds to wait for a response from a call.
+#   Defaults to $facts['os_service_default']
 #
 # [*control_exchange*]
 #   (Optional) The default exchange under which topics are scoped. May be
@@ -20,11 +20,6 @@
 # [*executor_thread_pool_size*]
 #   (Optional) Size of executor thread pool when executor is threading or eventlet.
 #   Defaults to $facts['os_service_default'].
-#
-# [*notification_transport_url*]
-#   (optional) Connection url for oslo messaging notification backend. An
-#   example rabbit url would be, rabbit://user:pass@host:port/virtual_host
-#   Defaults to $facts['os_service_default']
 #
 # [*rabbit_ha_queues*]
 #   (Optional) Use HA queues in RabbitMQ (x-ha-policy: all). If you change this
@@ -119,10 +114,6 @@
 #   more than one RabbitMQ node is provided in config. (string value)
 #   Defaults to $facts['os_service_default']
 #
-#  [*rabbit_notification_topic*]
-#    AMQP topic used for OpenStack notifications. (list value)
-#    Defaults to $facts['os_service_default']
-#
 # [*amqp_durable_queues*]
 #   (optional) Define queues as "durable" to rabbitmq. (boolean value)
 #   Defaults to $facts['os_service_default']
@@ -133,17 +124,30 @@
 #   (string value)
 #   Defaults to $facts['os_service_default']
 #
-#  [*notification_driver*]
-#    The Drivers(s) to handle sending notifications. Possible values are
-#    messaging, messagingv2, routing, log, test, noop (multi valued)
+# [*notification_transport_url*]
+#   (Optional) Connection url for oslo messaging notification backend. An
+#   example rabbit url would be, rabbit://user:pass@host:port/virtual_host
 #   Defaults to $facts['os_service_default']
+#
+# [*rabbit_notification_topic*]
+#   (Optional) AMQP topic used for OpenStack notifications. (list value)
+#   Defaults to $facts['os_service_default']
+#
+# [*notification_driver*]
+#   (Optional) The Drivers(s) to handle sending notifications. Possible values
+#   are messaging, messagingv2, routing, log, test, noop (multi valued)
+#   Defaults to $facts['os_service_default']
+#
+# [*notification_retry*]
+#   (Optional) The maximum number of attempts to re-sent a notification
+#   message, which failed to be delivered due to a recoverable error.
+#   Defaults to $facts['os_service_default'].
 #
 class glance::notify::rabbitmq(
   $default_transport_url              = $facts['os_service_default'],
   $rpc_response_timeout               = $facts['os_service_default'],
   $control_exchange                   = $facts['os_service_default'],
   $executor_thread_pool_size          = $facts['os_service_default'],
-  $notification_transport_url         = $facts['os_service_default'],
   $rabbit_ha_queues                   = $facts['os_service_default'],
   $rabbit_heartbeat_timeout_threshold = $facts['os_service_default'],
   $rabbit_heartbeat_rate              = $facts['os_service_default'],
@@ -162,10 +166,12 @@ class glance::notify::rabbitmq(
   $kombu_ssl_version                  = $facts['os_service_default'],
   $kombu_reconnect_delay              = $facts['os_service_default'],
   $kombu_failover_strategy            = $facts['os_service_default'],
-  $rabbit_notification_topic          = $facts['os_service_default'],
   $amqp_durable_queues                = $facts['os_service_default'],
   $kombu_compression                  = $facts['os_service_default'],
+  $notification_transport_url         = $facts['os_service_default'],
+  $rabbit_notification_topic          = $facts['os_service_default'],
   $notification_driver                = $facts['os_service_default'],
+  $notification_retry                 = $facts['os_service_default'],
 ) {
 
   include glance::deps
@@ -204,5 +210,6 @@ class glance::notify::rabbitmq(
     driver        => $notification_driver,
     transport_url => $notification_transport_url,
     topics        => $rabbit_notification_topic,
+    retry         => $notification_retry,
   }
 }

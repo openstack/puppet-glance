@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``glance::notify::rabbitmq::notification_retry`` parameter has been
+    added.
