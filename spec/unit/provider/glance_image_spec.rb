@@ -80,11 +80,6 @@ visibility="public"
     end
 
     describe '#pythondict2hash' do
-      it 'should return a hash with key-value when provided with a unicode python dict' do
-        s = "{'key': 'value', 'key2': 'value2'}"
-        expect(provider_class.pythondict2hash(s)).to eq({"key"=>"value", "key2"=>"value2"})
-      end
-
       it 'should return a hash with key-value when provided with a python dict' do
         s = "{'key': 'value', 'key2': 'value2'}"
         expect(provider_class.pythondict2hash(s)).to eq({"key"=>"value", "key2"=>"value2"})
@@ -93,18 +88,6 @@ visibility="public"
       it 'should convert boolean to json compatible hash when provided with a python dict' do
         s = "{'key': 'value', 'key2': False}"
         expect(provider_class.pythondict2hash(s)).to eq({"key"=>"value", "key2"=>false})
-      end
-    end
-
-    describe '#parsestring' do
-      it 'should call string2hash when provided with a string' do
-        s = "key='value', key2='value2'"
-        expect(provider_class.parsestring(s)).to eq({"key"=>"value", "key2"=>"value2"})
-      end
-
-      it 'should call pythondict2hash when provided with a hash' do
-        s = "{'key': 'value', 'key2': 'value2'}"
-        expect(provider_class.parsestring(s)).to eq({"key"=>"value", "key2"=>"value2"})
       end
     end
 
@@ -130,7 +113,7 @@ min_disk="1024"
 min_ram="1024"
 name="image1"
 owner="None"
-properties="os_hash_algo=\'abc123\', os_hash_value=\'test123\', os_hidden=\'true\'"
+properties="{\'os_hash_algo\': \'abc123\', \'os_hash_value\': \'test123\', \'os_hidden\': False}"
 protected="False"
 size="1270"
 status="active"
@@ -189,7 +172,7 @@ min_disk="1024"
 min_ram="1024"
 name="image1"
 owner="5a9e521e17014804ab8b4e8b3de488a4"
-properties="something=\'what\', vmware_disktype=\'sparse\', os_hash_algo=\'abc123\', os_hash_value=\'test123\', os_hidden=\'true\'"
+properties="{\'something\': \'what\', \'vmware_disktype\': \'sparse\', \'os_hash_algo\': \'abc123\', \'os_hash_value\': \'test123\', \'os_hidden\': False}"
 protected="False"
 schema="/v2/schemas/image"
 size="13287936"
@@ -226,7 +209,7 @@ min_disk="1024"
 min_ram="1024"
 name="image1"
 owner="None"
-properties="something=\'what\', vmware_disktype=\'sparse\', os_hash_algo=\'abc123\', os_hash_value=\'test123\', os_hidden=\'true\'"
+properties="{\'something\': \'what\', \'vmware_disktype\': \'sparse\', \'os_hash_algo\': \'abc123\', \'os_hash_value\': \'test123\', \'os_hidden\': False}"
 protected="False"
 size="1270"
 status="active"
@@ -283,7 +266,7 @@ min_disk="0"
 min_ram="0"
 name="image1"
 owner="5a9e521e17014804ab8b4e8b3de488a4"
-properties="os_hash_algo=\'abc123\', os_hash_value=\'test123\', os_hidden=\'true\'"
+properties="{\'os_hash_algo\': \'abc123\', \'os_hash_value\': \'test123\', \'os_hidden\': False}"
 protected="False"
 schema="/v2/schemas/image"
 size="13287936"
@@ -321,7 +304,7 @@ min_ram="0"
 visibility="public"
 name="image1"
 owner="None"
-properties="os_hash_algo=\'abc123\', os_hash_value=\'test123\', os_hidden=\'true\'"
+properties="{\'os_hash_algo\': \'abc123\', \'os_hash_value\': \'test123\', \'os_hidden\': False}"
 protected="False"
 size="1270"
 status="active"
@@ -377,7 +360,7 @@ min_disk="0"
 min_ram="0"
 name="image1"
 owner="5a9e521e17014804ab8b4e8b3de488a4"
-properties="os_hash_algo=\'abc123\', os_hash_value=\'test123\', os_hidden=\'true\'"
+properties="{\'os_hash_algo\': \'abc123\', \'os_hash_value\': \'test123\', \'os_hidden\': False}"
 protected="False"
 schema="/v2/schemas/image"
 size="13287936"

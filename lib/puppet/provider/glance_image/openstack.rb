@@ -70,7 +70,7 @@ Puppet::Type.type(:glance_image).provide(
 
     begin
       attrs = self.class.request('image', 'create', opts)
-      properties = self.class.parsestring(attrs[:properties]) rescue nil
+      properties = self.class.pythondict2hash(attrs[:properties]) rescue nil
       @property_hash = {
         :ensure           => :present,
         :name             => attrs[:name],
@@ -130,7 +130,7 @@ Puppet::Type.type(:glance_image).provide(
     list = request('image', 'list', '--long')
     list.collect do |image|
       attrs = request('image', 'show', image[:id])
-      properties = parsestring(attrs[:properties]) rescue nil
+      properties = pythondict2hash(attrs[:properties]) rescue nil
       new(
         :ensure           => :present,
         :name             => attrs[:name],
@@ -213,22 +213,8 @@ Puppet::Type.type(:glance_image).provide(
     }.compact
   end
 
-  def self.string2hash(input)
-    return Hash[input.scan(/(\S+)='([^']*)'/)]
-  end
-
   def self.pythondict2hash(input)
     return JSON.parse(input.gsub(/'/, '"').gsub(/False/,'false').gsub(/True/,'true'))
-  end
-
-  def self.parsestring(input)
-    if input[0] == '{'
-      # 4.0.0+ output, python dict
-      return self.pythondict2hash(input)
-    else
-      # Pre-4.0.0 output, key=value
-      return self.string2hash(input)
-    end
   end
 
   def fetch(uri_str, proxy_host = nil, proxy_port = nil, limit = 10)
