@@ -94,21 +94,11 @@ Puppet::Type.newtype(:glance_image) do
   newproperty(:properties) do
     desc "The set of image properties"
 
-    munge do |value|
-      return value if value.is_a? Hash
-
-      Hash[value.scan(/([^,=]+)=([^,]*)/)]
-    end
-
     validate do |value|
       if value.is_a?(Hash)
         return true
-      elsif value.is_a?(String)
-        value.split(',').each do |property|
-          raise ArgumentError, "Key/value pairs should be separated by an =" unless property.include?('=')
-        end
       else
-        raise ArgumentError, "Invalid properties #{value}. Requires a String or a Hash, not a #{value.class}"
+        raise ArgumentError, "Invalid properties #{value}. Requires a Hash, not a #{value.class}"
       end
     end
   end
