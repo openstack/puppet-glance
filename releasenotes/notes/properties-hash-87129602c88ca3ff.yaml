@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``properties`` property of ``glance_image`` resource now accepts only
+    Hash values.
