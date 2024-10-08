@@ -54,6 +54,7 @@ min_disk="1024"
 min_ram="1024"
 name="image1"
 owner="5a9e521e17014804ab8b4e8b3de488a4"
+properties="{}"
 protected="False"
 schema="/v2/schemas/image"
 size="13287936"
@@ -77,18 +78,6 @@ visibility="public"
         expect(provider.exists?).to be_falsey
       end
 
-    end
-
-    describe '#pythondict2hash' do
-      it 'should return a hash with key-value when provided with a python dict' do
-        s = "{'key': 'value', 'key2': 'value2'}"
-        expect(provider_class.pythondict2hash(s)).to eq({"key"=>"value", "key2"=>"value2"})
-      end
-
-      it 'should convert boolean to json compatible hash when provided with a python dict' do
-        s = "{'key': 'value', 'key2': False}"
-        expect(provider_class.pythondict2hash(s)).to eq({"key"=>"value", "key2"=>false})
-      end
     end
 
     describe '.instances' do
@@ -415,6 +404,7 @@ file="/v2/images/8801c5b0-c505-4a15-8ca3-1d2383f8c015/file"
 id="8801c5b0-c505-4a15-8ca3-1d2383f8c015"
 name="image1"
 owner="5a9e521e17014804ab8b4e8b3de488a4"
+properties="{}"
 protected="False"
 schema="/v2/schemas/image"
 size="13287936"
@@ -451,6 +441,7 @@ visibility="public"
 name="image1"
 owner="None"
 tags="testtag"
+properties="{}"
 protected="False"
 size="1270"
 status="active"

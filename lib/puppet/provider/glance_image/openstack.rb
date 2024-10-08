@@ -70,7 +70,7 @@ Puppet::Type.type(:glance_image).provide(
 
     begin
       attrs = self.class.request('image', 'create', opts)
-      properties = self.class.pythondict2hash(attrs[:properties]) rescue nil
+      properties = self.class.parse_python_dict(attrs[:properties])
       @property_hash = {
         :ensure           => :present,
         :name             => attrs[:name],
@@ -130,7 +130,7 @@ Puppet::Type.type(:glance_image).provide(
     list = request('image', 'list', '--long')
     list.collect do |image|
       attrs = request('image', 'show', image[:id])
-      properties = pythondict2hash(attrs[:properties]) rescue nil
+      properties = parse_python_dict(attrs[:properties])
       new(
         :ensure           => :present,
         :name             => attrs[:name],
@@ -183,9 +183,6 @@ Puppet::Type.type(:glance_image).provide(
   private
 
   def self.exclude_readonly_props(props)
-    if props == nil
-      return nil
-    end
     hidden = [
       'os_hash_algo',
       'os_hash_value',
@@ -199,9 +196,6 @@ Puppet::Type.type(:glance_image).provide(
   end
 
   def self.exclude_owner_specified_props(props)
-    if props == nil
-      return nil
-    end
     rv = props.select { |k, v| not k.start_with?('owner_specified.') }
     return rv
   end
@@ -211,10 +205,6 @@ Puppet::Type.type(:glance_image).provide(
     props.flat_map{ |k, v|
       ['--property', "#{k}=#{v}"] unless hidden.include?(k)
     }.compact
-  end
-
-  def self.pythondict2hash(input)
-    return JSON.parse(input.gsub(/'/, '"').gsub(/False/,'false').gsub(/True/,'true'))
   end
 
   def fetch(uri_str, proxy_host = nil, proxy_port = nil, limit = 10)
