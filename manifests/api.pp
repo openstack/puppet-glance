@@ -422,7 +422,7 @@ class glance::api(
     $enabled_backends_array.each |$backend| {
       $backend_type = split($backend, /:/)[1]
 
-      unless $backend_type =~ /file|http|swift|rbd|cinder|vsphere/ {
+      unless $backend_type in ['file', 'http', 'swift', 'rbd', 'cinder', 's3', 'vsphere'] {
         fail("\'${backend_type}\' is not a valid backend type.")
       }
     }
