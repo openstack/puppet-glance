@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``glance::api::pipeline`` parameter has been removed.

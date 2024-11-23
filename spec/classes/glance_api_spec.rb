@@ -247,16 +247,6 @@ describe 'glance::api' do
       it { is_expected.to contain_glance_api_config('paste_deploy/flavor').with_value('something') }
     end
 
-    describe 'with flavor overridden by the deprecated pipeline parameter' do
-      let :params do
-        {
-          :pipeline => 'something',
-        }
-      end
-
-      it { is_expected.to contain_glance_api_config('paste_deploy/flavor').with_value('something') }
-    end
-
     context 'when running glance-api in wsgi' do
       let :params do
         {

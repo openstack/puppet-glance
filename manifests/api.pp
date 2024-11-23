@@ -263,11 +263,6 @@
 #   (optional) File access permissions for the image files.
 #   Defaults to undef
 #
-# [*pipeline*]
-#   (optional) Partial name of a pipeline in your paste configuration file with the
-#   service name removed.
-#   Defaults to undef
-#
 # [*delayed_delete*]
 #   (optional) Turn on/off delayed delete.
 #   Defaults to undef
@@ -330,7 +325,6 @@ class glance::api(
   $show_multiple_locations              = undef,
   $filesystem_store_metadata_file       = undef,
   $filesystem_store_file_perm           = undef,
-  Optional[String] $pipeline            = undef,
   $delayed_delete                       = undef,
 ) inherits glance {
 
@@ -551,15 +545,8 @@ enabled_backends instead.')
     'inject_metadata_properties/ignore_user_roles': value => $ignore_user_roles;
   }
 
-  if $pipeline != undef {
-    warning('The pipeline parameter has been deprecated. Use the paste_deploy_flavor parmaeter instead.')
-    $paste_deploy_flavor_real = $pipeline
-  } else {
-    $paste_deploy_flavor_real = $paste_deploy_flavor
-  }
-
   glance_api_config {
-    'paste_deploy/flavor':      value => $paste_deploy_flavor_real;
+    'paste_deploy/flavor':      value => $paste_deploy_flavor;
     'paste_deploy/config_file': value => $paste_deploy_config_file;
   }
 
