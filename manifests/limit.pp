@@ -74,30 +74,38 @@
 #
 class glance::limit(
   String[1] $password,
-  Optional[String[1]] $endpoint_id           = undef,
-  Optional[String[1]] $endpoint_service_name = undef,
-  Optional[String[1]] $endpoint_service_type = undef,
-  $endpoint_region_name                      = $facts['os_service_default'],
-  $endpoint_interface                        = $facts['os_service_default'],
-  $username                                  = 'glance',
-  $auth_url                                  = 'http://localhost:5000',
-  $project_name                              = 'services',
-  $user_domain_name                          = 'Default',
-  $project_domain_name                       = 'Default',
-  $system_scope                              = $facts['os_service_default'],
-  $auth_type                                 = 'password',
-  $service_type                              = $facts['os_service_default'],
-  $valid_interfaces                          = $facts['os_service_default'],
-  $region_name                               = $facts['os_service_default'],
-  $endpoint_override                         = $facts['os_service_default'],
+  Optional[String[1]] $endpoint_id = undef,
+  String[1] $endpoint_service_name = 'glance',
+  String[1] $endpoint_service_type = 'image',
+  $endpoint_region_name            = $facts['os_service_default'],
+  $endpoint_interface              = $facts['os_service_default'],
+  $username                        = 'glance',
+  $auth_url                        = 'http://localhost:5000',
+  $project_name                    = 'services',
+  $user_domain_name                = 'Default',
+  $project_domain_name             = 'Default',
+  $system_scope                    = $facts['os_service_default'],
+  $auth_type                       = 'password',
+  $service_type                    = $facts['os_service_default'],
+  $valid_interfaces                = $facts['os_service_default'],
+  $region_name                     = $facts['os_service_default'],
+  $endpoint_override               = $facts['os_service_default'],
 ) {
 
   include glance::deps
 
+  if $endpoint_id != undef {
+    $endpoint_service_name_real = undef
+    $endpoint_service_type_real = undef
+  } else {
+    $endpoint_service_name_real = $endpoint_service_name
+    $endpoint_service_type_real = $endpoint_service_type
+  }
+
   oslo::limit { 'glance_api_config':
     endpoint_id           => $endpoint_id,
-    endpoint_service_name => $endpoint_service_name,
-    endpoint_service_type => $endpoint_service_type,
+    endpoint_service_name => $endpoint_service_name_real,
+    endpoint_service_type => $endpoint_service_type_real,
     endpoint_region_name  => $endpoint_region_name,
     endpoint_interface    => $endpoint_interface,
     username              => $username,
