@@ -48,6 +48,9 @@ class glance::cache::cleaner(
   include glance::deps
   include glance::params
 
+  warning("Support for glance-cache-cleaner has been deprecated and \
+will be removed in a future release.")
+
   if $maxdelay == 0 {
     $sleep = ''
   } else {
