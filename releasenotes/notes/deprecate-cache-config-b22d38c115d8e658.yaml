@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The following implementations to manage ``glance-cache.conf`` file have
+    been deprecated and will be removed in a future release.
+
+    - The ``glance_cache_config`` resource type
+    - The ``glance::cache::logging`` class
+    - The ``glance::config::cache_config`` parameter

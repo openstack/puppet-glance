@@ -124,6 +124,8 @@ class glance::cache::logging(
 
   include glance::deps
 
+  warning('The glance::cache::logging class has been deprecated.')
+
   oslo::log { 'glance_cache_config':
     debug                         => $debug,
     use_stderr                    => $use_stderr,

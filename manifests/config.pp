@@ -23,14 +23,16 @@
 # [*api_paste_ini_config*]
 #   (optional) Allow configuration of glance-api-paste.ini configurations.
 #
-# [*cache_config*]
-#   (optional) Allow configuration of glance-cache.conf configurations.
-#
 # [*image_import_config*]
 #   (optional) Allow configuration of glance-image-import.conf configurations.
 #
 # [*rootwrap_config*]
 #   (optional) Allow configuration of rootwrap.conf configurations.
+#
+# DEPRECATED PARAMETERS
+#
+# [*cache_config*]
+#   (optional) Allow configuration of glance-cache.conf configurations.
 #
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
@@ -38,16 +40,21 @@
 class glance::config (
   Hash $api_config           = {},
   Hash $api_paste_ini_config = {},
-  Hash $cache_config         = {},
   Hash $image_import_config  = {},
   Hash $rootwrap_config      = {},
+  # DEPRECATED PARAMETERS
+  Optional[Hash] $cache_config = undef,
 ) {
 
   include glance::deps
 
   create_resources('glance_api_config', $api_config)
   create_resources('glance_api_paste_ini', $api_paste_ini_config)
-  create_resources('glance_cache_config', $cache_config)
   create_resources('glance_image_import_config', $image_import_config)
   create_resources('glance_rootwrap_config', $rootwrap_config)
+
+  if $cache_config != undef {
+    warning('The cache_config parameter has been deprecated.')
+    create_resources('glance_cache_config', $cache_config)
+  }
 }

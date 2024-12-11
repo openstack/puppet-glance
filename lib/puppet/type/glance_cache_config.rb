@@ -3,7 +3,7 @@ Puppet::Type.newtype(:glance_cache_config) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from glance-cache.conf'
+    desc 'Section/setting name to manage from glance-cache.conf (DEPRECATED)'
     newvalues(/\S+\/\S+/)
   end
 
