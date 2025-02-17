@@ -42,7 +42,7 @@ class glance::db::mysql(
 
   include glance::deps
 
-  ::openstacklib::db::mysql { 'glance':
+  openstacklib::db::mysql { 'glance':
     user          => $user,
     password      => $password,
     dbname        => $dbname,

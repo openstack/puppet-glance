@@ -165,7 +165,7 @@ class glance::wsgi::apache (
 
   Anchor['glance::install::end'] -> Class['apache']
 
-  ::openstacklib::wsgi::apache { 'glance_wsgi':
+  openstacklib::wsgi::apache { 'glance_wsgi':
     bind_host                   => $bind_host,
     bind_port                   => $port,
     group                       => 'glance',

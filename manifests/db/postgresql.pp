@@ -34,7 +34,7 @@ class glance::db::postgresql(
 
   include glance::deps
 
-  ::openstacklib::db::postgresql { 'glance':
+  openstacklib::db::postgresql { 'glance':
     password   => $password,
     dbname     => $dbname,
     user       => $user,
