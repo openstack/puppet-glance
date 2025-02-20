@@ -7,7 +7,7 @@ describe 'glance::notify::rabbitmq' do
         :rabbit_ha_queues                => '<SERVICE DEFAULT>',
         :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
         :heartbeat_rate                  => '<SERVICE DEFAULT>',
-        :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
+        :heartbeat_in_pthread            => nil,
         :rabbit_qos_prefetch_count       => '<SERVICE DEFAULT>',
         :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
         :kombu_ssl_ca_certs              => '<SERVICE DEFAULT>',
