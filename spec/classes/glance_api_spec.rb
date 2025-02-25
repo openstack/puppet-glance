@@ -41,7 +41,6 @@ describe 'glance::api' do
       :image_location_quota           => '<SERVICE DEFAULT>',
       :image_size_cap                 => '<SERVICE DEFAULT>',
       :user_storage_quota             => '<SERVICE DEFAULT>',
-      :disk_formats                   => '<SERVICE DEFAULT>',
       :paste_deploy_flavor            => 'keystone',
       :paste_deploy_config_file       => '<SERVICE DEFAULT>',
       :task_time_to_live              => '<SERVICE DEFAULT>',
@@ -215,6 +214,7 @@ describe 'glance::api' do
         it 'is_expected.to have no formats set' do
           is_expected.to contain_glance_api_config('image_format/container_formats').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_glance_api_config('image_format/disk_formats').with_value('<SERVICE DEFAULT>')
+          is_expected.to contain_glance_api_config('image_format/require_image_format_match').with_value('<SERVICE DEFAULT>')
         end
 
         it 'passes purge to resource' do
@@ -357,6 +357,18 @@ describe 'glance::api' do
       context 'with disk_formats option' do
         it { is_expected.to contain_glance_api_config('image_format/container_formats').with_value('ami,ari') }
         it { is_expected.to contain_glance_api_config('image_format/disk_formats').with_value('raw,iso') }
+      end
+    end
+
+    describe 'with require_image_format_match' do
+      let :params do
+        {
+          :require_image_format_match => true,
+        }
+      end
+
+      context 'with require_image_format_match option' do
+        it { is_expected.to contain_glance_api_config('image_format/require_image_format_match').with_value(true) }
       end
     end
 

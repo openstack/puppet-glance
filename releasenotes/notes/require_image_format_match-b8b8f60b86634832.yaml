@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``glance::api::require_image_format_match`` parameter has been
+    added.

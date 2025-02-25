@@ -62,6 +62,11 @@
 #   (optional) List of allowed values for an image disk_format attribute.
 #   Defaults to $facts['os_service_default'].
 #
+# [*require_image_format_match*]
+#   (optional) Inspect the content of uploads and require that they match
+#   the disk format set on the image.
+#   Defaults to $facts['os_service_default'].
+#
 # [*image_cache_driver*]
 #   (optional) The driver to use for image cache management.
 #   Defaults to $facts['os_service_default'].
@@ -287,6 +292,7 @@ class glance::api(
   $default_backend                      = undef,
   $container_formats                    = $facts['os_service_default'],
   $disk_formats                         = $facts['os_service_default'],
+  $require_image_format_match           = $facts['os_service_default'],
   $image_cache_driver                   = $facts['os_service_default'],
   $image_cache_dir                      = '/var/lib/glance/image-cache',
   $image_cache_max_size                 = $facts['os_service_default'],
@@ -517,8 +523,9 @@ enabled_backends instead.')
   }
 
   glance_api_config {
-    'image_format/container_formats': value => join(any2array($container_formats), ',');
-    'image_format/disk_formats':      value => join(any2array($disk_formats), ',');
+    'image_format/container_formats':          value => join(any2array($container_formats), ',');
+    'image_format/disk_formats':               value => join(any2array($disk_formats), ',');
+    'image_format/require_image_format_match': value => $require_image_format_match;
   }
 
   resources { 'glance_api_config':
