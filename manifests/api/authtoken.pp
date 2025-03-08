@@ -239,7 +239,7 @@ class glance::api::authtoken(
 
   keystone::resource::authtoken {
     'glance_api_config':
-      *                              => $params;
+      * => $params;
     default:
       username                       => $username,
       password                       => $password,
