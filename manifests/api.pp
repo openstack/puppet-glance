@@ -429,14 +429,14 @@ class glance::api(
     }
 
     glance_api_config {
-      'DEFAULT/enabled_backends':     value  => join($enabled_backends_array, ',');
-      'glance_store/default_backend': value  => $default_backend;
+      'DEFAULT/enabled_backends':      value => join($enabled_backends_array, ',');
+      'glance_store/default_backend':  value => $default_backend;
       'glance_store/stores':          ensure => absent;
       'glance_store/default_store':   ensure => absent;
     }
     glance_cache_config {
-      'DEFAULT/enabled_backends':     value  => join($enabled_backends_array, ',');
-      'glance_store/default_backend': value  => $default_backend;
+      'DEFAULT/enabled_backends':      value => join($enabled_backends_array, ',');
+      'glance_store/default_backend':  value => $default_backend;
       'glance_store/stores':          ensure => absent;
       'glance_store/default_store':   ensure => absent;
     }
