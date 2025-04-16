@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``glance::api::logging::watch_log_file`` parameter and
+    the ``glance::cache::logging::watch_log_file`` parameter have been removed.

@@ -29,7 +29,6 @@ describe 'glance::cache::logging' do
      :log_facility                   => 'LOG_FOO',
      :log_dir                        => '/var/log',
      :log_file                       => '/var/tmp/glance_cache_random.log',
-     :watch_log_file                 => true,
      :debug                          => true,
     }
   end
@@ -78,7 +77,6 @@ describe 'glance::cache::logging' do
         :syslog_log_facility => 'LOG_FOO',
         :log_dir             => '/var/log',
         :log_file            => '/var/tmp/glance_cache_random.log',
-        :watch_log_file      => true,
         :debug               => true,
       )
     end
