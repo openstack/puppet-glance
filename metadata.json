@@ -65,5 +65,5 @@
     ],
     "source": "https://opendev.org/openstack/puppet-glance.git",
     "summary": "Puppet module for OpenStack Glance",
-    "version": "23.0.0"
+    "version": "23.0.1"
 }
