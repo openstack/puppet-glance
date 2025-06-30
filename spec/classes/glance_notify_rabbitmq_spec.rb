@@ -25,6 +25,8 @@ describe 'glance::notify::rabbitmq' do
         :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
         :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
         :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
+        :use_queue_manager               => '<SERVICE DEFAULT>',
+        :rabbit_stream_fanout            => '<SERVICE DEFAULT>',
         :enable_cancel_on_failover       => '<SERVICE DEFAULT>',
       ) }
 
@@ -61,6 +63,8 @@ describe 'glance::notify::rabbitmq' do
           :rabbit_quorum_delivery_limit       => 3,
           :rabbit_quorum_max_memory_length    => 5,
           :rabbit_quorum_max_memory_bytes     => 1073741824,
+          :rabbit_use_queue_manager           => true,
+          :rabbit_stream_fanout               => true,
           :rabbit_enable_cancel_on_failover   => false,
           :rabbit_use_ssl                     => true,
           :kombu_ssl_ca_certs                 => '/etc/ca.cert',
@@ -101,6 +105,8 @@ describe 'glance::notify::rabbitmq' do
         :rabbit_quorum_delivery_limit    => 3,
         :rabbit_quorum_max_memory_length => 5,
         :rabbit_quorum_max_memory_bytes  => 1073741824,
+        :use_queue_manager               => true,
+        :rabbit_stream_fanout            => true,
         :enable_cancel_on_failover       => false,
       ) }
 
