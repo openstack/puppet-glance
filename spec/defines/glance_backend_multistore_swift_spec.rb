@@ -73,7 +73,7 @@ describe 'glance::backend::multistore::swift' do
       it 'configures glance-swift.conf' do
         is_expected.to contain_glance_swift_config('ref1/key').with_value('key').with_secret(true)
         is_expected.to contain_glance_swift_config('ref1/user').with_value('user')
-        is_expected.to contain_glance_swift_config('ref1/auth_version').with_value('3')
+        is_expected.to contain_glance_swift_config('ref1/auth_version').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_swift_config('ref1/auth_address').with_value('http://127.0.0.1:5000/v3/')
         is_expected.to contain_glance_swift_config('ref1/user_domain_id').with_value('default')
         is_expected.to contain_glance_swift_config('ref1/project_domain_id').with_value('default')
@@ -87,7 +87,7 @@ describe 'glance::backend::multistore::swift' do
           :weight                              => 0,
           :swift_store_user                    => 'user2',
           :swift_store_key                     => 'key2',
-          :swift_store_auth_version            => '1',
+          :swift_store_auth_version            => '3',
           :swift_store_auth_project_domain_id  => 'proj_domain',
           :swift_store_auth_user_domain_id     => 'user_domain',
           :swift_store_large_object_size       => '100',
@@ -141,7 +141,7 @@ describe 'glance::backend::multistore::swift' do
       it 'configures glance-swift.conf' do
         is_expected.to contain_glance_swift_config('swift_creds/key').with_value('key2').with_secret(true)
         is_expected.to contain_glance_swift_config('swift_creds/user').with_value('user2')
-        is_expected.to contain_glance_swift_config('swift_creds/auth_version').with_value('1')
+        is_expected.to contain_glance_swift_config('swift_creds/auth_version').with_value('3')
         is_expected.to contain_glance_swift_config('swift_creds/auth_address').with_value('127.0.0.2:8080/v1.0/')
         is_expected.to contain_glance_swift_config('swift_creds/user_domain_id').with_value('user_domain')
         is_expected.to contain_glance_swift_config('swift_creds/project_domain_id').with_value('proj_domain')

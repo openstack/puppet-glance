@@ -38,9 +38,6 @@
 # [*swift_store_container*]
 #   Optional. Default: $facts['os_service_default'].
 #
-# [*swift_store_auth_version*]
-#   Optional. Default: '3'
-#
 # [*swift_store_large_object_size*]
 #   Optional. What size, in MB, should Glance start chunking image files
 #   and do a large object manifest in Swift?
@@ -101,12 +98,14 @@
 # [*swift_store_config_file*]
 #   Optional. Default: '/etc/glance/glance-swift.conf'
 #
+# [*swift_store_auth_version*]
+#   Optional. Default: undef
+#
 define glance::backend::multistore::swift(
   $swift_store_user,
   $swift_store_key,
   $swift_store_auth_address            = 'http://127.0.0.1:5000/v3/',
   $swift_store_container               = $facts['os_service_default'],
-  $swift_store_auth_version            = '3',
   $swift_store_auth_project_domain_id  = 'default',
   $swift_store_auth_user_domain_id     = 'default',
   $swift_store_large_object_size       = $facts['os_service_default'],
@@ -123,6 +122,7 @@ define glance::backend::multistore::swift(
   $weight                              = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $swift_store_config_file             = undef,
+  $swift_store_auth_version            = undef,
 ) {
 
   include glance::deps
@@ -136,6 +136,10 @@ define glance::backend::multistore::swift(
     $swift_store_config_file_real = $swift_store_config_file
   } else {
     $swift_store_config_file_real = '/etc/glance/glance-swift.conf'
+  }
+
+  if $swift_store_auth_version != undef {
+    warning('The swift_store_auth_version parameter is deprecated')
   }
 
   glance_api_config {
@@ -174,7 +178,7 @@ define glance::backend::multistore::swift(
     "${default_swift_reference}/user":              value => $swift_store_user;
     "${default_swift_reference}/key":               value => $swift_store_key, secret => true;
     "${default_swift_reference}/auth_address":      value => $swift_store_auth_address;
-    "${default_swift_reference}/auth_version":      value => $swift_store_auth_version;
+    "${default_swift_reference}/auth_version":      value => pick($swift_store_auth_version, $facts['os_service_default']);
     "${default_swift_reference}/user_domain_id":    value => $swift_store_auth_user_domain_id;
     "${default_swift_reference}/project_domain_id": value => $swift_store_auth_project_domain_id;
   }

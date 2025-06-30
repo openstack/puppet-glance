@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``glance::backend::swift::swift_store_auth_version`` parameter and
+    the ``glance::backend::multistore::swift::swift_store_auth_version``
+    parameter have been deprecated and will be removed in a future release.
