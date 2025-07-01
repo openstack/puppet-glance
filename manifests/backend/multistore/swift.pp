@@ -21,85 +21,93 @@
 # === Parameters:
 #
 # [*swift_store_user*]
-#   Required. Swift store user.
+#   (Required) Swift store user.
 #
 # [*swift_store_key*]
-#   Required. Swift store key.
+#   (Required) Swift store key.
 #
 # [*swift_store_auth_address*]
-#   Optional. Default: 'http://127.0.0.1:5000/v3/'
+#   (Optional) The address where the Swift authentication service is listening.
+#   Defaults to 'http://127.0.0.1:5000/v3/'
 #
 # [*swift_store_auth_project_domain_id*]
-#   Optional. Useful when keystone auth is version 3. Default: default
+#   (Optional) ID of the domain to which the project belongs.
+#   Defaults to 'default'
 #
 # [*swift_store_auth_user_domain_id*]
-#   Optional. Useful when keystone auth is version 3. Default: default
+#   (Optional) ID of the domain to which the user belongs.
+#   Defaults to 'default'
 #
 # [*swift_store_container*]
-#   Optional. Default: $facts['os_service_default'].
+#   (Optional) Name of single container to store images/name prefix for
+#   multiple containers.
+#   Defaults to $facts['os_service_default'].
 #
 # [*swift_store_large_object_size*]
-#   Optional. What size, in MB, should Glance start chunking image files
-#   and do a large object manifest in Swift?
-#   Default: $facts['os_service_default'].
+#   (Optional) The size threshold, in MB, after which Glance will start
+#   segmenting image data.
+#   Defaults to $facts['os_service_default'].
 #
 # [*swift_store_large_object_chunk_size*]
-#   Optional. When doing a large object manifest, what size, in MB, should
-#   Glance write chunks to Swift? This amount of data is written
-#   to a temporary disk buffer during the process of chunking.
-#   Default: $facts['os_service_default'].
+#   (Optional) The maximum size, in MB, of the segments when image data is
+#   segmented.
+#   Defaults to $facts['os_service_default'].
 #
 # [*swift_store_create_container_on_put*]
-#   Optional. Default: $facts['os_service_default'].
+#   (Optional) Create container, if it doesn't already exist, when uploading
+#   image.
+#   Defaults to $facts['os_service_default'].
 #
 # [*swift_store_endpoint_type*]
-#   Optional. Endpoint type of Swift service.
-#   Default: 'internalURL'
+#   (Optional) Endpoint type of Swift service.
+#   Defaults to 'internalURL'
 #
 # [*swift_store_service_type*]
-#   Optional. Type of the swift service to use.
-#   Default: $facts['os_service_default'].
+#   (Optional) Type of the swift service to use.
+#   Defaults to $facts['os_service_default'].
 #
 # [*swift_store_region*]
-#   Optional. The region of Swift endpoint to use by Glance.
-#   Default: $facts['os_service_default'].
+#   (Optional) The region of Swift endpoint to use by Glance.
+#   Defaults to $facts['os_service_default'].
 #
 # [*default_swift_reference*]
-#   Optional. The reference to the default swift
-#   account/backing store parameters to use for adding
-#   new images. String value.
-#   Default: 'ref1'.
+#   (Optional) The reference to the default swift account/backing store
+#   parameters to use for adding new images. String value.
+#   Defaults to 'ref1'.
 #
 # [*swift_buffer_on_upload*]
-#   Optional. Buffer image segments before upload to Swift.
-#   Default: $facts['os_service_default'].
+#   (Optional) Buffer image segments before upload to Swift.
+#   Defaults to $facts['os_service_default'].
 #
 # [*swift_upload_buffer_dir*]
-#   Optional. Directory to buffer image segments before upload to Swift.
-#   Default: $facts['os_service_default'].
+#   (Optional) Directory to buffer image segments before upload to Swift.
+#   Defaults to $facts['os_service_default'].
 #
 # [*swift_store_retry_get_count*]
-#   Optional. The number of times a Swift download will be retried before
+#   (Optional) The number of times a Swift download will be retried before
 #   the request fails.
-#   Defaults to $facts['os_service_default']
+#   Defaults to $facts['os_service_default'].
 #
 # [*store_description*]
-#   (optional) Provides constructive information about the store backend to
+#   (Optional) Provides constructive information about the store backend to
 #   end users.
 #   Defaults to $facts['os_service_default'].
 #
 # [*weight*]
-#   (optional) Define a relative weight for this store over any others that
+#   (Optional) Define a relative weight for this store over any others that
 #   are configured.
 #   Defaults to $facts['os_service_default'].
 #
 # DEPRECATED PARAMETERS
 #
 # [*swift_store_config_file*]
-#   Optional. Default: '/etc/glance/glance-swift.conf'
+#   (Optional) Absolute path to the file containing the swift account(s)
+#   configuration.
+#   Defaults to '/etc/glance/glance-swift.conf'
 #
 # [*swift_store_auth_version*]
-#   Optional. Default: undef
+#   (Optional) The authentication version to be used.
+#   Defaults to undef
 #
 define glance::backend::multistore::swift(
   $swift_store_user,
