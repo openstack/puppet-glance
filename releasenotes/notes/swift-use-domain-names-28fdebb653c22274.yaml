@@ -1,0 +1,18 @@
+---
+features:
+  - |
+    The ``glance::backend::swift`` class and
+    the ``glance::backend::multistore::swift`` defined resource type now
+    support the following two new parameters.
+
+    - ``swift_store_auth_project_domain_name``
+    - ``swift_store_auth_user_domain_name``
+
+deprecations:
+  - |
+    The following parameters of the ``glance::backend::swift`` class and
+    the ``glance::backend::multistore::swift`` defined resource type have
+    been deprecated, in favor of the new project_name parameters.
+
+    - ``swift_store_auth_project_domain_id``
+    - ``swift_store_auth_user_domain_id``
