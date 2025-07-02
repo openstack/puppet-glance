@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``glance::backend::multistore::file::filesystem_store_datadirs``
+    parameter has been deprecated, and will be removed in a future release.
