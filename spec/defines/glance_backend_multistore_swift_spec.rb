@@ -75,34 +75,38 @@ describe 'glance::backend::multistore::swift' do
         is_expected.to contain_glance_swift_config('ref1/user').with_value('user')
         is_expected.to contain_glance_swift_config('ref1/auth_version').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_swift_config('ref1/auth_address').with_value('http://127.0.0.1:5000/v3/')
-        is_expected.to contain_glance_swift_config('ref1/user_domain_id').with_value('default')
-        is_expected.to contain_glance_swift_config('ref1/project_domain_id').with_value('default')
+        is_expected.to contain_glance_swift_config('ref1/user_domain_name').with_value('Default')
+        is_expected.to contain_glance_swift_config('ref1/project_domain_name').with_value('Default')
+        is_expected.to contain_glance_swift_config('ref1/user_domain_id').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_glance_swift_config('ref1/project_domain_id').with_value('<SERVICE DEFAULT>')
       end
     end
 
     describe 'when overriding parameters' do
       let :params do
         {
-          :store_description                   => 'My swift store',
-          :weight                              => 0,
-          :swift_store_user                    => 'user2',
-          :swift_store_key                     => 'key2',
-          :swift_store_auth_version            => '3',
-          :swift_store_auth_project_domain_id  => 'proj_domain',
-          :swift_store_auth_user_domain_id     => 'user_domain',
-          :swift_store_large_object_size       => '100',
-          :swift_store_large_object_chunk_size => '50',
-          :swift_store_auth_address            => '127.0.0.2:8080/v1.0/',
-          :swift_store_container               => 'swift',
-          :swift_store_create_container_on_put => true,
-          :swift_store_endpoint_type           => 'publicURL',
-          :swift_store_service_type            => 'object-store',
-          :swift_store_region                  => 'RegionTwo',
-          :swift_store_config_file             => '/etc/glance/glance-swift2.conf',
-          :default_swift_reference             => 'swift_creds',
-          :swift_buffer_on_upload              => true,
-          :swift_upload_buffer_dir             => '/var/glance/swift',
-          :swift_store_retry_get_count         => 3,
+          :store_description                    => 'My swift store',
+          :weight                               => 0,
+          :swift_store_user                     => 'user2',
+          :swift_store_key                      => 'key2',
+          :swift_store_auth_version             => '3',
+          :swift_store_auth_project_domain_name => 'proj_domain',
+          :swift_store_auth_user_domain_name    => 'user_domain',
+          :swift_store_auth_project_domain_id   => 'proj_domain_id',
+          :swift_store_auth_user_domain_id      => 'user_domain_id',
+          :swift_store_large_object_size        => '100',
+          :swift_store_large_object_chunk_size  => '50',
+          :swift_store_auth_address             => '127.0.0.2:8080/v1.0/',
+          :swift_store_container                => 'swift',
+          :swift_store_create_container_on_put  => true,
+          :swift_store_endpoint_type            => 'publicURL',
+          :swift_store_service_type             => 'object-store',
+          :swift_store_region                   => 'RegionTwo',
+          :swift_store_config_file              => '/etc/glance/glance-swift2.conf',
+          :default_swift_reference              => 'swift_creds',
+          :swift_buffer_on_upload               => true,
+          :swift_upload_buffer_dir              => '/var/glance/swift',
+          :swift_store_retry_get_count          => 3,
         }
       end
 
@@ -143,8 +147,10 @@ describe 'glance::backend::multistore::swift' do
         is_expected.to contain_glance_swift_config('swift_creds/user').with_value('user2')
         is_expected.to contain_glance_swift_config('swift_creds/auth_version').with_value('3')
         is_expected.to contain_glance_swift_config('swift_creds/auth_address').with_value('127.0.0.2:8080/v1.0/')
-        is_expected.to contain_glance_swift_config('swift_creds/user_domain_id').with_value('user_domain')
-        is_expected.to contain_glance_swift_config('swift_creds/project_domain_id').with_value('proj_domain')
+        is_expected.to contain_glance_swift_config('swift_creds/user_domain_name').with_value('user_domain')
+        is_expected.to contain_glance_swift_config('swift_creds/project_domain_name').with_value('proj_domain')
+        is_expected.to contain_glance_swift_config('swift_creds/user_domain_id').with_value('user_domain_id')
+        is_expected.to contain_glance_swift_config('swift_creds/project_domain_id').with_value('proj_domain_id')
       end
     end
   end
