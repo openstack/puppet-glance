@@ -23,9 +23,6 @@
 #  [*swift_store_container*]
 #    Optional. Default: $facts['os_service_default'].
 #
-#  [*swift_store_auth_version*]
-#    Optional. Default: '3'
-#
 #  [*swift_store_large_object_size*]
 #    Optional. What size, in MB, should Glance start chunking image files
 #    and do a large object manifest in Swift?
@@ -52,16 +49,20 @@
 #    new images. String value.
 #    Default to 'ref1'.
 #
-# [*multi_store*]
+#  [*multi_store*]
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
+#
+# DEPRECATED PARAMETERS
+#
+#  [*swift_store_auth_version*]
+#    Optional. Defaults to undef
 #
 class glance::backend::swift(
   $swift_store_user,
   $swift_store_key,
   $swift_store_auth_address            = 'http://127.0.0.1:5000/v3/',
   $swift_store_container               = $facts['os_service_default'],
-  $swift_store_auth_version            = '3',
   $swift_store_auth_project_domain_id  = 'default',
   $swift_store_auth_user_domain_id     = 'default',
   $swift_store_large_object_size       = $facts['os_service_default'],
@@ -71,6 +72,8 @@ class glance::backend::swift(
   $swift_store_region                  = $facts['os_service_default'],
   $default_swift_reference             = 'ref1',
   Boolean $multi_store                 = false,
+  # DEPRECATED PARAMETERS
+  $swift_store_auth_version            = undef
 ) {
 
   include glance::deps
