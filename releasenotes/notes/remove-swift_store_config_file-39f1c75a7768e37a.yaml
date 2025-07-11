@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``glance::backend::multistore::swift::swift_store_config_file``
+    parameter has been removed.

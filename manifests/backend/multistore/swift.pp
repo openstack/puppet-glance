@@ -100,11 +100,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*swift_store_config_file*]
-#   (Optional) Absolute path to the file containing the swift account(s)
-#   configuration.
-#   Defaults to '/etc/glance/glance-swift.conf'
-#
 # [*swift_store_auth_version*]
 #   (Optional) The authentication version to be used.
 #   Defaults to undef
@@ -137,7 +132,6 @@ define glance::backend::multistore::swift(
   $store_description                    = $facts['os_service_default'],
   $weight                               = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
-  $swift_store_config_file              = undef,
   $swift_store_auth_version             = undef,
   $swift_store_auth_project_domain_id   = undef,
   $swift_store_auth_user_domain_id      = undef,
@@ -148,13 +142,6 @@ define glance::backend::multistore::swift(
 
   Class['swift::client'] -> Anchor['glance::install::end']
   Anchor['swift::service::end'] -> Anchor['glance::service::end']
-
-  if $swift_store_config_file != undef {
-    warning('The swift_store_config_file parameter is deprecated')
-    $swift_store_config_file_real = $swift_store_config_file
-  } else {
-    $swift_store_config_file_real = '/etc/glance/glance-swift.conf'
-  }
 
   [
     'swift_store_auth_version',
@@ -174,7 +161,7 @@ define glance::backend::multistore::swift(
     "${name}/swift_store_large_object_chunk_size": value => $swift_store_large_object_chunk_size;
     "${name}/swift_store_endpoint_type":           value => $swift_store_endpoint_type;
     "${name}/swift_store_service_type":            value => $swift_store_service_type;
-    "${name}/swift_store_config_file":             value => $swift_store_config_file_real;
+    "${name}/swift_store_config_file":             value => '/etc/glance/glance-swift.conf';
     "${name}/default_swift_reference":             value => $default_swift_reference;
     "${name}/swift_buffer_on_upload":              value => $swift_buffer_on_upload;
     "${name}/swift_upload_buffer_dir":             value => $swift_upload_buffer_dir;
@@ -190,7 +177,7 @@ define glance::backend::multistore::swift(
     "${name}/swift_store_large_object_chunk_size": value => $swift_store_large_object_chunk_size;
     "${name}/swift_store_endpoint_type":           value => $swift_store_endpoint_type;
     "${name}/swift_store_service_type":            value => $swift_store_service_type;
-    "${name}/swift_store_config_file":             value => $swift_store_config_file_real;
+    "${name}/swift_store_config_file":             value => '/etc/glance/glance-swift.conf';
     "${name}/default_swift_reference":             value => $default_swift_reference;
     "${name}/swift_buffer_on_upload":              value => $swift_buffer_on_upload;
     "${name}/swift_upload_buffer_dir":             value => $swift_upload_buffer_dir;
