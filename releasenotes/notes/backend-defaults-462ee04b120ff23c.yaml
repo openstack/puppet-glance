@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Added support for managing options in the new ``[backend_defaults]``
+    section.

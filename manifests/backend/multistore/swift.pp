@@ -13,10 +13,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Define: glance::backend::swift
+# == Define: glance::backend::multistore::swift
 #
-# configures the storage backend for glance
-# as a swift instance
+# configures the storage backend for glance as a swift instance
 #
 # === Parameters:
 #

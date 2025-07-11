@@ -15,8 +15,7 @@
 #
 # == Define: glance::backend::multistore::rbd
 #
-# configures the storage backend for glance
-# as a rbd instance
+# configures the storage backend for glance as a rbd instance
 #
 # === Parameters:
 #
