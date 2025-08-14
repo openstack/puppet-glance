@@ -96,7 +96,7 @@ define glance::backend::multistore::s3(
   include glance::params
 
   if $manage_packages {
-    ensure_packages('python-boto3', {
+    stdlib::ensure_packages('python-boto3', {
       'ensure' => $package_ensure,
       'name'   => $::glance::params::boto3_package_name,
       'tag'    => ['openstack','glance-package'],

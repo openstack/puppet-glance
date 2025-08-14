@@ -502,8 +502,8 @@ enabled_backends instead.')
       }
     }
 
-    create_resources('glance_api_config', merge($default_store_opt, $stores_opt))
-    create_resources('glance_cache_config', merge($default_store_opt, $stores_opt))
+    create_resources('glance_api_config', stdlib::merge($default_store_opt, $stores_opt))
+    create_resources('glance_cache_config', stdlib::merge($default_store_opt, $stores_opt))
 
   } else {
     warning('Glance-api is being provisioned without any backends')

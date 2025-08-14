@@ -56,7 +56,7 @@ class glance::property_protection(
 
         create_resources(
           'glance_property_protections_config',
-          { $key =>  merge($value, $value_override)}
+          { $key =>  stdlib::merge($value, $value_override)}
         )
       }
 
