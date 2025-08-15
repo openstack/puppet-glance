@@ -19,7 +19,7 @@ class glance(
   if ( $glance::params::package_name != undef ) {
     package { 'glance' :
       ensure => $package_ensure,
-      name   => $::glance::params::package_name,
+      name   => $glance::params::package_name,
       tag    => ['openstack', 'glance-package'],
     }
   }

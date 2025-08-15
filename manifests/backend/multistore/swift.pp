@@ -145,7 +145,7 @@ define glance::backend::multistore::swift(
   [
     'swift_store_auth_version',
     'swift_store_auth_project_domain_id',
-    'swift_store_auth_user_domain_id'
+    'swift_store_auth_user_domain_id',
   ].each |String $dep_opt| {
     if getvar($dep_opt) != undef {
       warning("The ${dep_opt} parameter is deprecated")

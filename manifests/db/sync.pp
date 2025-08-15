@@ -24,7 +24,7 @@ class glance::db::sync(
   exec { 'glance-manage db_sync':
     command     => "glance-manage ${extra_params} db_sync",
     path        => '/usr/bin',
-    user        => $::glance::params::user,
+    user        => $glance::params::user,
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,

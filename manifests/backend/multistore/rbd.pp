@@ -98,7 +98,7 @@ define glance::backend::multistore::rbd(
   if $manage_packages {
     stdlib::ensure_packages('python-ceph', {
       ensure => $package_ensure,
-      name   => $::glance::params::pyceph_package_name,
+      name   => $glance::params::pyceph_package_name,
       tag    => ['openstack', 'glance-support-package'],
     })
   }

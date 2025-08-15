@@ -42,7 +42,7 @@ class glance::property_protection(
       file { '/etc/glance/property-protections.conf':
         ensure  => 'file',
         owner   => 'root',
-        group   => $::glance::params::group,
+        group   => $glance::params::group,
         mode    => '0640',
         require => Anchor['glance::config::begin'],
         notify  => Anchor['glance::config::end'],

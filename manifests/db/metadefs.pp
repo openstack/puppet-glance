@@ -19,7 +19,7 @@ class glance::db::metadefs(
   exec { 'glance-manage db_load_metadefs':
     command     => "glance-manage ${extra_params} db_load_metadefs",
     path        => '/usr/bin',
-    user        => $::glance::params::user,
+    user        => $glance::params::user,
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,

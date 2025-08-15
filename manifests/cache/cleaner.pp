@@ -58,7 +58,7 @@ class glance::cache::cleaner(
     ensure      => $ensure,
     command     => "${sleep}${glance::params::cache_cleaner_command} ${command_options}",
     environment => 'PATH=/bin:/usr/bin:/usr/sbin',
-    user        => $::glance::params::user,
+    user        => $glance::params::user,
     minute      => $minute,
     hour        => $hour,
     monthday    => $monthday,

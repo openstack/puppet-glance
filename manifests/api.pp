@@ -52,7 +52,7 @@
 #   service, and you must use another class to configure that
 #   web service. For example, use class { 'glance::wsgi::apache'...}
 #   to make glance-api be a web app using apache mod_wsgi.
-#   Defaults to '$::glance::params::api_service_name'
+#   Defaults to '$glance::params::api_service_name'
 #
 # [*container_formats*]
 #   (optional) List of allowed values for an image container_format attributes
@@ -221,7 +221,7 @@
 # [*lock_path*]
 #   (optional) Where to store lock files. This directory must be writeable
 #   by the user executing the agent
-#   Defaults to: $::glance::params::lock_path
+#   Defaults to: $glance::params::lock_path
 #
 # [*public_endpoint*]
 #   (optional) Public url endpoint to use for Glance versions response.
@@ -283,7 +283,7 @@ class glance::api(
   $paste_deploy_config_file             = $facts['os_service_default'],
   Boolean $manage_service               = true,
   Boolean $enabled                      = true,
-  $service_name                         = $::glance::params::api_service_name,
+  $service_name                         = $glance::params::api_service_name,
   $show_image_direct_url                = $facts['os_service_default'],
   Boolean $purge_config                 = false,
   $enforce_secure_rbac                  = $facts['os_service_default'],
@@ -321,7 +321,7 @@ class glance::api(
   Boolean $sync_db                      = true,
   $limit_param_default                  = $facts['os_service_default'],
   $api_limit_max                        = $facts['os_service_default'],
-  $lock_path                            = $::glance::params::lock_path,
+  $lock_path                            = $glance::params::lock_path,
   $public_endpoint                      = $facts['os_service_default'],
   $hashing_algorithm                    = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
@@ -357,7 +357,7 @@ class glance::api(
   if ( $glance::params::api_package_name != undef ) {
     package { 'glance-api':
       ensure => $package_ensure,
-      name   => $::glance::params::api_package_name,
+      name   => $glance::params::api_package_name,
       tag    => ['openstack', 'glance-package'],
     }
   }
@@ -402,7 +402,7 @@ class glance::api(
     warning('The show_multiple_locations parameter is deprecated, and will be removed in a future release')
   }
   glance_api_config {
-    'DEFAULT/show_multiple_locations': value => pick($show_multiple_locations, $facts['os_service_default'])
+    'DEFAULT/show_multiple_locations': value => pick($show_multiple_locations, $facts['os_service_default']);
   }
 
   # task/taskflow_executor config.
@@ -481,11 +481,11 @@ enabled_backends instead.')
     if $multi_store {
       if $default_store_real {
         $default_store_opt = {
-          'glance_store/default_store' => {'value' => $default_store_real}
+          'glance_store/default_store' => {'value' => $default_store_real},
         }
       } else {
         $default_store_opt = {
-          'glance_store/default_store' => {'ensure' => absent}
+          'glance_store/default_store' => {'ensure' => absent},
         }
       }
     } else {
@@ -494,11 +494,11 @@ enabled_backends instead.')
 
     if $stores_real {
       $stores_opt = {
-        'glance_store/stores' => {'value' => join($stores_real, ',')}
+        'glance_store/stores' => {'value' => join($stores_real, ',')},
       }
     } else {
       $stores_opt = {
-        'glance_store/stores' => {'ensure' => absent}
+        'glance_store/stores' => {'ensure' => absent},
       }
     }
 
@@ -578,10 +578,10 @@ enabled_backends instead.')
       $service_ensure = 'stopped'
     }
 
-    if $service_name == $::glance::params::api_service_name {
+    if $service_name == $glance::params::api_service_name {
       service { 'glance-api':
         ensure     => $service_ensure,
-        name       => $::glance::params::api_service_name,
+        name       => $glance::params::api_service_name,
         enable     => $enabled,
         hasstatus  => true,
         hasrestart => true,
@@ -596,7 +596,7 @@ enabled_backends instead.')
     } elsif $service_name == 'httpd' {
       service { 'glance-api':
         ensure => 'stopped',
-        name   => $::glance::params::api_service_name,
+        name   => $glance::params::api_service_name,
         enable => false,
         tag    => 'glance-service',
       }

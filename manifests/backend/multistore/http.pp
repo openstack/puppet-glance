@@ -53,7 +53,7 @@ define glance::backend::multistore::http(
     fail('Glance accepts only one http store.')
   } else {
     exec { 'dummy-glance-multistore-http':
-      command => '/bin/true'
+      command => '/bin/true',
     }
   }
 
