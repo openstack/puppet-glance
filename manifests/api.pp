@@ -609,7 +609,7 @@ enabled_backends instead.')
       Glance_api_paste_ini<||> ~> Service['glance-api']
 
     } else {
-    fail("Invalid service_name. ${::glance::params::api_service_name} for \
+    fail("Invalid service_name. ${glance::params::api_service_name} for \
 running as a standalone service, or httpd for being run by a httpd server")
     }
   }
