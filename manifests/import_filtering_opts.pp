@@ -28,7 +28,7 @@
 #  (Optional) Ports disallowed for web-download.
 #  Defaults to $facts['os_service_default']
 #
-class glance::import_filtering_opts(
+class glance::import_filtering_opts (
   $allowed_schemes    = $facts['os_service_default'],
   $disallowed_schemes = $facts['os_service_default'],
   $allowed_hosts      = $facts['os_service_default'],
@@ -36,7 +36,6 @@ class glance::import_filtering_opts(
   $allowed_ports      = $facts['os_service_default'],
   $disallowed_ports   = $facts['os_service_default'],
 ) {
-
   include glance::deps
   include glance::params
 

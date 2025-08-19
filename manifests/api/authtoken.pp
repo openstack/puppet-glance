@@ -194,7 +194,7 @@
 #  (Optional) Hash of additional parameters to pass through to the keystone
 #  authtoken class. Values set here override the individual parameters above.
 #
-class glance::api::authtoken(
+class glance::api::authtoken (
   String[1] $password,
   $username                       = 'glance',
   $auth_url                       = 'http://127.0.0.1:5000',
@@ -234,7 +234,6 @@ class glance::api::authtoken(
   $interface                      = $facts['os_service_default'],
   $params                         = {}
 ) {
-
   include glance::deps
 
   keystone::resource::authtoken {

@@ -30,7 +30,7 @@
 #   (Optional) the database collation.
 #   Defaults to 'utf8_general_ci'
 #
-class glance::db::mysql(
+class glance::db::mysql (
   String[1] $password,
   $dbname        = 'glance',
   $user          = 'glance',
@@ -39,7 +39,6 @@ class glance::db::mysql(
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
 ) {
-
   include glance::deps
 
   openstacklib::db::mysql { 'glance':

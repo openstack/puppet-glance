@@ -13,11 +13,10 @@
 #   (Optional) Timeout for the execution of the db_sync
 #   Defaults to 300
 #
-class glance::db::sync(
+class glance::db::sync (
   $extra_params    = '',
   $db_sync_timeout = 300,
 ) {
-
   include glance::deps
   include glance::params
 
@@ -38,5 +37,4 @@ class glance::db::sync(
     notify      => Anchor['glance::dbsync::end'],
     tag         => 'openstack-db',
   }
-
 }

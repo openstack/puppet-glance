@@ -6,10 +6,9 @@
 #    (Optional) Ensure state for package.
 #    Defaults to 'present'
 #
-class glance::client(
+class glance::client (
   $ensure = 'present'
 ) {
-
   include glance::deps
   include glance::params
 
@@ -18,5 +17,4 @@ class glance::client(
     name   => $glance::params::client_package_name,
     tag    => 'openstack',
   }
-
 }

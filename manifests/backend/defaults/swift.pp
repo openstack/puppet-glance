@@ -49,7 +49,7 @@
 #   the request fails.
 #   Defaults to $facts['os_service_default'].
 #
-class glance::backend::defaults::swift(
+class glance::backend::defaults::swift (
   $swift_store_container               = $facts['os_service_default'],
   $swift_store_large_object_size       = $facts['os_service_default'],
   $swift_store_large_object_chunk_size = $facts['os_service_default'],
@@ -61,7 +61,6 @@ class glance::backend::defaults::swift(
   $swift_upload_buffer_dir             = $facts['os_service_default'],
   $swift_store_retry_get_count         = $facts['os_service_default'],
 ) {
-
   include glance::deps
   include swift::client
 

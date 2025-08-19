@@ -75,7 +75,6 @@ class glance::cron::db_purge_images_table (
   Integer[0] $maxdelay              = 0,
   Enum['present', 'absent'] $ensure = 'present',
 ) inherits glance::params {
-
   include glance::deps
 
   if $maxdelay == 0 {

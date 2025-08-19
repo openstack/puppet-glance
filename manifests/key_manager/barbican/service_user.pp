@@ -62,7 +62,7 @@
 #  (Optional) The region in which the identity server can be found.
 #  Defaults to $facts['os_service_default'].
 #
-class glance::key_manager::barbican::service_user(
+class glance::key_manager::barbican::service_user (
   $password,
   $username            = 'glance',
   $auth_url            = 'http://localhost:5000',
@@ -78,7 +78,6 @@ class glance::key_manager::barbican::service_user(
   $keyfile             = $facts['os_service_default'],
   $region_name         = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   oslo::key_manager::barbican::service_user { 'glance_api_config':

@@ -111,7 +111,7 @@
 #   (Optional) ID of the domain to which the user belongs.
 #   Defaults to undef
 #
-define glance::backend::multistore::swift(
+define glance::backend::multistore::swift (
   $swift_store_user,
   $swift_store_key,
   $swift_store_auth_address             = 'http://127.0.0.1:5000/v3/',
@@ -135,7 +135,6 @@ define glance::backend::multistore::swift(
   $swift_store_auth_project_domain_id   = undef,
   $swift_store_auth_user_domain_id      = undef,
 ) {
-
   include glance::deps
   include swift::client
 

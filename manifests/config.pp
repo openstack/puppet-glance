@@ -42,7 +42,6 @@ class glance::config (
   Hash $image_import_config  = {},
   Hash $rootwrap_config      = {},
 ) {
-
   include glance::deps
 
   create_resources('glance_api_config', $api_config)

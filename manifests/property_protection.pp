@@ -17,12 +17,11 @@
 #   in the property protections config.
 #   Defaults to false.
 #
-class glance::property_protection(
+class glance::property_protection (
   Optional[Enum['roles', 'policies']] $property_protection_rule_format = undef,
   Hash[String[1], Hash] $rules                                         = {},
   Boolean $purge_config                                                = false,
 ) {
-
   include glance::deps
   include glance::params
 
@@ -51,12 +50,12 @@ class glance::property_protection(
       $rules.each |$key, $value| {
         $value_override = $value['value'] ? {
           undef   => {},
-          default => {'value' => join(any2array($value['value']), ',')},
+          default => { 'value' => join(any2array($value['value']), ',') },
         }
 
         create_resources(
           'glance_property_protections_config',
-          { $key =>  stdlib::merge($value, $value_override)}
+          { $key => stdlib::merge($value, $value_override) }
         )
       }
 

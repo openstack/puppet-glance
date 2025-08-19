@@ -24,14 +24,13 @@
 #    (Optional) Privileges given to the database user.
 #    Default to 'ALL'
 #
-class glance::db::postgresql(
+class glance::db::postgresql (
   $password,
   $dbname     = 'glance',
   $user       = 'glance',
   $encoding   = undef,
   $privileges = 'ALL',
 ) {
-
   include glance::deps
 
   openstacklib::db::postgresql { 'glance':
@@ -45,5 +44,4 @@ class glance::db::postgresql(
   Anchor['glance::db::begin']
   ~> Class['glance::db::postgresql']
   ~> Anchor['glance::db::end']
-
 }

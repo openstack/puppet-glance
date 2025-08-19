@@ -34,7 +34,7 @@
 #    (optional) Ensure cron jobs present or absent
 #    Defaults to present.
 #
-class glance::cache::pruner(
+class glance::cache::pruner (
   $minute                           = '*/30',
   $hour                             = '*',
   $monthday                         = '*',
@@ -44,7 +44,6 @@ class glance::cache::pruner(
   Integer[0] $maxdelay              = 0,
   Enum['present', 'absent'] $ensure = 'present',
 ) {
-
   include glance::deps
   include glance::params
 

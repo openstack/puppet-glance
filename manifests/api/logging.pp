@@ -98,7 +98,7 @@
 #   Defaults to $facts['os_service_default'].
 #   Example: 'Y-%m-%d %H:%M:%S'
 #
-class glance::api::logging(
+class glance::api::logging (
   $use_syslog                    = $facts['os_service_default'],
   $use_json                      = $facts['os_service_default'],
   $use_journal                   = $facts['os_service_default'],
@@ -119,7 +119,6 @@ class glance::api::logging(
   $instance_uuid_format          = $facts['os_service_default'],
   $log_date_format               = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   oslo::log { 'glance_api_config':
@@ -143,5 +142,4 @@ class glance::api::logging(
     instance_uuid_format          => $instance_uuid_format,
     log_date_format               => $log_date_format,
   }
-
 }

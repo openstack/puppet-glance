@@ -54,7 +54,6 @@ class glance::api::db (
   $database_pool_timeout            = $facts['os_service_default'],
   $mysql_enable_ndb                 = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   oslo::db { 'glance_api_config':

@@ -17,11 +17,12 @@
 #   (Optional) Interval value to wait for multipath device to be ready for I/O.
 #   Defaults to $facts['os_service_default']
 #
-class glance::os_brick(
+class glance::os_brick (
   $lock_path                  = $facts['os_service_default'],
   $wait_mpath_device_attempts = $facts['os_service_default'],
   $wait_mpath_device_interval = $facts['os_service_default'],
 ) {
+  include glance::deps
 
   oslo::os_brick { 'glance_api_config':
     lock_path                  => $lock_path,

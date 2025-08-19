@@ -58,7 +58,7 @@
 #   a colon.
 #   Defaults to undef
 #
-define glance::backend::multistore::file(
+define glance::backend::multistore::file (
   $filesystem_store_datadir       = $facts['os_service_default'],
   $filesystem_store_metadata_file = $facts['os_service_default'],
   $filesystem_store_file_perm     = $facts['os_service_default'],
@@ -69,7 +69,6 @@ define glance::backend::multistore::file(
   # DEPRECATED PARAMETERS
   $filesystem_store_datadirs      = undef,
 ) {
-
   include glance::deps
 
   if $filesystem_store_datadirs != undef {

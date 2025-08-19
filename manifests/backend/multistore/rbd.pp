@@ -58,7 +58,7 @@
 #   are configured.
 #   Defaults to $facts['os_service_default'].
 #
-define glance::backend::multistore::rbd(
+define glance::backend::multistore::rbd (
   $rbd_store_user          = $facts['os_service_default'],
   $rbd_store_ceph_conf     = $facts['os_service_default'],
   $rbd_store_pool          = $facts['os_service_default'],
@@ -70,7 +70,6 @@ define glance::backend::multistore::rbd(
   $store_description       = $facts['os_service_default'],
   $weight                  = $facts['os_service_default'],
 ) {
-
   include glance::deps
   include glance::params
 

@@ -17,12 +17,11 @@
 #    (optional) Boolean describing if multiple backends will be configured
 #    Defaults to false
 #
-class glance::backend::file(
+class glance::backend::file (
   $filesystem_store_datadir     = '/var/lib/glance/images/',
   $filesystem_thin_provisioning = $facts['os_service_default'],
   Boolean $multi_store          = false,
 ) {
-
   include glance::deps
 
   warning('glance::backend::file is deprecated. Use glance::backend::multistore::file instead.')
