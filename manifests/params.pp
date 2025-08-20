@@ -3,6 +3,8 @@
 class glance::params {
   include openstacklib::defaults
 
+  $pyver3 = $openstacklib::defaults::pyver3
+
   $client_package_name = 'python3-glanceclient'
 
   $cache_cleaner_command = 'glance-cache-cleaner'
@@ -11,24 +13,25 @@ class glance::params {
   $group                 = 'glance'
   $boto3_package_name    = 'python3-boto3'
 
-  $glance_wsgi_script_source = '/usr/bin/glance-wsgi-api'
 
   case $facts['os']['family'] {
     'RedHat': {
-      $package_name            = 'openstack-glance'
-      $api_package_name        = undef
-      $api_service_name        = 'openstack-glance-api'
-      $pyceph_package_name     = 'python3-rbd'
-      $lock_path               = '/var/lib/glance/tmp'
-      $glance_wsgi_script_path = '/var/www/cgi-bin/glance'
+      $package_name              = 'openstack-glance'
+      $api_package_name          = undef
+      $api_service_name          = 'openstack-glance-api'
+      $pyceph_package_name       = 'python3-rbd'
+      $lock_path                 = '/var/lib/glance/tmp'
+      $glance_wsgi_script_path   = '/var/www/cgi-bin/glance'
+      $glance_wsgi_script_source = "/usr/lib/python${pyver3}/site-packages/glance/wsgi/api.py"
     }
     'Debian': {
-      $package_name            = undef
-      $api_package_name        = 'glance-api'
-      $api_service_name        = 'glance-api'
-      $pyceph_package_name     = 'python3-ceph'
-      $lock_path               = '/var/lock/glance'
-      $glance_wsgi_script_path = '/usr/lib/cgi-bin/glance'
+      $package_name              = undef
+      $api_package_name          = 'glance-api'
+      $api_service_name          = 'glance-api'
+      $pyceph_package_name       = 'python3-ceph'
+      $lock_path                 = '/var/lock/glance'
+      $glance_wsgi_script_path   = '/usr/lib/cgi-bin/glance'
+      $glance_wsgi_script_source = '/usr/bin/glance-wsgi-api'
     }
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")

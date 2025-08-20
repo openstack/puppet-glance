@@ -165,7 +165,7 @@ describe 'glance::wsgi::apache' do
         when 'RedHat'
           {
             :wsgi_script_path   => '/var/www/cgi-bin/glance',
-            :wsgi_script_source => '/usr/bin/glance-wsgi-api'
+            :wsgi_script_source => '/usr/lib/python3.9/site-packages/glance/wsgi/api.py',
           }
         end
       end
