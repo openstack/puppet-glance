@@ -9,10 +9,9 @@
 #   command line between 'glance-manage' and 'db_load_metadefs'.
 #   Defaults to ''
 #
-class glance::db::metadefs(
+class glance::db::metadefs (
   $extra_params = '',
 ) {
-
   include glance::deps
   include glance::params
 
@@ -30,5 +29,4 @@ class glance::db::metadefs(
       Anchor['glance::dbsync::end']
     ],
   }
-
 }

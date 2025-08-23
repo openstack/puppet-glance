@@ -24,14 +24,13 @@
 #   (optional) Boolean describing if thin provisioning is enabled or not
 #   Defaults to $facts['os_service_default']
 #
-class glance::backend::defaults::file(
+class glance::backend::defaults::file (
   $filesystem_store_datadir       = $facts['os_service_default'],
   $filesystem_store_metadata_file = $facts['os_service_default'],
   $filesystem_store_file_perm     = $facts['os_service_default'],
   $filesystem_store_chunk_size    = $facts['os_service_default'],
   $filesystem_thin_provisioning   = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   glance_api_config {

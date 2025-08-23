@@ -87,7 +87,7 @@
 #    admin_url    => 'https://10.0.0.11:9292',
 #  }
 #
-class glance::keystone::auth(
+class glance::keystone::auth (
   String[1] $password,
   String[1] $email                        = 'glance@localhost',
   String[1] $auth_name                    = 'glance',
@@ -107,7 +107,6 @@ class glance::keystone::auth(
   Keystone::EndpointUrl $admin_url        = 'http://127.0.0.1:9292',
   Keystone::EndpointUrl $internal_url     = 'http://127.0.0.1:9292',
 ) {
-
   include glance::deps
 
   Keystone::Resource::Service_identity['glance'] -> Anchor['glance::service::end']
@@ -132,5 +131,4 @@ class glance::keystone::auth(
     admin_url           => $admin_url,
     internal_url        => $internal_url,
   }
-
 }

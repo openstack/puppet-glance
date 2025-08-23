@@ -159,7 +159,6 @@ class glance::wsgi::apache (
   $request_headers             = undef,
   $vhost_custom_fragment       = undef,
 ) {
-
   include glance::deps
   include glance::params
 

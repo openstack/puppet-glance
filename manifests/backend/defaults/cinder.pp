@@ -80,7 +80,7 @@
 #   on the attached volume.
 #   Defaults to $facts['os_service_default'].
 #
-class glance::backend::defaults::cinder(
+class glance::backend::defaults::cinder (
   $cinder_ca_certificates_file      = $facts['os_service_default'],
   $cinder_api_insecure              = $facts['os_service_default'],
   $cinder_catalog_info              = $facts['os_service_default'],
@@ -99,7 +99,6 @@ class glance::backend::defaults::cinder(
   $cinder_mount_point_base          = $facts['os_service_default'],
   $cinder_do_extend_attached        = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   glance_api_config {

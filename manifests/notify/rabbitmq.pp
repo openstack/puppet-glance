@@ -169,7 +169,7 @@
 #   will be run through a green thread.
 #   Defaults to undef
 #
-class glance::notify::rabbitmq(
+class glance::notify::rabbitmq (
   $default_transport_url              = $facts['os_service_default'],
   $rpc_response_timeout               = $facts['os_service_default'],
   $control_exchange                   = $facts['os_service_default'],
@@ -205,7 +205,6 @@ class glance::notify::rabbitmq(
   $rabbit_notification_topic          = undef,
   $rabbit_heartbeat_in_pthread        = undef,
 ) {
-
   include glance::deps
 
   if $rabbit_notification_topic != undef {

@@ -9,10 +9,9 @@
 #    is ignored since Ubuntu has packages per services
 #    Defaults to 'present'
 #
-class glance(
+class glance (
   $package_ensure = 'present'
 ) {
-
   include glance::deps
   include glance::params
 

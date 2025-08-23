@@ -72,7 +72,7 @@
 #  (Optional) Always use this endpoint URL for requests for this client.
 #  Defaults to $facts['os_service_default'].
 #
-class glance::limit(
+class glance::limit (
   String[1] $password,
   Optional[String[1]] $endpoint_id = undef,
   String[1] $endpoint_service_name = 'glance',
@@ -91,7 +91,6 @@ class glance::limit(
   $region_name                     = $facts['os_service_default'],
   $endpoint_override               = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   if $endpoint_id != undef {

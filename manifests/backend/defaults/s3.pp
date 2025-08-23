@@ -42,7 +42,7 @@
 #   (optional) The number of thread pools to perform a multipart upload in S3.
 #   Defaults to $facts['os_service_default'].
 #
-class glance::backend::defaults::s3(
+class glance::backend::defaults::s3 (
   $s3_store_host                    = $facts['os_service_default'],
   $s3_store_access_key              = $facts['os_service_default'],
   $s3_store_secret_key              = $facts['os_service_default'],
@@ -53,7 +53,6 @@ class glance::backend::defaults::s3(
   $s3_store_large_object_chunk_size = $facts['os_service_default'],
   $s3_store_thread_pools            = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   glance_api_config {

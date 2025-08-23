@@ -44,7 +44,6 @@ class glance::cors (
   $allow_methods     = $facts['os_service_default'],
   $allow_headers     = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   oslo::cors { 'glance_api_config':

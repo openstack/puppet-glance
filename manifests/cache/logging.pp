@@ -93,7 +93,7 @@
 #    Defaults to $facts['os_service_default'].
 #    Example: 'Y-%m-%d %H:%M:%S'
 #
-class glance::cache::logging(
+class glance::cache::logging (
   $use_syslog                    = $facts['os_service_default'],
   $use_json                      = $facts['os_service_default'],
   $use_stderr                    = $facts['os_service_default'],
@@ -113,7 +113,6 @@ class glance::cache::logging(
   $instance_uuid_format          = $facts['os_service_default'],
   $log_date_format               = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   oslo::log { 'glance_cache_config':
@@ -136,5 +135,4 @@ class glance::cache::logging(
     instance_uuid_format          => $instance_uuid_format,
     log_date_format               => $log_date_format,
   }
-
 }

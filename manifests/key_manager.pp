@@ -11,7 +11,6 @@
 class glance::key_manager (
   $backend = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   oslo::key_manager { 'glance_api_config':

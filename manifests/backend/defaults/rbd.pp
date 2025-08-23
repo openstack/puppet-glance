@@ -24,7 +24,7 @@
 #   Optional. Timeout value (in seconds) used when connecting to ceph cluster.
 #   Default: $facts['os_service_default'].
 #
-class glance::backend::defaults::rbd(
+class glance::backend::defaults::rbd (
   $rbd_store_user        = $facts['os_service_default'],
   $rbd_store_ceph_conf   = $facts['os_service_default'],
   $rbd_store_pool        = $facts['os_service_default'],
@@ -32,7 +32,6 @@ class glance::backend::defaults::rbd(
   $rbd_thin_provisioning = $facts['os_service_default'],
   $rados_connect_timeout = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   glance_api_config {

@@ -37,19 +37,18 @@
 #   are configured.
 #   Defaults to $facts['os_service_default'].
 #
-define glance::backend::multistore::http(
+define glance::backend::multistore::http (
   $https_ca_certificates_file = $facts['os_service_default'],
   $https_insecure             = $facts['os_service_default'],
   $http_proxy_information     = $facts['os_service_default'],
   $weight                     = $facts['os_service_default'],
 ) {
-
   include glance::deps
   include glance::params
 
   # Glance only accepts a single http store. The following dummy resource
   # has been added to make sure that only one http store is defined.
-  if defined(Exec['dummy-glance-multistore-http']){
+  if defined(Exec['dummy-glance-multistore-http']) {
     fail('Glance accepts only one http store.')
   } else {
     exec { 'dummy-glance-multistore-http':

@@ -272,7 +272,7 @@
 #   (optional) Turn on/off delayed delete.
 #   Defaults to undef
 #
-class glance::api(
+class glance::api (
   $package_ensure                       = 'present',
   $bind_host                            = $facts['os_service_default'],
   $bind_port                            = $facts['os_service_default'],
@@ -333,11 +333,9 @@ class glance::api(
   $filesystem_store_file_perm           = undef,
   $delayed_delete                       = undef,
 ) inherits glance {
-
   include glance::deps
   include glance::policy
   include glance::api::db
-
 
   ['filesystem_store_metadata_file', 'filesystem_store_file_perm'].each |String $fs_opt| {
     if getvar($fs_opt) != undef {
@@ -452,7 +450,6 @@ class glance::api(
       'glance_store/stores':          ensure => absent;
       'glance_store/default_store':   ensure => absent;
     }
-
   } elsif $stores or $default_store {
     warning('The stores and default_store parameters are deprecated. Please use \
 enabled_backends instead.')
@@ -481,11 +478,11 @@ enabled_backends instead.')
     if $multi_store {
       if $default_store_real {
         $default_store_opt = {
-          'glance_store/default_store' => {'value' => $default_store_real},
+          'glance_store/default_store' => { 'value' => $default_store_real },
         }
       } else {
         $default_store_opt = {
-          'glance_store/default_store' => {'ensure' => absent},
+          'glance_store/default_store' => { 'ensure' => absent },
         }
       }
     } else {
@@ -494,17 +491,16 @@ enabled_backends instead.')
 
     if $stores_real {
       $stores_opt = {
-        'glance_store/stores' => {'value' => join($stores_real, ',')},
+        'glance_store/stores' => { 'value' => join($stores_real, ',') },
       }
     } else {
       $stores_opt = {
-        'glance_store/stores' => {'ensure' => absent},
+        'glance_store/stores' => { 'ensure' => absent },
       }
     }
 
     create_resources('glance_api_config', stdlib::merge($default_store_opt, $stores_opt))
     create_resources('glance_cache_config', stdlib::merge($default_store_opt, $stores_opt))
-
   } else {
     warning('Glance-api is being provisioned without any backends')
   }
@@ -592,7 +588,6 @@ enabled_backends instead.')
       Glance_api_paste_ini<||> ~> Service['glance-api']
       # On any uwsgi config change, we must restart Glance API.
       Glance_api_uwsgi_config<||> ~> Service['glance-api']
-
     } elsif $service_name == 'httpd' {
       service { 'glance-api':
         ensure => 'stopped',
@@ -607,7 +602,6 @@ enabled_backends instead.')
 
       # On any paste-api.ini config change, we must restart Glance API.
       Glance_api_paste_ini<||> ~> Service['glance-api']
-
     } else {
     fail("Invalid service_name. ${glance::params::api_service_name} for \
 running as a standalone service, or httpd for being run by a httpd server")

@@ -37,5 +37,4 @@ class glance::params {
       fail("Unsupported osfamily: ${facts['os']['family']}")
     }
   }
-
 }

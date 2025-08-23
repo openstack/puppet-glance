@@ -47,7 +47,6 @@ class glance::key_manager::barbican (
   $barbican_region_name    = $facts['os_service_default'],
   $send_service_user_token = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   oslo::key_manager::barbican { 'glance_api_config':

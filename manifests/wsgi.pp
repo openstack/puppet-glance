@@ -18,7 +18,6 @@ class glance::wsgi (
   $task_pool_threads  = $facts['os_service_default'],
   $python_interpreter = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   glance_api_config {

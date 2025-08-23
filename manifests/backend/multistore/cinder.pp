@@ -105,7 +105,7 @@
 #   are configured.
 #   Defaults to $facts['os_service_default'].
 #
-define glance::backend::multistore::cinder(
+define glance::backend::multistore::cinder (
   $cinder_ca_certificates_file      = $facts['os_service_default'],
   $cinder_api_insecure              = $facts['os_service_default'],
   $cinder_catalog_info              = $facts['os_service_default'],
@@ -126,7 +126,6 @@ define glance::backend::multistore::cinder(
   $store_description                = $facts['os_service_default'],
   $weight                           = $facts['os_service_default'],
 ) {
-
   include glance::deps
 
   glance_api_config {

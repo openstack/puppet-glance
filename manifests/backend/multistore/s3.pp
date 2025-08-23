@@ -76,7 +76,7 @@
 #   accepts latest or specific versions.
 #   Defaults to present.
 #
-define glance::backend::multistore::s3(
+define glance::backend::multistore::s3 (
   $s3_store_host,
   $s3_store_access_key,
   $s3_store_secret_key,
@@ -91,7 +91,6 @@ define glance::backend::multistore::s3(
   Boolean $manage_packages          = true,
   $package_ensure                   = 'present',
 ) {
-
   include glance::deps
   include glance::params
 

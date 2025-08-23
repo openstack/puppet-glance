@@ -38,7 +38,7 @@
 #    Optional. Boolean describing if multiple backends will be configured
 #    Defaults to false
 #
-class glance::backend::rbd(
+class glance::backend::rbd (
   $rbd_store_user          = $facts['os_service_default'],
   $rbd_store_ceph_conf     = $facts['os_service_default'],
   $rbd_store_pool          = $facts['os_service_default'],
@@ -49,7 +49,6 @@ class glance::backend::rbd(
   $rados_connect_timeout   = $facts['os_service_default'],
   Boolean $multi_store     = false,
 ) {
-
   include glance::deps
   include glance::params
 

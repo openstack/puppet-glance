@@ -71,7 +71,7 @@
 #   (optional) Boolean describing if multiple backends will be configured
 #   Defaults to false
 #
-class glance::backend::cinder(
+class glance::backend::cinder (
   $cinder_ca_certificates_file = $facts['os_service_default'],
   $cinder_api_insecure         = $facts['os_service_default'],
   $cinder_catalog_info         = $facts['os_service_default'],
@@ -84,7 +84,6 @@ class glance::backend::cinder(
   $cinder_os_region_name       = 'RegionOne',
   Boolean $multi_store         = false,
 ) {
-
   include glance::deps
 
   warning('glance::backend::cinder is deprecated. Use glance::backend::multistore::cinder instead.')
