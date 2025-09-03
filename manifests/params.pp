@@ -13,7 +13,6 @@ class glance::params {
   $group                 = 'glance'
   $boto3_package_name    = 'python3-boto3'
 
-
   case $facts['os']['family'] {
     'RedHat': {
       $package_name              = 'openstack-glance'
