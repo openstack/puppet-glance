@@ -62,7 +62,6 @@ class glance::backend::defaults::swift (
   $swift_store_retry_get_count         = $facts['os_service_default'],
 ) {
   include glance::deps
-  include swift::client
 
   glance_api_config {
     'backend_defaults/swift_store_region':                  value => $swift_store_region;

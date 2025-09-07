@@ -94,7 +94,6 @@ class glance::backend::swift (
   $swift_store_auth_user_domain_id      = undef,
 ) {
   include glance::deps
-  include swift::client
 
   warning('glance::backend::swift is deprecated. Use glance::backend::multistore::swift instead.')
 
