@@ -5,8 +5,8 @@
 #
 # [*extra_params*]
 #   (Optional) String of extra command line parameters to append
-#   to the glance-manage db sync command. These will be inserted
-#   in the command line between 'glance-manage' and 'db sync'.
+#   to the glance-manage db_sync command. These will be inserted
+#   in the command line between 'glance-manage' and 'db_sync'.
 #   Defaults to ''
 #
 # [*db_sync_timeout*]
