@@ -10,7 +10,7 @@
 #    Defaults to 'present'
 #
 class glance (
-  $package_ensure = 'present'
+  Stdlib::Ensure::Package $package_ensure = 'present',
 ) {
   include glance::deps
   include glance::params

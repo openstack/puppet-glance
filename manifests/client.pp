@@ -7,7 +7,7 @@
 #    Defaults to 'present'
 #
 class glance::client (
-  $ensure = 'present'
+  Stdlib::Ensure::Package $ensure = 'present'
 ) {
   include glance::deps
   include glance::params
