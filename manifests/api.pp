@@ -601,7 +601,7 @@ enabled_backends instead.')
       Service['glance-api'] -> Service[$service_name]
 
       # On any paste-api.ini config change, we must restart Glance API.
-      Glance_api_paste_ini<||> ~> Service['glance-api']
+      Glance_api_paste_ini<||> ~> Service[$service_name]
     } else {
     fail("Invalid service_name. ${glance::params::api_service_name} for \
 running as a standalone service, or httpd for being run by a httpd server")
