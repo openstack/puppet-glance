@@ -283,7 +283,7 @@ class glance::api (
   $paste_deploy_config_file               = $facts['os_service_default'],
   Boolean $manage_service                 = true,
   Boolean $enabled                        = true,
-  $service_name                           = $glance::params::api_service_name,
+  String[1] $service_name                 = $glance::params::api_service_name,
   $show_image_direct_url                  = $facts['os_service_default'],
   Boolean $purge_config                   = false,
   $enforce_secure_rbac                    = $facts['os_service_default'],
@@ -568,43 +568,43 @@ enabled_backends instead.')
   }
 
   if $manage_service {
-    if $enabled {
-      $service_ensure = 'running'
-    } else {
-      $service_ensure = 'stopped'
-    }
+    case $service_name {
+      'httpd': {
+        Service <| title == 'httpd' |> { tag +> 'glance-service' }
 
-    if $service_name == $glance::params::api_service_name {
-      service { 'glance-api':
-        ensure     => $service_ensure,
-        name       => $glance::params::api_service_name,
-        enable     => $enabled,
-        hasstatus  => true,
-        hasrestart => true,
-        tag        => 'glance-service',
+        service { 'glance-api':
+          ensure => 'stopped',
+          name   => $glance::params::api_service_name,
+          enable => false,
+          tag    => 'glance-service',
+        }
+
+        # we need to make sure glance-api/eventlet is stopped before trying to start apache
+        Service['glance-api'] -> Service['httpd']
+
+        # On any paste-api.ini config change, we must restart Glance API.
+        Glance_api_paste_ini<||> ~> Service['httpd']
       }
+      default: {
+        $service_ensure = $enabled ? {
+          true    => 'running',
+          default => 'stopped',
+        }
 
-      # On any paste-api.ini config change, we must restart Glance API.
-      Glance_api_paste_ini<||> ~> Service['glance-api']
-      # On any uwsgi config change, we must restart Glance API.
-      Glance_api_uwsgi_config<||> ~> Service['glance-api']
-    } elsif $service_name == 'httpd' {
-      service { 'glance-api':
-        ensure => 'stopped',
-        name   => $glance::params::api_service_name,
-        enable => false,
-        tag    => 'glance-service',
+        service { 'glance-api':
+          ensure     => $service_ensure,
+          name       => $service_name,
+          enable     => $enabled,
+          hasstatus  => true,
+          hasrestart => true,
+          tag        => 'glance-service',
+        }
+
+        # On any paste-api.ini config change, we must restart Glance API.
+        Glance_api_paste_ini<||> ~> Service['glance-api']
+        # On any uwsgi config change, we must restart Glance API.
+        Glance_api_uwsgi_config<||> ~> Service['glance-api']
       }
-      Service <| title == 'httpd' |> { tag +> 'glance-service' }
-
-      # we need to make sure glance-api/eventlet is stopped before trying to start apache
-      Service['glance-api'] -> Service[$service_name]
-
-      # On any paste-api.ini config change, we must restart Glance API.
-      Glance_api_paste_ini<||> ~> Service[$service_name]
-    } else {
-    fail("Invalid service_name. ${glance::params::api_service_name} for \
-running as a standalone service, or httpd for being run by a httpd server")
     }
   }
 }
