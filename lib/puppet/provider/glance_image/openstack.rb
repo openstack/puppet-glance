@@ -74,7 +74,7 @@ Puppet::Type.type(:glance_image).provide(
       @property_hash = {
         :ensure           => :present,
         :name             => attrs[:name],
-        :is_public        => attrs[:visibility].downcase.chomp == 'public'? true : false,
+        :is_public        => attrs[:visibility].downcase.chomp == 'public'? :true : :false,
         :container_format => attrs[:container_format],
         :id               => attrs[:id],
         :disk_format      => attrs[:disk_format],
@@ -100,11 +100,11 @@ Puppet::Type.type(:glance_image).provide(
     @property_hash.clear
   end
 
-  mk_resource_methods
-
   def is_public
-    bool_to_sym(@property_hash[:is_public])
+    @property_hash[:is_public]
   end
+
+  mk_resource_methods
 
   [
     :is_public,
@@ -134,7 +134,7 @@ Puppet::Type.type(:glance_image).provide(
       new(
         :ensure           => :present,
         :name             => attrs[:name],
-        :is_public        => attrs[:visibility].downcase.chomp == 'public'? true : false,
+        :is_public        => attrs[:visibility].downcase.chomp == 'public'? :true : :false,
         :container_format => attrs[:container_format],
         :id               => attrs[:id],
         :disk_format      => attrs[:disk_format],

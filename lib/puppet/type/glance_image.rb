@@ -41,14 +41,13 @@ Puppet::Type.newtype(:glance_image) do
   newproperty(:is_public) do
     desc "Whether the image is public or not. Default true"
     newvalues(/(y|Y)es/, /(n|N)o/, /(t|T)rue/, /(f|F)alse/, true, false)
-    defaultto(true)
-    munge do |v|
-      if v =~ /^(y|Y)es$/
+    defaultto(:true)
+    munge do |value|
+      case value.to_s.downcase
+      when 'true', 'yes'
         :true
-      elsif v =~ /^(n|N)o$/
-        :false
       else
-        v.to_s.downcase.to_sym
+        :false
       end
     end
   end

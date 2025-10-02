@@ -8,8 +8,4 @@ class Puppet::Provider::Glance < Puppet::Provider::Openstack
 
   extend Puppet::Provider::Openstack::Auth
 
-  def bool_to_sym(bool)
-    bool == true ? :true : :false
-  end
-
 end
