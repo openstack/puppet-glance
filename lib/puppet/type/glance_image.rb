@@ -54,12 +54,12 @@ Puppet::Type.newtype(:glance_image) do
 
   newproperty(:container_format) do
     desc "The format of the container"
-    newvalues(:ami, :ari, :aki, :bare, :ovf)
+    newvalues(:ami, :ari, :aki, :bare, :ovf, :ova, :docker, :compressed)
   end
 
   newproperty(:disk_format) do
     desc "The format of the disk"
-    newvalues(:ami, :ari, :aki, :vhd, :vmdk, :raw, :qcow2, :vdi, :iso, :ploop)
+    newvalues(:ami, :ari, :aki, :vhd, :vhdx, :vmdk, :raw, :qcow2, :vdi, :iso, :ploop)
   end
 
   newparam(:source) do
