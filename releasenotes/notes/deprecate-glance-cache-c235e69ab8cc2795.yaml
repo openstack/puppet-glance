@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    Support for ``glance-cache-pruner`` cron job and ``glance-cache-cleaner``
+    cron job has been deprecated. These command line tools were deprecated in
+    glance in favor of the cache API.

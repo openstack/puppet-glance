@@ -47,6 +47,9 @@ class glance::cache::pruner (
   include glance::deps
   include glance::params
 
+  warning("Support for glance-cache-pruner has been deprecated and \
+will be removed in a future release.")
+
   if $maxdelay == 0 {
     $sleep = ''
   } else {
