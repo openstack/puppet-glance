@@ -160,7 +160,7 @@ describe 'glance::wsgi::apache' do
         when 'Debian'
           {
             :wsgi_script_path   => '/usr/lib/cgi-bin/glance',
-            :wsgi_script_source => '/usr/bin/glance-wsgi-api'
+            :wsgi_script_source => '/usr/lib/python3/dist-packages/glance/wsgi/api.py',
           }
         when 'RedHat'
           {

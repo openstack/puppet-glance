@@ -30,7 +30,7 @@ class glance::params {
       $pyceph_package_name       = 'python3-ceph'
       $lock_path                 = '/var/lock/glance'
       $glance_wsgi_script_path   = '/usr/lib/cgi-bin/glance'
-      $glance_wsgi_script_source = '/usr/bin/glance-wsgi-api'
+      $glance_wsgi_script_source = "${pybasedir}/glance/wsgi/api.py"
     }
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")
