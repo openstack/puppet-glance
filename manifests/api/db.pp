@@ -38,6 +38,11 @@
 #   (Optional) If set, use this value for pool_timeout with SQLAlchemy.
 #   Defaults to $facts['os_service_default']
 #
+# [*connection_parameters*]
+#   (Optional) URL parameters to append to the database connection
+#   URL at connect time
+#   Defaults to $facts['os_service_default']
+#
 # DEPRECATED PARAMETERS
 #
 # [*mysql_enable_ndb*]
@@ -46,16 +51,17 @@
 #   Defaults to undef
 #
 class glance::api::db (
-  $database_db_max_retries          = $facts['os_service_default'],
-  $database_connection              = 'sqlite:///var/lib/glance/glance.sqlite',
-  $database_connection_recycle_time = $facts['os_service_default'],
-  $database_max_pool_size           = $facts['os_service_default'],
-  $database_max_retries             = $facts['os_service_default'],
-  $database_retry_interval          = $facts['os_service_default'],
-  $database_max_overflow            = $facts['os_service_default'],
-  $database_pool_timeout            = $facts['os_service_default'],
+  $database_db_max_retries                                   = $facts['os_service_default'],
+  $database_connection                                       = 'sqlite:///var/lib/glance/glance.sqlite',
+  $database_connection_recycle_time                          = $facts['os_service_default'],
+  $database_max_pool_size                                    = $facts['os_service_default'],
+  $database_max_retries                                      = $facts['os_service_default'],
+  $database_retry_interval                                   = $facts['os_service_default'],
+  $database_max_overflow                                     = $facts['os_service_default'],
+  $database_pool_timeout                                     = $facts['os_service_default'],
+  Optional[Oslo::Dbconn::Conn_params] $connection_parameters = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
-  $mysql_enable_ndb                 = undef,
+  $mysql_enable_ndb                                          = undef,
 ) {
   include glance::deps
 
@@ -68,6 +74,7 @@ class glance::api::db (
     max_pool_size           => $database_max_pool_size,
     max_overflow            => $database_max_overflow,
     pool_timeout            => $database_pool_timeout,
+    connection_parameters   => $connection_parameters,
     mysql_enable_ndb        => $mysql_enable_ndb,
   }
 
