@@ -59,8 +59,6 @@ class glance::deps {
   -> Package<| tag == 'glance-support-package'|>
   -> Anchor['glance::install::end']
 
-  Anchor['glance::service::end'] -> Glance_image<||>
-
   # Installation or config changes will always restart services.
   Anchor['glance::install::end'] ~> Anchor['glance::service::begin']
   Anchor['glance::config::end']  ~> Anchor['glance::service::begin']
