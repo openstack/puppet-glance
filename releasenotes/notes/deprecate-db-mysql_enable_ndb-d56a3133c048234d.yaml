@@ -1,0 +1,4 @@
+---
+deprecations:
+  - |
+    The ``glance::api::db::mysql_enable_ndb`` parameter has been deprecated.
