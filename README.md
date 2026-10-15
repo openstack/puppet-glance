@@ -70,14 +70,6 @@ glance::backend::multistore::file {
 }
 ```
 
-**Setup postgres node glance**
-
-```puppet
-class { 'glance::db::postgresql':
-  password => '12345',
-}
-```
-
 **Setup mysql node for glance**
 
 ```puppet
