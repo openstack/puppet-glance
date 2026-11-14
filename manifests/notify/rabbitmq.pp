@@ -153,12 +153,6 @@
 #   message, which failed to be delivered due to a recoverable error.
 #   Defaults to $facts['os_service_default'].
 #
-# DEPRECATED PARAMETERS
-#
-# [*rabbit_notification_topic*]
-#   (Optional) AMQP topic used for OpenStack notifications. (list value)
-#   Defaults to undef
-#
 class glance::notify::rabbitmq (
   $default_transport_url              = $facts['os_service_default'],
   $rpc_response_timeout               = $facts['os_service_default'],
@@ -191,18 +185,8 @@ class glance::notify::rabbitmq (
   $notification_topics                = $facts['os_service_default'],
   $notification_driver                = $facts['os_service_default'],
   $notification_retry                 = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  $rabbit_notification_topic          = undef,
 ) {
   include glance::deps
-
-  if $rabbit_notification_topic != undef {
-    warning("The rabbit_notification_topic parameter is deprecated. \
-Use the notification_topic parameter instead.")
-    $notification_topics_real = $rabbit_notification_topic
-  } else {
-    $notification_topics_real = $notification_topics
-  }
 
   oslo::messaging::rabbit { 'glance_api_config':
     rabbit_ha_queues                => $rabbit_ha_queues,
@@ -240,7 +224,7 @@ Use the notification_topic parameter instead.")
   oslo::messaging::notifications { 'glance_api_config':
     driver        => $notification_driver,
     transport_url => $notification_transport_url,
-    topics        => $notification_topics_real,
+    topics        => $notification_topics,
     retry         => $notification_retry,
   }
 }
