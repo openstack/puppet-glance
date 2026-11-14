@@ -49,15 +49,6 @@
 #   are configured.
 #   Defaults to $facts['os_service_default'].
 #
-# DEPRECATED PARAMETERS
-#
-# [*filesystem_store_datadirs*]
-#   (optional) List of directories where dist images are stored. When using
-#   multiple directories, each directory can be given an optional priority,
-#   which is an integer that is concatenated to the directory path with
-#   a colon.
-#   Defaults to undef
-#
 define glance::backend::multistore::file (
   $filesystem_store_datadir       = $facts['os_service_default'],
   $filesystem_store_metadata_file = $facts['os_service_default'],
@@ -66,29 +57,15 @@ define glance::backend::multistore::file (
   $filesystem_thin_provisioning   = $facts['os_service_default'],
   $store_description              = $facts['os_service_default'],
   $weight                         = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  $filesystem_store_datadirs      = undef,
 ) {
   include glance::deps
 
-  if $filesystem_store_datadirs != undef {
-    warning('The filesystem_store_datadirs parameter is deprecated')
-    $filesystem_store_datadirs_real = $filesystem_store_datadirs
-  } else {
-    $filesystem_store_datadirs_real = $facts['os_service_default']
-  }
-
-  if !is_service_default($filesystem_store_datadir) and !is_service_default($filesystem_store_datadirs_real) {
-    fail('filesystem_store_datadir and filesystem_store_datadirs are mutually exclusive.')
-  }
-
   glance_api_config {
-    "${name}/filesystem_store_datadir":       value => $filesystem_store_datadir;
-    "${name}/filesystem_store_datadirs":      value => $filesystem_store_datadirs_real;
-    "${name}/filesystem_store_chunk_size":    value => $filesystem_store_chunk_size;
-    "${name}/filesystem_thin_provisioning":   value => $filesystem_thin_provisioning;
-    "${name}/store_description":              value => $store_description;
-    "${name}/weight":                         value => $weight;
+    "${name}/filesystem_store_datadir":     value => $filesystem_store_datadir;
+    "${name}/filesystem_store_chunk_size":  value => $filesystem_store_chunk_size;
+    "${name}/filesystem_thin_provisioning": value => $filesystem_thin_provisioning;
+    "${name}/store_description":            value => $store_description;
+    "${name}/weight":                       value => $weight;
   }
 
   if $name != 'glance_store' {
@@ -105,7 +82,6 @@ define glance::backend::multistore::file (
 
   glance_cache_config {
     "${name}/filesystem_store_datadir":     value => $filesystem_store_datadir;
-    "${name}/filesystem_store_datadirs":    value => $filesystem_store_datadirs_real;
     "${name}/filesystem_store_chunk_size":  value => $filesystem_store_chunk_size;
     "${name}/filesystem_thin_provisioning": value => $filesystem_thin_provisioning;
     "${name}/weight":                       value => $weight;
