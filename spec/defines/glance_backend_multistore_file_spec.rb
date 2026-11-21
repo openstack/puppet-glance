@@ -26,7 +26,6 @@ describe 'glance::backend::multistore::file' do
       is_expected.to contain_glance_api_config('file/store_description').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_api_config('file/weight').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_api_config('file/filesystem_store_datadir').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_glance_api_config('file/filesystem_store_datadirs').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_api_config('file/filesystem_store_metadata_file').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_api_config('file/filesystem_store_file_perm').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_api_config('file/filesystem_store_chunk_size').with_value('<SERVICE DEFAULT>')
@@ -37,7 +36,6 @@ describe 'glance::backend::multistore::file' do
       is_expected.to_not contain_glance_cache_config('file/store_description')
       is_expected.to contain_glance_cache_config('file/weight').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_cache_config('file/filesystem_store_datadir').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_glance_cache_config('file/filesystem_store_datadirs').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_cache_config('file/filesystem_store_metadata_file').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_cache_config('file/filesystem_store_file_perm').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_glance_cache_config('file/filesystem_store_chunk_size').with_value('<SERVICE DEFAULT>')
@@ -60,8 +58,6 @@ describe 'glance::backend::multistore::file' do
         is_expected.to contain_glance_api_config('file/weight').with_value(0)
         is_expected.to contain_glance_api_config('file/filesystem_store_datadir')\
           .with_value('/var/lib/glance/images')
-        is_expected.to contain_glance_api_config('file/filesystem_store_datadirs')\
-          .with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_api_config('file/filesystem_store_metadata_file')\
           .with_value('/var/lib/glance/metadata.json')
         is_expected.to contain_glance_api_config('file/filesystem_store_file_perm')\
@@ -76,8 +72,6 @@ describe 'glance::backend::multistore::file' do
         is_expected.to contain_glance_cache_config('file/weight').with_value(0)
         is_expected.to contain_glance_cache_config('file/filesystem_store_datadir')\
           .with_value('/var/lib/glance/images')
-        is_expected.to contain_glance_cache_config('file/filesystem_store_datadirs')\
-          .with_value('<SERVICE DEFAULT>')
         is_expected.to contain_glance_cache_config('file/filesystem_store_metadata_file')\
           .with_value('/var/lib/glance/metadata.json')
         is_expected.to contain_glance_cache_config('file/filesystem_store_file_perm')\
@@ -86,27 +80,6 @@ describe 'glance::backend::multistore::file' do
           .with_value(65536)
         is_expected.to contain_glance_cache_config('file/filesystem_thin_provisioning')\
           .with_value(true)
-      end
-    end
-
-    describe 'when filesystem_store_datadirs is set' do
-      let :params do
-        {
-          :filesystem_store_datadirs => ['/var/lib/glance/images', '/var/lib/glance/images_alt']
-        }
-      end
-      it 'configures glance-api.conf' do
-        is_expected.to contain_glance_api_config('file/filesystem_store_datadir')\
-          .with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_glance_api_config('file/filesystem_store_datadirs')\
-          .with_value(['/var/lib/glance/images', '/var/lib/glance/images_alt'])
-      end
-
-      it 'configures glance-cache.conf' do
-        is_expected.to contain_glance_cache_config('file/filesystem_store_datadir')\
-          .with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_glance_cache_config('file/filesystem_store_datadirs')\
-          .with_value(['/var/lib/glance/images', '/var/lib/glance/images_alt'])
       end
     end
   end
