@@ -1,0 +1,10 @@
+---
+deprecations:
+  - |
+    The following parameters of the ``glance::api`` class have been deprecatd
+    and have no effect now.
+
+    - ``bind_host``
+    - ``bind_port``
+    - ``workers``
+    - ``backlog``

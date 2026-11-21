@@ -9,22 +9,6 @@
 #   setting is ignored and the setting from the glance class is used
 #   because there is only one glance package. Defaults to 'present'.
 #
-# [*bind_host*]
-#   (optional) The address of the host to bind to.
-#   Default: $facts['os_service_default'].
-#
-# [*bind_port*]
-#   (optional) The port the server should bind to.
-#   Default: $facts['os_service_default'].
-#
-# [*backlog*]
-#   (optional) Backlog requests when creating socket
-#   Default: $facts['os_service_default'].
-#
-# [*workers*]
-#   (optional) Number of Glance API worker processes to start
-#   Default: $facts['os_workers'].
-#
 # [*auth_strategy*]
 #   (optional) Type is authorization being used.
 #   Defaults to 'keystone'
@@ -272,12 +256,24 @@
 #   (optional) Turn on/off delayed delete.
 #   Defaults to undef
 #
+# [*bind_host*]
+#   (optional) The address of the host to bind to.
+#   Defaults to undef
+#
+# [*bind_port*]
+#   (optional) The port the server should bind to.
+#   Defaults to undef
+#
+# [*backlog*]
+#   (optional) Backlog requests when creating socket
+#   Defaults to undef
+#
+# [*workers*]
+#   (optional) Number of Glance API worker processes to start
+#   Defaults to undef
+#
 class glance::api (
   Stdlib::Ensure::Package $package_ensure = 'present',
-  $bind_host                              = $facts['os_service_default'],
-  $bind_port                              = $facts['os_service_default'],
-  $backlog                                = $facts['os_service_default'],
-  $workers                                = $facts['os_workers'],
   $auth_strategy                          = 'keystone',
   String $paste_deploy_flavor             = 'keystone',
   $paste_deploy_config_file               = $facts['os_service_default'],
@@ -332,6 +328,10 @@ class glance::api (
   $filesystem_store_metadata_file         = undef,
   $filesystem_store_file_perm             = undef,
   $delayed_delete                         = undef,
+  $bind_host                              = undef,
+  $bind_port                              = undef,
+  $backlog                                = undef,
+  $workers                                = undef,
 ) inherits glance {
   include glance::deps
   include glance::policy
@@ -345,6 +345,12 @@ class glance::api (
 
   if $delayed_delete != undef {
     warning('The delayed_delete parameter was deprecated and will be removed.')
+  }
+
+  ['bind_host', 'bind_port', 'backlog', 'workers'].each |String $fs_opt| {
+    if getvar($fs_opt) != undef {
+      warning("The ${fs_opt} parameter has been deprecated and has no effect.")
+    }
   }
 
   if $sync_db {
@@ -369,10 +375,6 @@ class glance::api (
 
   # basic service config
   glance_api_config {
-    'DEFAULT/bind_host':                  value => $bind_host;
-    'DEFAULT/bind_port':                  value => $bind_port;
-    'DEFAULT/backlog':                    value => $backlog;
-    'DEFAULT/workers':                    value => $workers;
     'DEFAULT/show_image_direct_url':      value => $show_image_direct_url;
     'DEFAULT/delayed_delete':             value => pick($delayed_delete, $facts['os_service_default']);
     'DEFAULT/enforce_secure_rbac':        value => $enforce_secure_rbac;
@@ -394,6 +396,13 @@ class glance::api (
     'DEFAULT/api_limit_max':              value => $api_limit_max;
     'DEFAULT/public_endpoint':            value => $public_endpoint;
     'DEFAULT/hashing_algorithm':          value => $hashing_algorithm;
+  }
+
+  glance_api_config {
+    'DEFAULT/bind_host': ensure => absent;
+    'DEFAULT/bind_port': ensure => absent;
+    'DEFAULT/backlog':   ensure => absent;
+    'DEFAULT/workers':   ensure => absent;
   }
 
   if $show_multiple_locations {

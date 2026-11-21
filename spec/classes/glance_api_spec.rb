@@ -9,13 +9,9 @@ describe 'glance::api' do
 
   let :default_params do
     {
-      :bind_host                      => '<SERVICE DEFAULT>',
-      :bind_port                      => '<SERVICE DEFAULT>',
       :auth_strategy                  => 'keystone',
       :enabled                        => true,
       :manage_service                 => true,
-      :backlog                        => '<SERVICE DEFAULT>',
-      :workers                        => '7',
       :show_image_direct_url          => '<SERVICE DEFAULT>',
       :show_multiple_locations        => '<SERVICE DEFAULT>',
       :filesystem_store_metadata_file => '<SERVICE DEFAULT>',
@@ -60,12 +56,8 @@ describe 'glance::api' do
   shared_examples_for 'glance::api' do
 
     [{
-        :bind_host                      => '127.0.0.1',
-        :bind_port                      => '9222',
         :auth_strategy                  => 'not_keystone',
         :enabled                        => false,
-        :backlog                        => '4095',
-        :workers                        => '5',
         :show_image_direct_url          => true,
         :show_multiple_locations        => true,
         :filesystem_store_metadata_file => '/etc/glance/glance-metadata-file.conf',
@@ -134,8 +126,6 @@ describe 'glance::api' do
 
         it 'is_expected.to lay down default api config' do
           [
-            'bind_host',
-            'bind_port',
             'show_image_direct_url',
             'show_multiple_locations',
             'delayed_delete',
