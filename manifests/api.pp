@@ -94,10 +94,6 @@
 #   in the api config.
 #   Defaults to false.
 #
-# [*enforce_secure_rbac*]
-#  (optional) Enabled enforcing authorization based on common RBAC personas.
-#  Defaults to $facts['os_service_default']
-#
 # [*use_keystone_limits*]
 #  (optional) Allow Glance to retrieve limits set in keystone for resource
 #  consumption and enforce them against API users
@@ -235,7 +231,7 @@
 #
 # [*multi_store*]
 #   (optional) Boolean describing if multiple backends will be configured
-#   Defaults to false
+#   Defaults to true
 #
 # [*show_multiple_locations*]
 #   (optional) Whether to include the backend image locations in image
@@ -272,6 +268,10 @@
 #   (optional) Number of Glance API worker processes to start
 #   Defaults to undef
 #
+# [*enforce_secure_rbac*]
+#   (optional) Enabled enforcing authorization based on common RBAC personas.
+#   Defaults to undef
+#
 class glance::api (
   Stdlib::Ensure::Package $package_ensure = 'present',
   $auth_strategy                          = 'keystone',
@@ -282,7 +282,6 @@ class glance::api (
   String[1] $service_name                 = $glance::params::api_service_name,
   $show_image_direct_url                  = $facts['os_service_default'],
   Boolean $purge_config                   = false,
-  $enforce_secure_rbac                    = $facts['os_service_default'],
   $use_keystone_limits                    = $facts['os_service_default'],
   $enabled_backends                       = undef,
   $default_backend                        = undef,
@@ -332,6 +331,7 @@ class glance::api (
   $bind_port                              = undef,
   $backlog                                = undef,
   $workers                                = undef,
+  $enforce_secure_rbac                    = undef,
 ) inherits glance {
   include glance::deps
   include glance::policy
@@ -347,7 +347,7 @@ class glance::api (
     warning('The delayed_delete parameter was deprecated and will be removed.')
   }
 
-  ['bind_host', 'bind_port', 'backlog', 'workers'].each |String $fs_opt| {
+  ['bind_host', 'bind_port', 'backlog', 'workers', 'enforce_secure_rbac'].each |String $fs_opt| {
     if getvar($fs_opt) != undef {
       warning("The ${fs_opt} parameter has been deprecated and has no effect.")
     }
@@ -377,7 +377,6 @@ class glance::api (
   glance_api_config {
     'DEFAULT/show_image_direct_url':      value => $show_image_direct_url;
     'DEFAULT/delayed_delete':             value => pick($delayed_delete, $facts['os_service_default']);
-    'DEFAULT/enforce_secure_rbac':        value => $enforce_secure_rbac;
     'DEFAULT/use_keystone_limits':        value => $use_keystone_limits;
     'DEFAULT/image_cache_driver':         value => $image_cache_driver;
     'DEFAULT/image_cache_dir':            value => $image_cache_dir;
@@ -399,10 +398,11 @@ class glance::api (
   }
 
   glance_api_config {
-    'DEFAULT/bind_host': ensure => absent;
-    'DEFAULT/bind_port': ensure => absent;
-    'DEFAULT/backlog':   ensure => absent;
-    'DEFAULT/workers':   ensure => absent;
+    'DEFAULT/bind_host':           ensure => absent;
+    'DEFAULT/bind_port':           ensure => absent;
+    'DEFAULT/backlog':             ensure => absent;
+    'DEFAULT/workers':             ensure => absent;
+    'DEFAULT/enforce_secure_rbac': ensure => absent;
   }
 
   if $show_multiple_locations {

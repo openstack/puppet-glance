@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``glance::api::enforce_secure_rbac`` parameter has been deprecated and
+    has no effect now.
